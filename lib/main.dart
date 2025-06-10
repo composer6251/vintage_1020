@@ -1,9 +1,12 @@
-import 'package:english_words/english_words.dart';
+
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:namer_app/ui/edit_inventory_item/edit_inventory_item_screen.dart';
+import 'package:namer_app/ui/manage_inventory/manage_inventory_screen.dart';
 
 void main() {
-  runApp(MyApp());
+  // Wrap entire app in ProviderScope to use RiverPod
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -11,32 +14,22 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => MyAppState(),
-      child: MaterialApp(
-        title: 'Namer App',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
-        ),
-        home: MyHomePage(),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Vintage 1020',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
       ),
+      routes: <String, WidgetBuilder> {
+      // '/inventory': (BuildContext context) => InventoryCarousel(),
+      '/manage-inventory': (BuildContext context) =>  ManageInventoryScreen(),
+      '/edit-inventory-item': (BuildContext context) => const EditInventoryItemScreen(),
+    },
+      home: ManageInventoryScreen(),
     );
   }
 }
 
-class MyAppState extends ChangeNotifier {
-  var current = WordPair.random();
-}
-
-class MyHomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-
-    return Scaffold(
-      body: Column(
-        children: [Text('A random idea:'), Text(appState.current.asLowerCase)],
-      ),
-    );
-  }
-}
+/****WIDGETS FOR UI
+ * CircleAvatar
+ */
