@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:namer_app/picture_names.dart';
@@ -20,27 +19,28 @@ class InventoryCarousel extends StatefulWidget {
   State<InventoryCarousel> createState() => _InventoryCarouselState();
 }
 
-List<InventoryItem> buildInventoryCarouselViewModels() {
-  List<String> imageList = PictureNames.picListFurniture;
-  List<InventoryItem> models = [];
-  for (var image in imageList) {
-    InventoryItem model = InventoryItem(
-      itemImageUrl: image,
-      itemDescription: "itemDescription",
-      itemListingDate: DateFormat.yMEd().add_jms().format(DateTime.now()),
-      itemPrice: "100.0",
-    );
+// List<InventoryItem> buildInventoryCarouselViewModels() {
+//   List<String> imageList = PictureNames.picListFurniture;
+//   List<InventoryItem> models = [];
+//   for (var image in imageList) {
+//     InventoryItem model = InventoryItem(
+//       itemImageUrl: image,
+//       itemDescription: "itemDescription",
+//       itemListingDate: DateTime.now(),
+//       itemListingPrice: 100.00,
+//       itemPurchaseDate: DateTime.now(),
+//       itemPurchasePrice: 20.00
+//     );
 
-    models.add(model);
-  }
+//     models.add(model);
+//   }
 
-  return models;
-}
+//   return models;
+// }
 
 class _InventoryCarouselState extends State<InventoryCarousel> {
   @override
   Widget build(BuildContext context) {
-
     List<String> imageList = PictureNames.picListFurniture;
     List<InventoryItem> models = [];
     bool flag = true;
@@ -52,8 +52,11 @@ class _InventoryCarouselState extends State<InventoryCarousel> {
       InventoryItem model = InventoryItem(
         itemImageUrl: image,
         itemDescription: "itemDescription",
-        itemListingDate: DateFormat.yMEd().add_jms().format(DateTime.now()),
-        itemPrice: flag ? '\$100' : '\$50',
+        itemListingDate: DateTime.now(),
+        itemListingPrice: 100.00,
+        itemPurchaseDate: DateTime.now(),
+        itemPurchasePrice: 20.00,
+        itemCategory: 'Category'
       );
 
       models.add(model);
@@ -108,7 +111,7 @@ class HeroLayoutCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Text(
-                image.itemPrice,
+                image.itemListingPrice.toString(),
                 overflow: TextOverflow.clip,
                 softWrap: false,
                 style: Theme.of(
@@ -123,9 +126,17 @@ class HeroLayoutCard extends StatelessWidget {
                   context,
                 ).textTheme.headlineLarge?.copyWith(color: Colors.white),
               ),
+              Text(
+                image.itemCategory,
+                overflow: TextOverflow.clip,
+                softWrap: false,
+                style: Theme.of(
+                  context,
+                ).textTheme.headlineLarge?.copyWith(color: Colors.white),
+              ),
               const SizedBox(height: 10),
               Text(
-                'Listed: ${image.itemListingDate.toString()}',
+                'Listed: ${DateFormat.yMEd().add_jms().format(image.itemListingDate)}',
                 overflow: TextOverflow.clip,
                 softWrap: false,
                 style: Theme.of(

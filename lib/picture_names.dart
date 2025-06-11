@@ -24,9 +24,11 @@ class PictureNames {
     20: twentyOne,
   };
 
-  static String one = 'resources/images-furniture/One.heic';
+    static String wateree = 'resources/branding/wateree.jpeg';
+
+  static String one = 'resources/images-furniture/One.jpeg';
   static String two = 'resources/images-furniture/two.jpeg';
-  static String three = 'resources/images-furniture/three.heic';
+  static String three = 'resources/images-furniture/three.jpeg';
   static String four = 'resources/images-furniture/four.jpeg';
   static String five = 'resources/images-furniture/five.jpeg';
   static String six = 'resources/images-furniture/six.jpeg';

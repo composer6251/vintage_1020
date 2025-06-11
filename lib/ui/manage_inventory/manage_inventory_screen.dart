@@ -1,8 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:namer_app/picture_names.dart';
-import 'package:namer_app/ui/core/ui/widgets/inputform.dart';
+import 'package:namer_app/ui/core/ui/widgets/inputform_vertical.dart';
 import 'package:namer_app/ui/edit_inventory_item/edit_inventory_item_screen.dart';
 import 'package:namer_app/ui/inventory_carousel/inventory_carousel_viewmodel.dart';
 
@@ -38,6 +40,9 @@ class ConstrainedAppBarTabs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void filterResults(String value) {
+      
+    }
     return ConstrainedBox(
       constraints: BoxConstraints(maxHeight: height, maxWidth: width),
       child: DefaultTabController(
@@ -62,7 +67,10 @@ class ConstrainedAppBarTabs extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  SearchBar(leading: const Icon(Icons.search), hintText: 'Search'),
+                  SearchBar(
+                    leading: const Icon(Icons.search),
+                    hintText: 'Search',
+                  ),
                   InventoryCarousel(
                     height: height,
                     width: width,
@@ -72,7 +80,11 @@ class ConstrainedAppBarTabs extends StatelessWidget {
               ),
               Column(
                 children: [
-                  SearchBar(leading: const Icon(Icons.search), hintText: 'Search'),
+                  SearchBar(
+                    onChanged: (String value) => filterResults(value),
+                    leading: const Icon(Icons.search),
+                    hintText: 'Search',
+                  ),
                   Expanded(
                     flex: 4,
                     child: ListView.separated(
@@ -99,22 +111,11 @@ class ConstrainedAppBarTabs extends StatelessWidget {
     );
   }
 }
-            // RichText(
-            //   text: TextSpan(
-            //       style: TextStyle(
-            //       fontSize: 12.0, 
-            //       fontWeight: FontWeight.bold),
-            //       children: <TextSpan>[
-            //       TextSpan(text: 'Item:', style: TextStyle(fontWeight: FontWeight.bold)),
-            //       TextSpan(text: model.itemPrice, style: TextStyle(fontStyle: FontStyle.italic))
-            //     ],
-            //     ),
-                
 
 class AddInventoryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return InputForm(title: 'Add To Inventory', isHorizontal: false,);
+    return InputFormVertical(title: 'Add To Inventory', isHorizontal: false);
   }
 }
 
@@ -137,10 +138,10 @@ class SingleInventoryItem extends StatelessWidget {
         Flexible(
           fit: FlexFit.loose,
           child: Image.asset(
-            fit: BoxFit.fill,
-          //  alignment: AlignmentGeometry.xy(0, 0),
-            // height: height * .20,
-            // width: width * .10,
+            // fit: BoxFit.,
+            //  alignment: AlignmentGeometry.xy(0, 0),
+            height: height / 1.25,
+            width: width,
             model.itemImageUrl,
           ),
         ),
@@ -148,11 +149,13 @@ class SingleInventoryItem extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: [
             Text('Item: ${model.itemDescription}'),
-            Text('Date Listed price: ${model.itemPrice}'),
-            Text('Listing price: ${model.itemPrice}'),
+            Text('Category: ${model.itemCategory}'),
+            Text('Listed price: ${model.itemListingDate}'),
+            Text('Listing price: ${model.itemListingPrice}'),
+            Text('Purchase price: ${model.itemPurchasePrice}'),
           ],
         ),
-         Flexible(
+        Flexible(
           fit: FlexFit.tight,
           child: Banner(
             location: BannerLocation.bottomStart,
@@ -164,8 +167,8 @@ class SingleInventoryItem extends StatelessWidget {
         Flexible(
           // flex: 5,
           // fit: FlexFit.loose,
-          child: IconButton(onPressed: () {}, icon: Icon(Icons.delete))),
-       
+          child: IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
+        ),
       ],
     );
   }
@@ -227,7 +230,7 @@ class HeroLayoutCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Text(
-                '\$${image.itemPrice}',
+                '\$${image.itemListingPrice}',
                 overflow: TextOverflow.clip,
                 softWrap: false,
                 style: Theme.of(
@@ -298,12 +301,16 @@ class InventoryWidget extends StatelessWidget {
 List<InventoryItem> buildInventoryCarouselViewModels() {
   List<String> imageList = PictureNames.picListFurniture;
   List<InventoryItem> models = [];
+  List<String> categories = ['Furniture, Lamp, Painting, Wall decor'];
   for (var image in imageList) {
     InventoryItem model = InventoryItem(
       itemImageUrl: image,
+      itemPurchaseDate: DateTime.now(),
+      itemPurchasePrice: 100.0,
       itemDescription: "itemDescription",
-      itemListingDate: DateFormat.yMEd().add_jms().format(DateTime.now()),
-      itemPrice: "100.0",
+      itemListingDate: DateTime.now(),
+      itemListingPrice: 100.0,
+      itemCategory: Random().nextInt(categories.length),
     );
 
     models.add(model);

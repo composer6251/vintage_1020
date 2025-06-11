@@ -8,6 +8,9 @@ class HomeScreen extends StatelessWidget {
   final String title = 'HELLO BEAUTIFUL!!';
   @override
   Widget build(BuildContext context) {
+
+    final double height = MediaQuery.sizeOf(context).height;
+    final double width = MediaQuery.sizeOf(context).width;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Inventory for Vintage 1020!'),
@@ -15,7 +18,7 @@ class HomeScreen extends StatelessWidget {
         bottomOpacity: 100,
       ),
       body: 
-        InventoryCarousel()
+        InventoryCarousel(height: height, width: width, flexWeights: [1, 7, 1],)
     );
   }
 }
