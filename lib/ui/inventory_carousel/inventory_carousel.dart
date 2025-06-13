@@ -56,7 +56,7 @@ class _InventoryCarouselState extends State<InventoryCarousel> {
         itemListingPrice: 100.00,
         itemPurchaseDate: DateTime.now(),
         itemPurchasePrice: 20.00,
-        itemCategory: 'Category'
+        itemCategory: 'Category',
       );
 
       models.add(model);
@@ -116,7 +116,15 @@ class HeroLayoutCard extends StatelessWidget {
                 softWrap: false,
                 style: Theme.of(
                   context,
-                ).textTheme.headlineLarge?.copyWith(color: Colors.white),
+                ).textTheme.headlineLarge?.copyWith(color: Colors.black),
+              ),
+              Text(
+                'Category: ${image.itemCategory}',
+                overflow: TextOverflow.clip,
+                softWrap: false,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: Colors.black),
               ),
               Text(
                 image.itemDescription,
@@ -124,7 +132,7 @@ class HeroLayoutCard extends StatelessWidget {
                 softWrap: false,
                 style: Theme.of(
                   context,
-                ).textTheme.headlineLarge?.copyWith(color: Colors.white),
+                ).textTheme.headlineLarge?.copyWith(color: Colors.black),
               ),
               Text(
                 image.itemCategory,
@@ -132,7 +140,7 @@ class HeroLayoutCard extends StatelessWidget {
                 softWrap: false,
                 style: Theme.of(
                   context,
-                ).textTheme.headlineLarge?.copyWith(color: Colors.white),
+                ).textTheme.headlineLarge?.copyWith(color: Colors.black),
               ),
               const SizedBox(height: 10),
               Text(
@@ -141,8 +149,9 @@ class HeroLayoutCard extends StatelessWidget {
                 softWrap: false,
                 style: Theme.of(
                   context,
-                ).textTheme.bodyMedium?.copyWith(color: Colors.white),
+                ).textTheme.bodyMedium?.copyWith(color: Colors.black),
               ),
+
             ],
           ),
         ),

@@ -48,28 +48,7 @@ class _InputFormHorizontalState extends State<InputFormHorizontal> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Container(height: widget.height / 4, child: Text('Placeholder'),),
-          // Row(
-          //   mainAxisSize: MainAxisSize.max,
-          //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-          //   children: [
-          //     SizedBox(
-          //       height: 200,
-          //       width: 200,
-          //       child: Image.asset(fit: BoxFit.scaleDown, PictureNames.wateree),
-          //     ),
-          //     Text(
-          //       style: TextStyle(
-          //         decorationStyle: TextDecorationStyle.wavy,
-          //         fontWeight: FontWeight.bold,
-          //         fontStyle: FontStyle.italic,
-          //         fontSize: 20,
-          //         backgroundColor: Colors.blueGrey,
-          //       ),
-          //       'Vintage 1020!!!',
-          //     ),
-          //   ],
-          // ),
+          Container(height: widget.height / 6, child: Text(style: TextStyle(fontSize: 50), 'Placeholder'),),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             spacing: widget.width / 10,

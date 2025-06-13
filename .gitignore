@@ -45,5 +45,11 @@ app.*.map.json
 /android/app/release
 
 # Custom
-.pubspec.lock
+pubspec.lock
+.vscode/
+devtools_options.yaml
+how-to.md
+ios/
+ios/Runner.xcodeproj/
+
 

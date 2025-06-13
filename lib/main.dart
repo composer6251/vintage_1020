@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:namer_app/ui/edit_inventory_item/edit_inventory_item_screen.dart';
@@ -20,11 +19,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
       ),
-      routes: <String, WidgetBuilder> {
-      // '/inventory': (BuildContext context) => InventoryCarousel(),
-      '/manage-inventory': (BuildContext context) =>  ManageInventoryScreen(),
-      '/edit-inventory-item': (BuildContext context) => const EditInventoryItemScreen(),
-    },
+      routes: <String, WidgetBuilder>{
+        // '/inventory': (BuildContext context) => InventoryCarousel(),
+        '/manage-inventory': (BuildContext context) => ManageInventoryScreen(),
+        '/edit-inventory-item': (BuildContext context) =>
+            const EditInventoryItemScreen(),
+      },
       home: ManageInventoryScreen(),
     );
   }

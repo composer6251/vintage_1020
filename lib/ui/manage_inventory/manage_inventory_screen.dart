@@ -8,14 +8,21 @@ import 'package:namer_app/ui/core/ui/widgets/inputform_vertical.dart';
 import 'package:namer_app/ui/edit_inventory_item/edit_inventory_item_screen.dart';
 import 'package:namer_app/ui/inventory_carousel/inventory_carousel_viewmodel.dart';
 
-class ManageInventoryScreen extends StatelessWidget {
+class ManageInventoryScreen extends StatefulWidget {
+  @override
+  State<ManageInventoryScreen> createState() => _ManageInventoryScreenState();
+}
+
+class _ManageInventoryScreenState extends State<ManageInventoryScreen> {
   final logger = Logger(printer: PrettyPrinter());
+
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.sizeOf(context).height;
     final double width = MediaQuery.sizeOf(context).width;
 
     List<InventoryItem> models = [];
+
     models = buildInventoryCarouselViewModels();
 
     return Column(
@@ -26,7 +33,7 @@ class ManageInventoryScreen extends StatelessWidget {
   }
 }
 
-class ConstrainedAppBarTabs extends StatelessWidget {
+class ConstrainedAppBarTabs extends StatefulWidget {
   const ConstrainedAppBarTabs({
     super.key,
     required this.height,
@@ -39,12 +46,44 @@ class ConstrainedAppBarTabs extends StatelessWidget {
   final List<InventoryItem> models;
 
   @override
+  State<ConstrainedAppBarTabs> createState() => _ConstrainedAppBarTabsState();
+}
+
+class _ConstrainedAppBarTabsState extends State<ConstrainedAppBarTabs> {
+  List<InventoryItem> _filteredModels = [];
+  List<InventoryItem> originalModels = [];
+  String _searchText = '';
+  @override
+  void initState() {
+    setState(() {
+      _filteredModels = widget.models;
+    });
+  }
+
+  void _filterResults(String query) {
+    setState(() {
+      _searchText = query;
+      if (_searchText == '') {
+        _filteredModels = widget.models;
+        return;
+      }
+      //originalModels = widget.models;
+      _filteredModels = widget.models
+          .where(
+            (item) =>
+                item.itemCategory.toLowerCase().contains(query.toLowerCase()),
+          )
+          .toList();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    void filterResults(String value) {
-      
-    }
     return ConstrainedBox(
-      constraints: BoxConstraints(maxHeight: height, maxWidth: width),
+      constraints: BoxConstraints(
+        maxHeight: widget.height,
+        maxWidth: widget.width,
+      ),
       child: DefaultTabController(
         length: 4,
         child: Scaffold(
@@ -68,20 +107,21 @@ class ConstrainedAppBarTabs extends StatelessWidget {
               Column(
                 children: [
                   SearchBar(
+                    onChanged: (String value) => _filterResults(value),
                     leading: const Icon(Icons.search),
                     hintText: 'Search',
                   ),
                   InventoryCarousel(
-                    height: height,
-                    width: width,
-                    models: models,
+                    height: widget.height,
+                    width: widget.width,
+                    models: _filteredModels,
                   ),
                 ],
               ),
               Column(
                 children: [
                   SearchBar(
-                    onChanged: (String value) => filterResults(value),
+                    onChanged: (String value) => _filterResults(value),
                     leading: const Icon(Icons.search),
                     hintText: 'Search',
                   ),
@@ -91,13 +131,13 @@ class ConstrainedAppBarTabs extends StatelessWidget {
                       // shrinkWrap: true,
                       itemBuilder: (context, index) {
                         return SingleInventoryItem(
-                          model: models[index],
-                          width: width / 2,
-                          height: height / 4,
+                          model: _filteredModels[index],
+                          width: widget.width / 2,
+                          height: widget.height / 4.25,
                         );
                       },
                       separatorBuilder: (_, _) => Divider(),
-                      itemCount: models.length,
+                      itemCount: _filteredModels.length,
                     ),
                   ),
                 ],
@@ -148,11 +188,26 @@ class SingleInventoryItem extends StatelessWidget {
         Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            Text('Item: ${model.itemDescription}'),
-            Text('Category: ${model.itemCategory}'),
-            Text('Listed price: ${model.itemListingDate}'),
-            Text('Listing price: ${model.itemListingPrice}'),
-            Text('Purchase price: ${model.itemPurchasePrice}'),
+            Text(
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              'Item: ${model.itemDescription}',
+            ),
+            Text(
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              'Category: ${model.itemCategory}',
+            ),
+            Text(
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              'Listed Date: ${model.itemListingDate}',
+            ),
+            Text(
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              'Listing price: ${model.itemListingPrice}',
+            ),
+            Text(
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              'Purchase price: ${model.itemPurchasePrice}',
+            ),
           ],
         ),
         Flexible(
@@ -235,7 +290,15 @@ class HeroLayoutCard extends StatelessWidget {
                 softWrap: false,
                 style: Theme.of(
                   context,
-                ).textTheme.headlineLarge?.copyWith(color: Colors.white),
+                ).textTheme.headlineLarge?.copyWith(color: Colors.red),
+              ),
+              Text(
+                'Category: ${image.itemCategory}',
+                overflow: TextOverflow.clip,
+                softWrap: false,
+                style: Theme.of(
+                  context,
+                ).textTheme.headlineLarge?.copyWith(color: Colors.red),
               ),
               Text(
                 image.itemDescription,
@@ -243,7 +306,7 @@ class HeroLayoutCard extends StatelessWidget {
                 softWrap: false,
                 style: Theme.of(
                   context,
-                ).textTheme.headlineLarge?.copyWith(color: Colors.white),
+                ).textTheme.headlineLarge?.copyWith(color: Colors.red),
               ),
               const SizedBox(height: 10),
               Text(
@@ -252,7 +315,7 @@ class HeroLayoutCard extends StatelessWidget {
                 softWrap: false,
                 style: Theme.of(
                   context,
-                ).textTheme.bodyMedium?.copyWith(color: Colors.white),
+                ).textTheme.bodyMedium?.copyWith(color: Colors.red),
               ),
             ],
           ),
@@ -301,8 +364,10 @@ class InventoryWidget extends StatelessWidget {
 List<InventoryItem> buildInventoryCarouselViewModels() {
   List<String> imageList = PictureNames.picListFurniture;
   List<InventoryItem> models = [];
-  List<String> categories = ['Furniture, Lamp, Painting, Wall decor'];
+  List<String> categories = ['Furniture', 'Lamp', 'Painting', 'Wall decor'];
+
   for (var image in imageList) {
+    int cat = Random().nextInt(categories.length);
     InventoryItem model = InventoryItem(
       itemImageUrl: image,
       itemPurchaseDate: DateTime.now(),
@@ -310,7 +375,7 @@ List<InventoryItem> buildInventoryCarouselViewModels() {
       itemDescription: "itemDescription",
       itemListingDate: DateTime.now(),
       itemListingPrice: 100.0,
-      itemCategory: Random().nextInt(categories.length),
+      itemCategory: categories[cat],
     );
 
     models.add(model);
