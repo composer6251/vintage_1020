@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:namer_app/picture_names.dart';
-import 'package:namer_app/ui/core/ui/widgets/inputform_horizontal_two.dart';
+import 'package:namer_app/ui/core/ui/widgets/inputform.dart';
 import 'package:namer_app/ui/inventory_carousel/inventory_carousel.dart';
 import 'package:namer_app/ui/inventory_carousel/inventory_carousel_viewmodel.dart';
 
