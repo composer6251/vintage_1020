@@ -19,38 +19,19 @@ class InventoryCarousel extends StatefulWidget {
   State<InventoryCarousel> createState() => _InventoryCarouselState();
 }
 
-// List<InventoryItem> buildInventoryCarouselViewModels() {
-//   List<String> imageList = PictureNames.picListFurniture;
-//   List<InventoryItem> models = [];
-//   for (var image in imageList) {
-//     InventoryItem model = InventoryItem(
-//       itemImageUrl: image,
-//       itemDescription: "itemDescription",
-//       itemListingDate: DateTime.now(),
-//       itemListingPrice: 100.00,
-//       itemPurchaseDate: DateTime.now(),
-//       itemPurchasePrice: 20.00
-//     );
-
-//     models.add(model);
-//   }
-
-//   return models;
-// }
-
 class _InventoryCarouselState extends State<InventoryCarousel> {
   @override
   Widget build(BuildContext context) {
-    List<String> imageList = PictureNames.picListFurniture;
+    List<String> modelList = PictureNames.picListFurniture;
     List<InventoryItem> models = [];
     bool flag = true;
 
-    for (var image in imageList) {
+    for (var m in modelList) {
       if (flag) {
         flag = false;
       }
       InventoryItem model = InventoryItem(
-        itemImageUrl: image,
+        itemImageUrl: m,
         itemDescription: "itemDescription",
         itemListingDate: DateTime.now(),
         itemListingPrice: 100.00,
@@ -160,7 +141,7 @@ class HeroLayoutCard extends StatelessWidget {
   }
 }
 
-List<Widget> buildImageList(BuildContext context) {
+List<Widget> buildModelList(BuildContext context) {
   List<String> imageList = PictureNames.picListFurniture;
   List<Widget> widgets = [];
   for (var image in imageList) {

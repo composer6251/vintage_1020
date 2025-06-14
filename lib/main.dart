@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:namer_app/ui/edit_inventory_item/edit_inventory_item_screen.dart';
-import 'package:namer_app/ui/manage_inventory/manage_inventory_screen.dart';
+import 'package:namer_app/ui/landing_inventory/landing_inventory_screen.dart';
 
 void main() {
   // Wrap entire app in ProviderScope to use RiverPod
@@ -21,15 +21,11 @@ class MyApp extends StatelessWidget {
       ),
       routes: <String, WidgetBuilder>{
         // '/inventory': (BuildContext context) => InventoryCarousel(),
-        '/manage-inventory': (BuildContext context) => ManageInventoryScreen(),
+        '/manage-inventory': (BuildContext context) => LandingInventoryScreen(),
         '/edit-inventory-item': (BuildContext context) =>
             const EditInventoryItemScreen(),
       },
-      home: ManageInventoryScreen(),
+      home: LandingInventoryScreen(),
     );
   }
 }
-
-/****WIDGETS FOR UI
- * CircleAvatar
- */
