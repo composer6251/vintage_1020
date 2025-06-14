@@ -6,11 +6,13 @@ import 'package:namer_app/ui/inventory_carousel/inventory_carousel_viewmodel.dar
 class InventoryCarousel extends StatefulWidget {
   const InventoryCarousel({
     super.key,
+    required this.images,
     required this.width,
     required this.height,
     required this.flexWeights,
   });
 
+  final List<InventoryItem> images;
   final double width;
   final double height;
   final List<int> flexWeights;
@@ -22,26 +24,6 @@ class InventoryCarousel extends StatefulWidget {
 class _InventoryCarouselState extends State<InventoryCarousel> {
   @override
   Widget build(BuildContext context) {
-    List<String> modelList = PictureNames.picListFurniture;
-    List<InventoryItem> models = [];
-    bool flag = true;
-
-    for (var m in modelList) {
-      if (flag) {
-        flag = false;
-      }
-      InventoryItem model = InventoryItem(
-        itemImageUrl: m,
-        itemDescription: "itemDescription",
-        itemListingDate: DateTime.now(),
-        itemListingPrice: 100.00,
-        itemPurchaseDate: DateTime.now(),
-        itemPurchasePrice: 20.00,
-        itemCategory: 'Category',
-      );
-
-      models.add(model);
-    }
     return Column(
       children: [
         // ConstrainedAppBarTabs(height: height / 6, width: width, models: []),
@@ -54,8 +36,8 @@ class _InventoryCarouselState extends State<InventoryCarousel> {
             // controller: controller,
             itemSnapping: true,
             flexWeights: widget.flexWeights,
-            children: models.map((image) {
-              return HeroLayoutCard(image: image);
+            children: widget.images.map((image) {
+              return HeroLayoutCard(model: image);
             }).toList(),
           ),
         ),
@@ -65,9 +47,9 @@ class _InventoryCarouselState extends State<InventoryCarousel> {
 }
 
 class HeroLayoutCard extends StatelessWidget {
-  const HeroLayoutCard({super.key, required this.image});
+  const HeroLayoutCard({super.key, required this.model});
 
-  final InventoryItem image;
+  final InventoryItem model;
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +63,7 @@ class HeroLayoutCard extends StatelessWidget {
             minWidth: width * 7 / 8,
             child: Image(
               fit: BoxFit.cover,
-              image: AssetImage(image.itemImageUrl),
+              image: AssetImage(model.itemImageUrls.first),
             ),
           ),
         ),
@@ -92,7 +74,7 @@ class HeroLayoutCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Text(
-                image.itemListingPrice.toString(),
+                model.itemListingPrice.toString(),
                 overflow: TextOverflow.clip,
                 softWrap: false,
                 style: Theme.of(
@@ -100,7 +82,7 @@ class HeroLayoutCard extends StatelessWidget {
                 ).textTheme.headlineLarge?.copyWith(color: Colors.black),
               ),
               Text(
-                'Category: ${image.itemCategory}',
+                'Category: ${model.itemCategory}',
                 overflow: TextOverflow.clip,
                 softWrap: false,
                 style: Theme.of(
@@ -108,7 +90,7 @@ class HeroLayoutCard extends StatelessWidget {
                 ).textTheme.bodyMedium?.copyWith(color: Colors.black),
               ),
               Text(
-                image.itemDescription,
+                model.itemDescription,
                 overflow: TextOverflow.clip,
                 softWrap: false,
                 style: Theme.of(
@@ -116,7 +98,7 @@ class HeroLayoutCard extends StatelessWidget {
                 ).textTheme.headlineLarge?.copyWith(color: Colors.black),
               ),
               Text(
-                image.itemCategory,
+                model.itemCategory,
                 overflow: TextOverflow.clip,
                 softWrap: false,
                 style: Theme.of(
@@ -125,14 +107,13 @@ class HeroLayoutCard extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                'Listed: ${DateFormat.yMEd().add_jms().format(image.itemListingDate)}',
+                'Listed: ${DateFormat.yMEd().add_jms().format(model.itemListingDate)}',
                 overflow: TextOverflow.clip,
                 softWrap: false,
                 style: Theme.of(
                   context,
                 ).textTheme.bodyMedium?.copyWith(color: Colors.black),
               ),
-
             ],
           ),
         ),

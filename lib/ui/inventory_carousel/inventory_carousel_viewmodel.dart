@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class InventoryItem extends ChangeNotifier {
   InventoryItem({
-    required this.itemImageUrl,
+    required this.itemImageUrls,
     required this.itemDescription,
     required this.itemPurchaseDate,
     required this.itemPurchasePrice,
@@ -10,19 +10,22 @@ class InventoryItem extends ChangeNotifier {
     this.itemListingPrice,
     this.itemSoldPrice,
     this.itemCategory,
+    this.defaultItemImageUrl,
 
     this.itemSoldDate,
   }) {
-    itemImageUrl = itemImageUrl;
+    itemImageUrls = itemImageUrls;
     itemDescription = itemDescription;
     itemListingDate = itemListingDate;
     itemListingPrice = itemListingPrice;
     itemPurchasePrice = itemPurchasePrice;
     itemSoldPrice = itemSoldPrice;
     itemCategory ?? 'Miscellaneous';
+    // TODO: Currently just using the first image as the "main/default" image. Update to user preference my adding "make main image checkbox to singleInventoryItem"
+    defaultItemImageUrl = itemImageUrls.first;
   }
 
-  String itemImageUrl;
+  List<String> itemImageUrls;
   String itemDescription;
   double itemPurchasePrice;
   DateTime itemPurchaseDate;
@@ -34,4 +37,5 @@ class InventoryItem extends ChangeNotifier {
   var itemListingDate;
   var itemListingPrice;
   var itemCategory;
+  var defaultItemImageUrl;
 }

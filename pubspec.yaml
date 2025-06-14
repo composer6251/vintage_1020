@@ -34,4 +34,5 @@ flutter:
   uses-material-design: true
   assets:
     - resources/images-furniture/
+    - resources/images-lamps/
     - resources/branding/

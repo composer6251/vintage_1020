@@ -2,10 +2,13 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:namer_app/domain/models/mock/build_mock_models.dart';
 import 'package:namer_app/picture_names.dart';
 import 'package:namer_app/ui/core/ui/widgets/inputform_vertical.dart';
 import 'package:namer_app/ui/edit_inventory_item/edit_inventory_item_screen.dart';
+import 'package:namer_app/ui/inventory_carousel/inventory_carousel.dart';
 import 'package:namer_app/ui/inventory_carousel/inventory_carousel_viewmodel.dart';
+import 'package:namer_app/ui/manage_inventory_screen/manage_inventory_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LandingInventoryScreen extends StatefulWidget {
@@ -23,7 +26,7 @@ class _LandingInventoryScreenState extends State<LandingInventoryScreen> {
 
     List<InventoryItem> models = [];
 
-    models = buildInventoryCarouselViewModels();
+    models = BuildMockModels.buildInventoryItemModels();
 
     return Column(
       children: [
@@ -112,9 +115,10 @@ class _ConstrainedAppBarTabsState extends State<ConstrainedAppBarTabs> {
                     hintText: 'Search',
                   ),
                   InventoryCarousel(
-                    height: widget.height,
+                    images: _filteredModels,
+                    height: widget.height / 2,
                     width: widget.width,
-                    models: _filteredModels,
+                    flexWeights: [1, 2, 1],
                   ),
                 ],
               ),
@@ -130,7 +134,7 @@ class _ConstrainedAppBarTabsState extends State<ConstrainedAppBarTabs> {
                     child: ListView.separated(
                       // shrinkWrap: true,
                       itemBuilder: (context, index) {
-                        return SingleInventoryItem(
+                        return ManageInventoryScreen(
                           model: _filteredModels[index],
                           width: widget.width / 2,
                           height: widget.height / 4.25,
@@ -159,112 +163,33 @@ class AddInventoryItem extends StatelessWidget {
   }
 }
 
-class SingleInventoryItem extends StatelessWidget {
-  const SingleInventoryItem({
-    super.key,
-    required this.model,
-    required this.width,
-    required this.height,
-  });
+// class InventoryCarousel extends StatelessWidget {
+//   const InventoryCarousel({
+//     super.key,
+//     required this.height,
+//     required this.width,
+//     required this.models,
+//   });
 
-  final InventoryItem model;
-  final double width;
-  final double height;
-  @override
-  Widget build(BuildContext context) {
-    Future<void> _launchWebApp() async {
-      // TODO:
-      Uri uri = Uri(scheme: 'web', host: 'localhost', port: 60219);
-      if (!await launchUrl(uri)) {
-        throw Exception('Could not launch $uri');
-      }
-    }
+//   final double height;
+//   final double width;
+//   final List<InventoryItem> models;
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Flexible(
-          fit: FlexFit.loose,
-          child: Image.asset(
-            // fit: BoxFit.,
-            //  alignment: AlignmentGeometry.xy(0, 0),
-            height: height / 1.25,
-            width: width,
-            model.itemImageUrl,
-          ),
-        ),
-        Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Text(
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              'Item: ${model.itemDescription}',
-            ),
-            Text(
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              'Category: ${model.itemCategory}',
-            ),
-            Text(
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              'Listed Date: ${model.itemListingDate}',
-            ),
-            Text(
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              'Listing price: ${model.itemListingPrice}',
-            ),
-            Text(
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              'Purchase price: ${model.itemPurchasePrice}',
-            ),
-          ],
-        ),
-        Flexible(
-          fit: FlexFit.tight,
-          child: Banner(
-            location: BannerLocation.bottomStart,
-            // layoutDirection: textDirectionToAxisDirection(TextDirection.LTR),
-            color: const Color.fromARGB(255, 13, 94, 16),
-            message: 'SOLD',
-          ),
-        ),
-        IconButton(onPressed: _launchWebApp, icon: Icon(Icons.lens)),
-        Flexible(
-          // flex: 5,
-          // fit: FlexFit.loose,
-          child: IconButton(onPressed: () {}, icon: Icon(Icons.delete)),
-        ),
-      ],
-    );
-  }
-}
-
-class InventoryCarousel extends StatelessWidget {
-  const InventoryCarousel({
-    super.key,
-    required this.height,
-    required this.width,
-    required this.models,
-  });
-
-  final double height;
-  final double width;
-  final List<InventoryItem> models;
-
-  @override
-  Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: BoxConstraints(maxHeight: height / 3),
-      child: CarouselView.weighted(
-        // controller: controller,
-        itemSnapping: true,
-        flexWeights: const <int>[1, 2, 7],
-        children: models.map((image) {
-          return HeroLayoutCard(image: image);
-        }).toList(),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return ConstrainedBox(
+//       constraints: BoxConstraints(maxHeight: height / 3),
+//       child: CarouselView.weighted(
+//         // controller: controller,
+//         itemSnapping: true,
+//         flexWeights: const <int>[1, 2, 7],
+//         children: models.map((image) {
+//           return HeroLayoutCard(image: image);
+//         }).toList(),
+//       ),
+//     );
+//   }
+// }
 
 class HeroLayoutCard extends StatelessWidget {
   const HeroLayoutCard({super.key, required this.image});
@@ -283,7 +208,9 @@ class HeroLayoutCard extends StatelessWidget {
             minWidth: width * 6 / 8,
             child: Image(
               fit: BoxFit.cover,
-              image: AssetImage(image.itemImageUrl),
+              image: AssetImage(
+                image.itemImageUrls.first,
+              ), // TODO: make the actual defaultImageUrl
             ),
           ),
         ),
@@ -334,61 +261,62 @@ class HeroLayoutCard extends StatelessWidget {
   }
 }
 
-class InventoryWidget extends StatelessWidget {
-  const InventoryWidget({
-    super.key,
-    required this.height,
-    required this.width,
-    required this.models,
-  });
+// class InventoryWidget extends StatelessWidget {
+//   const InventoryWidget({
+//     super.key,
+//     required this.height,
+//     required this.width,
+//     required this.models,
+//   });
 
-  final double height;
-  final double width;
-  final List<InventoryItem> models;
+//   final double height;
+//   final double width;
+//   final List<InventoryItem> models;
 
-  @override
-  Column build(context) {
-    return Column(
-      children: [
-        SearchBar(leading: const Icon(Icons.search), hintText: 'Search'),
-        ConstrainedBox(
-          constraints: const BoxConstraints(maxHeight: 100),
-          child: CarouselView.weighted(
-            flexWeights: const <int>[1, 2, 3, 2, 1],
-            consumeMaxWeight: true,
-            // TODO ADD ON TAP
-            onTap: (value) => {
-              Navigator.pushNamed(context, '/manage-inventory'),
-            },
-            children: models.map((image) {
-              return Image.asset(image.itemImageUrl);
-            }).toList(),
-          ),
-        ),
-      ],
-    );
-  }
-}
+//   @override
+//   Column build(context) {
+//     return Column(
+//       children: [
+//         SearchBar(leading: const Icon(Icons.search), hintText: 'Search'),
+//         ConstrainedBox(
+//           constraints: const BoxConstraints(maxHeight: 100),
+//           child: CarouselView.weighted(
+//             flexWeights: const <int>[1, 2, 3, 2, 1],
+//             consumeMaxWeight: true,
+//             // TODO ADD ON TAP
+//             onTap: (value) => {
+//               Navigator.pushNamed(context, '/manage-inventory'),
+//             },
+//             children: models.map((image) {
+//               return Image.asset(image.itemImageUrls.first);
+//             }).toList(),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
 
-List<InventoryItem> buildInventoryCarouselViewModels() {
-  List<String> imageList = PictureNames.picListFurniture;
-  List<InventoryItem> models = [];
-  List<String> categories = ['Furniture', 'Lamp', 'Painting', 'Wall decor'];
+// List<InventoryItem> buildInventoryCarouselViewModels() {
+//   List<String> modelList = PictureNames.picListFurniture;
+//   List<InventoryItem> models = [];
+//   List<String> categories = ['Furniture', 'Lamp', 'Painting', 'Wall decor'];
 
-  for (var image in imageList) {
-    int cat = Random().nextInt(categories.length);
-    InventoryItem model = InventoryItem(
-      itemImageUrl: image,
-      itemPurchaseDate: DateTime.now(),
-      itemPurchasePrice: 100.0,
-      itemDescription: "itemDescription",
-      itemListingDate: DateTime.now(),
-      itemListingPrice: 100.0,
-      itemCategory: categories[cat],
-    );
+//   for (var m in modelList) {
+//     List<String> imageUrls = [m];
+//     int cat = Random().nextInt(categories.length);
+//     InventoryItem model = InventoryItem(
+//       itemImageUrls: imageUrls,
+//       itemPurchaseDate: DateTime.now(),
+//       itemPurchasePrice: 100.0,
+//       itemDescription: "itemDescription",
+//       itemListingDate: DateTime.now(),
+//       itemListingPrice: 100.0,
+//       itemCategory: categories[cat],
+//     );
 
-    models.add(model);
-  }
+//     models.add(model);
+//   }
 
-  return models;
-}
+//   return models;
+// }
