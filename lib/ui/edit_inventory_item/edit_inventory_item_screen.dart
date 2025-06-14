@@ -21,7 +21,7 @@ class _EditInventoryItemScreenState
   Widget build(BuildContext context) {
     /****MOCK MODEL */
     final InventoryItem model = InventoryItem(
-      itemImageUrl: PictureNames.one,
+      itemImageUrl: PictureNames.two,
       itemDescription: 'Description',
       itemPurchaseDate: DateTime.now(),
       itemPurchasePrice: 130.00,

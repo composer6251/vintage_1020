@@ -1,12 +1,17 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
+import 'package:namer_app/data/api/serpapi/serp_api.dart';
 import 'package:namer_app/picture_names.dart';
 import 'package:namer_app/ui/core/ui/widgets/inputform_vertical.dart';
 import 'package:namer_app/ui/edit_inventory_item/edit_inventory_item_screen.dart';
 import 'package:namer_app/ui/inventory_carousel/inventory_carousel_viewmodel.dart';
+
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ManageInventoryScreen extends StatefulWidget {
   @override
@@ -172,6 +177,14 @@ class SingleInventoryItem extends StatelessWidget {
   final double height;
   @override
   Widget build(BuildContext context) {
+    Future<void> _launchWebApp() async {
+      // TODO: 
+      Uri uri = Uri(scheme: 'web', host: 'localhost', port: 60219);
+      if (!await launchUrl(uri)) {
+        throw Exception('Could not launch $uri');
+      }
+    }
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -219,6 +232,7 @@ class SingleInventoryItem extends StatelessWidget {
             message: 'SOLD',
           ),
         ),
+        IconButton(onPressed: _launchWebApp, icon: Icon(Icons.lens)),
         Flexible(
           // flex: 5,
           // fit: FlexFit.loose,

@@ -51,5 +51,6 @@ devtools_options.yaml
 how-to.md
 ios/
 ios/Runner.xcodeproj/
-
+macos/Podfile.lock
+macos/Podfile
 
