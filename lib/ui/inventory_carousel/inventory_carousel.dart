@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:namer_app/picture_names.dart';
-import 'package:namer_app/ui/inventory_carousel/inventory_carousel_viewmodel.dart';
+import 'package:vintage_1020/data/model/inventory_item.dart';
 
 class InventoryCarousel extends StatefulWidget {
   const InventoryCarousel({
     super.key,
-    required this.images,
+    required this.models,
     required this.width,
     required this.height,
     required this.flexWeights,
   });
 
-  final List<InventoryItem> images;
+  final List<InventoryItem> models;
   final double width;
   final double height;
   final List<int> flexWeights;
@@ -26,7 +25,6 @@ class _InventoryCarouselState extends State<InventoryCarousel> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // ConstrainedAppBarTabs(height: height / 6, width: width, models: []),
         Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           ],
         ),
@@ -36,8 +34,8 @@ class _InventoryCarouselState extends State<InventoryCarousel> {
             // controller: controller,
             itemSnapping: true,
             flexWeights: widget.flexWeights,
-            children: widget.images.map((image) {
-              return HeroLayoutCard(model: image);
+            children: widget.models.map((model) {
+              return HeroLayoutCard(model: model, height: widget.height, width: widget.width,);
             }).toList(),
           ),
         ),
@@ -46,94 +44,101 @@ class _InventoryCarouselState extends State<InventoryCarousel> {
   }
 }
 
-class HeroLayoutCard extends StatelessWidget {
-  const HeroLayoutCard({super.key, required this.model});
+class HeroLayoutCard extends StatefulWidget {
+  const HeroLayoutCard({super.key, required this.model, required this.height, required this.width});
 
   final InventoryItem model;
+  final double height;
+  final double width;
 
   @override
+  State<HeroLayoutCard> createState() => _HeroLayoutCardState();
+}
+
+class _HeroLayoutCardState extends State<HeroLayoutCard> {
+  @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery.sizeOf(context).width;
     return Stack(
       alignment: AlignmentDirectional.bottomStart,
       children: <Widget>[
         ClipRect(
           child: OverflowBox(
-            maxWidth: width * 7 / 8,
-            minWidth: width * 7 / 8,
+            maxHeight: widget.height,
+            maxWidth: widget.width * 7 / 8,
+            minWidth: widget.width * 7 / 8,
             child: Image(
               fit: BoxFit.cover,
-              image: AssetImage(model.itemImageUrls.first),
+              image: AssetImage(widget.model.itemImageUrls.first),
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(18.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                model.itemListingPrice.toString(),
-                overflow: TextOverflow.clip,
-                softWrap: false,
-                style: Theme.of(
-                  context,
-                ).textTheme.headlineLarge?.copyWith(color: Colors.black),
-              ),
-              Text(
-                'Category: ${model.itemCategory}',
-                overflow: TextOverflow.clip,
-                softWrap: false,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.copyWith(color: Colors.black),
-              ),
-              Text(
-                model.itemDescription,
-                overflow: TextOverflow.clip,
-                softWrap: false,
-                style: Theme.of(
-                  context,
-                ).textTheme.headlineLarge?.copyWith(color: Colors.black),
-              ),
-              Text(
-                model.itemCategory,
-                overflow: TextOverflow.clip,
-                softWrap: false,
-                style: Theme.of(
-                  context,
-                ).textTheme.headlineLarge?.copyWith(color: Colors.black),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'Listed: ${DateFormat.yMEd().add_jms().format(model.itemListingDate)}',
-                overflow: TextOverflow.clip,
-                softWrap: false,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.copyWith(color: Colors.black),
-              ),
-            ],
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.all(16.0),
+          // child: Column(
+          //   crossAxisAlignment: CrossAxisAlignment.start,
+          //   mainAxisSize: MainAxisSize.min,
+          //   children: <Widget>[
+          //     Text(
+          //       widget.model.itemListingPrice.toString(),
+          //       overflow: TextOverflow.clip,
+          //       softWrap: false,
+          //       style: Theme.of(
+          //         context,
+          //       ).textTheme.headlineLarge?.copyWith(color: Colors.black),
+          //     ),
+          //     Text(
+          //       'Category: ${widget.model.itemCategory}',
+          //       overflow: TextOverflow.clip,
+          //       softWrap: false,
+          //       style: Theme.of(
+          //         context,
+          //       ).textTheme.bodyMedium?.copyWith(color: Colors.black),
+          //     ),
+          //     Text(
+          //       widget.model.itemDescription,
+          //       overflow: TextOverflow.clip,
+          //       softWrap: false,
+          //       style: Theme.of(
+          //         context,
+          //       ).textTheme.headlineLarge?.copyWith(color: Colors.black),
+          //     ),
+          //     Text(
+          //       widget.model.itemCategory ?? 'No Category',
+          //       overflow: TextOverflow.clip,
+          //       softWrap: false,
+          //       style: Theme.of(
+          //         context,
+          //       ).textTheme.headlineLarge?.copyWith(color: Colors.black),
+          //     ),
+          //     const SizedBox(height: 10),
+          //     Text(
+          //       'Listed: ${DateFormat.yMEd().add_jms().format(widget.model.itemListingDate)}',
+          //       overflow: TextOverflow.clip,
+          //       softWrap: false,
+          //       style: Theme.of(
+          //         context,
+          //       ).textTheme.bodyMedium?.copyWith(color: Colors.black),
+          //     ),
+          //   ],
+          // ),
+        // ),
       ],
     );
   }
 }
 
-List<Widget> buildModelList(BuildContext context) {
-  List<String> imageList = PictureNames.picListFurniture;
-  List<Widget> widgets = [];
-  for (var image in imageList) {
-    widgets.add(
-      Image(
-        fit: BoxFit.cover,
-        image: AssetImage(image),
-        semanticLabel: "Semantic label",
-      ),
-    );
-  }
+// List<Widget> buildModelList(BuildContext context) {
+//   List<String> imageList = PictureNames.picListFurniture;
+//   List<Widget> widgets = [];
+//   for (var image in imageList) {
+//     widgets.add(
+//       Image(
+//         fit: BoxFit.cover,
+//         image: AssetImage(image),
+//         semanticLabel: "Semantic label",
+//       ),
+//     );
+//   }
 
-  return widgets;
-}
+// return widgets;
+// }

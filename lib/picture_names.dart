@@ -44,8 +44,8 @@ class PictureNames {
   static String lampOne = 'resources/images-lamps/14.jpeg';
 
   static String lunaFurnitureOne = 'resources/images-furniture/lunaFurnitureOne.jpeg';
-  static String lunaFurnitureTwo = 'resources/images-lamps/lunaFurnitureTwo.jpeg';
-  static String lunaFurnitureThree = 'resources/images-lamps/lunaFurnitureThree.jpeg';
+  static String lunaFurnitureTwo = 'resources/images-furniture/lunaFurnitureTwo.jpeg';
+  static String lunaFurnitureThree = 'resources/images-furniture/lunaFurnitureThree.jpeg';
 
 
   static Map<num, String> picsLunaFurniture = <num, String>{

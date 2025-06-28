@@ -1,26 +1,34 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
-import 'package:namer_app/domain/models/mock/build_mock_models.dart';
-import 'package:namer_app/picture_names.dart';
-import 'package:namer_app/ui/core/ui/widgets/inputform_vertical.dart';
-import 'package:namer_app/ui/edit_inventory_item/edit_inventory_item_screen.dart';
-import 'package:namer_app/ui/inventory_carousel/inventory_carousel.dart';
-import 'package:namer_app/ui/inventory_carousel/inventory_carousel_viewmodel.dart';
-import 'package:namer_app/ui/manage_inventory_screen/manage_inventory_screen.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:vintage_1020/data/model/inventory_item.dart';
+import 'package:vintage_1020/data/repositories/inventory_repo_server_cache.dart';
+import 'package:vintage_1020/domain/models/mock/build_mock_models.dart';
+import 'package:vintage_1020/providers/inventory_provider.dart';
+import 'package:vintage_1020/ui/add_inventory_item/add_inventory_item_screen.dart';
+import 'package:vintage_1020/ui/core/ui/shared/dialog/add_inventory_form_dialog.dart';
+import 'package:vintage_1020/ui/edit_inventory_item/edit_inventory_item_screen.dart';
+import 'package:vintage_1020/ui/inventory_carousel/inventory_carousel.dart';
+import 'package:vintage_1020/ui/manage_inventory_screen/manage_inventory_screen.dart';
+import 'package:vintage_1020/ui/manage_inventory_screen/manage_inventory_screen_stream.dart';
 
-class LandingInventoryScreen extends StatefulWidget {
-  @override
-  State<LandingInventoryScreen> createState() => _LandingInventoryScreenState();
-}
+// class LandingInventoryScreen extends ConsumerWidget {
+//   // @override
+//   // State<LandingInventoryScreen> createState() => _LandingInventoryScreenState();
+  
+//   @override
+//   Widget build(BuildContext context) {
+//     // TODO: implement build
+//     throw UnimplementedError();
+//   }
+// }
 
-class _LandingInventoryScreenState extends State<LandingInventoryScreen> {
+class LandingInventoryScreen extends ConsumerWidget {
   final logger = Logger(printer: PrettyPrinter());
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+
     final double height = MediaQuery.sizeOf(context).height;
     final double width = MediaQuery.sizeOf(context).width;
 
@@ -28,16 +36,26 @@ class _LandingInventoryScreenState extends State<LandingInventoryScreen> {
 
     models = BuildMockModels.buildInventoryItemModels();
 
-    return Column(
-      children: [
-        ConstrainedAppBarTabs(height: height, width: width, models: models),
-      ],
+    void openDialog() {
+      showDialog(
+        context: context,
+        builder: (context) => const AddInventoryFormDialog(),
+      );
+    }
+
+    return Scaffold(
+      body: Column(
+        children: [
+          HomeScreen(height: height, width: width, models: models),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(onPressed: openDialog, backgroundColor: Colors.blue, child: Icon(Icons.add)),
     );
   }
 }
 
-class ConstrainedAppBarTabs extends StatefulWidget {
-  const ConstrainedAppBarTabs({
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({
     super.key,
     required this.height,
     required this.width,
@@ -49,15 +67,23 @@ class ConstrainedAppBarTabs extends StatefulWidget {
   final List<InventoryItem> models;
 
   @override
-  State<ConstrainedAppBarTabs> createState() => _ConstrainedAppBarTabsState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _ConstrainedAppBarTabsState extends State<ConstrainedAppBarTabs> {
+class _HomeScreenState extends State<HomeScreen> {
   List<InventoryItem> _filteredModels = [];
   List<InventoryItem> originalModels = [];
+  List<InventoryItem> newModels = [];
   String _searchText = '';
   @override
   void initState() {
+    var models = getInventoryItemStream();
+    // models.cast<InventoryItem>().map((i) => {
+    //   InventoryItem.fromJson(i.)
+    // }).toList();
+
+    var newModels = models.cast<InventoryItem>().toList;
+
     setState(() {
       _filteredModels = widget.models;
     });
@@ -74,7 +100,7 @@ class _ConstrainedAppBarTabsState extends State<ConstrainedAppBarTabs> {
       _filteredModels = widget.models
           .where(
             (item) =>
-                item.itemCategory.toLowerCase().contains(query.toLowerCase()),
+                item.itemCategory.toString().toLowerCase().contains(query.toLowerCase()),
           )
           .toList();
     });
@@ -82,114 +108,86 @@ class _ConstrainedAppBarTabsState extends State<ConstrainedAppBarTabs> {
 
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: BoxConstraints(
-        maxHeight: widget.height,
-        maxWidth: widget.width,
-      ),
-      child: DefaultTabController(
-        length: 4,
-        child: Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: Color.fromARGB(255, 50, 50, 235),
-            bottom: TabBar(
-              unselectedLabelColor: const Color.fromARGB(255, 87, 3, 3),
-              indicatorColor: Colors.white,
-              tabs: [
-                Tab(text: 'Inventory', icon: Icon(Icons.favorite)),
-                Tab(text: 'Manage', icon: Icon(Icons.chair_rounded)),
-                Tab(text: 'Add', icon: Icon(Icons.plus_one)),
-                Tab(text: 'Edit', icon: Icon(Icons.chair)),
-              ],
+    return Consumer(
+      builder: (context, ref, child) {
+        ref.watch(inventoryNotifierProvider);
+        return 
+           ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: widget.height,
+              maxWidth: widget.width,
+            ),
+            child: DefaultTabController(
+              length: 4,
+              child: Scaffold(
+                appBar: AppBar(
+                  automaticallyImplyLeading: false,
+                  backgroundColor: Color.fromARGB(255, 50, 50, 235),
+                  bottom: TabBar(
+                    unselectedLabelColor: const Color.fromARGB(255, 87, 3, 3),
+                    indicatorColor: Colors.white,
+                    tabs: [
+                      Tab(text: 'Inventory', icon: Icon(Icons.favorite)),
+                      Tab(text: 'Manage', icon: Icon(Icons.chair_rounded)),
+                      Tab(text: 'Edit', icon: Icon(Icons.chair)),
+                      // Tab(text: 'Add', icon: Icon(Icons.plus_one)),
+                    ],
+                  ),
+                ),
+                body: TabBarView(
+                  // controller: TabController(length: 0, vsync: ),
+                  children: [
+                    Column(
+                      children: [
+                        SearchBar(
+                          onChanged: (String value) => _filterResults(value),
+                          leading: const Icon(Icons.search),
+                          hintText: 'Search',
+                        ),
+                        InventoryCarousel(
+                          models: _filteredModels,
+                          height: widget.height / 2,
+                          width: widget.width,
+                          flexWeights: [1, 2, 1],
+                        ),
+                      ],
+                    ),
+                    // ManageInventoryScreenStream(),
+                    Column(
+                      children: [
+                        SearchBar(
+                          onChanged: (String value) => _filterResults(value),
+                          leading: const Icon(Icons.search),
+                          hintText: 'Search',
+                        ),
+                        Expanded(
+                          flex: 4,
+                          child: ListView.separated(
+                            // shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              return ManageInventoryScreen(
+                                model: _filteredModels[index],
+                                width: widget.width / 2,
+                                height: widget.height / 4.25,
+                              );
+                            },
+                            separatorBuilder: (_, _) => Divider(),
+                            itemCount: _filteredModels.length,
+                          ),
+                        ),
+                      ],
+                    ),
+                    EditInventoryItemScreen(),
+                    // AddInventoryItemScreen(),
+                  ],
+                ),
             ),
           ),
-          body: TabBarView(
-            // controller: TabController(length: 0, vsync: ),
-            children: [
-              Column(
-                children: [
-                  SearchBar(
-                    onChanged: (String value) => _filterResults(value),
-                    leading: const Icon(Icons.search),
-                    hintText: 'Search',
-                  ),
-                  InventoryCarousel(
-                    images: _filteredModels,
-                    height: widget.height / 2,
-                    width: widget.width,
-                    flexWeights: [1, 2, 1],
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  SearchBar(
-                    onChanged: (String value) => _filterResults(value),
-                    leading: const Icon(Icons.search),
-                    hintText: 'Search',
-                  ),
-                  Expanded(
-                    flex: 4,
-                    child: ListView.separated(
-                      // shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return ManageInventoryScreen(
-                          model: _filteredModels[index],
-                          width: widget.width / 2,
-                          height: widget.height / 4.25,
-                        );
-                      },
-                      separatorBuilder: (_, _) => Divider(),
-                      itemCount: _filteredModels.length,
-                    ),
-                  ),
-                ],
-              ),
-              AddInventoryItem(),
-              EditInventoryItemScreen(),
-            ],
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
-
-class AddInventoryItem extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return InputFormVertical(title: 'Add To Inventory', isHorizontal: false);
-  }
-}
-
-// class InventoryCarousel extends StatelessWidget {
-//   const InventoryCarousel({
-//     super.key,
-//     required this.height,
-//     required this.width,
-//     required this.models,
-//   });
-
-//   final double height;
-//   final double width;
-//   final List<InventoryItem> models;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return ConstrainedBox(
-//       constraints: BoxConstraints(maxHeight: height / 3),
-//       child: CarouselView.weighted(
-//         // controller: controller,
-//         itemSnapping: true,
-//         flexWeights: const <int>[1, 2, 7],
-//         children: models.map((image) {
-//           return HeroLayoutCard(image: image);
-//         }).toList(),
-//       ),
-//     );
-//   }
-// }
 
 class HeroLayoutCard extends StatelessWidget {
   const HeroLayoutCard({super.key, required this.image});
@@ -237,7 +235,7 @@ class HeroLayoutCard extends StatelessWidget {
                 ).textTheme.headlineLarge?.copyWith(color: Colors.red),
               ),
               Text(
-                image.itemDescription,
+                image.itemDescription ?? '',
                 overflow: TextOverflow.clip,
                 softWrap: false,
                 style: Theme.of(
@@ -260,63 +258,3 @@ class HeroLayoutCard extends StatelessWidget {
     );
   }
 }
-
-// class InventoryWidget extends StatelessWidget {
-//   const InventoryWidget({
-//     super.key,
-//     required this.height,
-//     required this.width,
-//     required this.models,
-//   });
-
-//   final double height;
-//   final double width;
-//   final List<InventoryItem> models;
-
-//   @override
-//   Column build(context) {
-//     return Column(
-//       children: [
-//         SearchBar(leading: const Icon(Icons.search), hintText: 'Search'),
-//         ConstrainedBox(
-//           constraints: const BoxConstraints(maxHeight: 100),
-//           child: CarouselView.weighted(
-//             flexWeights: const <int>[1, 2, 3, 2, 1],
-//             consumeMaxWeight: true,
-//             // TODO ADD ON TAP
-//             onTap: (value) => {
-//               Navigator.pushNamed(context, '/manage-inventory'),
-//             },
-//             children: models.map((image) {
-//               return Image.asset(image.itemImageUrls.first);
-//             }).toList(),
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
-
-// List<InventoryItem> buildInventoryCarouselViewModels() {
-//   List<String> modelList = PictureNames.picListFurniture;
-//   List<InventoryItem> models = [];
-//   List<String> categories = ['Furniture', 'Lamp', 'Painting', 'Wall decor'];
-
-//   for (var m in modelList) {
-//     List<String> imageUrls = [m];
-//     int cat = Random().nextInt(categories.length);
-//     InventoryItem model = InventoryItem(
-//       itemImageUrls: imageUrls,
-//       itemPurchaseDate: DateTime.now(),
-//       itemPurchasePrice: 100.0,
-//       itemDescription: "itemDescription",
-//       itemListingDate: DateTime.now(),
-//       itemListingPrice: 100.0,
-//       itemCategory: categories[cat],
-//     );
-
-//     models.add(model);
-//   }
-
-//   return models;
-// }

@@ -54,3 +54,6 @@ ios/Runner.xcodeproj/
 macos/Podfile.lock
 macos/Podfile
 
+# Security
+index.html
+

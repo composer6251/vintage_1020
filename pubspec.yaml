@@ -1,5 +1,5 @@
-name: namer_app
-description: "A new Flutter project."
+name: vintage_1020
+description: "An app for tracking consignment inventory."
 publish_to: 'none'
 version: 0.1.0
 
@@ -14,21 +14,34 @@ dependencies:
   flutter_riverpod: ^2.6.1
   riverpod_annotation: ^2.6.1
   freezed_annotation: ^3.0.0
-  freezed: ^3.0.6
   http: ^1.4.0
   intl: ^0.20.2
   logger: ^2.5.0
   google_vision: ^2.0.0+6
   url_launcher: ^6.3.1
+  firebase_core: ^3.14.0
+  firebase_auth: ^5.6.0
+  cloud_firestore: ^5.6.9
+  image_picker: ^1.1.2
+  google_sign_in: ^6.3.0
+  firebase_ui_auth: ^1.17.0
+  firebase_ui_oauth_google: ^1.4.2
+  json_annotation: ^4.9.0
+  flutter_hooks: ^0.21.2
+  hooks_riverpod: ^2.6.1
+  shared_preferences: ^2.5.3
+  uuid: ^4.5.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
   riverpod_generator: ^2.6.4
-  build_runner: ^2.4.15
   custom_lint: ^0.7.4
   riverpod_lint: ^2.6.5
+  build_runner: ^2.5.4
+  freezed: ^3.0.6
+  json_serializable: ^6.9.5
 
 flutter:
   uses-material-design: true

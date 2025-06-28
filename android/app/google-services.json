@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "421198450591",
+    "project_id": "vintage-1020-498ff",
+    "storage_bucket": "vintage-1020-498ff.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:421198450591:android:d286c8d7121d014a1677aa",
+        "android_client_info": {
+          "package_name": "com.example.cmoney_1020"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLsml_SCyMZg3FqjF5JJ6DZuQGJBG4RVw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

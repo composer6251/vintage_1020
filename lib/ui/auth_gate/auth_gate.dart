@@ -1,0 +1,75 @@
+import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:vintage_1020/auth/firebase_auth.dart';
+import 'package:vintage_1020/ui/landing_inventory/landing_inventory_screen.dart';
+
+
+class AuthGate extends StatelessWidget {
+  const AuthGate({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        // If the user is NOT logged in (snapshot.hasData is false or snapshot.data is null)
+        if (!snapshot.hasData) {
+          return SignInScreen(
+            providers: [
+              // This is where you list the authentication providers you want to offer.
+              // We'll start with Email and Password, as you have it enabled.
+              EmailAuthProvider(),
+              // If you enabled Google Sign-In, you'd add:
+              // GoogleProvider(clientId: "YOUR_WEBCLIENT_ID"), // Replace with your actual Web Client ID if supporting web
+            ],
+            // Customize the header (top part) of the sign-in screen
+            headerBuilder: (context, constraints, shrinkOffset) {
+              return Padding(
+                padding: const EdgeInsets.all(20),
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  // Make sure you have 'assets/flutterfire_300x.png' in your pubspec.yaml and project!
+                  child: Image.asset('resources/branding/wateree.jpeg'),
+                ),
+              );
+            },
+            // Customize the subtitle messages (e.g., "Welcome, please sign in!")
+            subtitleBuilder: (context, action) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: action == AuthAction.signIn
+                    ? const Text('Welcome to Vintage 1020, please sign in!')
+                    : const Text('Welcome to Vintage 1020, please sign up!'),
+              );
+            },
+            // Customize the footer (bottom part, e.g., terms and conditions)
+            footerBuilder: (context, action) {
+              return const Padding(
+                padding: EdgeInsets.only(top: 16),
+                child: Text(
+                  'By signing in, you agree to our terms and conditions.',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              );
+            },
+            // Add a side panel for larger screens (e.g., web or desktop)
+            sideBuilder: (context, shrinkOffset) {
+              return Padding(
+                padding: const EdgeInsets.all(20),
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  // Use the same image or a different one for the side panel
+                  child: Image.asset('resources/branding/wateree.jpeg'),
+                ),
+              );
+            },
+          );
+        }
+
+        // If the user IS logged in, show your main application screen
+        return LandingInventoryScreen();
+      },
+    );
+  }
+}
