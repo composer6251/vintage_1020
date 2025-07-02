@@ -12,7 +12,7 @@ sealed class InventoryItem with _$InventoryItem {
     required String id,
     required List<String> itemImageUrls,
     required DateTime itemPurchaseDate,
-    required double itemPurchasePrice,
+    double? itemPurchasePrice,
     required InventoryCategory itemCategory,
     DateTime? itemListingDate,
     double? itemListingPrice,

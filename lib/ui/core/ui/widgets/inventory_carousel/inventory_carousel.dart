@@ -126,19 +126,3 @@ class _HeroLayoutCardState extends State<HeroLayoutCard> {
     );
   }
 }
-
-// List<Widget> buildModelList(BuildContext context) {
-//   List<String> imageList = PictureNames.picListFurniture;
-//   List<Widget> widgets = [];
-//   for (var image in imageList) {
-//     widgets.add(
-//       Image(
-//         fit: BoxFit.cover,
-//         image: AssetImage(image),
-//         semanticLabel: "Semantic label",
-//       ),
-//     );
-//   }
-
-// return widgets;
-// }

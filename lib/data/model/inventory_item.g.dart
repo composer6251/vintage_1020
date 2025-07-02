@@ -13,7 +13,7 @@ _InventoryItem _$InventoryItemFromJson(Map<String, dynamic> json) =>
           .map((e) => e as String)
           .toList(),
       itemPurchaseDate: DateTime.parse(json['itemPurchaseDate'] as String),
-      itemPurchasePrice: (json['itemPurchasePrice'] as num).toDouble(),
+      itemPurchasePrice: (json['itemPurchasePrice'] as num?)?.toDouble(),
       itemCategory: $enumDecode(
         _$InventoryCategoryEnumMap,
         json['itemCategory'],

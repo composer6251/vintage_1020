@@ -3,8 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:vintage_1020/data/model/inventory_item.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ManageInventoryScreen extends StatelessWidget {
-  const ManageInventoryScreen({
+class ManageInventoryItemTile extends StatelessWidget {
+  const ManageInventoryItemTile({
     super.key,
     required this.model,
     required this.width,
@@ -49,34 +49,48 @@ class ManageInventoryScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   model.itemCategory.toString(),
                 ),
-                // Text(
-                //   overflow: TextOverflow.ellipsis,
-                //   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                //   model.itemListingDate == null ?
-                //   'No Listing date'
-                //   : 
-                //   'Listed ${DateFormat.y().add_jms().format(model.itemListingDate)}'
-
-                // ),
                 Text(
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                  'Listed: ${model.itemListingPrice}',
+                  model.itemListingPrice != null
+                      ? 'Listed: ${NumberFormat.currency(symbol: '\$').format(model.itemListingPrice)}'
+                      : 'Not Listed',
                 ),
                 Text(
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                  'Purchased: ${model.itemPurchasePrice}',
+                  model.itemSoldPrice != null
+                      ? 'Sold: ${NumberFormat.currency(symbol: '\$').format(model.itemSoldPrice)}'
+                      : 'Not Sold',
                 ),
               ],
             ),
           ),
+          if(model.itemSoldDate != null) 
           Flexible(
             fit: FlexFit.tight,
             child: Banner(
               location: BannerLocation.bottomStart,
               color: const Color.fromARGB(255, 13, 94, 16),
               message: 'SOLD',
+            ),
+          ),
+          if(model.itemListingDate != null)
+          Flexible(
+            fit: FlexFit.tight,
+            child: Banner(
+              location: BannerLocation.bottomStart,
+              color: const Color.fromARGB(255, 243, 228, 95),
+              message: 'Listed',
+            ),
+          ),
+          if(model.itemListingDate == null)
+          Flexible(
+            fit: FlexFit.tight,
+            child: Banner(
+              location: BannerLocation.bottomStart,
+              color: const Color.fromARGB(255, 220, 15, 66),
+              message: 'Not Listed',
             ),
           ),
           Flexible(

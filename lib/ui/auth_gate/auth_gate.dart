@@ -2,8 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:vintage_1020/auth/firebase_auth.dart';
-import 'package:vintage_1020/ui/landing_inventory/landing_inventory_screen.dart';
-
+import 'package:vintage_1020/ui/home_screen/home_screen.dart';
 
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
@@ -68,7 +67,7 @@ class AuthGate extends StatelessWidget {
         }
 
         // If the user IS logged in, show your main application screen
-        return LandingInventoryScreen();
+        return HomeScreen();
       },
     );
   }

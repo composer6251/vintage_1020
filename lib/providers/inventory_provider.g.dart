@@ -6,7 +6,7 @@ part of 'inventory_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$inventoryNotifierHash() => r'99d7e397412a66eaa7d796426f49bc7618380d5c';
+String _$inventoryNotifierHash() => r'831a20e6101a476abcdd9f9c8b6d588a2033002f';
 
 /// See also [InventoryNotifier].
 @ProviderFor(InventoryNotifier)

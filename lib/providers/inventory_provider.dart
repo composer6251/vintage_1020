@@ -24,18 +24,26 @@ class InventoryNotifier extends _$InventoryNotifier {
         itemPurchasePrice: item.itemPurchasePrice,
         itemCategory: item.itemCategory,
       ),
-    ]; 
+    ];
   }
 
-  // void toggleInventoryStatus(String id) {
-  //   state = [
-  //     for (final item in state)
-  //       if (item.id == id) {
-  //         item.copyWith(id)
-  //         }
-  //         else {item},
-  //   ];
-  // }
+  void toggleInventoryStatus(String id) {
+    state = [
+      for (final item in state)
+        if (item.id == id) item.copyWith(id: _uuid.v4()) else item,
+    ];
+  }
+
+  void makeCurrentInventoryItem(String id) {
+    state = [
+      for (final item in state)
+        if (item.id == id)
+          item.copyWith(id: _uuid.v4())
+           // Assign a new ID to make it current
+        else
+          item,
+    ];
+  }
 
   void removeInventoryItem(String id) {
     state = state.where((item) => item.id != id).toList();

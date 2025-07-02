@@ -6,8 +6,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'firebase_options.dart';
-import 'package:vintage_1020/ui/edit_inventory_item/edit_inventory_item_screen.dart';
-import 'package:vintage_1020/ui/landing_inventory/landing_inventory_screen.dart';
+import 'package:vintage_1020/ui/edit_inventory_item/edit_inventory_tab.dart';
+import 'package:vintage_1020/ui/home_screen/home_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,25 +34,26 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Vintage 1020',
       theme: ThemeData(
-        colorScheme: const ColorScheme.dark(
-          primary: Colors.white,
-          secondary: Colors.white70,
-          surface: Color(0xFF1A237E),
-          onSurface: Colors.white,
+        colorScheme: const ColorScheme.light(
+          primary: Colors.pink, // Date pickersubmit, tab bar selected button color
+          secondary: Colors.black,
+          primaryContainer: Colors.red,
+          secondaryContainer: Colors.redAccent, 
+          surface: Colors.white, // Background color
+          onSurface: Colors.black, // Search bar text color
+          onPrimary: Colors.black,
         ),
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFF1A237E),
+          backgroundColor: Color.fromARGB(255, 13, 22, 124),
           elevation: 0,
         ),
       ),
       routes: <String, WidgetBuilder>{
         // '/inventory': (BuildContext context) => InventoryCarousel(),
-        '/manage-inventory': (BuildContext context) => LandingInventoryScreen(),
-        '/edit-inventory-item': (BuildContext context) =>
-            const EditInventoryItemScreen(),
+        '/manage-inventory': (BuildContext context) => HomeScreen(),
+        '/edit-inventory-item': (BuildContext context) =>  EditItemTab(),
       },
-      home: AuthGate(),
-      
+      home: HomeScreen(),
     );
   }
 }
