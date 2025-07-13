@@ -72,56 +72,61 @@ class _HeroLayoutCardState extends State<HeroLayoutCard> {
             ),
           ),
         ),
-        // Padding(
-        //   padding: const EdgeInsets.all(16.0),
-          // child: Column(
-          //   crossAxisAlignment: CrossAxisAlignment.start,
-          //   mainAxisSize: MainAxisSize.min,
-          //   children: <Widget>[
-          //     Text(
-          //       widget.model.itemListingPrice.toString(),
-          //       overflow: TextOverflow.clip,
-          //       softWrap: false,
-          //       style: Theme.of(
-          //         context,
-          //       ).textTheme.headlineLarge?.copyWith(color: Colors.black),
-          //     ),
-          //     Text(
-          //       'Category: ${widget.model.itemCategory}',
-          //       overflow: TextOverflow.clip,
-          //       softWrap: false,
-          //       style: Theme.of(
-          //         context,
-          //       ).textTheme.bodyMedium?.copyWith(color: Colors.black),
-          //     ),
-          //     Text(
-          //       widget.model.itemDescription,
-          //       overflow: TextOverflow.clip,
-          //       softWrap: false,
-          //       style: Theme.of(
-          //         context,
-          //       ).textTheme.headlineLarge?.copyWith(color: Colors.black),
-          //     ),
-          //     Text(
-          //       widget.model.itemCategory ?? 'No Category',
-          //       overflow: TextOverflow.clip,
-          //       softWrap: false,
-          //       style: Theme.of(
-          //         context,
-          //       ).textTheme.headlineLarge?.copyWith(color: Colors.black),
-          //     ),
-          //     const SizedBox(height: 10),
-          //     Text(
-          //       'Listed: ${DateFormat.yMEd().add_jms().format(widget.model.itemListingDate)}',
-          //       overflow: TextOverflow.clip,
-          //       softWrap: false,
-          //       style: Theme.of(
-          //         context,
-          //       ).textTheme.bodyMedium?.copyWith(color: Colors.black),
-          //     ),
-          //   ],
-          // ),
-        // ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+            if (widget.model.itemSoldPrice != null) 
+              Text(
+                widget.model.itemListingPrice != null
+                    ? 'Sold: ${NumberFormat.currency(symbol: '\$').format(widget.model.itemSoldPrice)}'
+                    : 'Not Sold',
+                overflow: TextOverflow.clip,
+                softWrap: false,
+                style: Theme.of(
+                  context,
+                ).textTheme.headlineLarge?.copyWith(color: Colors.black),
+              ),
+              Text(
+                'Category: ${widget.model.itemCategory}',
+                overflow: TextOverflow.clip,
+                softWrap: false,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: Colors.black),
+              ),
+              Text(
+                widget.model.itemDescription ?? 'No Description',
+                overflow: TextOverflow.clip,
+                softWrap: false,
+                style: Theme.of(
+                  context,
+                ).textTheme.headlineLarge?.copyWith(color: Colors.black),
+              ),
+              Flexible(
+                  fit: FlexFit.loose,
+                  child: Banner(
+                    location: BannerLocation.topStart,
+                    color: const Color.fromARGB(255, 13, 94, 16),
+                    message: 'SOLD',
+                  ),
+                ),
+              const SizedBox(height: 10),
+              // Text(
+              //   widget.model.itemSoldPrice != null
+              //       ? 'Sold: ${NumberFormat.currency(symbol: '\$').format(widget.model.itemSoldPrice)}'
+              //       : 'Not Sold',
+              //   overflow: TextOverflow.clip,
+              //   softWrap: false,
+              //   style: Theme.of(
+              //     context,
+              //   ).textTheme.bodyMedium?.copyWith(color: Colors.black),
+              // ),
+            ],
+          ),
+        ),
       ],
     );
   }

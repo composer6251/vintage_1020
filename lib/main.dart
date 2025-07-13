@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
       title: 'Vintage 1020',
       theme: ThemeData(
         colorScheme: const ColorScheme.light(
-          primary: Colors.pink, // Date pickersubmit, tab bar selected button color
+          // primary: Colors.white, // Date pickersubmit, tab bar selected button color
           secondary: Colors.black,
           primaryContainer: Colors.red,
           secondaryContainer: Colors.redAccent, 
@@ -43,17 +43,13 @@ class MyApp extends StatelessWidget {
           onSurface: Colors.black, // Search bar text color
           onPrimary: Colors.black,
         ),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Color.fromARGB(255, 13, 22, 124),
-          elevation: 0,
-        ),
       ),
       routes: <String, WidgetBuilder>{
         // '/inventory': (BuildContext context) => InventoryCarousel(),
         '/manage-inventory': (BuildContext context) => HomeScreen(),
         '/edit-inventory-item': (BuildContext context) =>  EditItemTab(),
       },
-      home: HomeScreen(),
+      home: AuthGate(),
     );
   }
 }

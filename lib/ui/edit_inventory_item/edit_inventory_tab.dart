@@ -18,23 +18,21 @@ class EditItemTab extends ConsumerWidget {
     getInventoryItemStream().map((event) => {print(event)});
 
     return Scaffold(
-      body: Flexible(
-        child: Column(
-          children: [
-            InventoryCarousel(
-              models: items,
-              width: width,
-              height: height * .30,
-              flexWeights: [3],
-            ),
-            InventoryCarousel(
-              models: items,
-              width: width,
-              height: height * .25,
-              flexWeights: [1, 2, 1],
-            ),
-          ],
-        ),
+      body: Column(
+        children: [
+          InventoryCarousel(
+            models: items,
+            width: width,
+            height: height * .30,
+            flexWeights: [3],
+          ),
+          InventoryCarousel(
+            models: items,
+            width: width,
+            height: height * .25,
+            flexWeights: [1, 2, 1],
+          ),
+        ],
       ),
     );
   }

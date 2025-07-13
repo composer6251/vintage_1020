@@ -11,7 +11,7 @@ import 'package:vintage_1020/ui/core/ui/widgets/dialog/add_inventory_form_dialog
 import 'package:vintage_1020/ui/edit_inventory_item/edit_inventory_tab.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/inventory_carousel.dart';
 import 'package:vintage_1020/ui/inventory_overview/inventory_overview_tab.dart';
-import 'package:vintage_1020/ui/manage_inventory_tab/manage_inventory_screen.dart';
+import 'package:vintage_1020/ui/manage_inventory_tab/manage_inventory_item_tile.dart';
 import 'package:vintage_1020/ui/manage_inventory_tab/manage_inventory_screen_stream.dart';
 import 'package:vintage_1020/ui/manage_inventory_tab/manage_inventory_tab.dart';
 import 'package:vintage_1020/ui/manage_inventory_tab/widgets/activity_chart.dart';
@@ -37,18 +37,46 @@ class HomeScreen extends ConsumerWidget {
         children: [TabViewsContent()],
       ),
       floatingActionButton: FloatingActionButton(
+        shape: CircleBorder(
+          side: BorderSide(color: Colors.blue, width: 2.0),
+        ),
         onPressed: openAddInventoryDialog,
         backgroundColor: Colors.blue,
-        child: Icon(Icons.add),
+        child: Icon(size: 40.0, Icons.add),
       ),
     );
   }
 }
 
-class TabViewsContent extends ConsumerWidget {
+class TabViewsContent extends ConsumerStatefulWidget {
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  _TabViewsContentState createState() => _TabViewsContentState();
+}
+
+class _TabViewsContentState extends ConsumerState<TabViewsContent> with TickerProviderStateMixin {
+  late TabController _tabController;
+
+  final List<Tab> myTabs = <Tab>[
+    Tab(text: 'Inventory', icon: Icon(Icons.favorite)),
+    Tab(text: 'Manage', icon: Icon(Icons.chair_rounded)),
+    Tab(text: 'Edit', icon: Icon(Icons.chair)),   
+    Tab(text: 'Sales', icon: Icon(Icons.attach_money)),
+  ];
+
+    @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(vsync: this, length: myTabs.length);
+  }
+
+ @override
+ void dispose() {
+   _tabController.dispose();
+   super.dispose();
+ }
+  @override
+  Widget build(BuildContext context) {
     final double height = MediaQuery.sizeOf(context).height;
     final double width = MediaQuery.sizeOf(context).width;
 
@@ -58,39 +86,39 @@ class TabViewsContent extends ConsumerWidget {
     final filteredInventory = unfilteredInventory.where(
       (item) => item.itemCategory == 'Furniture',
     );
+    // TODO: Create tab controller and pass to children to change index
 
     return ConstrainedBox(
       constraints: BoxConstraints(maxHeight: height, maxWidth: width),
-      child: DefaultTabController(
-        length: 4,
-        child: Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: Colors.blue[700],
-            bottom: TabBar(
-              dividerColor: Colors.white,
-              isScrollable: false,
-              indicatorAnimation: TabIndicatorAnimation.elastic,
-              automaticIndicatorColorAdjustment: true,
-              unselectedLabelColor: Colors.white60,
-              indicatorColor: Colors.white,
-              tabs: [
-                Tab(text: 'Inventory', icon: Icon(Icons.favorite)),
-                Tab(text: 'Manage', icon: Icon(Icons.chair_rounded)),
-                Tab(text: 'Edit', icon: Icon(Icons.chair)),
-                Tab(text: 'Sales', icon: Icon(Icons.attach_money)),
-              ],
-            ),
-          ),
-          body: TabBarView(
-            // controller: TabController(length: 0, vsync: ),
-            children: [
-              InventoryOverviewTab(),
-              ManageInventoryTab(),
-              EditItemTab(),
-              ActivityChart(isShowingMainData: true),
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.blue[700],
+          bottom: TabBar(
+            controller: _tabController,
+            dividerColor: Colors.white,
+            isScrollable: false,
+            indicatorAnimation: TabIndicatorAnimation.elastic,
+            automaticIndicatorColorAdjustment: false,
+            unselectedLabelColor: Colors.white38,
+            indicatorColor: Colors.white,
+            labelColor: Colors.white,
+            tabs: [
+              ...myTabs,
             ],
           ),
+        ),
+        body: TabBarView(
+          controller: _tabController,
+          physics: NeverScrollableScrollPhysics(),
+          children: [
+            InventoryOverviewTab(),
+            ManageInventoryTab(
+              controller: _tabController,
+            ),
+            EditItemTab(),
+            ActivityChart(isShowingMainData: true),
+          ],
         ),
       ),
     );

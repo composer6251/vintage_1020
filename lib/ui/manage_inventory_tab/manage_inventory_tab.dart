@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vintage_1020/data/model/inventory_item.dart';
 import 'package:vintage_1020/providers/inventory_provider.dart';
-import 'package:vintage_1020/ui/manage_inventory_tab/manage_inventory_screen.dart';
+import 'package:vintage_1020/ui/manage_inventory_tab/manage_inventory_item_tile.dart';
 
 class ManageInventoryTab extends ConsumerWidget {
+  const ManageInventoryTab({super.key, required this.controller});
+  final TabController controller;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final items = ref.watch(inventoryNotifierProvider);
@@ -12,24 +16,31 @@ class ManageInventoryTab extends ConsumerWidget {
     final double height = MediaQuery.sizeOf(context).height;
     final double width = MediaQuery.sizeOf(context).width;
 
+    void redirectToEditInventoryItem(InventoryItem item, TabController controller) {
+      ref.read(inventoryNotifierProvider.notifier).makeCurrentInventoryItem(item.id);
+      controller.index = 2; // Switch to EditItemTab
+      // Navigator.pushNamed(context, '/edit-inventory-item', arguments: item);
+    }
+
     // TODO: implement build
     return Column(
       children: [
         Expanded(
           flex: 4,
           child: ListView.separated(
-            // shrinkWrap: true,
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  ref
-                    .read(inventoryNotifierProvider.notifier)
-                    .makeCurrentInventoryItem(items[index].id);
-                  Navigator.pushNamed(
-                    context,
-                    '/edit-inventory-item',
-                    arguments: items[index],
-                  );
+                  redirectToEditInventoryItem(items[index], controller);
+                  // ref
+                  //   .read(inventoryNotifierProvider.notifier)
+                  //   .makeCurrentInventoryItem(items[index].id);
+                    
+                  // Navigator.pushNamed(
+                  //   context,
+                  //   '/edit-inventory-item',
+                  //   arguments: items[index],
+                  // );
                 },
                 child: ManageInventoryItemTile(
                   model: items[index],

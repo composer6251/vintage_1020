@@ -23,6 +23,11 @@ class InventoryNotifier extends _$InventoryNotifier {
         itemPurchaseDate: item.itemPurchaseDate,
         itemPurchasePrice: item.itemPurchasePrice,
         itemCategory: item.itemCategory,
+        itemListingDate: item.itemListingDate,
+        itemListingPrice: item.itemListingPrice,
+        itemSoldPrice: item.itemSoldPrice,
+        defaultItemImageUrl: item.defaultItemImageUrl,
+        itemSoldDate: item.itemSoldDate,
       ),
     ];
   }

@@ -57,6 +57,19 @@ class AddInventoryFormDialog extends HookConsumerWidget {
       
     }
 
+    List<String> addMockImages() {
+      List<String> mockImages = [];
+      mockImages.add(PictureNames.picListFurniture.elementAt(
+                  Random().nextInt(PictureNames.picListFurniture.length)));
+      mockImages.add(PictureNames.picListFurniture.elementAt(
+                  Random().nextInt(PictureNames.picListFurniture.length)));
+      mockImages.add(PictureNames.picListFurniture.elementAt(
+                  Random().nextInt(PictureNames.picListFurniture.length)));
+
+
+      return mockImages;
+    }
+
     void submit() {
       if (formKey.currentState?.validate() ?? false) {
         ref
@@ -65,9 +78,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
               InventoryItem(
                 id: Uuid().v4(),
                 itemCategory: InventoryCategory.furniture,
-                itemImageUrls: [PictureNames.picListFurniture.elementAt(
-                  Random().nextInt(PictureNames.picListFurniture.length),
-                )],
+                itemImageUrls: addMockImages(),
                 itemPurchaseDate: purchaseDate.value,
                 itemPurchasePrice: double.tryParse(
                   itemPurchasePriceController.text,
@@ -125,7 +136,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
             ),
             TextFormField(
               controller: itemPurchasePriceController,
-              decoration: const InputDecoration(labelText: 'Purchase Price'),
+              decoration: const InputDecoration(fillColor: Colors.blue, labelText: 'Purchase Price'),
               keyboardType: TextInputType.numberWithOptions(decimal: true),
               validator: (value) =>
                   value?.isEmpty ?? true ? 'Purchase Price is required' : null,
