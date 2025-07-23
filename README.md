@@ -1,4 +1,4 @@
-# cmoney_1020
+# vintage_1020
 
 ## RUNNING THE APP
 Command Line:
