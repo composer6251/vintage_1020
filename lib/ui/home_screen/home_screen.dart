@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
-import 'package:vintage_1020/constants/inventory_categories.dart';
 import 'package:vintage_1020/data/model/inventory_item.dart';
-import 'package:vintage_1020/data/repositories/inventory_repo_server_cache.dart';
 import 'package:vintage_1020/domain/models/mock/build_mock_models.dart';
 import 'package:vintage_1020/providers/inventory_provider.dart';
-import 'package:vintage_1020/ui/add_inventory_item/add_inventory_item_screen.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/add_inventory_form_dialog.dart';
 import 'package:vintage_1020/ui/edit_inventory_item/edit_inventory_tab.dart';
-import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/inventory_carousel.dart';
 import 'package:vintage_1020/ui/inventory_overview/inventory_overview_tab.dart';
-import 'package:vintage_1020/ui/manage_inventory_tab/manage_inventory_item_tile.dart';
-import 'package:vintage_1020/ui/manage_inventory_tab/manage_inventory_screen_stream.dart';
 import 'package:vintage_1020/ui/manage_inventory_tab/manage_inventory_tab.dart';
 import 'package:vintage_1020/ui/manage_inventory_tab/widgets/activity_chart.dart';
+import 'package:vintage_1020/ui/my_booth_tab/my_booth_tab.dart';
 
 class HomeScreen extends ConsumerWidget {
   final logger = Logger(printer: PrettyPrinter());
@@ -59,9 +54,10 @@ class _TabViewsContentState extends ConsumerState<TabViewsContent> with TickerPr
 
   final List<Tab> myTabs = <Tab>[
     Tab(text: 'Inventory', icon: Icon(Icons.favorite)),
+    Tab(text: 'My Booth', icon: Icon(Icons.storefront)),
     Tab(text: 'Manage', icon: Icon(Icons.chair_rounded)),
-    Tab(text: 'Edit', icon: Icon(Icons.chair)),   
-    Tab(text: 'Sales', icon: Icon(Icons.attach_money)),
+    Tab(text: 'Edit', icon: Icon(Icons.price_check)),   
+    Tab(text: 'Sales', icon: Icon(Icons.bar_chart)),
   ];
 
     @override
@@ -113,6 +109,7 @@ class _TabViewsContentState extends ConsumerState<TabViewsContent> with TickerPr
           physics: NeverScrollableScrollPhysics(),
           children: [
             InventoryOverviewTab(),
+            MyBoothTab(),
             ManageInventoryTab(
               controller: _tabController,
             ),

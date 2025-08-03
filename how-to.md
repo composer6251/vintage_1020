@@ -1,5 +1,15 @@
 # *****************************************FLUTTER*****************************************
 
+## COMMON CLI COMMANDS
+
+-flutter pub get
+-flutter run
+-flutter clean
+-flutter doctor
+-flutter pub cache repair
+
+
+
 ### WIDGET TYPES:
 - A view model is a Dart class responsible for handling UI logic.View models take domain data models as input and expose that data as UI state to their corresponding views
 <b>view models need to tell Flutter to re-render views when the data layer provides a new state by extending ChangeNotifier or some other state management framework</b>

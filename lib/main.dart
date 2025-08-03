@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
         '/manage-inventory': (BuildContext context) => HomeScreen(),
         '/edit-inventory-item': (BuildContext context) =>  EditItemTab(),
       },
-      home: AuthGate(),
+      home: HomeScreen()// AuthGate(),
     );
   }
 }
