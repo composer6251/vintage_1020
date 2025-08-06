@@ -8,9 +8,8 @@ class InventoryOverviewTab extends ConsumerWidget {
   
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    
     final items = ref.watch(inventoryNotifierProvider);
-    // final items = BuildMockModels.buildInventoryItemModels();
-
     final double height = MediaQuery.sizeOf(context).height;
     final double width = MediaQuery.sizeOf(context).width;
 

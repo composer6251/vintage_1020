@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
-import 'package:vintage_1020/data/model/inventory_item.dart';
-import 'package:vintage_1020/domain/models/mock/build_mock_models.dart';
 import 'package:vintage_1020/providers/inventory_provider.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/add_inventory_form_dialog.dart';
 import 'package:vintage_1020/ui/edit_inventory_item/edit_inventory_tab.dart';
@@ -16,9 +14,6 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    List<InventoryItem> models = [];
-
-    models = BuildMockModels.buildInventoryItemModels();
 
     void openAddInventoryDialog() {
       showDialog(

@@ -1,17 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-// import 'dart:io'; // Might not be strictly needed with XFile for basic display
-
-// class ImageSelector extends StatefulWidget {
-//   const ImageSelector({super.key});
-
-//   @override
-//   State<ImageSelector> createState() => _ImageSelectorState();
-// }
-
-// class PictureUtil {
   // Variable to hold the list of selected image files
   List<XFile> _selectedImages = [];
   List<XFile> _photo = [];

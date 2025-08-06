@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -19,13 +18,9 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     // useMemoized to prevent new instances of formKey
     final formKey = useMemoized(() => GlobalKey<FormState>());
 
-    final itemCategoryController = useTextEditingController();
     final itemPurchasePriceController = useTextEditingController();
-    final itemImageUrlsController = useTextEditingController();
     final itemListingPriceController = useTextEditingController();
     final itemSoldPriceController = useTextEditingController();
-    final defaultItemImageUrlController = useTextEditingController();
-    final itemDescriptionController = useTextEditingController();
 
     // useState to hold inital dropdown value. Once changed it doesn't revert
     // back to original value on rebuild.
@@ -66,7 +61,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
       }
     }
 
-    Future<void> _pickMultipleImagesFromGallery() async {
+    Future<void> pickMultipleImagesFromGallery() async {
       print('Picking multiple images from gallery...');
       final picker = ImagePicker();
       final List<XFile> pickedFiles = await picker.pickMultiImage();
@@ -101,19 +96,6 @@ class AddInventoryFormDialog extends HookConsumerWidget {
       purchaseDate.value = pickedDate;
       
     }
-
-    // List<String> addMockImages() {
-    //   List<String> mockImages = [];
-    //   mockImages.add(PictureNames.picListFurniture.elementAt(
-    //               Random().nextInt(PictureNames.picListFurniture.length)));
-    //   mockImages.add(PictureNames.picListFurniture.elementAt(
-    //               Random().nextInt(PictureNames.picListFurniture.length)));
-    //   mockImages.add(PictureNames.picListFurniture.elementAt(
-    //               Random().nextInt(PictureNames.picListFurniture.length)));
-
-
-    //   return mockImages;
-    // }
 
     void submit() {
 
@@ -276,7 +258,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
               Colors.blue,
             ),
           ),
-          onPressed: _pickMultipleImagesFromGallery,
+          onPressed: pickMultipleImagesFromGallery,
           child: const Text('Select Photo'),
         ),
         TextButton(
