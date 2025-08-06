@@ -43,6 +43,8 @@ VIEW HIERARCHY:
         - ViewModel
 
 #### RIVERPOD FOR STATE MANAGEMENT
+- Create model class(data structure to parse JSON responses into. See InventoryItem.dart)
+- Create Provider class
 - Wrap entire app in ProviderScope widget
 - Make class extend Consumer
 

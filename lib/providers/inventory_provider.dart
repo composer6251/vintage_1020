@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
+import 'package:vintage_1020/constants/api_urls.dart';
 import 'package:vintage_1020/data/model/inventory_item.dart';
+import 'package:http/http.dart' as http;
 
 part 'inventory_provider.g.dart';
 
@@ -13,6 +17,25 @@ class InventoryNotifier extends _$InventoryNotifier {
     return [];
   }
 
+  Future<InventoryItem?> fetchInventoryItemById(String id) async {
+     
+     final response = await http.get(Uri.https(apiBaseUrl, '/inventory/$id'));
+
+     final json = jsonDecode(response.body);
+  }
+
+    Future<InventoryItem?> saveInventoryItem(InventoryItem item) async {
+     
+     final response = await http.post(
+      Uri.parse(apiBaseUrl + addItemUrl),
+      headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(item.toJson()),
+    // body: jsonEncode(<String, InventoryItem>{'title': '${item.itemDescription}', item}),
+    );
+
+  }
   void addInventoryItem(InventoryItem item) {
     state = [
       ...state,
@@ -30,6 +53,10 @@ class InventoryNotifier extends _$InventoryNotifier {
         itemSoldDate: item.itemSoldDate,
       ),
     ];
+  }
+
+  void addInventoryImage() {
+    
   }
 
   void toggleInventoryStatus(String id) {

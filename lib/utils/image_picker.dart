@@ -18,6 +18,7 @@ class _ImageSelectorState extends State<ImageSelector> {
 
   // Function to pick multiple images from the gallery
   Future<void> _pickMultipleImagesFromGallery() async {
+    print('Picking multiple images from gallery...');
     final picker = ImagePicker();
     final List<XFile> pickedFiles = await picker.pickMultiImage();
 
