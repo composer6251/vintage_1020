@@ -24,18 +24,6 @@ class InventoryNotifier extends _$InventoryNotifier {
      final json = jsonDecode(response.body);
   }
 
-    Future<InventoryItem?> saveInventoryItem(InventoryItem item) async {
-     
-     final response = await http.post(
-      Uri.parse(apiBaseUrl + addItemUrl),
-      headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(item.toJson()),
-    // body: jsonEncode(<String, InventoryItem>{'title': '${item.itemDescription}', item}),
-    );
-
-  }
   void addInventoryItem(InventoryItem item) {
     state = [
       ...state,
@@ -56,7 +44,7 @@ class InventoryNotifier extends _$InventoryNotifier {
   }
 
   void addInventoryImage() {
-    
+
   }
 
   void toggleInventoryStatus(String id) {

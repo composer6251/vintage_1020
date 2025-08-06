@@ -3,12 +3,12 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vintage_1020/constants/inventory_categories.dart';
+import 'package:vintage_1020/data/api/b_t_api/b_t_api.dart';
 import 'package:vintage_1020/data/model/inventory_item.dart';
-import 'package:vintage_1020/picture_names.dart';
 import 'package:vintage_1020/providers/inventory_provider.dart';
-import 'package:vintage_1020/utils/picture_util.dart';
 
 /// **A HookConsumerWidget IS ESSENTIALLY A STATELESS WIDGET, BUT UTILIZES FLUTTER HOOKS TO MANAGE STATE ***
 class AddInventoryFormDialog extends HookConsumerWidget {
@@ -36,6 +36,51 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     final purchaseDate = useState(DateTime.now());
     final listingDate = useState(DateTime.now());
     final soldDate = useState(DateTime.now());
+    final _photo = useState<XFile?>(null);
+    final _selectedPhotos = useState<List<XFile?>?>(null);
+    final itemImageUrls = useState<List<String>>([]);
+    final _defaultItemImageUrl = useState<String>('');
+
+    Future<void> takePhoto() async {
+      final picker = ImagePicker();
+      XFile? image = await picker.pickImage(
+        source: ImageSource.camera,
+        imageQuality: 90,
+      );
+      if (image != null) {
+        // If we have no default image, set the first taken image as default
+        // TODO: AFTER SAVING, THIS SHOULD BE BASED OFF OF WHAT THE PROVIDER HAS
+        if(_defaultItemImageUrl.value.isEmpty) {
+          _defaultItemImageUrl.value = image.path;
+        }
+        _photo.value = image;
+        // Create new list from existing image urls and add new image path
+        final updatedImageUrls = List<String>.from(itemImageUrls.value)..add(image.path);
+        print('Image taken and saved to state ${_photo.value?.path}');
+      } 
+      if(itemImageUrls.value.isEmpty) {
+        itemImageUrls.value = [image!.path];
+      }
+      else {
+        print('No image selected');
+      }
+    }
+
+    Future<void> _pickMultipleImagesFromGallery() async {
+      print('Picking multiple images from gallery...');
+      final picker = ImagePicker();
+      final List<XFile> pickedFiles = await picker.pickMultiImage();
+
+      if (pickedFiles.isNotEmpty) {
+        _selectedPhotos.value = pickedFiles;
+        print('${pickedFiles.length} images picked.');
+        // Images were successfully picked
+        
+      } else {
+        // User canceled the picker or selected nothing
+        print('No images selected.');
+      }
+  }
 
     Future<void> selectDate(String type) async {
       final DateTime? pickedDate = await showDatePicker(
@@ -57,40 +102,53 @@ class AddInventoryFormDialog extends HookConsumerWidget {
       
     }
 
-    List<String> addMockImages() {
-      List<String> mockImages = [];
-      mockImages.add(PictureNames.picListFurniture.elementAt(
-                  Random().nextInt(PictureNames.picListFurniture.length)));
-      mockImages.add(PictureNames.picListFurniture.elementAt(
-                  Random().nextInt(PictureNames.picListFurniture.length)));
-      mockImages.add(PictureNames.picListFurniture.elementAt(
-                  Random().nextInt(PictureNames.picListFurniture.length)));
+    // List<String> addMockImages() {
+    //   List<String> mockImages = [];
+    //   mockImages.add(PictureNames.picListFurniture.elementAt(
+    //               Random().nextInt(PictureNames.picListFurniture.length)));
+    //   mockImages.add(PictureNames.picListFurniture.elementAt(
+    //               Random().nextInt(PictureNames.picListFurniture.length)));
+    //   mockImages.add(PictureNames.picListFurniture.elementAt(
+    //               Random().nextInt(PictureNames.picListFurniture.length)));
 
 
-      return mockImages;
-    }
+    //   return mockImages;
+    // }
 
     void submit() {
+
+      final InventoryItem itemToSave = InventoryItem(
+          id: Uuid().v4(),
+          itemCategory: InventoryCategory.furniture,
+          itemImageUrls: itemImageUrls.value,
+          itemPurchaseDate: purchaseDate.value,
+          itemPurchasePrice: double.tryParse(
+            itemPurchasePriceController.text,
+          ),
+          itemListingDate: listingDate.value,
+          itemListingPrice: double.tryParse(itemListingPriceController.text),
+          itemSoldDate: soldDate.value,
+          itemSoldPrice: double.tryParse(itemSoldPriceController.text),
+        );
+
       if (formKey.currentState?.validate() ?? false) {
         ref
             .read(inventoryNotifierProvider.notifier)
             .addInventoryItem(
-              InventoryItem(
-                id: Uuid().v4(),
-                itemCategory: InventoryCategory.furniture,
-                itemImageUrls: addMockImages(),
-                itemPurchaseDate: purchaseDate.value,
-                itemPurchasePrice: double.tryParse(
-                  itemPurchasePriceController.text,
-                ),
-                itemListingDate: listingDate.value,
-                itemListingPrice: double.tryParse(itemListingPriceController.text),
-                itemSoldDate: soldDate.value,
-                itemSoldPrice: double.tryParse(itemSoldPriceController.text),
-              ),
+              itemToSave,
             );
 
             Navigator.of(context).pop(); // Close the dialog
+
+            saveInventoryItem(itemToSave).then((savedItem) {
+              if (savedItem != null) {
+                print('Inventory item saved successfully: ${savedItem.id}');
+              } else {
+                print('Failed to save inventory item');
+              }
+            }).catchError((error) {
+              print('Error saving inventory item: $error');
+            });
       }
     }
 
@@ -218,7 +276,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
               Colors.blue,
             ),
           ),
-          onPressed: takePhoto,
+          onPressed: _pickMultipleImagesFromGallery,
           child: const Text('Select Photo'),
         ),
         TextButton(

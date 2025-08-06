@@ -33,6 +33,8 @@ App State: shared across parts of app. User preferences, carts, logins...etc
 USE PROVIDER, RIVERPOD, VALUENOTIFIER & INHERITEDNOTIFIER, INHERITED WIDGET & INHERITED MODEL
 
 USE Cases:
+StatefulWidget: Widget needs own internal EPHEMERAL state
+
 I have a stateless type widget(Stateless, HookConsumer, Consumer)
     - useState for NON UI REBUILDING CHANGES.
         - i.e. I have a dialog box where the user enters data and we need to temporarily save that data until the submit button is clicked. 
