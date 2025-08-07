@@ -23,7 +23,7 @@ _InventoryItem _$InventoryItemFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['itemListingDate'] as String),
       itemListingPrice: (json['itemListingPrice'] as num?)?.toDouble(),
       itemSoldPrice: (json['itemSoldPrice'] as num?)?.toDouble(),
-      defaultItemImageUrl: json['defaultItemImageUrl'] as String?,
+      primaryImageUrl: json['primaryImageUrl'] as String?,
       itemDescription: json['itemDescription'] as String?,
       itemSoldDate: json['itemSoldDate'] == null
           ? null
@@ -40,7 +40,7 @@ Map<String, dynamic> _$InventoryItemToJson(_InventoryItem instance) =>
       'itemListingDate': instance.itemListingDate?.toIso8601String(),
       'itemListingPrice': instance.itemListingPrice,
       'itemSoldPrice': instance.itemSoldPrice,
-      'defaultItemImageUrl': instance.defaultItemImageUrl,
+      'primaryImageUrl': instance.primaryImageUrl,
       'itemDescription': instance.itemDescription,
       'itemSoldDate': instance.itemSoldDate?.toIso8601String(),
     };

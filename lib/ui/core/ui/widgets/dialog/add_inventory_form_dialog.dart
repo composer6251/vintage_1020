@@ -51,6 +51,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         _photo.value = image;
         // Create new list from existing image urls and add new image path
         final updatedImageUrls = List<String>.from(itemImageUrls.value)..add(image.path);
+        itemImageUrls.value = updatedImageUrls;
         print('Image taken and saved to state ${_photo.value?.path}');
       } 
       if(itemImageUrls.value.isEmpty) {
@@ -68,6 +69,12 @@ class AddInventoryFormDialog extends HookConsumerWidget {
 
       if (pickedFiles.isNotEmpty) {
         _selectedPhotos.value = pickedFiles;
+        // Create new list of selected image URLs
+        final selectedImageUrls = _selectedPhotos.value?.map((e) => e?.path).whereType<String>() ?? [];
+        // Create new list with the existing itemImageUrls and add selected images urls
+        final updatedImageUrls = List<String>.from(itemImageUrls.value)..addAll(selectedImageUrls);
+        // Update state hook with the new list
+        itemImageUrls.value = updatedImageUrls;
         print('${pickedFiles.length} images picked.');
         // Images were successfully picked
         

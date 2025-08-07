@@ -17,7 +17,7 @@ sealed class InventoryItem with _$InventoryItem {
     DateTime? itemListingDate,
     double? itemListingPrice,
     double? itemSoldPrice,
-    String? defaultItemImageUrl,
+    String? primaryImageUrl,    
     String? itemDescription,
     DateTime? itemSoldDate,
   }) = _InventoryItem; // Freezed generates private implementation class
