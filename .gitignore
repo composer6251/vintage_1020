@@ -56,3 +56,5 @@ macos/Podfile
 # Security
 index.html
 
+pubspec.lock
+pubspec.lock

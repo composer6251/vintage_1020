@@ -17,7 +17,7 @@ class ManageInventoryTab extends ConsumerWidget {
     final double width = MediaQuery.sizeOf(context).width;
 
     void redirectToEditInventoryItem(InventoryItem item, TabController controller) {
-      ref.read(inventoryNotifierProvider.notifier).makeCurrentInventoryItem(item.id);
+      ref.read(inventoryNotifierProvider.notifier).makeCurrentInventoryItem(item.id!);
       controller.index = 2; // Switch to EditItemTab
       // Navigator.pushNamed(context, '/edit-inventory-item', arguments: item);
     }

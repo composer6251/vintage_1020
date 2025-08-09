@@ -106,8 +106,11 @@ class AddInventoryFormDialog extends HookConsumerWidget {
 
     void submit() {
 
+      // TODO REMOVE MOCK DATA 
+      if(itemImageUrls.value.isEmpty) {
+        itemImageUrls.value = ['resources/images-booth/booth-1.jpeg', 'resources/images-booth/booth-1.jpeg'];
+      }
       final InventoryItem itemToSave = InventoryItem(
-          id: Uuid().v4(),
           itemCategory: InventoryCategory.furniture,
           itemImageUrls: itemImageUrls.value,
           itemPurchaseDate: purchaseDate.value,

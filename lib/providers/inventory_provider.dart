@@ -17,7 +17,7 @@ class InventoryNotifier extends _$InventoryNotifier {
     return [];
   }
 
-  Future<InventoryItem?> fetchInventoryItemById(String id) async {
+  Future<InventoryItem?> fetchInventoryItemById(num id) async {
      
      final response = await http.get(Uri.https(apiBaseUrl, '/inventory/$id'));
 
@@ -28,7 +28,6 @@ class InventoryNotifier extends _$InventoryNotifier {
     state = [
       ...state,
       InventoryItem(
-        id: _uuid.v4(),
         itemImageUrls: item.itemImageUrls,
         itemDescription: item.itemDescription,
         itemPurchaseDate: item.itemPurchaseDate,
@@ -47,25 +46,25 @@ class InventoryNotifier extends _$InventoryNotifier {
 
   }
 
-  void toggleInventoryStatus(String id) {
-    state = [
-      for (final item in state)
-        if (item.id == id) item.copyWith(id: _uuid.v4()) else item,
-    ];
-  }
+  // void toggleInventoryStatus(num id) {
+  //   state = [
+  //     for (final item in state)
+  //       if (item.id == id) item.copyWith(id: _uuid.v4()) else item,
+  //   ];
+  // }
 
-  void makeCurrentInventoryItem(String id) {
+  void makeCurrentInventoryItem(num id) {
     state = [
       for (final item in state)
         if (item.id == id)
-          item.copyWith(id: _uuid.v4())
+          item.copyWith(id: 0)
            // Assign a new ID to make it current
         else
           item,
     ];
   }
 
-  void removeInventoryItem(String id) {
+  void removeInventoryItem(num id) {
     state = state.where((item) => item.id != id).toList();
   }
 }

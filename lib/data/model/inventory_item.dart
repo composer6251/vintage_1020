@@ -9,7 +9,7 @@ part 'inventory_item.g.dart';
 @freezed
 sealed class InventoryItem with _$InventoryItem {
   const factory InventoryItem({
-    required String id,
+    num? id, // Optional ID for the item
     required List<String> itemImageUrls,
     required DateTime itemPurchaseDate,
     double? itemPurchasePrice,
@@ -21,9 +21,10 @@ sealed class InventoryItem with _$InventoryItem {
     String? itemDescription,
     DateTime? itemSoldDate,
   }) = _InventoryItem; // Freezed generates private implementation class
-
+// Getter for itemId, defaults to 0 if id is null
   /// Convert a JSON object into an [InventoryItem] instance.
   /// This enables type-safe reading of the API response.
   factory InventoryItem.fromJson(Map<String, dynamic> json) =>
       _$InventoryItemFromJson(json);
+
 }

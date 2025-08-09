@@ -21,7 +21,7 @@ Future<void> addInventoryItem(InventoryItem item) async {
       'itemSoldPrice': item.itemSoldPrice,
       'itemCategory': item.itemCategory,
       'itemSoldDate': item.itemSoldDate,
-      'defaultItemImageUrl': item.defaultItemImageUrl,
+      'primaryImageUrl': item.primaryImageUrl,
     });
     print('InventoryItem added locally and syncing');
   } catch (e) {
@@ -41,7 +41,7 @@ Future<void> a(InventoryItem item) async {
       'itemSoldPrice': item.itemSoldPrice,
       'itemCategory': item.itemCategory,
       'itemSoldDate': item.itemSoldDate,
-      'defaultItemImageUrl': item.defaultItemImageUrl,
+      'primaryImageUrl': item.primaryImageUrl,
     });
     print('InventoryItem added locally and syncing');
   } catch (e) {
@@ -51,9 +51,9 @@ Future<void> a(InventoryItem item) async {
 
 
 // Set/Overwrite a document (you specify the ID)
-Future<void> updateTaskById(String itemId, String newTitle) async {
+Future<void> updateTaskById(num itemId, String newTitle) async {
   try {
-    await firestore.collection('tasks').doc(itemId).set({
+    await firestore.collection('tasks').doc(itemId.toString()).set({
       'title': newTitle,
       'description': 'Updated description',
       'completed': false, // This will overwrite other fields if not careful

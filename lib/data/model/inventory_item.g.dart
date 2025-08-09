@@ -8,7 +8,7 @@ part of 'inventory_item.dart';
 
 _InventoryItem _$InventoryItemFromJson(Map<String, dynamic> json) =>
     _InventoryItem(
-      id: json['id'] as String,
+      id: json['id'] as num?,
       itemImageUrls: (json['itemImageUrls'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),

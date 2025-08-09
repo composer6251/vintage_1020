@@ -16,7 +16,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$InventoryItem {
 
- String get id; List<String> get itemImageUrls; DateTime get itemPurchaseDate; double? get itemPurchasePrice; InventoryCategory get itemCategory; DateTime? get itemListingDate; double? get itemListingPrice; double? get itemSoldPrice; String? get primaryImageUrl; String? get itemDescription; DateTime? get itemSoldDate;
+ num? get id;// Optional ID for the item
+ List<String> get itemImageUrls; DateTime get itemPurchaseDate; double? get itemPurchasePrice; InventoryCategory get itemCategory; DateTime? get itemListingDate; double? get itemListingPrice; double? get itemSoldPrice; String? get primaryImageUrl; String? get itemDescription; DateTime? get itemSoldDate;
 /// Create a copy of InventoryItem
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +50,7 @@ abstract mixin class $InventoryItemCopyWith<$Res>  {
   factory $InventoryItemCopyWith(InventoryItem value, $Res Function(InventoryItem) _then) = _$InventoryItemCopyWithImpl;
 @useResult
 $Res call({
- String id, List<String> itemImageUrls, DateTime itemPurchaseDate, double? itemPurchasePrice, InventoryCategory itemCategory, DateTime? itemListingDate, double? itemListingPrice, double? itemSoldPrice, String? primaryImageUrl, String? itemDescription, DateTime? itemSoldDate
+ num? id, List<String> itemImageUrls, DateTime itemPurchaseDate, double? itemPurchasePrice, InventoryCategory itemCategory, DateTime? itemListingDate, double? itemListingPrice, double? itemSoldPrice, String? primaryImageUrl, String? itemDescription, DateTime? itemSoldDate
 });
 
 
@@ -66,10 +67,10 @@ class _$InventoryItemCopyWithImpl<$Res>
 
 /// Create a copy of InventoryItem
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? itemImageUrls = null,Object? itemPurchaseDate = null,Object? itemPurchasePrice = freezed,Object? itemCategory = null,Object? itemListingDate = freezed,Object? itemListingPrice = freezed,Object? itemSoldPrice = freezed,Object? primaryImageUrl = freezed,Object? itemDescription = freezed,Object? itemSoldDate = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? itemImageUrls = null,Object? itemPurchaseDate = null,Object? itemPurchasePrice = freezed,Object? itemCategory = null,Object? itemListingDate = freezed,Object? itemListingPrice = freezed,Object? itemSoldPrice = freezed,Object? primaryImageUrl = freezed,Object? itemDescription = freezed,Object? itemSoldDate = freezed,}) {
   return _then(_self.copyWith(
-id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,itemImageUrls: null == itemImageUrls ? _self.itemImageUrls : itemImageUrls // ignore: cast_nullable_to_non_nullable
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as num?,itemImageUrls: null == itemImageUrls ? _self.itemImageUrls : itemImageUrls // ignore: cast_nullable_to_non_nullable
 as List<String>,itemPurchaseDate: null == itemPurchaseDate ? _self.itemPurchaseDate : itemPurchaseDate // ignore: cast_nullable_to_non_nullable
 as DateTime,itemPurchasePrice: freezed == itemPurchasePrice ? _self.itemPurchasePrice : itemPurchasePrice // ignore: cast_nullable_to_non_nullable
 as double?,itemCategory: null == itemCategory ? _self.itemCategory : itemCategory // ignore: cast_nullable_to_non_nullable
@@ -90,11 +91,13 @@ as DateTime?,
 @JsonSerializable()
 
 class _InventoryItem implements InventoryItem {
-  const _InventoryItem({required this.id, required final  List<String> itemImageUrls, required this.itemPurchaseDate, this.itemPurchasePrice, required this.itemCategory, this.itemListingDate, this.itemListingPrice, this.itemSoldPrice, this.primaryImageUrl, this.itemDescription, this.itemSoldDate}): _itemImageUrls = itemImageUrls;
+  const _InventoryItem({this.id, required final  List<String> itemImageUrls, required this.itemPurchaseDate, this.itemPurchasePrice, required this.itemCategory, this.itemListingDate, this.itemListingPrice, this.itemSoldPrice, this.primaryImageUrl, this.itemDescription, this.itemSoldDate}): _itemImageUrls = itemImageUrls;
   factory _InventoryItem.fromJson(Map<String, dynamic> json) => _$InventoryItemFromJson(json);
 
-@override final  String id;
+@override final  num? id;
+// Optional ID for the item
  final  List<String> _itemImageUrls;
+// Optional ID for the item
 @override List<String> get itemImageUrls {
   if (_itemImageUrls is EqualUnmodifiableListView) return _itemImageUrls;
   // ignore: implicit_dynamic_type
@@ -144,7 +147,7 @@ abstract mixin class _$InventoryItemCopyWith<$Res> implements $InventoryItemCopy
   factory _$InventoryItemCopyWith(_InventoryItem value, $Res Function(_InventoryItem) _then) = __$InventoryItemCopyWithImpl;
 @override @useResult
 $Res call({
- String id, List<String> itemImageUrls, DateTime itemPurchaseDate, double? itemPurchasePrice, InventoryCategory itemCategory, DateTime? itemListingDate, double? itemListingPrice, double? itemSoldPrice, String? primaryImageUrl, String? itemDescription, DateTime? itemSoldDate
+ num? id, List<String> itemImageUrls, DateTime itemPurchaseDate, double? itemPurchasePrice, InventoryCategory itemCategory, DateTime? itemListingDate, double? itemListingPrice, double? itemSoldPrice, String? primaryImageUrl, String? itemDescription, DateTime? itemSoldDate
 });
 
 
@@ -161,10 +164,10 @@ class __$InventoryItemCopyWithImpl<$Res>
 
 /// Create a copy of InventoryItem
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? itemImageUrls = null,Object? itemPurchaseDate = null,Object? itemPurchasePrice = freezed,Object? itemCategory = null,Object? itemListingDate = freezed,Object? itemListingPrice = freezed,Object? itemSoldPrice = freezed,Object? primaryImageUrl = freezed,Object? itemDescription = freezed,Object? itemSoldDate = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? itemImageUrls = null,Object? itemPurchaseDate = null,Object? itemPurchasePrice = freezed,Object? itemCategory = null,Object? itemListingDate = freezed,Object? itemListingPrice = freezed,Object? itemSoldPrice = freezed,Object? primaryImageUrl = freezed,Object? itemDescription = freezed,Object? itemSoldDate = freezed,}) {
   return _then(_InventoryItem(
-id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,itemImageUrls: null == itemImageUrls ? _self._itemImageUrls : itemImageUrls // ignore: cast_nullable_to_non_nullable
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as num?,itemImageUrls: null == itemImageUrls ? _self._itemImageUrls : itemImageUrls // ignore: cast_nullable_to_non_nullable
 as List<String>,itemPurchaseDate: null == itemPurchaseDate ? _self.itemPurchaseDate : itemPurchaseDate // ignore: cast_nullable_to_non_nullable
 as DateTime,itemPurchasePrice: freezed == itemPurchasePrice ? _self.itemPurchasePrice : itemPurchasePrice // ignore: cast_nullable_to_non_nullable
 as double?,itemCategory: null == itemCategory ? _self.itemCategory : itemCategory // ignore: cast_nullable_to_non_nullable

@@ -68,7 +68,7 @@ class _HeroLayoutCardState extends State<HeroLayoutCard> {
             minWidth: widget.width * 7 / 8,
             child: Image(
               fit: BoxFit.cover,
-              image: AssetImage(widget.model.itemImageUrls.first),
+              image: AssetImage(widget.model.itemImageUrls!.first),
             ),
           ),
         ),

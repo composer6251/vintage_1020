@@ -11,7 +11,6 @@ class BuildMockModels {
     for (var m in modelList) {
       List<String> imageUrls = [m];
       InventoryItem model = InventoryItem(
-        id: '',
         itemImageUrls: imageUrls,
         itemPurchaseDate: DateTime.now(),
         itemPurchasePrice: 100.0,
@@ -32,7 +31,6 @@ class BuildMockModels {
 
     /****MOCK MODEL */
     final InventoryItem model = InventoryItem(
-      id: '',
       itemImageUrls: pics,
       itemDescription: 'Description',
       itemPurchaseDate: DateTime.now(),
@@ -57,7 +55,6 @@ class BuildMockModels {
 
     /****MOCK MODEL */
     final InventoryItem model = InventoryItem(
-      id: '',
       itemImageUrls: pics,
       itemDescription: 'Description',
       itemPurchaseDate: DateTime.now(),
