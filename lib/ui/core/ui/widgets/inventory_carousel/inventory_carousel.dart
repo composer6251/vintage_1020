@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:vintage_1020/data/model/inventory_item.dart';
@@ -68,7 +70,10 @@ class _HeroLayoutCardState extends State<HeroLayoutCard> {
             minWidth: widget.width * 7 / 8,
             child: Image(
               fit: BoxFit.cover,
-              image: AssetImage(widget.model.itemImageUrls!.first),
+              image: AssetImage(widget.model.itemImageUrls.isNotEmpty
+                  ? widget.model.itemImageUrls.first
+                  : 'resources/images-booth/booth-1.jpeg'),
+              // image: FileImage('/private/var/mobile/Containers/Data/Application/45975B21-94B0-487A-BE26-E6D66B76111E/tmp/image_picker_E4D233DB-43C2-48BE-B1DF-2709A22E2E6D-71685-00001D8C32BE1DB7.jpg' as File),
             ),
           ),
         ),
