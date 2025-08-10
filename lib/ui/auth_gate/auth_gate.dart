@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:vintage_1020/auth/firebase_auth.dart';
+import 'package:vintage_1020/data/api/b_t_api/b_t_api.dart';
+import 'package:vintage_1020/data/model/inventory_item.dart';
 import 'package:vintage_1020/ui/home_screen/home_screen.dart';
 
 class AuthGate extends StatelessWidget {
@@ -66,6 +68,8 @@ class AuthGate extends StatelessWidget {
       // Get user credentials:
       final userEmail = snapshot.data?.email ?? 'No email';
       final userName = snapshot.data?.displayName ?? 'No name';
+      Future<List<InventoryItem?>?> inventory = getInventoryByUserEmail(userEmail);
+      print('User is signed in! Email: $userEmail, Name: $userName');
       // Create user inventory if it doesn't exist
       // Get inventory if it exists
         // If the user IS logged in, show your main application screen

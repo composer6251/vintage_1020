@@ -43,7 +43,7 @@ Future<InventoryItem?> getInventoryItemById(num id) async {
   }
 }
 
-Future<InventoryItem?> getInventoryByUserEmail(String userEmail) async {
+Future<List<InventoryItem?>?> getInventoryByUserEmail(String userEmail) async {
   // final String token = Uuid().v4();
 
   final response = await http.get(
@@ -54,8 +54,8 @@ Future<InventoryItem?> getInventoryByUserEmail(String userEmail) async {
     },
   );
   if (response.statusCode == 200) {
-    final json = jsonDecode(response.body);
-    return InventoryItem.fromJson(json);
+    final json = jsonDecode(response.body) as List;
+    return json.map((e) => InventoryItem.fromJson(e)).toList();
   } else {
     throw Exception('Failed to add inventory item');
   }
