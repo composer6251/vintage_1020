@@ -44,7 +44,8 @@ Future<InventoryItem?> getInventoryItemById(num id) async {
 }
 
 Future<List<InventoryItem?>?> getInventoryByUserEmail(String userEmail) async {
-
+Uri url  = Uri.http(apiBaseUrl, apiGetUserInventoryByEmail, {'userEmail': userEmail});
+print('Fetching inventory for URL: $url');
   final response = await http.get(
     Uri.http(apiBaseUrl, apiGetUserInventoryByEmail, {'userEmail': userEmail}),
     headers: <String, String>{
