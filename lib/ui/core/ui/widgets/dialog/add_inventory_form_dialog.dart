@@ -145,12 +145,12 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     }
 
     return AlertDialog(
-      title: const Text('Add to Inventory'),
+      title: Center(child: const Text('Add to Inventory', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))),
       content: Form(
         key: formKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
-          mainAxisSize: MainAxisSize.max,
+          mainAxisSize: MainAxisSize.min,
           children: [
             DropdownButtonFormField<InventoryCategory>(
               value: category.value,
@@ -241,46 +241,55 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         ),
       ),
       actions: [
-        TextButton(
-          style: ButtonStyle(
-            elevation: WidgetStatePropertyAll<double>(8.0),
-            backgroundColor: WidgetStatePropertyAll<Color>(
-              Colors.red,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+          IconButton(
+            icon: const Icon(Icons.cancel),
+            tooltip: 'Cancel',
+            style: ButtonStyle(
+              elevation: WidgetStatePropertyAll<double>(8.0),
+              backgroundColor: WidgetStatePropertyAll<Color>(
+                Colors.red,
+              ),
             ),
+            onPressed: () => Navigator.of(context).pop(),
           ),
-          onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
-        ),
-        TextButton(
-          style: ButtonStyle(
-            elevation: WidgetStatePropertyAll<double>(8.0),
-            backgroundColor: WidgetStatePropertyAll<Color>(
-              Colors.blue,
+          IconButton(
+            icon: const Icon(Icons.photo_camera),
+            tooltip: 'Take Photo',
+            style: ButtonStyle(
+              elevation: WidgetStatePropertyAll<double>(8.0),
+              backgroundColor: WidgetStatePropertyAll<Color>(
+                Colors.blue,
+              ),
             ),
+            onPressed: takePhoto,
           ),
-          onPressed: takePhoto,
-          child: const Text('Take Photo'),
-        ),
-        TextButton(
-          style: ButtonStyle(
-            elevation: WidgetStatePropertyAll<double>(8.0),
-            backgroundColor: WidgetStatePropertyAll<Color>(
-              Colors.blue,
+          IconButton(
+            icon: const Icon(Icons.photo_library),
+            tooltip: 'Pick Images from Gallery',
+            style: ButtonStyle(
+              elevation: WidgetStatePropertyAll<double>(8.0),
+              backgroundColor: WidgetStatePropertyAll<Color>(
+                Colors.blue,
+              ),
             ),
+            onPressed: pickMultipleImagesFromGallery,
           ),
-          onPressed: pickMultipleImagesFromGallery,
-          child: const Text('Select Photo'),
-        ),
-        TextButton(
-          style: ButtonStyle(
-            elevation: WidgetStatePropertyAll<double>(8.0),
-            backgroundColor: WidgetStatePropertyAll<Color>(
-              Colors.green,
+          IconButton(
+            icon: const Icon(Icons.check),
+            style: ButtonStyle(
+              elevation: WidgetStatePropertyAll<double>(8.0),
+              backgroundColor: WidgetStatePropertyAll<Color>(
+                Colors.green,
+              ),
             ),
+            onPressed: submit,
           ),
-          onPressed: submit,
-          child: const Text('Submit'),
+          ],
         ),
+
       ],
     );
   }

@@ -17,7 +17,6 @@ class AuthGate extends StatelessWidget {
           return SignInScreen(
             providers: [
               // This is where you list the authentication providers you want to offer.
-              // We'll start with Email and Password, as you have it enabled.
               EmailAuthProvider(),
               // If you enabled Google Sign-In, you'd add:
               // GoogleProvider(clientId: "YOUR_WEBCLIENT_ID"), // Replace with your actual Web Client ID if supporting web
@@ -28,7 +27,6 @@ class AuthGate extends StatelessWidget {
                 padding: const EdgeInsets.all(20),
                 child: AspectRatio(
                   aspectRatio: 1,
-                  // Make sure you have 'assets/flutterfire_300x.png' in your pubspec.yaml and project!
                   child: Image.asset('resources/branding/wateree.jpeg'),
                 ),
               );
@@ -65,7 +63,11 @@ class AuthGate extends StatelessWidget {
             },
           );
         }
-
+      // Get user credentials:
+      final userEmail = snapshot.data?.email ?? 'No email';
+      final userName = snapshot.data?.displayName ?? 'No name';
+      // Create user inventory if it doesn't exist
+      // Get inventory if it exists
         // If the user IS logged in, show your main application screen
         return HomeScreen();
       },

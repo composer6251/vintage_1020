@@ -21,7 +21,7 @@ class MyBoothTab extends ConsumerWidget {
           InventoryCarousel(
             models: items,
             width: width,
-            height: height * .30,
+            height: height * .20,
             flexWeights: [3],
           ),
           InventoryCarousel(

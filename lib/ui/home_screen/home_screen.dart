@@ -4,7 +4,6 @@ import 'package:logger/logger.dart';
 import 'package:vintage_1020/providers/inventory_provider.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/add_inventory_form_dialog.dart';
 import 'package:vintage_1020/ui/edit_inventory_item/edit_inventory_tab.dart';
-import 'package:vintage_1020/ui/inventory_overview/inventory_overview_tab.dart';
 import 'package:vintage_1020/ui/manage_inventory_tab/manage_inventory_tab.dart';
 import 'package:vintage_1020/ui/manage_inventory_tab/widgets/activity_chart.dart';
 import 'package:vintage_1020/ui/my_booth_tab/my_booth_tab.dart';
@@ -24,6 +23,8 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [TabViewsContent()],
       ),
       floatingActionButton: FloatingActionButton(
@@ -48,7 +49,7 @@ class _TabViewsContentState extends ConsumerState<TabViewsContent> with TickerPr
   late TabController _tabController;
 
   final List<Tab> myTabs = <Tab>[
-    Tab(text: 'Inventory', icon: Icon(Icons.favorite)),
+    // Tab(text: 'Inventory', icon: Icon(Icons.favorite)),
     Tab(text: 'My Booth', icon: Icon(Icons.storefront)),
     Tab(text: 'Manage', icon: Icon(Icons.chair_rounded)),
     Tab(text: 'Edit', icon: Icon(Icons.price_check)),   
@@ -103,7 +104,7 @@ class _TabViewsContentState extends ConsumerState<TabViewsContent> with TickerPr
           controller: _tabController,
           physics: NeverScrollableScrollPhysics(),
           children: [
-            InventoryOverviewTab(),
+            // InventoryOverviewTab(),
             MyBoothTab(),
             ManageInventoryTab(
               controller: _tabController,

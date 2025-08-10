@@ -5,7 +5,7 @@ final String apiBaseUrl = '$mac_studio_ip:8080';
 // GET ENDPOINTS
 final String apiGetAllInventoryItems = '$apiBaseUrl/inventory-items';
 final String apiGetItemById = '$apiBaseUrl/inventory/get-item-by-id';
-final String apiGetUserInventoryById = '$apiBaseUrl/inventory/get-user-inventory';
-
+final String apiGetUserInventoryByEmail = '$apiBaseUrl/inventory/get-user-inventory';
+// /inventory/get-user-inventory/{userEmail}
 // POST ENDPOINTS
 final String addItemUrl = '/inventory/add';
