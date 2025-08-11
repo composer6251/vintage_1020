@@ -46,23 +46,24 @@ class AddInventoryFormDialog extends HookConsumerWidget {
       List<String> savedFilePaths = [];
       try {
         final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
-        imagePaths.forEach( (path) async {
-          String? uniquePath = extractDistinctUrl(path, null);
-          final String filePath = '${appDocumentsDir.path}/$uniquePath';
-          final File file = File(filePath);
+        for (var path in imagePaths) {
+            String? uniquePath = extractDistinctUrl(path, null);
+            final String filePath = '${appDocumentsDir.path}/$uniquePath';
+            final File file = File(filePath);
 
-          // Write to the file
-          await file.writeAsString('Hello, Flutter persistence!');
 
-          print('File saved to: $filePath');
-          savedFilePaths.add(filePath);
-        });
-
+            print('File saved to: $filePath');
+            savedFilePaths.add(filePath);;
+        }
       } catch (e) {
         print('Error saving file: $e');
       }
       return savedFilePaths;
     }
+
+    // Future<void> saveImagesToDocumentsFolder() {
+
+    // }
 
     Future<void> takePhoto() async {
       final picker = ImagePicker();
