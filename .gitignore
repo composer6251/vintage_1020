@@ -55,5 +55,8 @@ macos/Podfile
 # Security
 index.html
 
+
+ios/Podfile.lock
+ios/Podfile.lock
 pubspec.lock
-pubspec.lock
+ios/Podfile.lock

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vintage_1020/data/model/inventory_item.dart';
 import 'package:vintage_1020/ui/auth_gate/auth_gate.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -28,6 +29,12 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  List<InventoryItem> getUserInventory() {
+    // This function should return the user's inventory items.
+    // For now, we return an empty list.
+    return [];
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -49,7 +56,7 @@ class MyApp extends StatelessWidget {
         '/manage-inventory': (BuildContext context) => HomeScreen(),
         '/edit-inventory-item': (BuildContext context) =>  EditItemTab(),
       },
-      home: AuthGate(),//HomeScreen()// AuthGate(),
+      home: const AuthGate(),
     );
   }
 }

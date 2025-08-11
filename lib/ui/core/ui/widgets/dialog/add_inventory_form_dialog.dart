@@ -6,11 +6,15 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:photo_gallery/photo_gallery.dart';
+import 'package:photo_manager/photo_manager.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter_image_gallery_saver/flutter_image_gallery_saver.dart';
 import 'package:vintage_1020/constants/inventory_categories.dart';
 import 'package:vintage_1020/data/api/b_t_api/b_t_api.dart';
 import 'package:vintage_1020/data/model/inventory_item.dart';
 import 'package:vintage_1020/providers/inventory_provider.dart';
+import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
 import 'package:vintage_1020/ui/core/ui/util/url_util.dart';
 
 /// **A HookConsumerWidget IS ESSENTIALLY A STATELESS WIDGET, BUT UTILIZES FLUTTER HOOKS TO MANAGE STATE ***
@@ -41,29 +45,26 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     final _defaultItemImageUrl = useState<String>('');
     Future<Directory?>? _appDocumentsDirectory;
 
-    Future<List<String>> saveFiles(List<String> imagePaths) async {
-      if(imagePaths.isEmpty) return [];
-      List<String> savedFilePaths = [];
+    void saveImageToAlbum(XFile image) async {
+      if (image.path.isEmpty) return;
+
+      final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
+      final String imagePath = '${appDocumentsDir.path}/$appNameForImages';
       try {
-        final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
-        for (var path in imagePaths) {
-            String? uniquePath = extractDistinctUrl(path, null);
-            final String filePath = '${appDocumentsDir.path}/$uniquePath';
-            final File file = File(filePath);
+        await PhotoManager.editor.darwin.createAlbum(appNameForImages);
 
+        // image.saveTo('$appNameForImages');
+        final AssetEntity? entity = await PhotoManager.editor.saveImage(await image.readAsBytes(), filename: appNameForImages);
 
-            print('File saved to: $filePath');
-            savedFilePaths.add(filePath);;
-        }
-      } catch (e) {
-        print('Error saving file: $e');
+        await FlutterImageGallerySaver.saveImage(await image.readAsBytes());
+
+        itemImageUrls.value = List.from(itemImageUrls.value)..add(imagePath);
+     
+      } catch(ex) {
+        print('Error saving image to album: $ex');
       }
-      return savedFilePaths;
     }
 
-    // Future<void> saveImagesToDocumentsFolder() {
-
-    // }
 
     Future<void> takePhoto() async {
       final picker = ImagePicker();
@@ -78,10 +79,8 @@ class AddInventoryFormDialog extends HookConsumerWidget {
           _defaultItemImageUrl.value = image.path;
         }
         _photo.value = image;
-        // Create new list from existing image urls and add new image path
-        List<String> savedImagePaths = await saveFiles([image.path]);
-        final updatedImageUrls = List<String>.from(itemImageUrls.value)..addAll(savedImagePaths);
-        itemImageUrls.value = updatedImageUrls;
+
+        saveImageToAlbum(image);
         print('Image taken and saved to state ${_photo.value?.path}');
       } 
       if(itemImageUrls.value.isEmpty) {
@@ -96,21 +95,15 @@ class AddInventoryFormDialog extends HookConsumerWidget {
       print('Picking multiple images from gallery...');
       final picker = ImagePicker();
       final List<XFile> pickedFiles = await picker.pickMultiImage();
-      // Get id of most recent photo from user's inventory FOR THIS PARTICULAR ITEM
-      // MAY NEED AN IMAGES TABLE AND LINK TO INVENTORY ITEM VIA FOREIGN KEY.
-      // OR SIMPLY STORE THE IMAGE URLS AS A LIST IN THE INVENTORY ITEM
-      // OR SUBSTRING THE IMAGE URLS TO GET THE UNIQUE PART OF THE URL
       // image_picker_E4D233DB-43C2-48BE-B1DF-2709A22E2E6D-71685-00001D8C32BE1DB7.jpg
       if (pickedFiles.isNotEmpty) {
         _selectedPhotos.value = pickedFiles;
-        // Create new list of selected image URLs
-        final selectedImageUrls = _selectedPhotos.value?.map((e) => e?.path).whereType<String>() ?? [];
-        // SAVE THE FILES TO THE APP DOCUMENTS DIRECTORY
-        List<String> savedImagePaths = await saveFiles(selectedImageUrls.toList());
-        // Create new list with the existing itemImageUrls and add selected images urls
-        final updatedImageUrls = List<String>.from(itemImageUrls.value)..addAll(savedImagePaths);
-        // Update state hook with the new list
-        itemImageUrls.value = updatedImageUrls;
+        // SAVE FILES
+        for (var pickedFile in pickedFiles) {
+          // Save each picked file to the app documents directory
+          saveImageToAlbum(pickedFile);
+        }
+
         print('${pickedFiles.length} images picked.');
         // Images were successfully picked
         
