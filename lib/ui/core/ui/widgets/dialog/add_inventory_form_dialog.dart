@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -48,33 +47,52 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     void saveImageToAlbum(XFile image) async {
       if (image.path.isEmpty) return;
 
-      final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
+      final Directory appDocumentsDir =
+          await getApplicationDocumentsDirectory();
       final String imagePath = '${appDocumentsDir.path}/$appNameForImages';
       try {
-        await PhotoManager.editor.darwin.createAlbum(appNameForImages);
-
-        // image.saveTo('$appNameForImages');
-        final AssetEntity? entity = await PhotoManager.editor.saveImage(await image.readAsBytes(), filename: appNameForImages);
-
-        String? test = entity?.id;
-
-        File testFile = await PhotoGallery.getFile(mediumId: entity!.id);
-        AssetEntity savedImage = await PhotoManager.editor.saveImageWithPath(testFile.path,
-        relativePath: testFile.path,
-          title: 'Vintage_1020',
+        // Create album if it doesn't exist
+        AssetPathEntity? entity = await createInventoryPhotoAlbum(
+          appNameForImages,
         );
-        String? nonOrigin = await PhotoManager.plugin.getFullFile(savedImage.id, isOrigin: false);
-       String? nonOriginTwo = await PhotoManager.plugin.getFullFile(savedImage.id, isOrigin: false);
-        // await FlutterImageGallerySaver.saveImage(await image.readAsBytes());
+        if (entity == null) {
+          print('Failed to create album: $appNameForImages');
+          return;
+        }
+        // Get the file from PhotoGallery
+        File testFile = await PhotoGallery.getFile(mediumId: entity!.id);
+        AssetEntity savedImage = await PhotoManager.editor.saveImageWithPath(
+          testFile.path,
+          relativePath: testFile.path,
+          title: category.value.name + Uuid().v4(),
+        );
+        
+        // AssetEntity e = AssetEntity(
+        //   id: savedImage.id,
+        //   typeInt: savedImage.typeInt,
+        //   width: savedImage.width,
+        //   height: savedImage.height,
+        //   duration: savedImage.duration,
+        //   relativePath: savedImage.relativePath,
+        // );
+        await PhotoManager.plugin.copyAssetToGallery(savedImage, entity);
 
+        String? nonOrigin = await PhotoManager.plugin.getFullFile(
+          savedImage.id,
+          isOrigin: false,
+        );
+        String? nonOriginTwo = await PhotoManager.plugin.getFullFile(
+          savedImage.id,
+          isOrigin: false,
+        );
+        // Update state with selected image Urls
         itemImageUrls.value = List.from(itemImageUrls.value)..add(nonOrigin!);
-        itemImageUrls.value = List.from(itemImageUrls.value)..add(nonOriginTwo!);
-     
-      } catch(ex) {
+        itemImageUrls.value = List.from(itemImageUrls.value)
+          ..add(nonOriginTwo!);
+      } catch (ex) {
         print('Error saving image to album: $ex');
       }
     }
-
 
     Future<void> takePhoto() async {
       final picker = ImagePicker();
@@ -85,18 +103,17 @@ class AddInventoryFormDialog extends HookConsumerWidget {
       if (image != null) {
         // If we have no default image, set the first taken image as default
         // TODO: AFTER SAVING, THIS SHOULD BE BASED OFF OF WHAT THE PROVIDER HAS
-        if(_defaultItemImageUrl.value.isEmpty) {
+        if (_defaultItemImageUrl.value.isEmpty) {
           _defaultItemImageUrl.value = image.path;
         }
         _photo.value = image;
 
         saveImageToAlbum(image);
         print('Image taken and saved to state ${_photo.value?.path}');
-      } 
-      if(itemImageUrls.value.isEmpty) {
-        itemImageUrls.value = [image!.path];
       }
-      else {
+      if (itemImageUrls.value.isEmpty) {
+        itemImageUrls.value = [image!.path];
+      } else {
         print('No image selected');
       }
     }
@@ -116,12 +133,11 @@ class AddInventoryFormDialog extends HookConsumerWidget {
 
         print('${pickedFiles.length} images picked.');
         // Images were successfully picked
-        
       } else {
         // User canceled the picker or selected nothing
         print('No images selected.');
       }
-  }
+    }
 
     Future<void> selectDate(String type) async {
       final DateTime? pickedDate = await showDatePicker(
@@ -140,51 +156,48 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         return;
       }
       purchaseDate.value = pickedDate;
-      
     }
 
     void submit() {
-
-      // TODO REMOVE MOCK DATA 
-      // if(itemImageUrls.value.isEmpty) {
-      //   itemImageUrls.value = ['resources/images-booth/booth-1.jpeg', 'resources/images-booth/booth-1.jpeg'];
-      // }
       final InventoryItem itemToSave = InventoryItem(
-          itemCategory: InventoryCategory.furniture,
-          itemImageUrls: itemImageUrls.value,
-          itemPurchaseDate: purchaseDate.value,
-          itemPurchasePrice: double.tryParse(
-            itemPurchasePriceController.text,
-          ),
-          itemListingDate: listingDate.value,
-          itemListingPrice: double.tryParse(itemListingPriceController.text),
-          itemSoldDate: soldDate.value,
-          itemSoldPrice: double.tryParse(itemSoldPriceController.text),
-        );
+        itemCategory: InventoryCategory.furniture,
+        itemImageUrls: itemImageUrls.value,
+        itemPurchaseDate: purchaseDate.value,
+        itemPurchasePrice: double.tryParse(itemPurchasePriceController.text),
+        itemListingDate: listingDate.value,
+        itemListingPrice: double.tryParse(itemListingPriceController.text),
+        itemSoldDate: soldDate.value,
+        itemSoldPrice: double.tryParse(itemSoldPriceController.text),
+      );
 
       if (formKey.currentState?.validate() ?? false) {
         ref
             .read(inventoryNotifierProvider.notifier)
-            .addInventoryItem(
-              itemToSave,
-            );
+            .addInventoryItem(itemToSave);
 
-            Navigator.of(context).pop(); // Close the dialog
+        Navigator.of(context).pop(); // Close the dialog
 
-            saveInventoryItem(itemToSave).then((savedItem) {
+        saveInventoryItem(itemToSave)
+            .then((savedItem) {
               if (savedItem != null) {
                 print('Inventory item saved successfully: ${savedItem.id}');
               } else {
                 print('Failed to save inventory item');
               }
-            }).catchError((error) {
+            })
+            .catchError((error) {
               print('Error saving inventory item: $error');
             });
       }
     }
 
     return AlertDialog(
-      title: Center(child: const Text('Add to Inventory', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))),
+      title: Center(
+        child: const Text(
+          'Add to Inventory',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+      ),
       content: Form(
         key: formKey,
         child: Column(
@@ -225,7 +238,10 @@ class AddInventoryFormDialog extends HookConsumerWidget {
             ),
             TextFormField(
               controller: itemPurchasePriceController,
-              decoration: const InputDecoration(fillColor: Colors.blue, labelText: 'Purchase Price'),
+              decoration: const InputDecoration(
+                fillColor: Colors.blue,
+                labelText: 'Purchase Price',
+              ),
               keyboardType: TextInputType.numberWithOptions(decimal: true),
               validator: (value) =>
                   value?.isEmpty ?? true ? 'Purchase Price is required' : null,
@@ -233,14 +249,14 @@ class AddInventoryFormDialog extends HookConsumerWidget {
             OutlinedButton(
               style: ButtonStyle(
                 elevation: WidgetStatePropertyAll<double>(8.0),
-                backgroundColor: WidgetStatePropertyAll<Color>(
-                  Colors.blue,
-                ),
+                backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
               ),
               onPressed: () => selectDate('Purchase'),
-              child: Text(purchaseDate.value == null
-                  ? 'Select Purchase Date'
-                  : 'Purchase Date: ${purchaseDate.value.toLocal().month}/${purchaseDate.value.toLocal().day}/${purchaseDate.value.toLocal().year}'),
+              child: Text(
+                purchaseDate.value == null
+                    ? 'Select Purchase Date'
+                    : 'Purchase Date: ${purchaseDate.value.toLocal().month}/${purchaseDate.value.toLocal().day}/${purchaseDate.value.toLocal().year}',
+              ),
             ),
             TextFormField(
               controller: itemListingPriceController,
@@ -250,14 +266,14 @@ class AddInventoryFormDialog extends HookConsumerWidget {
             OutlinedButton(
               style: ButtonStyle(
                 elevation: WidgetStatePropertyAll<double>(8.0),
-                backgroundColor: WidgetStatePropertyAll<Color>(
-                  Colors.blue,
-                ),
+                backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
               ),
               onPressed: () => selectDate('Listing'),
-              child: Text(listingDate.value == null
-                  ? 'Select Listing Date'
-                  : 'Listing Date: ${listingDate.value.toLocal().month}/${listingDate.value.toLocal().day}/${listingDate.value.toLocal().year}'),
+              child: Text(
+                listingDate.value == null
+                    ? 'Select Listing Date'
+                    : 'Listing Date: ${listingDate.value.toLocal().month}/${listingDate.value.toLocal().day}/${listingDate.value.toLocal().year}',
+              ),
             ),
             TextFormField(
               controller: itemSoldPriceController,
@@ -267,14 +283,14 @@ class AddInventoryFormDialog extends HookConsumerWidget {
             OutlinedButton(
               style: ButtonStyle(
                 elevation: WidgetStatePropertyAll<double>(8.0),
-                backgroundColor: WidgetStatePropertyAll<Color>(
-                  Colors.blue,
-                ),
+                backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
               ),
               onPressed: () => selectDate('Sold'),
-              child: Text(soldDate.value == null
-                  ? 'Select Sold Date'
-                  : 'Sold Date: ${soldDate.value.toLocal().month}/${soldDate.value.toLocal().day}/${soldDate.value.toLocal().year}'),
+              child: Text(
+                soldDate.value == null
+                    ? 'Select Sold Date'
+                    : 'Sold Date: ${soldDate.value.toLocal().month}/${soldDate.value.toLocal().day}/${soldDate.value.toLocal().year}',
+              ),
             ),
           ],
         ),
@@ -283,52 +299,43 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-          IconButton(
-            icon: const Icon(Icons.cancel),
-            tooltip: 'Cancel',
-            style: ButtonStyle(
-              elevation: WidgetStatePropertyAll<double>(8.0),
-              backgroundColor: WidgetStatePropertyAll<Color>(
-                Colors.red,
+            IconButton(
+              icon: const Icon(Icons.cancel),
+              tooltip: 'Cancel',
+              style: ButtonStyle(
+                elevation: WidgetStatePropertyAll<double>(8.0),
+                backgroundColor: WidgetStatePropertyAll<Color>(Colors.red),
               ),
+              onPressed: () => Navigator.of(context).pop(),
             ),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          IconButton(
-            icon: const Icon(Icons.photo_camera),
-            tooltip: 'Take Photo',
-            style: ButtonStyle(
-              elevation: WidgetStatePropertyAll<double>(8.0),
-              backgroundColor: WidgetStatePropertyAll<Color>(
-                Colors.blue,
+            IconButton(
+              icon: const Icon(Icons.photo_camera),
+              tooltip: 'Take Photo',
+              style: ButtonStyle(
+                elevation: WidgetStatePropertyAll<double>(8.0),
+                backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
               ),
+              onPressed: takePhoto,
             ),
-            onPressed: takePhoto,
-          ),
-          IconButton(
-            icon: const Icon(Icons.photo_library),
-            tooltip: 'Pick Images from Gallery',
-            style: ButtonStyle(
-              elevation: WidgetStatePropertyAll<double>(8.0),
-              backgroundColor: WidgetStatePropertyAll<Color>(
-                Colors.blue,
+            IconButton(
+              icon: const Icon(Icons.photo_library),
+              tooltip: 'Pick Images from Gallery',
+              style: ButtonStyle(
+                elevation: WidgetStatePropertyAll<double>(8.0),
+                backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
               ),
+              onPressed: pickMultipleImagesFromGallery,
             ),
-            onPressed: pickMultipleImagesFromGallery,
-          ),
-          IconButton(
-            icon: const Icon(Icons.check),
-            style: ButtonStyle(
-              elevation: WidgetStatePropertyAll<double>(8.0),
-              backgroundColor: WidgetStatePropertyAll<Color>(
-                Colors.green,
+            IconButton(
+              icon: const Icon(Icons.check),
+              style: ButtonStyle(
+                elevation: WidgetStatePropertyAll<double>(8.0),
+                backgroundColor: WidgetStatePropertyAll<Color>(Colors.green),
               ),
+              onPressed: submit,
             ),
-            onPressed: submit,
-          ),
           ],
         ),
-
       ],
     );
   }

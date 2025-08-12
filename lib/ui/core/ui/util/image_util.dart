@@ -11,26 +11,25 @@ import 'package:flutter_image_gallery_saver/flutter_image_gallery_saver.dart';
 
 final String appNameForImages = 'Vintage_1020';
 
-void createInventoryPhotoAlbum(String albumName) async {
+Future<AssetPathEntity?> createInventoryPhotoAlbum(String albumName) async {
 
   List<Album> currentPhotoAlbums = await PhotoGallery.listAlbums();
   for(Album album in currentPhotoAlbums) {
     if(album.name == appNameForImages) {
-      return;
+
+      return AssetPathEntity(id: album.id, name: album.name ?? '', isAll: false);
     }
   }
-  PhotoManager.editor.darwin.createAlbum(albumName);
-  PhotoGallery.listAlbums();
-
-  final List<Album> imageAlbums = await PhotoGallery.listAlbums();
-  final List<Album> videoAlbums = await PhotoGallery.listAlbums(
-    mediumType: MediumType.video,
-    newest: false,
-    hideIfEmpty: false,
-);
-
-  // PhotoGallery.getMedium(mediumId: mediumId)
+  AssetPathEntity? newAlbum = await PhotoManager.editor.darwin.createAlbum(albumName);
+  return newAlbum;
 }
+
+//   final List<Album> imageAlbums = await PhotoGallery.listAlbums();
+//   final List<Album> videoAlbums = await PhotoGallery.listAlbums(
+//     mediumType: MediumType.video,
+//     newest: false,
+//     hideIfEmpty: false,
+// );
 
 void saveImagesToAlbum(String imagePath) async {
   await FlutterImageGallerySaver.saveFile(
