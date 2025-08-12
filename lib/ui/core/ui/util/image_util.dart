@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_gallery_saver/flutter_image_gallery_saver.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:photo_gallery/photo_gallery.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:vintage_1020/ui/core/ui/util/url_util.dart';
@@ -11,62 +12,76 @@ import 'package:flutter_image_gallery_saver/flutter_image_gallery_saver.dart';
 
 final String appNameForImages = 'Vintage_1020';
 
+Future<String> handleImageSelection(XFile image, String? imageName) async {
+  AssetPathEntity? pathEntity = await createInventoryPhotoAlbum(appNameForImages);
+
+  if (image.path.isEmpty) return '';
+  // Save image to disk
+  AssetEntity assetEntity = await saveImage(image.path, imageName!);
+
+  // Save image to album
+  saveImageToAlbum(assetEntity, pathEntity!);
+
+// TODO: SHOULD THIS BE IMAGE.PATH OR GET FULL FILE RETURNED PATH?
+  String? url = await getFullFile(image.path, isOrigin: false);
+  print('image.path: ${image.path}' + '\nurl: $url');
+
+  return image.path;
+}
+
+/****CREATE ALBUM IN PHOTOS LIBRARY ON IOS FOR VINTAGE_1020 IF IT DOESN'T ALREADY EXIST */
 Future<AssetPathEntity?> createInventoryPhotoAlbum(String albumName) async {
 
-  List<Album> currentPhotoAlbums = await PhotoGallery.listAlbums();
-  for(Album album in currentPhotoAlbums) {
+  List<AssetPathEntity> currentPhotoAlbums = await PhotoManager.getAssetPathList(
+    type: RequestType.image,
+    hasAll: false,
+  );
+  // Check if the album already exists
+  for(AssetPathEntity album in currentPhotoAlbums) {
+   
     if(album.name == appNameForImages) {
-
       return AssetPathEntity(id: album.id, name: album.name ?? '', isAll: false);
     }
   }
+  
   AssetPathEntity? newAlbum = await PhotoManager.editor.darwin.createAlbum(albumName);
+  
   return newAlbum;
 }
 
-//   final List<Album> imageAlbums = await PhotoGallery.listAlbums();
-//   final List<Album> videoAlbums = await PhotoGallery.listAlbums(
-//     mediumType: MediumType.video,
-//     newest: false,
-//     hideIfEmpty: false,
-// );
+Future<AssetEntity> saveImage(String imagePath, String category) async {
+        
+    AssetEntity savedImage = await PhotoManager.editor.saveImageWithPath(
+      imagePath,
+      title: category,
+    );
 
-void saveImagesToAlbum(String imagePath) async {
-  await FlutterImageGallerySaver.saveFile(
-    imagePath
-  );
+    return savedImage;
 }
 
-void getAssetCount() async {
-  await PhotoManager.getAssetCount().then((a) => print('COUNT: $a'));
+void saveImageToAlbum(AssetEntity entity, AssetPathEntity pathEntity) async {
+
+  try {
+    await PhotoManager.plugin.copyAssetToGallery(entity, pathEntity);
+  } catch (e) {
+    print('Error saving image to album: $e');
+  }
 }
 
-// void saveFiles(List<String> imagePaths) async {
-//       if(imagePaths.isEmpty) return;
-//
-//
-//       List<String> savedFilePaths = [];
-//       try {
-//         final Directory appDocumentsDir = await getApplicationDocumentsDirectory();
-//         String newAlbumName = "Vintage_1020";
-//         createInventoryPhotoAlbum(newAlbumName);
-//         for (var path in imagePaths) {
-//             String? uniquePath = extractDistinctUrl(path, null);
-//             final String filePath = '${appDocumentsDir.path}/$uniquePath';
-//             final File file = File(filePath);
-//             // await FlutterImageGallerySaver.saveFile(filePath);
-//
-//           // print('File saved to: $filePath');
-//           // savedFilePaths.add(filePath);
-//           // itemImageUrls.value = List.from(itemImageUrls.value)..add(filePath);
-//           // Create new list with the existing itemImageUrls and add selected images urls
-//           // final updatedImageUrls = List<String>.from(itemImageUrls.value)..addAll(savedImagePaths);
-//         };
-//
-//       } catch (e) {
-//         print('Error saving file: $e');
-//       }
-//     }
+Future<String?> getFullFile(String id, {bool isOrigin = true}) async {
+  String? photoUrl;
+  try {
+    photoUrl = 
+      await PhotoManager.plugin.getFullFile(
+          id,
+          isOrigin: isOrigin,
+        );
+  } catch (e) {
+      print('Error getting full file: $e');
+      return null;
+  }
+  return photoUrl;
+}
 
 
 

@@ -66,22 +66,9 @@ class AuthGate extends StatelessWidget {
           );
         }
       // Get user credentials:
+      // TODO: Add email to SharedPreferences or Hive
       final userEmail = snapshot.data?.email ?? 'No email';
-      final userName = snapshot.data?.displayName ?? 'No name';
       Future<List<InventoryItem?>?> inventory = getInventoryByUserEmail(userEmail);
-      // getInventoryItemById(1).then((item) {
-      //   if (item != null) {
-      //     print('Retrieved item: ${item}');
-      //   } else {
-      //     print('No item found with that ID.');
-      //   }
-      // }).catchError((error) {
-      //   print('Error retrieving item: $error');
-      // });
-      print('User is signed in! Email: $userEmail, Name: $userName');
-      // Create user inventory if it doesn't exist
-      // Get inventory if it exists
-        // If the user IS logged in, show your main application screen
         return HomeScreen();
       },
     );

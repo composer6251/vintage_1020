@@ -4,17 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:photo_gallery/photo_gallery.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:uuid/uuid.dart';
-import 'package:flutter_image_gallery_saver/flutter_image_gallery_saver.dart';
 import 'package:vintage_1020/constants/inventory_categories.dart';
 import 'package:vintage_1020/data/api/b_t_api/b_t_api.dart';
 import 'package:vintage_1020/data/model/inventory_item.dart';
 import 'package:vintage_1020/providers/inventory_provider.dart';
 import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
-import 'package:vintage_1020/ui/core/ui/util/url_util.dart';
 
 /// **A HookConsumerWidget IS ESSENTIALLY A STATELESS WIDGET, BUT UTILIZES FLUTTER HOOKS TO MANAGE STATE ***
 class AddInventoryFormDialog extends HookConsumerWidget {
@@ -47,48 +42,27 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     void saveImageToAlbum(XFile image) async {
       if (image.path.isEmpty) return;
 
-      final Directory appDocumentsDir =
-          await getApplicationDocumentsDirectory();
-      final String imagePath = '${appDocumentsDir.path}/$appNameForImages';
       try {
         // Create album if it doesn't exist
-        AssetPathEntity? entity = await createInventoryPhotoAlbum(
-          appNameForImages,
+        AssetPathEntity? pathEntity = await createInventoryPhotoAlbum(
+          appNameForImages
         );
-        if (entity == null) {
+        if (pathEntity == null) {
           print('Failed to create album: $appNameForImages');
           return;
         }
-        // Get the file from PhotoGallery
-        File testFile = await PhotoGallery.getFile(mediumId: entity!.id);
-        AssetEntity savedImage = await PhotoManager.editor.saveImageWithPath(
-          testFile.path,
-          relativePath: testFile.path,
-          title: category.value.name + Uuid().v4(),
-        );
         
-        // AssetEntity e = AssetEntity(
-        //   id: savedImage.id,
-        //   typeInt: savedImage.typeInt,
-        //   width: savedImage.width,
-        //   height: savedImage.height,
-        //   duration: savedImage.duration,
-        //   relativePath: savedImage.relativePath,
-        // );
-        await PhotoManager.plugin.copyAssetToGallery(savedImage, entity);
-
-        String? nonOrigin = await PhotoManager.plugin.getFullFile(
-          savedImage.id,
-          isOrigin: false,
-        );
-        String? nonOriginTwo = await PhotoManager.plugin.getFullFile(
+        AssetEntity savedImage = await saveImage(image.path, category.value.name);
+        // Adds image reference to the album created above
+        await PhotoManager.plugin.copyAssetToGallery(savedImage, pathEntity);
+        
+        // /var/mobile/Containers/Data/Application/B0972C49-6E37-45E2-A7DF-11F5C2FB97D2/Documents/Vintage_1020
+        String? photoUrl = await PhotoManager.plugin.getFullFile(
           savedImage.id,
           isOrigin: false,
         );
         // Update state with selected image Urls
-        itemImageUrls.value = List.from(itemImageUrls.value)..add(nonOrigin!);
-        itemImageUrls.value = List.from(itemImageUrls.value)
-          ..add(nonOriginTwo!);
+        itemImageUrls.value = List.from(itemImageUrls.value)..add(photoUrl!);
       } catch (ex) {
         print('Error saving image to album: $ex');
       }
