@@ -56,9 +56,19 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         // image.saveTo('$appNameForImages');
         final AssetEntity? entity = await PhotoManager.editor.saveImage(await image.readAsBytes(), filename: appNameForImages);
 
-        await FlutterImageGallerySaver.saveImage(await image.readAsBytes());
+        String? test = entity?.id;
 
-        itemImageUrls.value = List.from(itemImageUrls.value)..add(imagePath);
+        File testFile = await PhotoGallery.getFile(mediumId: entity!.id);
+        AssetEntity savedImage = await PhotoManager.editor.saveImageWithPath(testFile.path,
+        relativePath: testFile.path,
+          title: 'Vintage_1020',
+        );
+        String? nonOrigin = await PhotoManager.plugin.getFullFile(savedImage.id, isOrigin: false);
+       String? nonOriginTwo = await PhotoManager.plugin.getFullFile(savedImage.id, isOrigin: false);
+        // await FlutterImageGallerySaver.saveImage(await image.readAsBytes());
+
+        itemImageUrls.value = List.from(itemImageUrls.value)..add(nonOrigin!);
+        itemImageUrls.value = List.from(itemImageUrls.value)..add(nonOriginTwo!);
      
       } catch(ex) {
         print('Error saving image to album: $ex');
