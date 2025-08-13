@@ -1,18 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
+import 'package:vintage_1020/data/api/b_t_api/b_t_api.dart';
+import 'package:vintage_1020/data/model/inventory_item.dart';
 import 'package:vintage_1020/providers/inventory_provider.dart';
+import 'package:vintage_1020/providers/user_provider.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/add_inventory_form_dialog.dart';
 import 'package:vintage_1020/ui/edit_inventory_item/edit_inventory_tab.dart';
 import 'package:vintage_1020/ui/manage_inventory_tab/manage_inventory_tab.dart';
 import 'package:vintage_1020/ui/manage_inventory_tab/widgets/activity_chart.dart';
 import 'package:vintage_1020/ui/my_booth_tab/my_booth_tab.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
+  HomeScreen(String userEmail, {super.key});
   final logger = Logger(printer: PrettyPrinter());
-
+  
+  late final String userEmail;
+  
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _HomeScreenState();
+
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  late final String userEmail;
+  
+      @override
+    void initState() {
+      // Fetch inventory from API and build user inventory 
+      final userEmail = ref.read(userNotifierProvider).userEmail;
+      Future<List<InventoryItem?>?> inventory = getInventoryByUserEmail(userEmail);
+      inventory.then((items) {
+        if (items != null) {
+          ref.read(inventoryNotifierProvider.notifier).buildUserInventory(items.whereType<InventoryItem>().toList());
+        }
+      });
+        }
 
     void openAddInventoryDialog() {
       showDialog(
@@ -20,6 +43,10 @@ class HomeScreen extends ConsumerWidget {
         builder: (context) => const AddInventoryFormDialog(),
       );
     }
+  
+  @override
+  Widget build(BuildContext context) {
+
 
     return Scaffold(
       body: Column(
@@ -42,10 +69,10 @@ class HomeScreen extends ConsumerWidget {
 class TabViewsContent extends ConsumerStatefulWidget {
 
   @override
-  _TabViewsContentState createState() => _TabViewsContentState();
+  TabViewsContentState createState() => TabViewsContentState();
 }
 
-class _TabViewsContentState extends ConsumerState<TabViewsContent> with TickerProviderStateMixin {
+class TabViewsContentState extends ConsumerState<TabViewsContent> with TickerProviderStateMixin {
   late TabController _tabController;
 
   final List<Tab> myTabs = <Tab>[

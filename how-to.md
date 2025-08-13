@@ -45,6 +45,21 @@ VIEW HIERARCHY:
         - ViewModel
 
 #### RIVERPOD FOR STATE MANAGEMENT
+#### https://codewithandrea.com/articles/flutter-state-management-riverpod/
+*TYPES OF WIDGETS FROM RIVERPOD AND WHEN TO USE*
+*CONSUMER WIDGET* 
+- MOST COMMON USE CASE. A WIDGET NEEDS TO BE NOTIFIED WHEN A STATE IS UPDATED.
+
+**FUTURE PROVIDER**
+- Used to store data from API calls(separate service/repo)
+*STEPS*
+- Create api or repository logic to get data from API or DB respectively
+- Create   
+
+
+*WIDGETREF OBJECT*
+- ref.watch : Use INSIDE build method
+- ref.read : initstate or other lifecycle methods.
 - Create model class(data structure to parse JSON responses into. See InventoryItem.dart)
 - Create Provider class
 - Wrap entire app in ProviderScope widget

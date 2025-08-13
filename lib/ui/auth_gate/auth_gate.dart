@@ -1,16 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:vintage_1020/auth/firebase_auth.dart';
-import 'package:vintage_1020/data/api/b_t_api/b_t_api.dart';
-import 'package:vintage_1020/data/model/inventory_item.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:vintage_1020/providers/user_provider.dart';
 import 'package:vintage_1020/ui/home_screen/home_screen.dart';
 
-class AuthGate extends StatelessWidget {
+class AuthGate extends HookConsumerWidget {
   const AuthGate({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
@@ -68,8 +67,8 @@ class AuthGate extends StatelessWidget {
       // Get user credentials:
       // TODO: Add email to SharedPreferences or Hive
       final userEmail = snapshot.data?.email ?? 'No email';
-      Future<List<InventoryItem?>?> inventory = getInventoryByUserEmail(userEmail);
-        return HomeScreen();
+      ref.watch(userNotifierProvider.notifier).setUserEmail(userEmail);
+        return HomeScreen(userEmail);
       },
     );
   }

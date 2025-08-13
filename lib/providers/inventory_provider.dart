@@ -24,6 +24,10 @@ class InventoryNotifier extends _$InventoryNotifier {
      final json = jsonDecode(response.body);
   }
 
+  void buildUserInventory(List<InventoryItem> items) {
+    state = items;
+  }
+
   void addInventoryItem(InventoryItem item) {
     state = [
       ...state,

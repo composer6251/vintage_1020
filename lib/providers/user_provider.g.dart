@@ -1,57 +1,56 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'inventory_provider.dart';
+part of 'user_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-@ProviderFor(InventoryNotifier)
-const inventoryNotifierProvider = InventoryNotifierProvider._();
+@ProviderFor(UserNotifier)
+const userNotifierProvider = UserNotifierProvider._();
 
-final class InventoryNotifierProvider
-    extends $NotifierProvider<InventoryNotifier, List<InventoryItem>> {
-  const InventoryNotifierProvider._()
+final class UserNotifierProvider extends $NotifierProvider<UserNotifier, User> {
+  const UserNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'inventoryNotifierProvider',
+        name: r'userNotifierProvider',
         isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$inventoryNotifierHash();
+  String debugGetCreateSourceHash() => _$userNotifierHash();
 
   @$internal
   @override
-  InventoryNotifier create() => InventoryNotifier();
+  UserNotifier create() => UserNotifier();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(List<InventoryItem> value) {
+  Override overrideWithValue(User value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<List<InventoryItem>>(value),
+      providerOverride: $SyncValueProvider<User>(value),
     );
   }
 }
 
-String _$inventoryNotifierHash() => r'82490ba6c235bf4b0c44b36b971a01da57dffe21';
+String _$userNotifierHash() => r'd2cc8e532a2710263b1054e9d4f7ca1c8280ea97';
 
-abstract class _$InventoryNotifier extends $Notifier<List<InventoryItem>> {
-  List<InventoryItem> build();
+abstract class _$UserNotifier extends $Notifier<User> {
+  User build();
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
-    final ref = this.ref as $Ref<List<InventoryItem>, List<InventoryItem>>;
+    final ref = this.ref as $Ref<User, User>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<List<InventoryItem>, List<InventoryItem>>,
-              List<InventoryItem>,
+              AnyNotifier<User, User>,
+              User,
               Object?,
               Object?
             >;
