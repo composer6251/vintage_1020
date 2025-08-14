@@ -28,6 +28,10 @@ class InventoryNotifier extends _$InventoryNotifier {
     state = items;
   }
 
+  void fetchUserInventory() {
+    
+  }
+
   void addInventoryItem(InventoryItem item) {
     state = [
       ...state,

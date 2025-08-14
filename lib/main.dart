@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
       ),
       routes: <String, WidgetBuilder>{
         // '/inventory': (BuildContext context) => InventoryCarousel(),
-        '/manage-inventory': (BuildContext context) => HomeScreen(),
+        // '/manage-inventory': (BuildContext context) => HomeScreen(),
         '/edit-inventory-item': (BuildContext context) =>  EditItemTab(),
       },
       home: const AuthGate(),

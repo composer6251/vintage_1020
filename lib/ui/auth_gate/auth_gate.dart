@@ -2,12 +2,18 @@ import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vintage_1020/providers/user_provider.dart';
 import 'package:vintage_1020/ui/home_screen/home_screen.dart';
 
 class AuthGate extends HookConsumerWidget {
   const AuthGate({super.key});
 
+  void setUserEmail(WidgetRef ref, String userEmail) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    await pref.setString('userEmail', userEmail);
+    ref.watch(userNotifierProvider.notifier).setUserEmail(userEmail);
+  }
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return StreamBuilder<User?>(
@@ -67,8 +73,9 @@ class AuthGate extends HookConsumerWidget {
       // Get user credentials:
       // TODO: Add email to SharedPreferences or Hive
       final userEmail = snapshot.data?.email ?? 'No email';
-      ref.watch(userNotifierProvider.notifier).setUserEmail(userEmail);
-        return HomeScreen(userEmail);
+      setUserEmail(ref, userEmail);
+      // ref.watch(userNotifierProvider.notifier).setUserEmail(userEmail);
+        return HomeScreen(userEmail: userEmail,);
       },
     );
   }

@@ -12,7 +12,7 @@ import 'package:vintage_1020/ui/manage_inventory_tab/widgets/activity_chart.dart
 import 'package:vintage_1020/ui/my_booth_tab/my_booth_tab.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
-  HomeScreen(String userEmail, {super.key});
+  HomeScreen({super.key, required this.userEmail});
   final logger = Logger(printer: PrettyPrinter());
   
   late final String userEmail;
@@ -27,6 +27,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   
       @override
     void initState() {
+    super.initState();
       // Fetch inventory from API and build user inventory 
       final userEmail = ref.read(userNotifierProvider).userEmail;
       Future<List<InventoryItem?>?> inventory = getInventoryByUserEmail(userEmail);
