@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vintage_1020/constants/api_urls.dart';
+import 'package:vintage_1020/data/api/b_t_api/b_t_api.dart';
 import 'package:vintage_1020/data/model/inventory_item.dart';
 import 'package:http/http.dart' as http;
 
@@ -28,8 +29,20 @@ class InventoryNotifier extends _$InventoryNotifier {
     state = items;
   }
 
-  void fetchUserInventory() {
-    
+  void fetchUserInventory(String userEmail) async {
+    final response = await http.get(
+      Uri.http(apiBaseUrl, apiGetUserInventoryByEmail, {'userEmail': userEmail}),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        // HttpHeaders.authorizationHeader: token, // Replace with your actual CSRF token if needed
+      },
+    );
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body) as List;
+      json.map((e) => addInventoryItem(InventoryItem.fromJson(e)));
+    } else {
+      throw Exception('Failed to retrieve inventory item');
+    }
   }
 
   void addInventoryItem(InventoryItem item) {

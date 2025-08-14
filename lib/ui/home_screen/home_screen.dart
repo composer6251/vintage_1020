@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:vintage_1020/data/api/b_t_api/b_t_api.dart';
@@ -15,7 +16,7 @@ class HomeScreen extends ConsumerStatefulWidget {
   HomeScreen({super.key, required this.userEmail});
   final logger = Logger(printer: PrettyPrinter());
   
-  late final String userEmail;
+  final String userEmail;
   
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _HomeScreenState();
@@ -23,20 +24,25 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  late final String userEmail;
-  
-      @override
+
+  void useOnInit(Function action) {
+  useEffect(() {
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => action(),
+    );
+    return null;
+  }, []);
+}
+    @override
     void initState() {
-    super.initState();
-      // Fetch inventory from API and build user inventory 
-      final userEmail = ref.read(userNotifierProvider).userEmail;
-      Future<List<InventoryItem?>?> inventory = getInventoryByUserEmail(userEmail);
-      inventory.then((items) {
-        if (items != null) {
-          ref.read(inventoryNotifierProvider.notifier).buildUserInventory(items.whereType<InventoryItem>().toList());
-        }
-      });
-        }
+      super.initState();
+      // if(mounted) {
+      //   // Set user email in provider
+      //   ref.read(userNotifierProvider.notifier).setUserEmail(widget.userEmail);
+      //   final userEmail = ref.read(userNotifierProvider).userEmail;
+      //   Future<List<InventoryItem?>?> inventory = getInventoryByUserEmail(userEmail);
+      // }
+    }
 
     void openAddInventoryDialog() {
       showDialog(
@@ -44,11 +50,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         builder: (context) => const AddInventoryFormDialog(),
       );
     }
+
+    void fetchState() {
+      
+    }
   
   @override
   Widget build(BuildContext context) {
 
-
+    useOnInit(() => ref.read(inventoryNotifierProvider.notifier).fetchUserInventory(widget.userEmail));
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,

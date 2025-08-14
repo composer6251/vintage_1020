@@ -9,11 +9,11 @@ import 'package:vintage_1020/ui/home_screen/home_screen.dart';
 class AuthGate extends HookConsumerWidget {
   const AuthGate({super.key});
 
-  void setUserEmail(WidgetRef ref, String userEmail) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    await pref.setString('userEmail', userEmail);
-    ref.watch(userNotifierProvider.notifier).setUserEmail(userEmail);
-  }
+  // void setUserEmail(WidgetRef ref, String userEmail) async {
+  //   SharedPreferences pref = await SharedPreferences.getInstance();
+  //   await pref.setString('userEmail', userEmail);
+  //   ref.watch(userNotifierProvider.notifier).setUserEmail(userEmail);
+  // }
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return StreamBuilder<User?>(
@@ -73,9 +73,8 @@ class AuthGate extends HookConsumerWidget {
       // Get user credentials:
       // TODO: Add email to SharedPreferences or Hive
       final userEmail = snapshot.data?.email ?? 'No email';
-      setUserEmail(ref, userEmail);
       // ref.watch(userNotifierProvider.notifier).setUserEmail(userEmail);
-        return HomeScreen(userEmail: userEmail,);
+        return HomeScreen(userEmail: userEmail);
       },
     );
   }

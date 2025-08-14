@@ -8,7 +8,7 @@ import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/inventory_car
 
 class MyBoothTab extends ConsumerWidget {
 
-  getInventoryByUserEmail(String userEmail) {
+  getInventoryByEmail(String userEmail) {
     getInventoryByUserEmail(userEmail).then((items) {
       if (items != null) {
         // ref.read(inventoryNotifierProvider.notifier).buildUserInventory(items.whereType<InventoryItem>().toList());
@@ -20,12 +20,12 @@ class MyBoothTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     
     final items = ref.watch(inventoryNotifierProvider);
-    final userEmail = ref.watch(userNotifierProvider).userEmail;
+    final userEmail = ref.read(userNotifierProvider).userEmail;
     final double height = MediaQuery.sizeOf(context).height;
     final double width = MediaQuery.sizeOf(context).width;
     
     // TODO implement actual inventory item stream
-    getInventoryItemStream().map((event) => {print(event)});
+    // getInventoryItemStream().map((event) => {print(event)});
 
     return Scaffold(
       body: Column(
@@ -42,7 +42,7 @@ class MyBoothTab extends ConsumerWidget {
             height: height * .25,
             flexWeights: [1, 2, 1],
           ),
-          TextButton(onPressed: getInventoryByUserEmail(userEmail), child: Text('Refresh Inventory'))
+          TextButton(onPressed: getInventoryByEmail(userEmail), child: Text('Refresh Inventory'))
         ],
       ),
     );
