@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:vintage_1020/data/api/b_t_api/b_t_api.dart';
 import 'package:vintage_1020/data/model/inventory_item.dart';
@@ -12,7 +13,7 @@ import 'package:vintage_1020/ui/manage_inventory_tab/manage_inventory_tab.dart';
 import 'package:vintage_1020/ui/manage_inventory_tab/widgets/activity_chart.dart';
 import 'package:vintage_1020/ui/my_booth_tab/my_booth_tab.dart';
 
-class HomeScreen extends ConsumerStatefulWidget {
+class HomeScreen extends StatefulHookConsumerWidget {
   HomeScreen({super.key, required this.userEmail});
   final logger = Logger(printer: PrettyPrinter());
   
@@ -25,14 +26,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
 
-  void useOnInit(Function action) {
-  useEffect(() {
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) => action(),
-    );
-    return null;
-  }, []);
-}
+
     @override
     void initState() {
       super.initState();
@@ -57,6 +51,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   
   @override
   Widget build(BuildContext context) {
+  
+    void useOnInit(Function action) {
+      useEffect(() {
+        WidgetsBinding.instance.addPostFrameCallback(
+          (_) => action(),
+        );
+        return null;
+      }, []);
+    }
 
     useOnInit(() => ref.read(inventoryNotifierProvider.notifier).fetchUserInventory(widget.userEmail));
     return Scaffold(
