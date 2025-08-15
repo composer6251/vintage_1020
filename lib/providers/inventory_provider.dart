@@ -29,7 +29,7 @@ class InventoryNotifier extends _$InventoryNotifier {
     state = items;
   }
 
-  void fetchUserInventory(String userEmail) async {
+  Future<void> fetchUserInventory(String userEmail) async {
     final response = await http.get(
       Uri.http(apiBaseUrl, apiGetUserInventoryByEmail, {'userEmail': userEmail}),
       headers: <String, String>{
@@ -39,6 +39,7 @@ class InventoryNotifier extends _$InventoryNotifier {
     );
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body) as List;
+      
       json.map((e) => addInventoryItem(InventoryItem.fromJson(e)));
     } else {
       throw Exception('Failed to retrieve inventory item');

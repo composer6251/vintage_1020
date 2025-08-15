@@ -5,6 +5,7 @@ import 'package:vintage_1020/data/model/inventory_item.dart';
 import 'package:vintage_1020/ui/auth_gate/auth_gate.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:vintage_1020/ui/auth_gate/user_auth_gate.dart';
 
 import 'firebase_options.dart';
 import 'package:vintage_1020/ui/edit_inventory_item/edit_inventory_tab.dart';
@@ -56,7 +57,7 @@ class MyApp extends StatelessWidget {
         // '/manage-inventory': (BuildContext context) => HomeScreen(),
         '/edit-inventory-item': (BuildContext context) =>  EditItemTab(),
       },
-      home: const AuthGate(),
+      home: const UserAuthGate(),
     );
   }
 }

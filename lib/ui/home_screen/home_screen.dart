@@ -14,10 +14,12 @@ import 'package:vintage_1020/ui/manage_inventory_tab/widgets/activity_chart.dart
 import 'package:vintage_1020/ui/my_booth_tab/my_booth_tab.dart';
 
 class HomeScreen extends StatefulHookConsumerWidget {
-  HomeScreen({super.key, required this.userEmail});
+  HomeScreen({super.key, 
+  // required this.userEmail
+  });
   final logger = Logger(printer: PrettyPrinter());
   
-  final String userEmail;
+  // final String userEmail;
   
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _HomeScreenState();
@@ -51,7 +53,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   
   @override
   Widget build(BuildContext context) {
-  
+    final apiDataAsync = ref.watch(inventoryNotifierProvider);
     void useOnInit(Function action) {
       useEffect(() {
         WidgetsBinding.instance.addPostFrameCallback(
@@ -61,12 +63,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       }, []);
     }
 
-    useOnInit(() => ref.read(inventoryNotifierProvider.notifier).fetchUserInventory(widget.userEmail));
+    // useOnInit(() => ref.read(inventoryNotifierProvider.notifier).fetchUserInventory(widget.userEmail));
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
-        children: [TabViewsContent(userEmail: widget.userEmail)],
+        children: [TabViewsContent(
+          // userEmail: widget.userEmail
+          )],
       ),
       floatingActionButton: FloatingActionButton(
         shape: CircleBorder(
@@ -81,9 +85,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 }
 
 class TabViewsContent extends ConsumerStatefulWidget {
-  const TabViewsContent({super.key, required this.userEmail});
+  const TabViewsContent({super.key, 
+  // required this.userEmail
+  });
 
-  final String userEmail;
+  // final String userEmail;
 
   @override
   TabViewsContentState createState() => TabViewsContentState();
@@ -121,11 +127,11 @@ class TabViewsContentState extends ConsumerState<TabViewsContent> with TickerPro
         return null;
       }, []);
     }
-    useOnInit(() {
-      userEmail = widget.userEmail;
-      ref.read(userNotifierProvider.notifier).setUserEmail(userEmail);
-    });
-      ref.read(inventoryNotifierProvider.notifier).fetchUserInventory(userEmail);
+    // useOnInit(() {
+    //   userEmail = widget.userEmail;
+    //   ref.read(userNotifierProvider.notifier).setUserEmail(userEmail);
+    // });
+    //   ref.read(inventoryNotifierProvider.notifier).fetchUserInventory(userEmail);
 
     final double height = MediaQuery.sizeOf(context).height;
     final double width = MediaQuery.sizeOf(context).width;
