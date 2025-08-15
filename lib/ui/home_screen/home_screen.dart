@@ -90,7 +90,7 @@ class TabViewsContent extends ConsumerStatefulWidget {
 }
 
 class TabViewsContentState extends ConsumerState<TabViewsContent> with TickerProviderStateMixin {
-  late String userEmail;
+  late final String userEmail;
   late TabController _tabController;
 
   final List<Tab> myTabs = <Tab>[

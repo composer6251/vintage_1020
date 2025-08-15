@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vintage_1020/data/api/b_t_api/b_t_api.dart';
-import 'package:vintage_1020/data/repositories/inventory_repo_server_cache.dart';
 import 'package:vintage_1020/providers/inventory_provider.dart';
 import 'package:vintage_1020/providers/user_provider.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/inventory_carousel.dart';
 
 class MyBoothTab extends ConsumerWidget {
 
-  getInventoryByEmail(String userEmail) {
+  void getInventoryByEmail(String userEmail) {
     getInventoryByUserEmail(userEmail).then((items) {
       if (items != null) {
         // ref.read(inventoryNotifierProvider.notifier).buildUserInventory(items.whereType<InventoryItem>().toList());
@@ -42,7 +41,7 @@ class MyBoothTab extends ConsumerWidget {
             height: height * .25,
             flexWeights: [1, 2, 1],
           ),
-          TextButton(onPressed: getInventoryByEmail(userEmail), child: Text('Refresh Inventory'))
+          TextButton(onPressed:() => getInventoryByEmail(userEmail), child: Text('Refresh Inventory'))
         ],
       ),
     );
