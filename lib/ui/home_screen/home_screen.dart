@@ -66,7 +66,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
-        children: [TabViewsContent()],
+        children: [TabViewsContent(userEmail: widget.userEmail)],
       ),
       floatingActionButton: FloatingActionButton(
         shape: CircleBorder(
@@ -81,23 +81,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 }
 
 class TabViewsContent extends ConsumerStatefulWidget {
+  const TabViewsContent({super.key, required this.userEmail});
+
+  final String userEmail;
 
   @override
   TabViewsContentState createState() => TabViewsContentState();
 }
 
 class TabViewsContentState extends ConsumerState<TabViewsContent> with TickerProviderStateMixin {
+  late String userEmail;
   late TabController _tabController;
 
   final List<Tab> myTabs = <Tab>[
-    // Tab(text: 'Inventory', icon: Icon(Icons.favorite)),
     Tab(text: 'My Booth', icon: Icon(Icons.storefront)),
     Tab(text: 'Manage', icon: Icon(Icons.chair_rounded)),
     Tab(text: 'Edit', icon: Icon(Icons.price_check)),   
     Tab(text: 'Sales', icon: Icon(Icons.bar_chart)),
   ];
 
-    @override
+  @override
   void initState() {
     super.initState();
     _tabController = TabController(vsync: this, length: myTabs.length);
@@ -110,6 +113,20 @@ class TabViewsContentState extends ConsumerState<TabViewsContent> with TickerPro
  }
   @override
   Widget build(BuildContext context) {
+        void useOnInit(Function action) {
+      useEffect(() {
+        WidgetsBinding.instance.addPostFrameCallback(
+          (_) => action(),
+        );
+        return null;
+      }, []);
+    }
+    useOnInit(() {
+      userEmail = widget.userEmail;
+      ref.read(userNotifierProvider.notifier).setUserEmail(userEmail);
+    });
+      ref.read(inventoryNotifierProvider.notifier).fetchUserInventory(userEmail);
+
     final double height = MediaQuery.sizeOf(context).height;
     final double width = MediaQuery.sizeOf(context).width;
 
