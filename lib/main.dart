@@ -1,7 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vintage_1020/data/model/inventory_item.dart';
+import 'package:vintage_1020/data/repositories/inventory_repository.dart';
+import 'package:vintage_1020/data/repositories/inventory_repository_impl.dart';
 import 'package:vintage_1020/ui/auth_gate/auth_gate.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -20,6 +23,9 @@ Future<void> main() async {
     );
     // INITIALIZE Firestore persistence
     FirebaseFirestore.instance.settings = Settings(persistenceEnabled: true);
+    
+    @Riverpod(keepAlive: true)
+    InventoryRepository inventoryRepository(Ref ref) => InventoryRepositoryImpl();
   } else {
     await Firebase.initializeApp();
   }

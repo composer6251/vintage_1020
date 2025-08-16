@@ -13,6 +13,12 @@ INSTEAD:
 1. INITIALIZE THE DATA OUTSIDE OF BUILD METHODS
 2. OR TRIGGER THEM BY A USER EVENT SUCH AS ONPRESSED.   
 
+### PROVIDERS QUICK REF:
+✅ Provider: For simple immutable values
+✅ FutureProvider: For async operations that return a single value
+✅ StreamProvider: For reactive async data streams
+✅ NotifierProvider: For mutable state management in response to user interaction
+✅ AsyncNotifierProvider: For mutable state with async operations
 
 #### CORE CONCEPTS:
 *Declare and initialize providers OUTSIDE OF BUILD METHOD.
@@ -24,6 +30,19 @@ INSTEAD:
 - Create Provider class
 - Wrap entire app in ProviderScope widget
 - Make class extend Consumer
+
+#### AsyncValue
+AsyncValue<T> {
+  AsyncData<T>    // Successfully loaded data
+  AsyncError      // Error occurred during loading
+  AsyncLoading    // Currently loading
+}
+// Using the when method to handle different states
+return users.when(
+  data: (users) => UserList(users),
+  error: (error, stack) => ErrorWidget(error.toString()),
+  loading: () => CircularProgressIndicator(),
+);
 
 ### WIDGETS THAT CONSUME PROVIDER DATA
 #### Consumer and ConsumerWidget

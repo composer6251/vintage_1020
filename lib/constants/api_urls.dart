@@ -9,3 +9,5 @@ final String apiGetUserInventoryByEmail = '/inventory/get-user-inventory';
 // /inventory/get-user-inventory/{userEmail}
 // POST ENDPOINTS
 final String addItemUrl = '/inventory/add';
+final String deleteItemUrl = '/inventory/delete';
+final String updateItemUrl = '/inventory/update';
