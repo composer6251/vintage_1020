@@ -10,11 +10,7 @@ part of 'future_inventory_provider.dart';
 const futureInventoryProviderProvider = FutureInventoryProviderProvider._();
 
 final class FutureInventoryProviderProvider
-    extends
-        $AsyncNotifierProvider<
-          FutureInventoryProvider,
-          List<FutureInventoryProvider>
-        > {
+    extends $NotifierProvider<FutureInventoryProvider, void> {
   const FutureInventoryProviderProvider._()
     : super(
         from: null,
@@ -32,36 +28,35 @@ final class FutureInventoryProviderProvider
   @$internal
   @override
   FutureInventoryProvider create() => FutureInventoryProvider();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(void value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<void>(value),
+    );
+  }
 }
 
 String _$futureInventoryProviderHash() =>
-    r'8c9824fdf977ad493a61772eadbd46c0242959f4';
+    r'd048def88eb396e1c9af65ec08ce16b97f350d49';
 
-abstract class _$FutureInventoryProvider
-    extends $AsyncNotifier<List<FutureInventoryProvider>> {
-  FutureOr<List<FutureInventoryProvider>> build();
+abstract class _$FutureInventoryProvider extends $Notifier<void> {
+  void build();
   @$mustCallSuper
   @override
   void runBuild() {
-    final created = build();
-    final ref =
-        this.ref
-            as $Ref<
-              AsyncValue<List<FutureInventoryProvider>>,
-              List<FutureInventoryProvider>
-            >;
+    build();
+    final ref = this.ref as $Ref<void, void>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<
-                AsyncValue<List<FutureInventoryProvider>>,
-                List<FutureInventoryProvider>
-              >,
-              AsyncValue<List<FutureInventoryProvider>>,
+              AnyNotifier<void, void>,
+              void,
               Object?,
               Object?
             >;
-    element.handleValue(ref, created);
+    element.handleValue(ref, null);
   }
 }
 

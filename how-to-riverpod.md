@@ -20,6 +20,20 @@ INSTEAD:
 ✅ NotifierProvider: For mutable state management in response to user interaction
 ✅ AsyncNotifierProvider: For mutable state with async operations
 
+### STEPS FOR WIRING UP PROVIDER/REPO/STATE/UI *USING CODE GENERATION*
+1. Create repository for API/DB network requests
+- abstract class InventoryRepo
+- class InventoryRepoImpl implements InventoryRepo
+2. Create provider(See above for which)
+-  class InventoryProvider extends _$InventoryProvider {}
+-  declare late final InventoryRepo variable (For API/DB calls)
+-  Declare variable to hold Inventory items(List<InventoryItem> _items = [];)
+-  declare and override build method(called on provider load.)
+- add line:
+part 'inventory_repo.g.dart' (<file_name>.g.<fileExtension>)
+- Run dart build runner to build the files.
+
+
 #### CORE CONCEPTS:
 *Declare and initialize providers OUTSIDE OF BUILD METHOD.
 *Listen/Read/Watch INSIDE BUILD METHOD

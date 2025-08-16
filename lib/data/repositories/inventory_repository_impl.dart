@@ -6,29 +6,36 @@ import 'package:vintage_1020/constants/api_urls.dart';
 import 'package:vintage_1020/data/model/inventory_item.dart';
 import 'package:vintage_1020/data/repositories/inventory_repository.dart';
 
+part 'inventory_repository_impl.g.dart';
+
 @Riverpod(keepAlive: true)
 InventoryRepository inventoryRepository(Ref ref) => InventoryRepositoryImpl();
 
 class InventoryRepositoryImpl implements InventoryRepository {
 
   @override
-  Future<List<InventoryItem>> getInventoryByUserEmail(
+  Future<AsyncValue<List<InventoryItem>>> getInventoryByUserEmail(
     String userEmail,
   ) async {
-    final response = await http.get(
-      Uri.http(apiBaseUrl, apiGetUserInventoryByEmail, {
-        'userEmail': userEmail,
-      }),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        // HttpHeaders.authorizationHeader: token, // Replace with your actual CSRF token if needed
-      },
-    );
-    if (response.statusCode == 200) {
-      final json = jsonDecode(response.body) as List;
-      return json.map((e) => InventoryItem.fromJson(e)).toList();
-    } else {
-      throw Exception('Failed to retrieve inventory item');
+    try {
+      final response = await http.get(
+        Uri.http(apiBaseUrl, apiGetUserInventoryByEmail, {
+          'userEmail': userEmail,
+        }),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          // HttpHeaders.authorizationHeader: token, // Replace with your actual CSRF token if needed
+        },
+      );
+      if (response.statusCode == 200) {
+        final json = jsonDecode(response.body) as List;
+        final items = json.map((e) => InventoryItem.fromJson(e)).toList();
+        return AsyncValue.data(items.cast<InventoryItem>());
+      } else {
+        return AsyncValue.error(Exception('Failed to retrieve inventory item'), StackTrace.current);
+      }
+    } catch (e, st) {
+      return AsyncValue.error(e, st);
     }
   }
 
