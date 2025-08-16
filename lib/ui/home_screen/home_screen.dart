@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,6 +29,7 @@ class HomeScreen extends StatefulHookConsumerWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
 
+    final FirebaseAuth auth = FirebaseAuth.instance;
 
     @override
     void initState() {
@@ -53,6 +55,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   
   @override
   Widget build(BuildContext context) {
+
     final apiDataAsync = ref.watch(inventoryNotifierProvider);
     void useOnInit(Function action) {
       useEffect(() {
@@ -65,6 +68,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     // useOnInit(() => ref.read(inventoryNotifierProvider.notifier).fetchUserInventory(widget.userEmail));
     return Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 40.0,
+        backgroundColor: Colors.blue[700],
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () {
+              auth.currentUser?.sendEmailVerification();
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              auth.signOut();
+            },
+          ),
+        ],
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,

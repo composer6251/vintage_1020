@@ -77,12 +77,9 @@ class _AuthGateState extends ConsumerState<UserAuthGate> {
           return SignInScreen(
             providers: [EmailAuthProvider()],
             headerBuilder: (context, constraints, shrinkOffset) {
-              return Padding(
-                padding: const EdgeInsets.all(20),
-                child: AspectRatio(
-                  aspectRatio: 1,
-                  child: Image.asset('assets/flutterfire_300x.png'),
-                ),
+              return AspectRatio(
+                aspectRatio: 16 / 9,
+                child: Image.asset('resources/branding/booth-August.jpeg'),
               );
             },
             subtitleBuilder: (context, action) {

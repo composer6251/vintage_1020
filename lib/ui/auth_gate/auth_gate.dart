@@ -2,19 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:vintage_1020/data/api/b_t_api/b_t_api.dart';
-import 'package:vintage_1020/providers/user_provider.dart';
 import 'package:vintage_1020/ui/home_screen/home_screen.dart';
 
 class AuthGate extends HookConsumerWidget {
   const AuthGate({super.key});
-
-  // void setUserEmail(WidgetRef ref, String userEmail) async {
-  //   SharedPreferences pref = await SharedPreferences.getInstance();
-  //   await pref.setString('userEmail', userEmail);
-  //   ref.watch(userNotifierProvider.notifier).setUserEmail(userEmail);
-  // }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -37,7 +28,7 @@ class AuthGate extends HookConsumerWidget {
                 padding: const EdgeInsets.all(20),
                 child: AspectRatio(
                   aspectRatio: 1,
-                  child: Image.asset('resources/branding/wateree.jpeg'),
+                  child: Image.asset('resources/branding/booth-August.jpeg'),
                 ),
               );
             },
