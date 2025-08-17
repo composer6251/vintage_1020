@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vintage_1020/data/model/inventory_item.dart';
+import 'package:vintage_1020/domain/models/model/inventory_item/inventory_item.dart';
 import 'package:vintage_1020/data/repositories/inventory_repo_server_cache.dart';
 import 'package:vintage_1020/domain/models/mock/build_mock_models.dart';
 import 'package:vintage_1020/providers/inventory_provider/inventory_provider.dart';

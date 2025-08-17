@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:vintage_1020/constants/inventory_categories.dart';
 import 'package:vintage_1020/data/api/b_t_api/b_t_api.dart';
-import 'package:vintage_1020/data/model/inventory_item.dart';
+import 'package:vintage_1020/domain/models/model/inventory_item/inventory_item.dart';
 import 'package:vintage_1020/providers/inventory_provider/inventory_provider.dart';
 import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
 

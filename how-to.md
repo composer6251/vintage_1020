@@ -8,44 +8,43 @@
 -flutter doctor
 -flutter pub cache repair
 
+### APP ARCHITECTURE
+#### DATA : COMMUNICATION WITH APIs and DATABASES
+
+**Data Source** : HTTP REQUESTS and DB CALLS
+
+
+**Repository** : Bridge between Data and Domain Layers. Implementation of repositories in Domain Layer.
+
+
+
+#### DOMAIN : BUSINESS LOGIC
+
+**Providers** : Communicates with Data Layer: Repository layer
+
+
+**Repositories** : Abstract Classes defining expected Data layer repos functionality
+
+
+
+#### PRESENTATION : UI
+**Widget**
+
+
+
+**Providers**
+
+
+
+
+
 
 
 ### WIDGET TYPES:
 - A view model is a Dart class responsible for handling UI logic.View models take domain data models as input and expose that data as UI state to their corresponding views
 <b>view models need to tell Flutter to re-render views when the data layer provides a new state by extending ChangeNotifier or some other state management framework</b>
 
-- 
-
-
-### WIDGET DATA FLOW:       ViewModel <- Repository
-1. New state is provided to the view model from a Repository.
-2. The view model updates its UI state to reflect the new data.
-3. ViewModel.notifyListeners is called, alerting the View of new UI State.
-4. The view (widget) re-renders.
-<img src="lib/resources/mvvm-case-study-update-ui-steps.png" alt="Data Flow" width="800"/>
-
-### State management
-Flutter is declarative.
-UI = f(application state)
-Two types of state:
-UI(Local) state: Stateful widgets. Ephemeral(USE SETSTATE or useState hook
-App State: shared across parts of app. User preferences, carts, logins...etc 
-USE PROVIDER, RIVERPOD, VALUENOTIFIER & INHERITEDNOTIFIER, INHERITED WIDGET & INHERITED MODEL
-
-USE Cases:
-StatefulWidget: Widget needs own internal EPHEMERAL state
-
-I have a stateless type widget(Stateless, HookConsumer, Consumer)
-    - useState for NON UI REBUILDING CHANGES.
-        - i.e. I have a dialog box where the user enters data and we need to temporarily save that data until the submit button is clicked. 
-
-VIEW HIERARCHY:
-- Screen
-    - View/s
-        - ViewModel
-
-
-### FILE STRUCTURE
+-### FILE STRUCTURE
 lib
 ├─┬─ ui
 │ ├─┬─ core
@@ -81,6 +80,35 @@ test
 ├─── domain
 ├─── ui
 └─── utils
+
+
+### WIDGET DATA FLOW:       ViewModel <- Repository
+1. New state is provided to the view model from a Repository.
+2. The view model updates its UI state to reflect the new data.
+3. ViewModel.notifyListeners is called, alerting the View of new UI State.
+4. The view (widget) re-renders.
+<img src="lib/resources/mvvm-case-study-update-ui-steps.png" alt="Data Flow" width="800"/>
+
+### State management
+Flutter is declarative.
+UI = f(application state)
+Two types of state:
+UI(Local) state: Stateful widgets. Ephemeral(USE SETSTATE or useState hook
+App State: shared across parts of app. User preferences, carts, logins...etc 
+USE PROVIDER, RIVERPOD, VALUENOTIFIER & INHERITEDNOTIFIER, INHERITED WIDGET & INHERITED MODEL
+
+USE Cases:
+StatefulWidget: Widget needs own internal EPHEMERAL state
+
+I have a stateless type widget(Stateless, HookConsumer, Consumer)
+    - useState for NON UI REBUILDING CHANGES.
+        - i.e. I have a dialog box where the user enters data and we need to temporarily save that data until the submit button is clicked. 
+
+VIEW HIERARCHY:
+- Screen
+    - View/s
+        - ViewModel
+
 
 // The testing folder contains mocks other classes need to execute tests
 testing

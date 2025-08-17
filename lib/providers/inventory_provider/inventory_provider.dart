@@ -5,7 +5,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vintage_1020/constants/api_urls.dart';
 import 'package:vintage_1020/data/api/b_t_api/b_t_api.dart';
-import 'package:vintage_1020/data/model/inventory_item.dart';
+import 'package:vintage_1020/domain/models/model/inventory_item/inventory_item.dart';
 import 'package:http/http.dart' as http;
 import 'package:vintage_1020/data/repositories/inventory_repository.dart';
 
@@ -21,6 +21,7 @@ class InventoryNotifier extends _$InventoryNotifier {
   List<InventoryItem> _items = [];
   final FirebaseAuth auth = FirebaseAuth.instance;
 
+  @override
   InventoryFilter get currentFilter => _inventoryFilter;
 
   @override
@@ -32,9 +33,11 @@ class InventoryNotifier extends _$InventoryNotifier {
   List<InventoryItem> _getFilteredInventory() {
     switch (_inventoryFilter) {
       case InventoryFilter.all:
-      return _items;
+        return _items;
       case InventoryFilter.notSold:
-      return _items.where(())
+        return _items.where((item) => item.itemSoldDate == null).toList();
+      case InventoryFilter.sold:
+        return _items.where((item) => item.itemSoldDate != null).toList();
     }
   }
 

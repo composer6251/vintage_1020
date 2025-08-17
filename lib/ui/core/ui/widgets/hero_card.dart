@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vintage_1020/data/model/inventory_item.dart';
+import 'package:vintage_1020/domain/models/model/inventory_item/inventory_item.dart';
 
 class HeroLayoutCard extends StatelessWidget {
   const HeroLayoutCard({super.key, required this.image});

@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:vintage_1020/constants/inventory_categories.dart';
-import 'package:vintage_1020/data/model/inventory_item.dart';
+import 'package:vintage_1020/domain/models/model/inventory_item/inventory_item.dart';
 import 'package:vintage_1020/picture_names.dart';
 
 class BuildMockModels {

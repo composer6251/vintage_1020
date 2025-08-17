@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:vintage_1020/constants/api_urls.dart';
-import 'package:vintage_1020/data/model/inventory_item.dart';
+import 'package:vintage_1020/domain/models/model/inventory_item/inventory_item.dart';
 
 Future<InventoryItem?> saveInventoryItem(InventoryItem item) async {
   // final String token = Uuid().v4();
