@@ -1,22 +1,55 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vintage_1020/constants/api_urls.dart';
 import 'package:vintage_1020/data/api/b_t_api/b_t_api.dart';
 import 'package:vintage_1020/data/model/inventory_item.dart';
 import 'package:http/http.dart' as http;
+import 'package:vintage_1020/data/repositories/inventory_repository.dart';
 
 part 'inventory_provider.g.dart';
 
-@Riverpod(keepAlive: true)
+enum InventoryFilter {all, sold, notSold}
+
+@riverpod
 class InventoryNotifier extends _$InventoryNotifier {
   final _uuid = const Uuid();
+  late final InventoryRepository inventoryRepository;
+  InventoryFilter _inventoryFilter = InventoryFilter.all;
+  List<InventoryItem> _items = [];
+  final FirebaseAuth auth = FirebaseAuth.instance;
+
+  InventoryFilter get currentFilter => _inventoryFilter;
 
   @override
   List<InventoryItem> build() {
+    inventoryRepository = ref.watch(inventoryRepository as ProviderListenable<InventoryRepository>);
     return [];
   }
+
+  List<InventoryItem> _getFilteredInventory() {
+    switch (_inventoryFilter) {
+      case InventoryFilter.all:
+      return _items;
+      case InventoryFilter.notSold:
+      return _items.where(())
+    }
+  }
+
+
+  /// Refreshes the inventory list from the repository
+Future<void> refresh() async {
+  // Keep previous state(data or error) while loading
+  state = const AsyncLoading<List<InventoryItem>>().copyWithPrevious(state);
+
+  state = await AsyncValue.guard(() async {
+    _items = await inventoryRepository.getInventoryByUserEmail();
+    return _getFilteredTodos();
+  });
+}
+
 
   Future<InventoryItem?> fetchInventoryItemById(num id) async {
      

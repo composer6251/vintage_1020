@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vintage_1020/data/api/b_t_api/b_t_api.dart';
-import 'package:vintage_1020/providers/inventory_provider.dart';
-import 'package:vintage_1020/providers/user_provider.dart';
+import 'package:vintage_1020/providers/inventory_provider/inventory_provider.dart';
+import 'package:vintage_1020/providers/user_provider/user_provider.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/inventory_carousel.dart';
 
 class MyBoothTab extends ConsumerWidget {

@@ -8,7 +8,7 @@ import 'package:photo_manager/photo_manager.dart';
 import 'package:vintage_1020/constants/inventory_categories.dart';
 import 'package:vintage_1020/data/api/b_t_api/b_t_api.dart';
 import 'package:vintage_1020/data/model/inventory_item.dart';
-import 'package:vintage_1020/providers/inventory_provider.dart';
+import 'package:vintage_1020/providers/inventory_provider/inventory_provider.dart';
 import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
 
 /// **A HookConsumerWidget IS ESSENTIALLY A STATELESS WIDGET, BUT UTILIZES FLUTTER HOOKS TO MANAGE STATE ***

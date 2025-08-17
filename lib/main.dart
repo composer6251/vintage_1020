@@ -24,10 +24,11 @@ Future<void> main() async {
     // INITIALIZE Firestore persistence
     FirebaseFirestore.instance.settings = Settings(persistenceEnabled: true);
     
-    @Riverpod(keepAlive: true)
-    InventoryRepository inventoryRepository(Ref ref) => InventoryRepositoryImpl();
+
   } else {
     await Firebase.initializeApp();
+    @Riverpod(keepAlive: true)
+    InventoryRepository inventoryRepository(Ref ref) => InventoryRepositoryImpl();
   }
   // Wrap entire app in ProviderScope to use RiverPod
   runApp(ProviderScope(child: MyApp()));

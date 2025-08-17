@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:vintage_1020/providers/inventory_provider.dart';
+import 'package:vintage_1020/providers/inventory_provider/inventory_provider.dart';
 
 class ActivityGraph extends HookConsumerWidget {
   const ActivityGraph({super.key});

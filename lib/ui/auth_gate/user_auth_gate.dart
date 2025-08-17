@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'; // Import Riverpod
-import 'package:vintage_1020/providers/inventory_provider.dart';
-import 'package:vintage_1020/providers/user_provider.dart';
+import 'package:vintage_1020/providers/inventory_provider/inventory_provider.dart';
+import 'package:vintage_1020/providers/user_provider/user_provider.dart';
 import 'package:vintage_1020/ui/home_screen/home_screen.dart';
 import 'dart:async';
 // Your HomeScreen

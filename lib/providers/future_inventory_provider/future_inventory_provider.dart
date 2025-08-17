@@ -18,6 +18,7 @@ class FutureInventoryProvider extends _$FutureInventoryProvider {
 
   late final InventoryRepository inventoryRepository;
   List<InventoryItem> _items = [];
+  String? userEmail = email;
   void build(){}
   // List<InventoryItem> get => _items;
 
