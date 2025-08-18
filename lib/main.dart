@@ -12,7 +12,7 @@ import 'package:vintage_1020/ui/auth_gate/user_auth_gate.dart';
 
 import 'firebase_options.dart';
 import 'package:vintage_1020/ui/edit_inventory_item/edit_inventory_tab.dart';
-import 'package:vintage_1020/ui/home_screen/home_screen.dart';
+import 'package:vintage_1020/ui/landing_screen/landing_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

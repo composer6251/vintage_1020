@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'; // Import Riverpod
 import 'package:vintage_1020/providers/inventory_provider/inventory_provider.dart';
 import 'package:vintage_1020/providers/user_provider/user_provider.dart';
-import 'package:vintage_1020/ui/home_screen/home_screen.dart';
+import 'package:vintage_1020/ui/landing_screen/landing_screen.dart';
 import 'dart:async';
 // Your HomeScreen
 
@@ -46,9 +46,9 @@ class _AuthGateState extends ConsumerState<UserAuthGate> {
 
         // Trigger the API call on your Riverpod provider
         // We read the notifier, then call its method
-        await ref
-            .read(inventoryNotifierProvider.notifier)
-            .fetchUserInventory(user.email!);
+        // await ref
+        //     .read(inventoryNotifierProvider.notifier)
+        //     .fetchUserInventory(user.email!);
         
       } else if (user == null) {
         print('User signed out. Clearing API data in Riverpod.');
@@ -103,7 +103,7 @@ class _AuthGateState extends ConsumerState<UserAuthGate> {
         } else {
           // If a user is logged in, show the main application screen
           // Your HomeScreen can now *watch* the userSpecificDataProvider
-          return HomeScreen();
+          return LandingScreen();
         }
       },
     );

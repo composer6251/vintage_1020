@@ -12,8 +12,8 @@ import 'package:vintage_1020/ui/manage_inventory_tab/manage_inventory_tab.dart';
 import 'package:vintage_1020/ui/manage_inventory_tab/widgets/activity_chart.dart';
 import 'package:vintage_1020/ui/my_booth_tab/my_booth_tab.dart';
 
-class HomeScreen extends StatefulHookConsumerWidget {
-  HomeScreen({super.key});
+class LandingScreen extends StatefulHookConsumerWidget {
+  LandingScreen({super.key});
   final logger = Logger(printer: PrettyPrinter());
   
   @override
@@ -21,7 +21,7 @@ class HomeScreen extends StatefulHookConsumerWidget {
 
 }
 
-class _HomeScreenState extends ConsumerState<HomeScreen> {
+class _HomeScreenState extends ConsumerState<LandingScreen> {
 
     final FirebaseAuth auth = FirebaseAuth.instance;
 
