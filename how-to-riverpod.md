@@ -23,8 +23,25 @@ INSTEAD:
 ### STEPS FOR WIRING UP PROVIDER/REPO/STATE/UI *USING CODE GENERATION*
 1. Create repository for API/DB network requests
 - abstract class InventoryRepo
-- class InventoryRepoImpl implements InventoryRepo
+- @riverpod
+  class InventoryRepoImpl implements InventoryRepo
 2. Create provider(See above for which)
+-  VIA METHOD: 
+    @riverpod
+    Future<InventoryItem> getInventoryItemById(Ref ref, {required param}
+    ) async {
+      return ref.watch(repositoryProvider).getInventoryItemById(param);
+    }
+
+3. Declare Repository
+    @riverpod
+    InventoryRepository inventoryRepository(Ref ref) => InventoryRepository();
+
+4. UI CHANGES
+  inside build() method of UI widget:
+  declare inventory variable
+  final inventoryItems = ref.watch(getUserInventoryByEmail(userEmail : userEmail))
+
 -  class InventoryProvider extends _$InventoryProvider {}
 -  declare late final InventoryRepo variable (For API/DB calls)
 -  Declare variable to hold Inventory items(List<InventoryItem> _items = [];)

@@ -17,7 +17,7 @@ final class InventoryNotifierProvider
         argument: null,
         retry: null,
         name: r'inventoryNotifierProvider',
-        isAutoDispose: false,
+        isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -38,7 +38,7 @@ final class InventoryNotifierProvider
   }
 }
 
-String _$inventoryNotifierHash() => r'17c1e200ecd5254671150eda3ac8ce307e40f685';
+String _$inventoryNotifierHash() => r'5a4a9fb4a842a0a3186d6889e77b75a39ea1605b';
 
 abstract class _$InventoryNotifier extends $Notifier<List<InventoryItem>> {
   List<InventoryItem> build();

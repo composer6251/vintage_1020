@@ -43,15 +43,15 @@ class InventoryNotifier extends _$InventoryNotifier {
 
 
   /// Refreshes the inventory list from the repository
-Future<void> refresh() async {
-  // Keep previous state(data or error) while loading
-  state = const AsyncLoading<List<InventoryItem>>().copyWithPrevious(state);
+// Future<void> refresh() async {
+//   // Keep previous state(data or error) while loading
+//   state = const AsyncLoading<List<InventoryItem>>().copyWithPrevious(state);
 
-  state = await AsyncValue.guard(() async {
-    _items = await inventoryRepository.getInventoryByUserEmail();
-    return _getFilteredTodos();
-  });
-}
+//   state = await AsyncValue.guard(() async {
+//     _items = await inventoryRepository.getInventoryByUserEmail();
+//     return _getFilteredTodos();
+//   });
+// }
 
 
   Future<InventoryItem?> fetchInventoryItemById(num id) async {

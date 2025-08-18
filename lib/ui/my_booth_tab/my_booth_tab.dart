@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vintage_1020/data/api/b_t_api/b_t_api.dart';
+import 'package:vintage_1020/domain/models/model/inventory_item/inventory_item.dart';
+import 'package:vintage_1020/providers/inventory/inventory.dart';
 import 'package:vintage_1020/providers/inventory_provider/inventory_provider.dart';
 import 'package:vintage_1020/providers/user_provider/user_provider.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/inventory_carousel.dart';
@@ -18,8 +21,8 @@ class MyBoothTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     
-    final items = ref.watch(inventoryNotifierProvider);
-    final userEmail = ref.read(userNotifierProvider).userEmail;
+    final userEmail = FirebaseAuth.instance.currentUser?.email;
+    final inventoryItems = userEmail != null ? ref.watch(getUserInventoryProvider(userEmail : userEmail)) : [];
     final double height = MediaQuery.sizeOf(context).height;
     final double width = MediaQuery.sizeOf(context).width;
     
@@ -27,23 +30,30 @@ class MyBoothTab extends ConsumerWidget {
     // getInventoryItemStream().map((event) => {print(event)});
 
     return Scaffold(
-      body: Column(
+        body: inventoryItems.when(
+          error: (err, stack) => Text('Error $err'),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          data: (items) {
+            return Column(
         children: [
           InventoryCarousel(
-            models: items,
+            // models: inventoryItems,
             width: width,
             height: height * .20,
             flexWeights: [3],
           ),
           InventoryCarousel(
-            models: items,
+            // models: inventoryItems,
             width: width,
             height: height * .25,
             flexWeights: [1, 2, 1],
           ),
-          TextButton(onPressed:() => getInventoryByEmail(userEmail), child: Text('Refresh Inventory'))
+          // TextButton(onPressed:() => getInventoryByEmail(userEmail), child: Text('Refresh Inventory'))
         ],
-      ),
-    );
+      );
+     }
+
+         
+    ));
   }
 }

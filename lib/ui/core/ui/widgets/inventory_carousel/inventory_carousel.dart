@@ -7,13 +7,13 @@ import 'package:vintage_1020/domain/models/model/inventory_item/inventory_item.d
 class InventoryCarousel extends StatefulWidget {
   const InventoryCarousel({
     super.key,
-    required this.models,
+    // required this.models,
     required this.width,
     required this.height,
     required this.flexWeights,
   });
 
-  final List<InventoryItem> models;
+  // final List<InventoryItem> models;
   final double width;
   final double height;
   final List<int> flexWeights;

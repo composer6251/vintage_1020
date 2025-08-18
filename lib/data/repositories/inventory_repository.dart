@@ -5,7 +5,7 @@ import 'package:vintage_1020/domain/models/model/inventory_item/inventory_item.d
 
 abstract class InventoryRepository {
 
-  AsyncValue<List<InventoryItem>> getInventoryByUserEmail(String email);
+  Future<List<InventoryItem>> getInventoryByUserEmail(String email);
 
   Future<void> addInventoryItem(InventoryItem item);
 

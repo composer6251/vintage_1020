@@ -14,7 +14,7 @@ InventoryRepository inventoryRepository(Ref ref) => InventoryRepositoryImpl();
 class InventoryRepositoryImpl implements InventoryRepository {
 
   @override
-  Future<AsyncValue<List<InventoryItem>>> getInventoryByUserEmail(
+  Future<List<InventoryItem>> getInventoryByUserEmail(
     String userEmail,
   ) async {
     try {
@@ -30,12 +30,13 @@ class InventoryRepositoryImpl implements InventoryRepository {
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body) as List;
         final items = json.map((e) => InventoryItem.fromJson(e)).toList();
-        return AsyncValue.data(items.cast<InventoryItem>());
+        // return AsyncValue.data(items.cast<InventoryItem>());
+        return items;
       } else {
-        return AsyncValue.error(Exception('Failed to retrieve inventory item'), StackTrace.current);
+        return Future.error(Exception('Failed to retrieve inventory item'), StackTrace.current);
       }
     } catch (e, st) {
-      return AsyncValue.error(e, st);
+      return Future.error(e, st);
     }
   }
 
