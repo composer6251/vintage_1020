@@ -80,9 +80,13 @@ return users.when(
 - MOST COMMON USE CASE. 
 - **Replacement for StatelessWidget**
 A WIDGET NEEDS TO BE NOTIFIED WHEN A STATE IS UPDATED.
-- **Consumer is used to wrap widgets inside the build tree in the case that **THAT WIDGET IS THE ONLY ONE THAT NEEDS TO UPDATE**
+
+
 
 #### ConsumerState and ConsumerStatefulWidget
+Need to update a provider state.
+Have TextEditingCOntroller, Form...etc
+
 
 *TYPES OF PROVIDERS AND THE WIDGETS THAT USE THEM*
 

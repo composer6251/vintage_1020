@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:vintage_1020/domain/models/model/inventory_item/inventory_item.dart';
 
 class HeroLayoutCard extends StatelessWidget {
-  const HeroLayoutCard({super.key, required this.image});
+  HeroLayoutCard({super.key, required this.item, required this.height, required this.width});
 
-  final InventoryItem image;
+  final InventoryItem item;
+  final double height;
+  final double width;
 
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery.sizeOf(context).width;
+    // If no height/width are passed, size yourself according to defaults.
+    // height ??= MediaQuery.sizeOf(context).height;
+    // width ??= MediaQuery.sizeOf(context).height;
+      
     return Stack(
       alignment: AlignmentDirectional.bottomStart,
       children: <Widget>[
@@ -19,7 +24,7 @@ class HeroLayoutCard extends StatelessWidget {
             child: Image(
               fit: BoxFit.cover,
               image: AssetImage(
-                image.itemImageUrls.first,
+                item.itemImageUrls.first,
               ), // TODO: make the actual defaultImageUrl
             ),
           ),
@@ -31,7 +36,7 @@ class HeroLayoutCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Text(
-                '\$${image.itemListingPrice}',
+                '\$${item.itemListingPrice}',
                 overflow: TextOverflow.clip,
                 softWrap: false,
                 style: Theme.of(
@@ -39,7 +44,7 @@ class HeroLayoutCard extends StatelessWidget {
                 ).textTheme.headlineLarge?.copyWith(color: Colors.red),
               ),
               Text(
-                'Category: ${image.itemCategory}',
+                'Category: ${item.itemCategory}',
                 overflow: TextOverflow.clip,
                 softWrap: false,
                 style: Theme.of(
@@ -47,7 +52,7 @@ class HeroLayoutCard extends StatelessWidget {
                 ).textTheme.headlineLarge?.copyWith(color: Colors.red),
               ),
               Text(
-                image.itemDescription ?? '',
+                item.itemDescription ?? '',
                 overflow: TextOverflow.clip,
                 softWrap: false,
                 style: Theme.of(
@@ -56,7 +61,7 @@ class HeroLayoutCard extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                'Listed: ${image.itemListingDate.toString()}',
+                'Listed: ${item.itemListingDate.toString()}',
                 overflow: TextOverflow.clip,
                 softWrap: false,
                 style: Theme.of(

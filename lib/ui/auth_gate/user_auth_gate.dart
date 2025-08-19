@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart'; // Import Riverpod
 import 'package:vintage_1020/providers/inventory_provider/inventory_provider.dart';
 import 'package:vintage_1020/providers/user_provider/user_provider.dart';
-import 'package:vintage_1020/ui/landing_screen/landing_screen.dart';
+import 'package:vintage_1020/ui/ui_container/ui_container.dart';
 import 'dart:async';
 // Your HomeScreen
 
@@ -103,7 +103,7 @@ class _AuthGateState extends ConsumerState<UserAuthGate> {
         } else {
           // If a user is logged in, show the main application screen
           // Your HomeScreen can now *watch* the userSpecificDataProvider
-          return LandingScreen();
+          return UiContainer();
         }
       },
     );

@@ -6,6 +6,59 @@ part of 'inventory.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+@ProviderFor(InventoryNotifier)
+const inventoryNotifierProvider = InventoryNotifierProvider._();
+
+final class InventoryNotifierProvider
+    extends $NotifierProvider<InventoryNotifier, List<InventoryItem>> {
+  const InventoryNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'inventoryNotifierProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$inventoryNotifierHash();
+
+  @$internal
+  @override
+  InventoryNotifier create() => InventoryNotifier();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(List<InventoryItem> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<List<InventoryItem>>(value),
+    );
+  }
+}
+
+String _$inventoryNotifierHash() => r'd886ac9426672d6d7ddac8af218e8a38229c94d6';
+
+abstract class _$InventoryNotifier extends $Notifier<List<InventoryItem>> {
+  List<InventoryItem> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<List<InventoryItem>, List<InventoryItem>>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<List<InventoryItem>, List<InventoryItem>>,
+              List<InventoryItem>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
 @ProviderFor(getUserInventory)
 const getUserInventoryProvider = GetUserInventoryFamily._();
 

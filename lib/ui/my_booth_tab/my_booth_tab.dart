@@ -22,7 +22,9 @@ class MyBoothTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     
     final userEmail = FirebaseAuth.instance.currentUser?.email;
-    final inventoryItems = userEmail != null ? ref.watch(getUserInventoryProvider(userEmail : userEmail)) : [];
+    final inventoryItems = userEmail != null
+        ? ref.watch(getUserInventoryProvider(userEmail: userEmail))
+        : const AsyncValue.data([]);
     final double height = MediaQuery.sizeOf(context).height;
     final double width = MediaQuery.sizeOf(context).width;
     
