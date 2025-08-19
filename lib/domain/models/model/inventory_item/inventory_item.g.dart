@@ -28,6 +28,9 @@ _InventoryItem _$InventoryItemFromJson(Map<String, dynamic> json) =>
       itemSoldDate: json['itemSoldDate'] == null
           ? null
           : DateTime.parse(json['itemSoldDate'] as String),
+      itemDimensions: (json['itemDimensions'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, e as String),
+      ),
     );
 
 Map<String, dynamic> _$InventoryItemToJson(_InventoryItem instance) =>
@@ -43,6 +46,7 @@ Map<String, dynamic> _$InventoryItemToJson(_InventoryItem instance) =>
       'primaryImageUrl': instance.primaryImageUrl,
       'itemDescription': instance.itemDescription,
       'itemSoldDate': instance.itemSoldDate?.toIso8601String(),
+      'itemDimensions': instance.itemDimensions,
     };
 
 const _$InventoryCategoryEnumMap = {

@@ -20,6 +20,7 @@ sealed class InventoryItem with _$InventoryItem {
     String? primaryImageUrl,    
     String? itemDescription,
     DateTime? itemSoldDate,
+    Map<String, String>? itemDimensions,
   }) = _InventoryItem; // Freezed generates private implementation class
 // Getter for itemId, defaults to 0 if id is null
   /// Convert a JSON object into an [InventoryItem] instance.
