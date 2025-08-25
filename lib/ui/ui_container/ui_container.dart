@@ -18,7 +18,6 @@ class UiContainer extends StatefulHookConsumerWidget {
   
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _HomeScreenState();
-
 }
 
 class _HomeScreenState extends ConsumerState<UiContainer> {
@@ -28,12 +27,6 @@ class _HomeScreenState extends ConsumerState<UiContainer> {
     @override
     void initState() {
       super.initState();
-      // if(mounted) {
-      //   // Set user email in provider
-      //   ref.read(userNotifierProvider.notifier).setUserEmail(widget.userEmail);
-      //   final userEmail = ref.read(userNotifierProvider).userEmail;
-      //   Future<List<InventoryItem?>?> inventory = getInventoryByUserEmail(userEmail);
-      // }
     }
 
     void openAddInventoryDialog() {
@@ -49,19 +42,6 @@ class _HomeScreenState extends ConsumerState<UiContainer> {
   
   @override
   Widget build(BuildContext context) {
-
-    // final apiDataAsync = ref.watch(inventoryNotifierProvider);
-    // void useOnInit(Function action) {
-    //   useEffect(() {
-    //     WidgetsBinding.instance.addPostFrameCallback(
-    //       (_) => action(),
-    //     );
-    //     return null;
-    //   }, []);
-    // }
-
-
-    // useOnInit(() => ref.read(inventoryNotifierProvider.notifier).fetchUserInventory(widget.userEmail));
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 40.0,
@@ -104,14 +84,7 @@ class _HomeScreenState extends ConsumerState<UiContainer> {
 
 class TabViewsContent extends HookConsumerWidget {
   const TabViewsContent({super.key, 
-  // required this.userEmail
   });
-
-  // final String userEmail;
-
-  // @override
-  // TabViewsContentState createState() => TabViewsContentState();
-  // final String userEmail;
 
   static const  List<Tab> myTabs = <Tab>[
     Tab(text: 'My Booth', icon: Icon(Icons.storefront)),
@@ -120,39 +93,12 @@ class TabViewsContent extends HookConsumerWidget {
     Tab(text: 'Sales', icon: Icon(Icons.bar_chart)),
   ];
 
-
-//  @override
-//  void dispose() {
-//    _tabController.dispose();
-//    super.dispose();
-//  }
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    //     void useOnInit(Function action) {
-    //   useEffect(() {
-    //     WidgetsBinding.instance.addPostFrameCallback(
-    //       (_) => action(),
-    //     );
-    //     return null;
-    //   }, []);
-    // }
-    // useOnInit(() {
-    //   userEmail = widget.userEmail;
-    //   ref.read(userNotifierProvider.notifier).setUserEmail(userEmail);
-    // });
-    //   ref.read(inventoryNotifierProvider.notifier).fetchUserInventory(userEmail);
     final userEmail = FirebaseAuth.instance.currentUser?.email;
-    final inventoryItems = userEmail != null ? ref.watch(getUserInventoryProvider(userEmail : userEmail)) : [];
+    // final inventoryItems = userEmail != null ? ref.watch(getUserInventoryProvider(userEmail : userEmail)) : [];
     final double height = MediaQuery.sizeOf(context).height;
     final double width = MediaQuery.sizeOf(context).width;
-
-    // Listen to Inventory updates
-    // final unfilteredInventory = ref.watch(inventoryNotifierProvider).toList();
-    // TODO Add actual filter
-    // final filteredInventory = unfilteredInventory.where(
-    //   (item) => item.itemCategory == 'Furniture',
-    // );
-    // TODO: Create tab controller and pass to children to change index
 
     return DefaultTabController(
       length: myTabs.length,
@@ -181,9 +127,7 @@ class TabViewsContent extends HookConsumerWidget {
             children: [
               // InventoryOverviewTab(),
               MyBoothTab(),
-              ManageInventoryTab(
-      
-              ),
+              ManageInventoryTab(),
               EditItemTab(),
               ActivityChart(isShowingMainData: true),
             ],
@@ -193,8 +137,3 @@ class TabViewsContent extends HookConsumerWidget {
     );
   }
 }
-
-// class TabViewsContentState extends ConsumerState<TabViewsContent> with TickerProviderStateMixin {
-
-  
-// }

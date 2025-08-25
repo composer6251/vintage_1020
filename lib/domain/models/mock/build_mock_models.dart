@@ -3,7 +3,28 @@ import 'package:vintage_1020/domain/models/model/inventory_item/inventory_item.d
 import 'package:vintage_1020/picture_names.dart';
 
 class BuildMockModels {
-  static List<InventoryItem> buildInventoryItemModels() {
+  static List<InventoryItem> buildMyBoothMockModels() {
+    List<String> imageUrls = PictureNames.picListMyBooth;
+    List<InventoryItem> models = [];
+
+    for (var m in imageUrls) {
+      InventoryItem model = InventoryItem(
+        itemImageUrls: imageUrls,
+        itemPurchaseDate: DateTime.now(),
+        itemPurchasePrice: 100.0,
+        itemDescription: "itemDescription",
+        itemListingDate: DateTime.now(),
+        itemListingPrice: 100.0,
+        itemCategory: InventoryCategory.furniture,
+      );
+
+      models.add(model);
+    }
+
+    return models;
+  }
+
+    static List<InventoryItem> buildEditInventoryItemModels() {
     List<String> modelList = PictureNames.picListFurniture;
     List<InventoryItem> models = [];
 

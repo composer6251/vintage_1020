@@ -19,68 +19,52 @@ class HeroLayoutCard extends StatelessWidget {
       alignment: AlignmentDirectional.bottomStart,
       children: <Widget>[
         OverflowBox(
-          maxWidth: width * 8 / 8,
-          minWidth: width * 6 / 8,
-          child: SingleChildScrollView(
-            child: Image(
-              fit: BoxFit.cover,
-              image: AssetImage(
-                item.itemImageUrls.first,
-              ), // TODO: make the actual defaultImageUrl
-            ),
+          maxHeight: height,
+          maxWidth: width * 7 / 8,
+          minWidth: width * 7 / 8,
+          child: Image(
+            fit: BoxFit.fitWidth,
+            image: AssetImage(
+              item.itemImageUrls.first,
+            ), // TODO: make the actual defaultImageUrl
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(36.0, 18, 18, 18),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Text(
-                '\$${item.itemListingPrice}',
-                overflow: TextOverflow.ellipsis,
-                softWrap: false,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: 24),
-                // style: Theme.of(
-                //   context,
-                // ).textTheme.headlineLarge?.copyWith(color: Colors.white),
-              ),
-              // Text(
-              //   item.itemCategory.name,
-              //   overflow: TextOverflow.clip,
-              //   softWrap: false,
-              //   style: Theme.of(
-              //     context,
-              //   ).textTheme.headlineLarge?.copyWith(color: Colors.black),
-              // ),
-              // Text(
-              //   item.itemDescription ?? '',
-              //   overflow: TextOverflow.clip,
-              //   softWrap: false,
-              //   style: Theme.of(
-              //     context,
-              //   ).textTheme.headlineLarge?.copyWith(color: Colors.black),
-              // ),
-              const SizedBox(height: 10),
-              Text(
-                'Listed: ${item.itemListingDate != null ? DateFormat.yMMMEd().format(item.itemListingDate!) : 'Unknown'}',
-                overflow: TextOverflow.clip,
-                softWrap: true,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: 24),
-                // style: Theme.of(
-                //   context,
-                // ).textTheme.bodyMedium?.copyWith(color: Colors.white),
-              ),
-            ],
-          ),
-        ),
+        // Padding(
+        //   padding: const EdgeInsets.fromLTRB(18.0, 18, 18, 18),
+        //   child: Flexible(
+        //     fit: FlexFit.loose,
+        //     child: Column(
+        //       mainAxisAlignment: MainAxisAlignment.end,
+        //       crossAxisAlignment: CrossAxisAlignment.center,
+        //       mainAxisSize: MainAxisSize.max,
+        //       children: <Widget>[
+        //         Text(
+        //           '\$${item.itemListingPrice}',
+        //           overflow: TextOverflow.clip,
+        //           softWrap: true,
+        //           textAlign: TextAlign.center,
+        //           style: TextStyle(
+        //               fontWeight: FontWeight.bold,
+        //               color: Colors.white,
+        //               fontSize: 24),
+        //         ),
+        //         const SizedBox(height: 10),
+        //         Text(
+        //           'Listed: ${item.itemListingDate != null ? DateFormat.yMMMEd().format(item.itemListingDate!) : 'Unknown'}',
+        //           overflow: TextOverflow.clip,
+        //           softWrap: true,
+        //           // style: TextStyle(
+        //           //     fontWeight: FontWeight.bold,
+        //           //     color: Colors.white,
+        //           //     fontSize: 24),
+        //           style: Theme.of(
+        //             context,
+        //           ).textTheme.bodyMedium?.copyWith(color: Colors.white),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

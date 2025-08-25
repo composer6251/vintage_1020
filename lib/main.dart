@@ -5,19 +5,16 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vintage_1020/domain/models/model/inventory_item/inventory_item.dart';
 import 'package:vintage_1020/data/repositories/inventory_repository.dart';
 import 'package:vintage_1020/data/repositories/inventory_repository_impl.dart';
-import 'package:vintage_1020/ui/auth_gate/auth_gate.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:vintage_1020/ui/auth_gate/user_auth_gate.dart';
 
 import 'firebase_options.dart';
 import 'package:vintage_1020/ui/edit_inventory_item/edit_inventory_tab.dart';
-import 'package:vintage_1020/ui/ui_container/ui_container.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (kIsWeb) {
-    // setPathUrlStrategy();
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
@@ -38,8 +35,6 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   List<InventoryItem> getUserInventory() {
-    // This function should return the user's inventory items.
-    // For now, we return an empty list.
     return [];
   }
 
@@ -60,9 +55,10 @@ class MyApp extends StatelessWidget {
         ),
       ),
       routes: <String, WidgetBuilder>{
+        // TODO Leaving if we need routes instead of tabs
         // '/inventory': (BuildContext context) => InventoryCarousel(),
         // '/manage-inventory': (BuildContext context) => HomeScreen(),
-        '/edit-inventory-item': (BuildContext context) =>  EditItemTab(),
+        // '/edit-inventory-item': (BuildContext context) =>  EditItemTab(),
       },
       home: const UserAuthGate(),
     );
