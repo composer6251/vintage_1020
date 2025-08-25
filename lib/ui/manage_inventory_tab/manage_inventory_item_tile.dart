@@ -26,6 +26,7 @@ class ManageInventoryItemTile extends StatelessWidget {
     }
     final isListed = model.itemListingPrice != null && model.itemListingDate != null;
     final isSold = model.itemSoldPrice != null && model.itemSoldDate != null;
+    print(model.itemImageUrls.first);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -46,7 +47,7 @@ class ManageInventoryItemTile extends StatelessWidget {
               Text(
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                model.itemCategory.toString(),
+                model.itemCategory.name,
               ),
               Text(
                 overflow: TextOverflow.ellipsis,

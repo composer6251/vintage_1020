@@ -36,26 +36,23 @@ class MyBoothTab extends ConsumerWidget {
           error: (err, stack) => Text('Error $err'),
           loading: () => const Center(child: CircularProgressIndicator()),
           data: (items) {
-            return Column(
-        children: [
-          InventoryCarousel(
-            // models: inventoryItems,
-            width: width,
-            height: height * .20,
-            flexWeights: [3],
-          ),
-          InventoryCarousel(
-            // models: inventoryItems,
-            width: width,
-            height: height * .25,
-            flexWeights: [1, 2, 1],
-          ),
-          // TextButton(onPressed:() => getInventoryByEmail(userEmail), child: Text('Refresh Inventory'))
-        ],
-      );
-     }
-
-         
+          return Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              InventoryCarousel(
+                width: width,
+                height: height * .40,
+                flexWeights: [3],
+              ),
+              InventoryCarousel(
+                width: width,
+                height: height * .25,
+                flexWeights: [1, 2, 1],
+              ),
+              // TextButton(onPressed:() => getInventoryByEmail(userEmail), child: Text('Refresh Inventory'))
+            ],
+          );
+        }
     ));
   }
 }

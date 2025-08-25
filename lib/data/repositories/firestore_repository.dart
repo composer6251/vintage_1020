@@ -7,6 +7,25 @@ import 'package:vintage_1020/domain/models/model/inventory_item/inventory_item.d
 ///
 
 final firestore = FirebaseFirestore.instance;
+
+
+// Future<List<InventoryItem>> retrieveInventory(String email) async {
+//
+//     await firestore.collection('inventoryItem').where('inventory', isEqualTo: true).get().then(
+//           (querySnapshot) {
+//         print("Successfully completed");
+//         for (var docSnapshot in querySnapshot.docs) {
+//           print('${docSnapshot.id} => ${docSnapshot.data()}');
+//         }
+//       },
+//       onError: (e) => print("Error completing: $e"),
+//     );
+//
+//     return
+//
+//   }
+
+
  
 //Add a new document to a collection (with an auto-generated ID)
 Future<void> addInventoryItem(InventoryItem item) async {

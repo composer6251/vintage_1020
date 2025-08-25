@@ -1,5 +1,7 @@
 # vintage_1020
+Hosted website:
 
+https://vintage-1020-498ff.firebaseapp.com
 
 ## DEPENDENCY INSTALLATION
 1. Install Flutter sdk

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:vintage_1020/domain/models/mock/build_mock_models.dart';
 import 'package:vintage_1020/domain/models/model/inventory_item/inventory_item.dart';
 import 'package:vintage_1020/providers/inventory/inventory.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/hero_card.dart';
@@ -37,7 +38,17 @@ class _InventoryCarouselState extends ConsumerState<InventoryCarousel> {
   @override
   Widget build(BuildContext context) {
 
-    final items = ref.watch(inventoryRepositoryProvider);
+    // final items = ref.watch(inventoryRepositoryProvider);
+
+    final items = BuildMockModels.buildInventoryItemModels();
+
+    // Update firestore user_inventory db
+    // Create firestoreInventory.getInventoryByEmail
+
+    // Initialize inventory
+
+    // Display inventory
+
     return Column(
       children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
@@ -49,7 +60,7 @@ class _InventoryCarouselState extends ConsumerState<InventoryCarousel> {
             // controller: controller,
             itemSnapping: true,
             flexWeights: widget.flexWeights,
-            children: ((model) {
+            children: items.map((model) {
               return HeroLayoutCard(item: model, height: widget.height, width: widget.width,);
             }).toList(),
           ),

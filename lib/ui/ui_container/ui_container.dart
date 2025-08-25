@@ -81,12 +81,14 @@ class _HomeScreenState extends ConsumerState<UiContainer> {
           ),
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [TabViewsContent(
-          // userEmail: widget.userEmail
-          )],
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [TabViewsContent(
+            // userEmail: widget.userEmail
+            )],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         shape: CircleBorder(
