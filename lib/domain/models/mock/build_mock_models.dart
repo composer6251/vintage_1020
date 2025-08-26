@@ -3,6 +3,7 @@ import 'package:vintage_1020/domain/models/model/inventory_item/inventory_item.d
 import 'package:vintage_1020/picture_names.dart';
 
 class BuildMockModels {
+  
   static List<InventoryItem> buildMyBoothMockModels() {
     List<String> imageUrls = PictureNames.picListMyBooth;
     List<InventoryItem> models = [];
@@ -25,6 +26,7 @@ class BuildMockModels {
   }
 
     static List<InventoryItem> buildEditInventoryItemModels() {
+
     List<String> modelList = PictureNames.picListFurniture;
     List<InventoryItem> models = [];
 

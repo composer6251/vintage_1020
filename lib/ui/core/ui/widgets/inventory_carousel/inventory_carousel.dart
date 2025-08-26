@@ -23,20 +23,19 @@ class InventoryCarousel extends ConsumerStatefulWidget {
 }
 
 class _InventoryCarouselState extends ConsumerState<InventoryCarousel> {
+  // My booth tab?
+  // Need List<InventoryItem> for carousel
+  // Need CurrentInventoryItem from provider for HeroCard
 
-// My booth tab?
-// Need List<InventoryItem> for carousel
-// Need CurrentInventoryItem from provider for HeroCard
-
-// Edit InventoryItem?
-// Need InventoryItem for carousel
-// Need PrimaryImageUrl for HeroCard
+  // Edit InventoryItem?
+  // Need InventoryItem for carousel
+  // Need PrimaryImageUrl for HeroCard
   @override
   Widget build(BuildContext context) {
-
     // final items = ref.watch(inventoryRepositoryProvider);
 
     final items = BuildMockModels.buildMyBoothMockModels();
+    final mockItems = BuildMockModels.buildEditInventoryItemModels();
 
     // Update firestore user_inventory db
     // Create firestoreInventory.getInventoryByEmail
@@ -56,8 +55,12 @@ class _InventoryCarouselState extends ConsumerState<InventoryCarousel> {
             // controller: controller,
             itemSnapping: true,
             flexWeights: widget.flexWeights,
-            children: items.map((model) {
-              return HeroLayoutCard(item: model, height: widget.height, width: widget.width,);
+            children: mockItems.map((model) {
+              return HeroLayoutCard(
+                item: model,
+                height: widget.height,
+                width: widget.width,
+              );
             }).toList(),
           ),
         ),

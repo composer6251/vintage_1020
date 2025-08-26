@@ -21,7 +21,7 @@ class MyBoothTab extends ConsumerWidget {
     
     final userEmail = FirebaseAuth.instance.currentUser?.email;
 
-    final inventoryItems = BuildMockModels.buildMyBoothMockModels();
+    final inventoryItems = BuildMockModels.buildEditInventoryItemModels();
     // final inventoryItems = userEmail != null
     //     ? ref.watch(getUserInventoryProvider(userEmail: userEmail))
     //     : const AsyncValue.data([]);
