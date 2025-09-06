@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vintage_1020/providers/user_provider/user_provider.dart';
+import 'package:vintage_1020/domain/providers/user_provider/user_provider.dart';
 import 'package:vintage_1020/ui/ui_container/ui_container.dart';
 import 'dart:async';
 

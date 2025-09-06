@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vintage_1020/data/repositories/inventory_repo_server_cache.dart';
+import 'package:vintage_1020/domain/repositories/inventory_repo_server_cache.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ManageInventoryScreenStream extends StatelessWidget {

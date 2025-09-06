@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:vintage_1020/domain/models/model/inventory_item/inventory_item.dart';
+import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
 
 class HeroLayoutCard extends StatelessWidget {
   HeroLayoutCard({super.key, required this.item, required this.height, required this.width});

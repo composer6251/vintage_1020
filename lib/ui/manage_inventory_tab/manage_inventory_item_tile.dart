@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:vintage_1020/domain/models/model/inventory_item/inventory_item.dart';
+import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ManageInventoryItemTile extends StatelessWidget {

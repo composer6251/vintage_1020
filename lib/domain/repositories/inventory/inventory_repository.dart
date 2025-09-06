@@ -1,17 +1,19 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:vintage_1020/domain/models/model/inventory_item/inventory_item.dart';
-import 'package:vintage_1020/data/repositories/inventory_repository.dart';
-import 'package:vintage_1020/data/repositories/inventory_repository_impl.dart';
+import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
+import 'package:vintage_1020/domain/repositories/inventory_repository.dart';
 
-part 'inventory.g.dart';
+part 'inventory_repository.g.dart';
 
-enum InventoryFilter {all, sold, notSold}
+
+/// REPOSITORY CLASS FOR API/DB CALLS.
+/// WATCHED BY INVENTORY_PROVIDER.dart
+/// PROVIDERS SHOULD GENERALLY BE USED FOR READ OPERATIONS AND NOT WRITE OPERATIONS.
+
+enum InventoryFilter { all, sold, notSold }
 
 @riverpod
-class InventoryNotifier extends _$InventoryNotifier {
-
+class InventoryProvider extends _$InventoryProvider {
   late final InventoryRepository inventoryRepository;
   InventoryFilter _inventoryFilter = InventoryFilter.all;
   List<InventoryItem> _items = [];
@@ -22,7 +24,9 @@ class InventoryNotifier extends _$InventoryNotifier {
 
   @override
   List<InventoryItem> build() {
-    inventoryRepository = ref.watch(inventoryRepository as ProviderListenable<InventoryRepository>);
+    inventoryRepository = ref.watch(
+      inventoryRepository as ProviderListenable<InventoryRepository>,
+    );
     return [];
   }
 
@@ -37,7 +41,7 @@ class InventoryNotifier extends _$InventoryNotifier {
     }
   }
 
-    void addInventoryItem(InventoryItem item) {
+  void addInventoryItem(InventoryItem item) {
     state = [
       ...state,
       InventoryItem(
@@ -55,13 +59,12 @@ class InventoryNotifier extends _$InventoryNotifier {
     ];
   }
 
-
   void makeCurrentInventoryItem(num id) {
     state = [
       for (final item in state)
         if (item.id == id)
           item.copyWith(id: 0)
-           // Assign a new ID to make it current
+        // Assign a new ID to make it current
         else
           item,
     ];

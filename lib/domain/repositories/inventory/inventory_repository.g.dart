@@ -1,33 +1,33 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'inventory.dart';
+part of 'inventory_repository.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-@ProviderFor(InventoryNotifier)
-const inventoryNotifierProvider = InventoryNotifierProvider._();
+@ProviderFor(InventoryProvider)
+const inventoryProviderProvider = InventoryProviderProvider._();
 
-final class InventoryNotifierProvider
-    extends $NotifierProvider<InventoryNotifier, List<InventoryItem>> {
-  const InventoryNotifierProvider._()
+final class InventoryProviderProvider
+    extends $NotifierProvider<InventoryProvider, List<InventoryItem>> {
+  const InventoryProviderProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'inventoryNotifierProvider',
+        name: r'inventoryProviderProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$inventoryNotifierHash();
+  String debugGetCreateSourceHash() => _$inventoryProviderHash();
 
   @$internal
   @override
-  InventoryNotifier create() => InventoryNotifier();
+  InventoryProvider create() => InventoryProvider();
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(List<InventoryItem> value) {
@@ -38,9 +38,9 @@ final class InventoryNotifierProvider
   }
 }
 
-String _$inventoryNotifierHash() => r'3115b421829016bd86f340699720876b22241365';
+String _$inventoryProviderHash() => r'f6bbe747943591678d37b98e749ed3757b6964be';
 
-abstract class _$InventoryNotifier extends $Notifier<List<InventoryItem>> {
+abstract class _$InventoryProvider extends $Notifier<List<InventoryItem>> {
   List<InventoryItem> build();
   @$mustCallSuper
   @override

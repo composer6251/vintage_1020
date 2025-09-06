@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:vintage_1020/domain/models/model/inventory_item/inventory_item.dart';
+import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
 
 
-///
+///  Repository for ****FLUTTER APP DIRECT CRUD OPERATIONS****
 ///  Writing Data (Always to Local Cache First, Then Sync to Cloud)
 ///
 

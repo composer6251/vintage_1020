@@ -3,21 +3,16 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vintage_1020/constants/api_urls.dart';
-import 'package:vintage_1020/domain/models/model/inventory_item/inventory_item.dart';
-import 'package:vintage_1020/data/repositories/inventory_repository.dart';
+import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
+import 'package:vintage_1020/domain/repositories/inventory_repository.dart';
 
-part 'inventory_repository_impl.g.dart';
-
-@Riverpod(keepAlive: true)
 InventoryRepository inventoryRepository(Ref ref) => InventoryRepositoryImpl();
 
 class InventoryRepositoryImpl implements InventoryRepository {
-
   @override
-  Future<List<InventoryItem>> getInventoryByUserEmail(
-    String userEmail,
-  ) async {
+  Future<List<InventoryItem>> getInventoryByUserEmail(String userEmail) async {
     try {
+      print("getting user Inventory");
       final response = await http.get(
         Uri.http(apiBaseUrl, apiGetUserInventoryByEmail, {
           'userEmail': userEmail,
@@ -33,7 +28,10 @@ class InventoryRepositoryImpl implements InventoryRepository {
         // return AsyncValue.data(items.cast<InventoryItem>());
         return items;
       } else {
-        return Future.error(Exception('Failed to retrieve inventory item'), StackTrace.current);
+        return Future.error(
+          Exception('Failed to retrieve inventory item'),
+          StackTrace.current,
+        );
       }
     } catch (e, st) {
       return Future.error(e, st);
@@ -58,8 +56,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
     }
   }
 
-    Future<void> saveInventoryItem(InventoryItem item) async {
-
+  Future<void> saveInventoryItem(InventoryItem item) async {
     final response = await http.post(
       Uri.http(apiBaseUrl, addItemUrl),
       headers: <String, String>{
@@ -74,7 +71,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
       throw Exception('Failed to add inventory item');
     }
   }
-  
+
   @override
   Future<void> addInventoryItem(InventoryItem item) async {
     final response = await http.post(
@@ -84,29 +81,29 @@ class InventoryRepositoryImpl implements InventoryRepository {
         // HttpHeaders.authorizationHeader: token, // Replace with your actual CSRF token if needed
       },
       body: jsonEncode(item.toJson()),
-      );
-      if (response.statusCode == 200) {
-        final json = jsonDecode(response.body);
-      } else {
-        throw Exception('Failed to add inventory item');
-      }
+    );
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to add inventory item');
+    }
   }
-  
+
   @override
   Future<void> deleteInventoryItem(num itemId) async {
-       final response = await http.post(
+    final response = await http.post(
       Uri.http(apiBaseUrl, addItemUrl, {'itemId': itemId.toString()}),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         // HttpHeaders.authorizationHeader: token, // Replace with your actual CSRF token if needed
       },
       // body: jsonEncode(item.toJson()),
-      );
-      if (response.statusCode == 200) {
-        final json = jsonDecode(response.body);
-      } else {
-        throw Exception('Failed to add inventory item');
-      }
+    );
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to add inventory item');
+    }
   }
 
   @override
@@ -118,11 +115,11 @@ class InventoryRepositoryImpl implements InventoryRepository {
         // HttpHeaders.authorizationHeader: token, // Replace with your actual CSRF token if needed
       },
       body: jsonEncode(item.toJson()),
-      );
-      if (response.statusCode == 200) {
-        final json = jsonDecode(response.body);
-      } else {
-        throw Exception('Failed to add inventory item');
-      }
+    );
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to add inventory item');
+    }
   }
 }

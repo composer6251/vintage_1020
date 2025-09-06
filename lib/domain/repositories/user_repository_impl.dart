@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:vintage_1020/data/repositories/user_repository.dart';
+import 'package:vintage_1020/domain/repositories/user_repository.dart';
 
 part 'user_repository_impl.g.dart';
 
