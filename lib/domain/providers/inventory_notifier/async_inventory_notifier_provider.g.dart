@@ -36,7 +36,7 @@ final class AsyncInventoryNotifierProviderProvider
 }
 
 String _$asyncInventoryNotifierProviderHash() =>
-    r'0c1895850d52c576e26f6c6b786d056e1af0a2f5';
+    r'2e5d27e90c6886d65c819711f362f234eec64bee';
 
 abstract class _$AsyncInventoryNotifierProvider
     extends $AsyncNotifier<List<InventoryItem>> {

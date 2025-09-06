@@ -8,15 +8,15 @@ import 'package:vintage_1020/domain/api/b_t_api/b_t_api.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/inventory_carousel.dart';
 
 class MyBoothTab extends ConsumerWidget {
-  void getInventoryByEmail(String userEmail) {
-    getInventoryByUserEmail(userEmail).then((items) {
-      if (items != null) {
-        // ref.read(inventoryNotifierProvider.notifier).buildUserInventory(items.whereType<InventoryItem>().toList());
-        print(items);
-      }
-    });
-  }
-  
+  // void getInventoryByEmail(String userEmail) {
+  //   getInventoryByUserEmail(userEmail).then((items) {
+  //     if (items != null) {
+  //       // ref.read(inventoryNotifierProvider.notifier).buildUserInventory(items.whereType<InventoryItem>().toList());
+  //       print(items);
+  //     }
+  //   });
+  // }
+
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

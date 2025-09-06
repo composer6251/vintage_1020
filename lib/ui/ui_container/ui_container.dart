@@ -90,7 +90,7 @@ class TabViewsContent extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userEmail = FirebaseAuth.instance.currentUser?.email;
-    ref.read(userNotifierProvider.notifier).setUserEmail(userEmail!);
+    // ref.read(userNotifierProvider.notifier).setUserEmail(userEmail!);
     // final inventoryItems = userEmail != null ? ref.watch(inventoryNotifierProvider(userEmail : userEmail)) : [];
     final double height = MediaQuery.sizeOf(context).height;
     final double width = MediaQuery.sizeOf(context).width;
