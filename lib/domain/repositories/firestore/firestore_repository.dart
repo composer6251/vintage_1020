@@ -10,19 +10,19 @@ final firestore = FirebaseFirestore.instance;
 
 
 // Future<List<InventoryItem>> retrieveInventory(String email) async {
-//
-//     await firestore.collection('inventoryItem').where('inventory', isEqualTo: true).get().then(
+
+//     await firestore.collection('inventoryItem').where('inventory', isEqualTo: true)
+//       .get()
+//       .then(
 //           (querySnapshot) {
-//         print("Successfully completed");
-//         for (var docSnapshot in querySnapshot.docs) {
-//           print('${docSnapshot.id} => ${docSnapshot.data()}');
-//         }
-//       },
+//             print("Successfully completed");
+//             for (var docSnapshot in querySnapshot.docs) {
+//               print('${docSnapshot.id} => ${docSnapshot.data()}');
+//             }
+//           },
 //       onError: (e) => print("Error completing: $e"),
-//     );
-//
-//     return
-//
+//       ).whenComplete;
+
 //   }
 
 
