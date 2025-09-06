@@ -23,7 +23,7 @@ Future<InventoryItem?> saveInventoryItem(InventoryItem item) async {
   }
 }
 
-Future<InventoryItem?> getInventoryItemById(num id) async {
+Future<InventoryItem> getInventoryItemById(num id) async {
   // final String token = Uuid().v4();
 
   final response = await http.get(
@@ -41,7 +41,7 @@ Future<InventoryItem?> getInventoryItemById(num id) async {
   }
 }
 
-Future<List<InventoryItem?>?> getInventoryByUserEmail(String userEmail) async {
+Future<List<InventoryItem>> getInventoryByUserEmail(String userEmail) async {
 
   final response = await http.get(
     Uri.http(apiBaseUrl, apiGetUserInventoryByEmail, {'userEmail': userEmail}),

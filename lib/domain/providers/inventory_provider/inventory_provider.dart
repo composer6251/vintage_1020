@@ -39,12 +39,6 @@ class InventoryNotifier extends _$InventoryNotifier {
     return [];
   }
 
-  final getInventory = FutureProvider<List<InventoryItem>>((ref) async {
-    
-    
-    return items;
-  });
-
   List<InventoryItem> _getFilteredInventory() {
     switch (_inventoryFilter) {
       case InventoryFilter.all:

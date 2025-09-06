@@ -38,7 +38,7 @@ final class InventoryNotifierProvider
   }
 }
 
-String _$inventoryNotifierHash() => r'5a4a9fb4a842a0a3186d6889e77b75a39ea1605b';
+String _$inventoryNotifierHash() => r'6a2aa2bc213126e81df12e18f30e8e73e3fc6e8e';
 
 abstract class _$InventoryNotifier extends $Notifier<List<InventoryItem>> {
   List<InventoryItem> build();

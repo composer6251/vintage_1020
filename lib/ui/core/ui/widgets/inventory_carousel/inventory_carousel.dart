@@ -25,26 +25,10 @@ class InventoryCarousel extends ConsumerStatefulWidget {
 }
 
 class _InventoryCarouselState extends ConsumerState<InventoryCarousel> {
-  // My booth tab?
-  // Need List<InventoryItem> for carousel
-  // Need CurrentInventoryItem from provider for HeroCard
 
-  // Edit InventoryItem?
-  // Need InventoryItem for carousel
-  // Need PrimaryImageUrl for HeroCard
   @override
   Widget build(BuildContext context) {
     final items = ref.watch(inventoryNotifierProvider);
-
-    // final items = BuildMockModels.buildMyBoothMockModels();
-    // final mockItems = BuildMockModels.buildEditInventoryItemModels();
-
-    // Update firestore user_inventory db
-    // Create firestoreInventory.getInventoryByEmail
-
-    // Initialize inventory
-
-    // Display inventory
 
     return Column(
       children: [
