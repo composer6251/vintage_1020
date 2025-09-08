@@ -13,14 +13,13 @@ final String userCollection = 'userCollection';
 final firestore = FirebaseFirestore.instance;
 
 Future<List<InventoryItem>> fetchAllInventory() async {
-  print('Fetching all firestore inventory');
   final snapshot = await firestore.collection(itemInventoryCollection).get();
   print('Returned ${snapshot.docs.length} documents in fetchAllInventory call');
-  print('Returned $snapshot documents in fetchAllInventory call');
   if (snapshot.docs.isNotEmpty) {
-    snapshot.docs.cast();
-    snapshot.docs.map((doc) => doc.data());
-    return [];
+    List<InventoryItem> items = snapshot.docs
+        .map((doc) => InventoryItem.fromJson(doc.data()))
+        .toList();
+    return items;
   } else {
     throw Exception('No inventory found for the given email.');
   }
@@ -73,10 +72,6 @@ Future<UserCollection> getUserInventoryIdByEmail() async {
     print('snapshot.docs for userCollection: ${snapshot.docs.first.data().entries}');
     
     UserCollection userCollection = UserCollection.fromJson(snapshot.docs.first.data());
-    if(userCollection.inventoryId.isNotEmpty) {
-
-    }
-        
     return userCollection;
   } else {
     throw Exception('No inventory found for the given email.');

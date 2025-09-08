@@ -29,7 +29,7 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
   Widget build(BuildContext context) {
     final double height = MediaQuery.sizeOf(context).height;
     final double width = MediaQuery.sizeOf(context).width;
-
+    final items = ref.watch(firestoreProviderProvider);
     return Scaffold(
       body: FutureBuilder(
         /*FUTURE FUNCTION TO RETRIEVE DATA AND UPDATE PROVIDER*/
@@ -48,14 +48,14 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
               mainAxisSize: MainAxisSize.max,
               children: [
                 InventoryCarousel(
-                  models: [],
+                  models: items,
                   width: width,
                   height: height * .50,
                   flexWeights: [3],
                 ),
 
                 InventoryCarousel(
-                  models: [],
+                  models: items,
                   width: width,
                   height: height * .40,
                   flexWeights: [1, 2, 1],

@@ -10,12 +10,14 @@ FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
 String? userEmail = firebaseAuth.currentUser?.email;
 
+UserCollection? userCollectionId;
+
 @Riverpod(keepAlive: true)
 class FirestoreProvider extends _$FirestoreProvider {
   @override
   List<InventoryItem> build() {
     print('Getting user inventory async provider');
-    FirestoreProvider firestoreProvider = FirestoreProvider();
+    // FirestoreProvider firestoreProvider = FirestoreProvider();
     return [];
   }
 
@@ -31,9 +33,29 @@ class FirestoreProvider extends _$FirestoreProvider {
 
   Future<void> getUserCollectionId() async {
     UserCollection results = await getUserInventoryIdByEmail();
+
+    userCollectionId = results;
   }
 
     Future<void> addUserInventoryItem(InventoryItem item) async {
     var result = await addInventoryItemToUserCollection(item);
+    state = [...state,       
+      InventoryItem(
+        itemImageUrls: item.itemImageUrls,
+        itemDescription: item.itemDescription,
+        itemPurchaseDate: item.itemPurchaseDate,
+        itemPurchasePrice: item.itemPurchasePrice,
+        itemCategory: item.itemCategory,
+        itemListingDate: item.itemListingDate,
+        itemListingPrice: item.itemListingPrice,
+        itemSoldPrice: item.itemSoldPrice,
+        primaryImageUrl: item.primaryImageUrl,
+        itemSoldDate: item.itemSoldDate,
+      ),
+      ];
+  }
+
+  List<InventoryItem> getInventoryState() {
+    return state;
   }
 }
