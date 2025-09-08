@@ -45,7 +45,7 @@ static String lunaFurnitureOne = 'resources/images-furniture/lunaFurnitureOne.jp
 static String lunaFurnitureTwo = 'resources/images-furniture/lunaFurnitureTwo.jpeg';
 static String lunaFurnitureThree = 'resources/images-furniture/lunaFurnitureThree.jpeg';
 
-static String myBoothPicZero = 'resources/images-booth/booth.jpeg';
+// static String myBoothPicZero = 'resources/images-booth/booth.jpeg';
 static String myBoothPicOne = '/Users/davidfennell/Programming/vintage_1020/resources/images-booth/booth-1.jpeg';
 static String myBoothPicTwo = 'resources/images-booth/booth-2.jpeg';
 static String myBoothPicThree = 'resources/images-booth/booth-3.jpeg';
@@ -63,7 +63,7 @@ static String myBoothPicPrimary = 'resources/images-booth/booth-main.jpeg';
   };
 
     static Map<num, String> picsMyBooth = <num, String>{
-    0: myBoothPicZero,
+    // 0: myBoothPicZero,
     1: myBoothPicOne,
     2: myBoothPicTwo,
     3: myBoothPicThree,

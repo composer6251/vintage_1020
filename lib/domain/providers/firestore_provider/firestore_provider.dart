@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
 import 'package:vintage_1020/domain/repositories/firestore/firestore_repository.dart';
 
 part 'firestore_provider.g.dart';
@@ -12,14 +12,19 @@ String? userEmail = firebaseAuth.currentUser?.email;
 @Riverpod(keepAlive: true)
 class FirestoreProvider extends _$FirestoreProvider {
   @override
-  Future<void> build() async {
+  List<InventoryItem> build() {
     print('Getting user inventory async provider');
-    FirestoreProvider firestoreProvider = FirestoreProvider(),
-
+    FirestoreProvider firestoreProvider = FirestoreProvider();
     return [];
   }
 
-  Future<void> fetchInventory() async {
-    List<dynamic> results = await fetchInventoryByEmail();
+  Future<void> fetchInventoryByUsername() async {
+    List<InventoryItem> results = await fetchInventoryByEmail();
+    state = results;
+  }
+
+    Future<void> fetchAllInventoryTest() async {
+    List<InventoryItem> results = await fetchAllInventory();
+    state = results;
   }
 }

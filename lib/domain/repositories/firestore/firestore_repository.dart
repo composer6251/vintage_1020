@@ -2,32 +2,40 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
+import 'package:vintage_1020/domain/providers/inventory_provider/inventory_provider.dart';
 
 ///  Repository for ****FLUTTER APP DIRECT CRUD OPERATIONS****
 ///  Writing Data (Always to Local Cache First, Then Sync to Cloud)
-///
 
 final firestore = FirebaseFirestore.instance;
 
-// Future<List<InventoryItem>> retrieveInventory(String email) async {
-//   final snapshot = await firestore
-//       .collection('inventoryItem')
-//       .where('inventoryEmail', isEqualTo: email)
-//       .get();
-
-//   if (snapshot.docs.isNotEmpty) {
-//     return snapshot.docs.map((doc) => InventoryItem.fromJson(doc)).toList();
-//   }
-// }
-
-Future<List<dynamic>> fetchInventoryByEmail() async {
+Future<List<InventoryItem>> fetchAllInventory() async {
+  print('Fetching all firestore inventory');
   final snapshot = await firestore
       .collection('inventoryItem')
-      .where('inventoryEmail')
+      .get();
+  print('Returned ${snapshot.docs.length} documents in fetchAllInventory call');
+  print('Returned $snapshot documents in fetchAllInventory call');
+  if (snapshot.docs.isNotEmpty) {
+    snapshot.docs.cast();
+    snapshot.docs.map((doc) => doc.data());
+    return [];
+  } else {
+    throw Exception('No inventory found for the given email.');
+  }
+}
+
+Future<List<InventoryItem>> fetchInventoryByEmail() async {
+  print('Fetching firestore inventory with username: $userEmail');
+  final snapshot = await firestore
+      .collection('inventoryItem')
+      .where('username', isEqualTo: 'test@test.com')
       .get();
   print('Returned ${snapshot.size} documents in fetchInvetoryByEmail call');
   if (snapshot.docs.isNotEmpty) {
-    return snapshot.docs.toList();
+    snapshot.docs.cast();
+    snapshot.docs.map((doc) => doc.data());
+    return [];
   } else {
     throw Exception('No inventory found for the given email.');
   }
@@ -56,19 +64,24 @@ Future<void> addInventoryItem(InventoryItem item) async {
 
 Future<void> a(InventoryItem item) async {
   try {
-    await firestore.collection('inventoryItem').add({
-      'itemImageUrls': item.itemImageUrls,
-      'itemDescription': item.itemDescription,
-      'itemPurchaseDate': item.itemPurchaseDate,
-      'itemPurchasePrice': item.itemPurchasePrice,
-      'itemListingDate': item.itemListingDate,
-      'itemListingPrice': item.itemListingPrice,
-      'itemSoldPrice': item.itemSoldPrice,
-      'itemCategory': item.itemCategory,
-      'itemSoldDate': item.itemSoldDate,
-      'primaryImageUrl': item.primaryImageUrl,
-    });
-    print('InventoryItem added locally and syncing');
+    await firestore
+        .collection('inventoryItem')
+        .add({
+          'itemImageUrls': item.itemImageUrls,
+          'itemDescription': item.itemDescription,
+          'itemPurchaseDate': item.itemPurchaseDate,
+          'itemPurchasePrice': item.itemPurchasePrice,
+          'itemListingDate': item.itemListingDate,
+          'itemListingPrice': item.itemListingPrice,
+          'itemSoldPrice': item.itemSoldPrice,
+          'itemCategory': item.itemCategory,
+          'itemSoldDate': item.itemSoldDate,
+          'primaryImageUrl': item.primaryImageUrl,
+        })
+        .then(
+          (DocumentReference doc) =>
+              print('InventoryItem saved with ID: ${doc.id}'),
+        );
   } catch (e) {
     print('Error updating task: $e');
   }

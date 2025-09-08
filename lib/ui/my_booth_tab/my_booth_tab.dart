@@ -5,48 +5,75 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
 import 'package:vintage_1020/domain/api/b_t_api/b_t_api.dart';
+import 'package:vintage_1020/domain/providers/firestore_provider/firestore_provider.dart';
+import 'package:vintage_1020/domain/providers/inventory_notifier/async_inventory_notifier_provider.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/inventory_carousel.dart';
 
-class MyBoothTab extends ConsumerWidget {
-  // void getInventoryByEmail(String userEmail) {
-  //   getInventoryByUserEmail(userEmail).then((items) {
-  //     if (items != null) {
-  //       // ref.read(inventoryNotifierProvider.notifier).buildUserInventory(items.whereType<InventoryItem>().toList());
-  //       print(items);
-  //     }
-  //   });
-  // }
-
+class MyBoothTab extends ConsumerStatefulWidget {
+  late Future<void> _itemsFuture;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // final inventoryItems = BuildMockModels.buildEditInventoryItemModels();
-    // final inventoryItems = userEmail != null
-    //     ? ref.watch(userNotifierProvider.notifier).build(userEmail: userEmail))
-    //     : const AsyncValue.data([]);
-    // final items = ref
-    //     .watch(inventoryNotifierProvider.notifier)
-    //     .fetchUserInventory(userEmail);
+  ConsumerState<MyBoothTab> createState() => _MyBoothTabState();
+}
+
+class _MyBoothTabState extends ConsumerState<MyBoothTab> {
+  late Future<void> _itemsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    // _itemsFuture = ref
+    //     .read(firestoreProviderProvider.notifier)
+    //     .fetchInventoryByUsername();
+    _itemsFuture = ref
+        .read(firestoreProviderProvider.notifier)
+        .fetchAllInventoryTest();
+    }
+
+  @override
+  Widget build(BuildContext context) {
     final double height = MediaQuery.sizeOf(context).height;
     final double width = MediaQuery.sizeOf(context).width;
 
     return Scaffold(
-      body: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          InventoryCarousel(
-            width: width,
-            height: height * .50,
-            flexWeights: [3],
-          ),
+      body: FutureBuilder(
+        /*FUTURE FUNCTION TO RETRIEVE DATA AND UPDATE PROVIDER*/
+        future: _itemsFuture,
+        builder: (context, asyncSnapshot) {
+          // AFTER THE ASYNC CALL FINISHES, HANDLE THE RETURN
+          if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (asyncSnapshot.hasError) {
+            return Center(
+              child: Text('Error loading data: ${asyncSnapshot.error}'),
+            );
+          } else if (asyncSnapshot.hasData) {
+            print(asyncSnapshot);
+            return Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                InventoryCarousel(
+                  models: [],
+                  width: width,
+                  height: height * .50,
+                  flexWeights: [3],
+                ),
 
-          InventoryCarousel(
-            width: width,
-            height: height * .40,
-            flexWeights: [1, 2, 1],
-          ),
-          // TextButton(onPressed:() => getInventoryByEmail(userEmail), child: Text('Refresh Inventory'))
-        ],
+                InventoryCarousel(
+                  models: [],
+                  width: width,
+                  height: height * .40,
+                  flexWeights: [1, 2, 1],
+                ),
+                // TextButton(onPressed:() => getInventoryByEmail(userEmail), child: Text('Refresh Inventory'))
+              ],
+            );
+          }
+
+          return Center(
+            child: Text('No inventory Items. Click the PLUS sign to add'),
+          );
+        },
       ),
     );
   }

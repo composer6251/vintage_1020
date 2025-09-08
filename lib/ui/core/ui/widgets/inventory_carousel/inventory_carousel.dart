@@ -11,13 +11,13 @@ import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/hero_card.dar
 class InventoryCarousel extends ConsumerStatefulWidget {
   const InventoryCarousel({
     super.key,
-    // required this.models,
+    required this.models,
     required this.width,
     required this.height,
     required this.flexWeights,
   });
 
-  // final List<InventoryItem> models;
+  final List<InventoryItem> models;
   final double width;
   final double height;
   final List<int> flexWeights;
@@ -32,60 +32,36 @@ class _InventoryCarouselState extends ConsumerState<InventoryCarousel> {
   @override
   void initState() {
     super.initState();
-    _itemsFuture = ref.read(asyncInventoryNotifierProviderProvider.notifier).getInventory();
+    _itemsFuture = ref
+        .read(asyncInventoryNotifierProviderProvider.notifier)
+        .getInventory();
   }
 
   @override
   Widget build(BuildContext context) {
-
-    // final items = ref.watch(asyncInventoryNotifierProviderProvider);
-
-    return FutureBuilder(
-      /*FUTURE FUNCTION TO RETRIEVE DATA AND UPDATE PROVIDER*/
-      future: _itemsFuture,
-      builder: (context, asyncSnapshot) {
-        // AFTER THE ASYNC CALL FINISHES, HANDLE THE RETURN
-        if(asyncSnapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        }
-        else if(asyncSnapshot.hasError) {
-          return Center(child: Text('Error loading data: ${asyncSnapshot.error}'));
-        }
-        else if(asyncSnapshot.hasData) {
-          print(asyncSnapshot);
-          
-        }
-
-        return Center(child: Text('No inventory Items. Click the PLUS sign to add'));
-      }
+    return Column(
+      children: [
+        Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+              ],
+            ),
+        ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: widget.height * .7),
+          child: CarouselView.weighted(
+            // controller: controller,
+            itemSnapping: true,
+            flexWeights: widget.flexWeights,
+            children: widget.models
+                .map(
+                  (m) => HeroLayoutCard(
+                    item: m,
+                    height: widget.height,
+                    width: widget.width,
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+      ],
     );
   }
 }
-// return Column(
-//           children: [
-//             Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-//               ],
-//             ),
-//             ConstrainedBox(
-//               constraints: BoxConstraints(maxHeight: widget.height * .7),
-//               child: CarouselView.weighted(
-//                 // controller: controller,
-//                 itemSnapping: true,
-//                 flexWeights: widget.flexWeights,
-//                 children: asyncSnapshot.data(
-                 
-//                  )               
-//                 //((e) =>,)
-                
-                
-//                 // ((model) {
-//                 //   return HeroLayoutCard(
-//                 //     item: model,
-//                 //     height: widget.height,
-//                 //     width: widget.width,
-//                 //   );
-//                 // }).toList(),
-//               ),
-//             ),
-//           ],
-//         );
