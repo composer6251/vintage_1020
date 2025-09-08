@@ -64,7 +64,7 @@ class _AuthGateState extends ConsumerState<UserAuthGate> {
             headerBuilder: (context, constraints, shrinkOffset) {
               return AspectRatio(
                 aspectRatio: 16 / 9,
-                child: Image.asset('resources/branding/booth-August.jpeg'),
+                child: Image.asset('/Users/davidfennell/Programming/vintage_1020/resources/branding/booth-August.jpeg'),
               );
             },
             subtitleBuilder: (context, action) {

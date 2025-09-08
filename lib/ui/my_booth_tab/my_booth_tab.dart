@@ -1,16 +1,11 @@
-import 'dart:convert';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
-import 'package:vintage_1020/domain/api/b_t_api/b_t_api.dart';
 import 'package:vintage_1020/domain/providers/firestore_provider/firestore_provider.dart';
-import 'package:vintage_1020/domain/providers/inventory_notifier/async_inventory_notifier_provider.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/inventory_carousel.dart';
 
 class MyBoothTab extends ConsumerStatefulWidget {
-  late Future<void> _itemsFuture;
+  // late final Future<void> _itemsFuture;
 
   @override
   ConsumerState<MyBoothTab> createState() => _MyBoothTabState();
@@ -22,12 +17,12 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
   @override
   void initState() {
     super.initState();
-    // _itemsFuture = ref
-    //     .read(firestoreProviderProvider.notifier)
-    //     .fetchInventoryByUsername();
     _itemsFuture = ref
         .read(firestoreProviderProvider.notifier)
-        .fetchAllInventoryTest();
+        .fetchInventoryByUsername();
+    // _itemsFuture = ref
+    //     .read(firestoreProviderProvider.notifier)
+    //     .fetchAllInventoryTest();
     }
 
   @override
