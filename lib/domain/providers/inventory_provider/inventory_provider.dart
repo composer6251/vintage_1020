@@ -25,9 +25,6 @@ class InventoryNotifier extends _$InventoryNotifier {
   List<InventoryItem> _items = [];
   final FirebaseAuth auth = FirebaseAuth.instance;
 
-  // Future<List<InventoryItem>> items =
-  //       inventoryRepository.getInventoryByUserEmail(userEmail!);
-
   @override
   InventoryFilter get currentFilter => _inventoryFilter;
 

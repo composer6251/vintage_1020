@@ -1,6 +1,7 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
-
 
 ///  Repository for ****FLUTTER APP DIRECT CRUD OPERATIONS****
 ///  Writing Data (Always to Local Cache First, Then Sync to Cloud)
@@ -8,25 +9,30 @@ import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
 
 final firestore = FirebaseFirestore.instance;
 
-
 // Future<List<InventoryItem>> retrieveInventory(String email) async {
+//   final snapshot = await firestore
+//       .collection('inventoryItem')
+//       .where('inventoryEmail', isEqualTo: email)
+//       .get();
 
-//     await firestore.collection('inventoryItem').where('inventory', isEqualTo: true)
-//       .get()
-//       .then(
-//           (querySnapshot) {
-//             print("Successfully completed");
-//             for (var docSnapshot in querySnapshot.docs) {
-//               print('${docSnapshot.id} => ${docSnapshot.data()}');
-//             }
-//           },
-//       onError: (e) => print("Error completing: $e"),
-//       ).whenComplete;
-
+//   if (snapshot.docs.isNotEmpty) {
+//     return snapshot.docs.map((doc) => InventoryItem.fromJson(doc)).toList();
 //   }
+// }
 
+Future<List<dynamic>> fetchInventoryByEmail() async {
+  final snapshot = await firestore
+      .collection('inventoryItem')
+      .where('inventoryEmail')
+      .get();
+  print('Returned ${snapshot.size} documents in fetchInvetoryByEmail call');
+  if (snapshot.docs.isNotEmpty) {
+    return snapshot.docs.toList();
+  } else {
+    throw Exception('No inventory found for the given email.');
+  }
+}
 
- 
 //Add a new document to a collection (with an auto-generated ID)
 Future<void> addInventoryItem(InventoryItem item) async {
   try {
@@ -44,7 +50,7 @@ Future<void> addInventoryItem(InventoryItem item) async {
     });
     print('InventoryItem added locally and syncing');
   } catch (e) {
-     print('Error updating task: $e');
+    print('Error updating task: $e');
   }
 }
 
@@ -64,10 +70,9 @@ Future<void> a(InventoryItem item) async {
     });
     print('InventoryItem added locally and syncing');
   } catch (e) {
-     print('Error updating task: $e');
+    print('Error updating task: $e');
   }
 }
-
 
 // Set/Overwrite a document (you specify the ID)
 Future<void> updateTaskById(num itemId, String newTitle) async {
@@ -95,7 +100,3 @@ Future<void> updateInventoryItemById(String taskId) async {
     print('Error marking task completed: $e');
   }
 }
-
-// Example usage:
-// await addTask('Buy groceries', 'Milk, eggs, bread');
-// await markTaskCompleted('some_task_id');

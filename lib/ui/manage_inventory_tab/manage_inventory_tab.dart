@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vintage_1020/data/mock/build_mock_models.dart';
 import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
+import 'package:vintage_1020/domain/providers/inventory_notifier/async_inventory_notifier_provider.dart';
 import 'package:vintage_1020/domain/providers/inventory_provider/inventory_provider.dart';
 import 'package:vintage_1020/ui/manage_inventory_tab/manage_inventory_item_tile.dart';
 
@@ -21,7 +22,7 @@ class ManageInventoryTab extends ConsumerWidget {
     final double width = MediaQuery.sizeOf(context).width;
 
     void redirectToEditInventoryItem(InventoryItem item) {
-      ref.read(inventoryNotifierProvider.notifier).makeCurrentInventoryItem(item.id!);
+      ref.read(asyncInventoryNotifierProviderProvider.notifier).makeCurrentInventoryItem(item.id!);
       // controller.index = 2; // Switch to EditItemTab
       Navigator.pushNamed(context, '/edit-inventory-item', arguments: item);
     }

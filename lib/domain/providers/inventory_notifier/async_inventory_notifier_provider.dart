@@ -12,19 +12,12 @@ import 'package:vintage_1020/domain/repositories/inventory_repository.dart';
 
 part 'async_inventory_notifier_provider.g.dart';
 
-// final inventoryNotifier = AsyncNotifierProvider<List<InventoryItem>>(
-//   (ref) => InventoryNotifier(),
-// );
-
 /// ASYNC PROVIDER CLASS FOR INVENTORY
 /// USES CODE GENERATION
 
-
-
-
 final userEmail = FirebaseAuth.instance.currentUser?.email;
 
-@riverpod
+@Riverpod(keepAlive: true)
 class AsyncInventoryNotifierProvider extends _$AsyncInventoryNotifierProvider {
   late final InventoryRepository inventoryRepository;
   List<InventoryItem> items = [];
@@ -56,5 +49,18 @@ class AsyncInventoryNotifierProvider extends _$AsyncInventoryNotifierProvider {
     } else {
       state = AsyncValue.error(Exception('Failed to retrieve inventory item'), StackTrace.current);
     }
-  } 
+  }
+
+    void makeCurrentInventoryItem(num id) {
+      final currentItems = state.value ?? [];
+      final updatedItems = [
+        for (final item in currentItems)
+          if (item.id == id)
+            item.copyWith(id: 0)
+          // Assign a new ID to make it current
+          else
+            item,
+      ];
+      state = AsyncValue.data(updatedItems);
+  }
 }

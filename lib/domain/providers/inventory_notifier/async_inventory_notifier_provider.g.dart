@@ -22,7 +22,7 @@ final class AsyncInventoryNotifierProviderProvider
         argument: null,
         retry: null,
         name: r'asyncInventoryNotifierProviderProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -36,7 +36,7 @@ final class AsyncInventoryNotifierProviderProvider
 }
 
 String _$asyncInventoryNotifierProviderHash() =>
-    r'2e5d27e90c6886d65c819711f362f234eec64bee';
+    r'f3999dbbc9b223ca3242e8e3fd0f1a14d6af11ec';
 
 abstract class _$AsyncInventoryNotifierProvider
     extends $AsyncNotifier<List<InventoryItem>> {

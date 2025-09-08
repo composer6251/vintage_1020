@@ -2,8 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
-import 'package:vintage_1020/domain/providers/inventory_provider/inventory_provider.dart';
-import 'package:vintage_1020/domain/providers/user_provider/user_provider.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/add_inventory_form_dialog.dart';
 import 'package:vintage_1020/ui/edit_inventory_item/edit_inventory_tab.dart';
 import 'package:vintage_1020/ui/manage_inventory_tab/manage_inventory_tab.dart';
@@ -89,9 +87,6 @@ class TabViewsContent extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userEmail = FirebaseAuth.instance.currentUser?.email;
-    // ref.read(userNotifierProvider.notifier).setUserEmail(userEmail!);
-    // final inventoryItems = userEmail != null ? ref.watch(inventoryNotifierProvider(userEmail : userEmail)) : [];
     final double height = MediaQuery.sizeOf(context).height;
     final double width = MediaQuery.sizeOf(context).width;
 

@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
 import 'package:vintage_1020/domain/repositories/inventory_repo_server_cache.dart';
-import 'package:vintage_1020/data/mock/build_mock_models.dart';
-import 'package:vintage_1020/domain/repositories/inventory/inventory_repository.dart';
-import 'package:vintage_1020/domain/providers/inventory_provider/inventory_provider.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/inventory_carousel.dart';
 
 class EditItemTab extends ConsumerWidget {

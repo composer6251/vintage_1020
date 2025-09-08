@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:vintage_1020/data/mock/build_mock_models.dart';
 import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
 import 'package:vintage_1020/domain/providers/inventory_notifier/async_inventory_notifier_provider.dart';
-import 'package:vintage_1020/domain/repositories/inventory/inventory_repository.dart';
+import 'package:vintage_1020/domain/repositories/api/inventory_repository.dart';
 import 'package:vintage_1020/domain/providers/inventory_provider/inventory_provider.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/hero_card.dart';
 
@@ -44,6 +44,7 @@ class _InventoryCarouselState extends ConsumerState<InventoryCarousel> {
       /*FUTURE FUNCTION TO RETRIEVE DATA AND UPDATE PROVIDER*/
       future: _itemsFuture,
       builder: (context, asyncSnapshot) {
+        // AFTER THE ASYNC CALL FINISHES, HANDLE THE RETURN
         if(asyncSnapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         }
@@ -53,10 +54,9 @@ class _InventoryCarouselState extends ConsumerState<InventoryCarousel> {
         else if(asyncSnapshot.hasData) {
           print(asyncSnapshot);
           
-        } else {
-          return Text("ELSE");
         }
-        return Center(child: CircularProgressIndicator());
+
+        return Center(child: Text('No inventory Items. Click the PLUS sign to add'));
       }
     );
   }
