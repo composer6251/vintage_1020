@@ -5,10 +5,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:vintage_1020/constants/inventory_categories.dart';
-import 'package:vintage_1020/domain/api/b_t_api/b_t_api.dart';
 import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
-import 'package:vintage_1020/domain/providers/inventory_provider/inventory_provider.dart';
+import 'package:vintage_1020/domain/providers/firestore_provider/firestore_provider.dart';
 import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
 
 /// **A HookConsumerWidget IS ESSENTIALLY A STATELESS WIDGET, BUT UTILIZES FLUTTER HOOKS TO MANAGE STATE ***
@@ -23,10 +21,6 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     final itemPurchasePriceController = useTextEditingController();
     final itemListingPriceController = useTextEditingController();
     final itemSoldPriceController = useTextEditingController();
-
-    // useState to hold inital dropdown value. Once changed it doesn't revert
-    // back to original value on rebuild.
-    final category = useState(InventoryCategory.furniture);
 
     final initialDate = useState(DateTime.now());
 
@@ -52,7 +46,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
           return;
         }
         
-        AssetEntity savedImage = await saveImage(image.path, category.value.name);
+        AssetEntity savedImage = await saveImage(image.path, null);
         // Adds image reference to the album created above
         await PhotoManager.plugin.copyAssetToGallery(savedImage, pathEntity);
         
@@ -134,7 +128,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
 
     void submit() {
       final InventoryItem itemToSave = InventoryItem(
-        itemCategory: InventoryCategory.furniture,
+        itemCategory: 'Furniture',
         itemImageUrls: itemImageUrls.value,
         itemPurchaseDate: purchaseDate.value,
         itemPurchasePrice: double.tryParse(itemPurchasePriceController.text),
@@ -146,22 +140,22 @@ class AddInventoryFormDialog extends HookConsumerWidget {
 
       if (formKey.currentState?.validate() ?? false) {
         ref
-            .read(inventoryNotifierProvider.notifier)
-            .addInventoryItem(itemToSave);
+            .watch(firestoreProviderProvider.notifier)
+            .addUserInventoryItem(itemToSave);
 
         Navigator.of(context).pop(); // Close the dialog
 
-        saveInventoryItem(itemToSave)
-            .then((savedItem) {
-              if (savedItem != null) {
-                print('Inventory item saved successfully: ${savedItem.id}');
-              } else {
-                print('Failed to save inventory item');
-              }
-            })
-            .catchError((error) {
-              print('Error saving inventory item: $error');
-            });
+        // saveInventoryItem(itemToSave)
+        //     .then((savedItem) {
+        //       if (savedItem != null) {
+        //         print('Inventory item saved successfully: ${savedItem.id}');
+        //       } else {
+        //         print('Failed to save inventory item');
+        //       }
+        //     })
+        //     .catchError((error) {
+        //       print('Error saving inventory item: $error');
+        //     });
       }
     }
 
@@ -178,38 +172,38 @@ class AddInventoryFormDialog extends HookConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           mainAxisSize: MainAxisSize.min,
           children: [
-            DropdownButtonFormField<InventoryCategory>(
-              value: category.value,
-              onChanged: (value) {
-                if (value != null) {}
-              },
-              items: const [
-                DropdownMenuItem(
-                  value: InventoryCategory.furniture,
-                  child: Text('Furniture'),
-                ),
-                DropdownMenuItem(
-                  value: InventoryCategory.lamps,
-                  child: Text('Lamps'),
-                ),
-                DropdownMenuItem(
-                  value: InventoryCategory.wallDecor,
-                  child: Text('Wall Decor'),
-                ),
-                DropdownMenuItem(
-                  value: InventoryCategory.paintings,
-                  child: Text('Paintings'),
-                ),
-                DropdownMenuItem(
-                  value: InventoryCategory.pictures,
-                  child: Text('Pictures'),
-                ),
-                DropdownMenuItem(
-                  value: InventoryCategory.miscellaneous,
-                  child: Text('Miscellaneous'),
-                ),
-              ],
-            ),
+            // DropdownButtonFormField<String>(
+            //   value: 'Test',
+            //   onChanged: (value) {
+            //     if (value != null) {}
+            //   },
+            //   items: const [
+            //     DropdownMenuItem(
+            //       value: 'furn',
+            //       child: Text('Furniture'),
+            //     ),
+            //     DropdownMenuItem(
+            //       value: 'lam',
+            //       child: Text('Lamps'),
+            //     ),
+            //     // DropdownMenuItem(
+            //     //   value: 'Wall Decor',
+            //     //   child: Text('Wall Decor'),
+            //     // ),
+            //     // DropdownMenuItem(
+            //     //   value: 'Painting',
+            //     //   child: Text('Paintings'),
+            //     // ),
+            //     // DropdownMenuItem(
+            //     //   value: 'Picture',
+            //     //   child: Text('Pictures'),
+            //     // ),
+            //     // DropdownMenuItem(
+            //     //   value: 'Miscellaneous',
+            //     //   child: Text('Miscellaneous'),
+            //     // ),
+            //   ],
+            // ),
             TextFormField(
               controller: itemPurchasePriceController,
               decoration: const InputDecoration(

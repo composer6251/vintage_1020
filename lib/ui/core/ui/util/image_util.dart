@@ -49,11 +49,10 @@ Future<AssetPathEntity?> createInventoryPhotoAlbum(String albumName) async {
   return newAlbum;
 }
 
-Future<AssetEntity> saveImage(String imagePath, String category) async {
+Future<AssetEntity> saveImage(String imagePath, String? category) async {
         
     AssetEntity savedImage = await PhotoManager.editor.saveImageWithPath(
       imagePath,
-      title: category,
     );
 
     return savedImage;

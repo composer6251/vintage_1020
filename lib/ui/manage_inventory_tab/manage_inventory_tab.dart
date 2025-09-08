@@ -16,7 +16,7 @@ class ManageInventoryTab extends ConsumerWidget {
     // TODO: Use Repository and replace mock data
     // final items = ref.watch(inventoryNotifierProvider);
 
-    final items = BuildMockModels.buildMyBoothMockModels();
+    final items = [];
 
     final double height = MediaQuery.sizeOf(context).height;
     final double width = MediaQuery.sizeOf(context).width;

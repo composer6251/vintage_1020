@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 mixin _$InventoryItem {
 
  num? get id;// Optional ID for the item
- List<String> get itemImageUrls; DateTime get itemPurchaseDate; double? get itemPurchasePrice; InventoryCategory get itemCategory; DateTime? get itemListingDate; double? get itemListingPrice; double? get itemSoldPrice; String? get primaryImageUrl; String? get itemDescription; DateTime? get itemSoldDate; Map<String, String>? get itemDimensions;
+ List<String> get itemImageUrls; DateTime get itemPurchaseDate; double? get itemPurchasePrice; String get itemCategory; DateTime? get itemListingDate; double? get itemListingPrice; double? get itemSoldPrice; String? get primaryImageUrl; String? get itemDescription; DateTime? get itemSoldDate; Map<String, String>? get itemDimensions;
 /// Create a copy of InventoryItem
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -49,7 +49,7 @@ abstract mixin class $InventoryItemCopyWith<$Res>  {
   factory $InventoryItemCopyWith(InventoryItem value, $Res Function(InventoryItem) _then) = _$InventoryItemCopyWithImpl;
 @useResult
 $Res call({
- num? id, List<String> itemImageUrls, DateTime itemPurchaseDate, double? itemPurchasePrice, InventoryCategory itemCategory, DateTime? itemListingDate, double? itemListingPrice, double? itemSoldPrice, String? primaryImageUrl, String? itemDescription, DateTime? itemSoldDate, Map<String, String>? itemDimensions
+ num? id, List<String> itemImageUrls, DateTime itemPurchaseDate, double? itemPurchasePrice, String itemCategory, DateTime? itemListingDate, double? itemListingPrice, double? itemSoldPrice, String? primaryImageUrl, String? itemDescription, DateTime? itemSoldDate, Map<String, String>? itemDimensions
 });
 
 
@@ -73,7 +73,7 @@ as num?,itemImageUrls: null == itemImageUrls ? _self.itemImageUrls : itemImageUr
 as List<String>,itemPurchaseDate: null == itemPurchaseDate ? _self.itemPurchaseDate : itemPurchaseDate // ignore: cast_nullable_to_non_nullable
 as DateTime,itemPurchasePrice: freezed == itemPurchasePrice ? _self.itemPurchasePrice : itemPurchasePrice // ignore: cast_nullable_to_non_nullable
 as double?,itemCategory: null == itemCategory ? _self.itemCategory : itemCategory // ignore: cast_nullable_to_non_nullable
-as InventoryCategory,itemListingDate: freezed == itemListingDate ? _self.itemListingDate : itemListingDate // ignore: cast_nullable_to_non_nullable
+as String,itemListingDate: freezed == itemListingDate ? _self.itemListingDate : itemListingDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,itemListingPrice: freezed == itemListingPrice ? _self.itemListingPrice : itemListingPrice // ignore: cast_nullable_to_non_nullable
 as double?,itemSoldPrice: freezed == itemSoldPrice ? _self.itemSoldPrice : itemSoldPrice // ignore: cast_nullable_to_non_nullable
 as double?,primaryImageUrl: freezed == primaryImageUrl ? _self.primaryImageUrl : primaryImageUrl // ignore: cast_nullable_to_non_nullable
@@ -162,7 +162,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( num? id,  List<String> itemImageUrls,  DateTime itemPurchaseDate,  double? itemPurchasePrice,  InventoryCategory itemCategory,  DateTime? itemListingDate,  double? itemListingPrice,  double? itemSoldPrice,  String? primaryImageUrl,  String? itemDescription,  DateTime? itemSoldDate,  Map<String, String>? itemDimensions)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( num? id,  List<String> itemImageUrls,  DateTime itemPurchaseDate,  double? itemPurchasePrice,  String itemCategory,  DateTime? itemListingDate,  double? itemListingPrice,  double? itemSoldPrice,  String? primaryImageUrl,  String? itemDescription,  DateTime? itemSoldDate,  Map<String, String>? itemDimensions)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _InventoryItem() when $default != null:
 return $default(_that.id,_that.itemImageUrls,_that.itemPurchaseDate,_that.itemPurchasePrice,_that.itemCategory,_that.itemListingDate,_that.itemListingPrice,_that.itemSoldPrice,_that.primaryImageUrl,_that.itemDescription,_that.itemSoldDate,_that.itemDimensions);case _:
@@ -183,7 +183,7 @@ return $default(_that.id,_that.itemImageUrls,_that.itemPurchaseDate,_that.itemPu
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( num? id,  List<String> itemImageUrls,  DateTime itemPurchaseDate,  double? itemPurchasePrice,  InventoryCategory itemCategory,  DateTime? itemListingDate,  double? itemListingPrice,  double? itemSoldPrice,  String? primaryImageUrl,  String? itemDescription,  DateTime? itemSoldDate,  Map<String, String>? itemDimensions)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( num? id,  List<String> itemImageUrls,  DateTime itemPurchaseDate,  double? itemPurchasePrice,  String itemCategory,  DateTime? itemListingDate,  double? itemListingPrice,  double? itemSoldPrice,  String? primaryImageUrl,  String? itemDescription,  DateTime? itemSoldDate,  Map<String, String>? itemDimensions)  $default,) {final _that = this;
 switch (_that) {
 case _InventoryItem():
 return $default(_that.id,_that.itemImageUrls,_that.itemPurchaseDate,_that.itemPurchasePrice,_that.itemCategory,_that.itemListingDate,_that.itemListingPrice,_that.itemSoldPrice,_that.primaryImageUrl,_that.itemDescription,_that.itemSoldDate,_that.itemDimensions);}
@@ -200,7 +200,7 @@ return $default(_that.id,_that.itemImageUrls,_that.itemPurchaseDate,_that.itemPu
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( num? id,  List<String> itemImageUrls,  DateTime itemPurchaseDate,  double? itemPurchasePrice,  InventoryCategory itemCategory,  DateTime? itemListingDate,  double? itemListingPrice,  double? itemSoldPrice,  String? primaryImageUrl,  String? itemDescription,  DateTime? itemSoldDate,  Map<String, String>? itemDimensions)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( num? id,  List<String> itemImageUrls,  DateTime itemPurchaseDate,  double? itemPurchasePrice,  String itemCategory,  DateTime? itemListingDate,  double? itemListingPrice,  double? itemSoldPrice,  String? primaryImageUrl,  String? itemDescription,  DateTime? itemSoldDate,  Map<String, String>? itemDimensions)?  $default,) {final _that = this;
 switch (_that) {
 case _InventoryItem() when $default != null:
 return $default(_that.id,_that.itemImageUrls,_that.itemPurchaseDate,_that.itemPurchasePrice,_that.itemCategory,_that.itemListingDate,_that.itemListingPrice,_that.itemSoldPrice,_that.primaryImageUrl,_that.itemDescription,_that.itemSoldDate,_that.itemDimensions);case _:
@@ -230,7 +230,7 @@ class _InventoryItem implements InventoryItem {
 
 @override final  DateTime itemPurchaseDate;
 @override final  double? itemPurchasePrice;
-@override final  InventoryCategory itemCategory;
+@override final  String itemCategory;
 @override final  DateTime? itemListingDate;
 @override final  double? itemListingPrice;
 @override final  double? itemSoldPrice;
@@ -280,7 +280,7 @@ abstract mixin class _$InventoryItemCopyWith<$Res> implements $InventoryItemCopy
   factory _$InventoryItemCopyWith(_InventoryItem value, $Res Function(_InventoryItem) _then) = __$InventoryItemCopyWithImpl;
 @override @useResult
 $Res call({
- num? id, List<String> itemImageUrls, DateTime itemPurchaseDate, double? itemPurchasePrice, InventoryCategory itemCategory, DateTime? itemListingDate, double? itemListingPrice, double? itemSoldPrice, String? primaryImageUrl, String? itemDescription, DateTime? itemSoldDate, Map<String, String>? itemDimensions
+ num? id, List<String> itemImageUrls, DateTime itemPurchaseDate, double? itemPurchasePrice, String itemCategory, DateTime? itemListingDate, double? itemListingPrice, double? itemSoldPrice, String? primaryImageUrl, String? itemDescription, DateTime? itemSoldDate, Map<String, String>? itemDimensions
 });
 
 
@@ -304,7 +304,7 @@ as num?,itemImageUrls: null == itemImageUrls ? _self._itemImageUrls : itemImageU
 as List<String>,itemPurchaseDate: null == itemPurchaseDate ? _self.itemPurchaseDate : itemPurchaseDate // ignore: cast_nullable_to_non_nullable
 as DateTime,itemPurchasePrice: freezed == itemPurchasePrice ? _self.itemPurchasePrice : itemPurchasePrice // ignore: cast_nullable_to_non_nullable
 as double?,itemCategory: null == itemCategory ? _self.itemCategory : itemCategory // ignore: cast_nullable_to_non_nullable
-as InventoryCategory,itemListingDate: freezed == itemListingDate ? _self.itemListingDate : itemListingDate // ignore: cast_nullable_to_non_nullable
+as String,itemListingDate: freezed == itemListingDate ? _self.itemListingDate : itemListingDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,itemListingPrice: freezed == itemListingPrice ? _self.itemListingPrice : itemListingPrice // ignore: cast_nullable_to_non_nullable
 as double?,itemSoldPrice: freezed == itemSoldPrice ? _self.itemSoldPrice : itemSoldPrice // ignore: cast_nullable_to_non_nullable
 as double?,primaryImageUrl: freezed == primaryImageUrl ? _self.primaryImageUrl : primaryImageUrl // ignore: cast_nullable_to_non_nullable

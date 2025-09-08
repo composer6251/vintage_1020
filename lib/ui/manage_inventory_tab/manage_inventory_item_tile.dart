@@ -47,7 +47,7 @@ class ManageInventoryItemTile extends StatelessWidget {
               Text(
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                model.itemCategory.name,
+                model.itemCategory,
               ),
               Text(
                 overflow: TextOverflow.ellipsis,

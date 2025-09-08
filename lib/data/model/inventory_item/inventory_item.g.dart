@@ -14,10 +14,7 @@ _InventoryItem _$InventoryItemFromJson(Map<String, dynamic> json) =>
           .toList(),
       itemPurchaseDate: DateTime.parse(json['itemPurchaseDate'] as String),
       itemPurchasePrice: (json['itemPurchasePrice'] as num?)?.toDouble(),
-      itemCategory: $enumDecode(
-        _$InventoryCategoryEnumMap,
-        json['itemCategory'],
-      ),
+      itemCategory: json['itemCategory'] as String,
       itemListingDate: json['itemListingDate'] == null
           ? null
           : DateTime.parse(json['itemListingDate'] as String),
@@ -39,7 +36,7 @@ Map<String, dynamic> _$InventoryItemToJson(_InventoryItem instance) =>
       'itemImageUrls': instance.itemImageUrls,
       'itemPurchaseDate': instance.itemPurchaseDate.toIso8601String(),
       'itemPurchasePrice': instance.itemPurchasePrice,
-      'itemCategory': _$InventoryCategoryEnumMap[instance.itemCategory]!,
+      'itemCategory': instance.itemCategory,
       'itemListingDate': instance.itemListingDate?.toIso8601String(),
       'itemListingPrice': instance.itemListingPrice,
       'itemSoldPrice': instance.itemSoldPrice,
@@ -48,12 +45,3 @@ Map<String, dynamic> _$InventoryItemToJson(_InventoryItem instance) =>
       'itemSoldDate': instance.itemSoldDate?.toIso8601String(),
       'itemDimensions': instance.itemDimensions,
     };
-
-const _$InventoryCategoryEnumMap = {
-  InventoryCategory.furniture: 'furniture',
-  InventoryCategory.wallDecor: 'wallDecor',
-  InventoryCategory.lamps: 'lamps',
-  InventoryCategory.paintings: 'paintings',
-  InventoryCategory.pictures: 'pictures',
-  InventoryCategory.miscellaneous: 'miscellaneous',
-};
