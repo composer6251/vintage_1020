@@ -26,7 +26,6 @@ class ManageInventoryItemTile extends StatelessWidget {
     }
     final isListed = model.itemListingPrice != null && model.itemListingDate != null;
     final isSold = model.itemSoldPrice != null && model.itemSoldDate != null;
-    print(model.itemImageUrls.first);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -36,7 +35,7 @@ class ManageInventoryItemTile extends StatelessWidget {
           child: Image.asset(
             height: height,
             width: width,
-            model.itemImageUrls.first,
+            model.primaryImageUrl!,
           ),
         ),
         SizedBox(

@@ -23,7 +23,7 @@ class _HomeScreenState extends ConsumerState<UiContainer> {
   @override
   void initState() {
     super.initState();
-    createUser();
+    // createUser();
   }
 
   void openAddInventoryDialog() {

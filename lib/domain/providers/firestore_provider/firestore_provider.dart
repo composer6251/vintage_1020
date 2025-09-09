@@ -37,6 +37,10 @@ class FirestoreProvider extends _$FirestoreProvider {
     state = results;
   }
 
+  Future<void> updateUserInventory() async {
+    await updateUserAndInventory(state);
+  }
+
   Future<void> getUserCollectionId() async {
     UserCollection results = await getUserInventoryIdByEmail();
     print('User Uuid: $test');

@@ -9,14 +9,13 @@ import 'package:vintage_1020/data/model/user_collection/user_collection.dart';
 const String itemInventoryCollection = 'itemInventory';
 const String userCollection = 'userCollection';
 const String userTest = 'user';
+const String inventory = 'inventory';
 FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
 final String? userEmail = firebaseAuth.currentUser?.email;
 final String? uid = firebaseAuth.currentUser?.uid;
 
 final firestore = FirebaseFirestore.instance;
-
-//GET USER DocumentId
 
 Future<List<InventoryItem>> getUser() async {
    final snapshot = await firestore
@@ -39,8 +38,8 @@ Future<List<InventoryItem>> getUser() async {
 // Create user with Map<User>
 Future<void> createUser() async {
   try {
-    final snapshot = await firestore
-      .collection(userCollection)
+    await firestore
+      .collection(userTest)
       .doc(uid)
       .set({
         'documentId': uid,
@@ -60,13 +59,13 @@ UserCollection buildUserCollection(List<InventoryItem> inventory) {
   return UserCollection(username: userEmail!, inventory: inventory);
 }
 
-Future<void> updateUserAndInventory(List<InventoryItem> inventory) async {
+Future<void> updateUserAndInventory(List<InventoryItem> items) async {
   print('Updating user and inventory with ${inventory.length} items');
   // UserCollection user = buildUserCollection(inventory);
 
-  var user = UserCollection(username: userEmail!, inventory: inventory);
+  var user = UserCollection(username: userEmail!, inventory: items);
   await firestore
-    .collection(userTest)
+    .collection(inventory)
     .doc(uid)
     .set({
       'user': user},
@@ -105,7 +104,7 @@ Future<List<InventoryItem>> fetchInventoryByEmail() async {
   print('Fetching firestore inventory with username: $userEmail');
   final snapshot = await firestore
       .collection(itemInventoryCollection)
-      .where('username', isEqualTo: 'test@test.com')
+      .where('username', isEqualTo: userEmail)
       .get();
   print('Returned ${snapshot.size} documents in fetchInvetoryByEmail call');
   if (snapshot.docs.isNotEmpty) {
