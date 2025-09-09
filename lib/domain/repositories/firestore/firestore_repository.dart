@@ -8,12 +8,33 @@ import 'package:vintage_1020/data/model/user_collection/user_collection.dart';
 ///  Writing Data (Always to Local Cache First, Then Sync to Cloud)
 const String itemInventoryCollection = 'itemInventory';
 const String userCollection = 'userCollection';
+const String userTest = 'user';
 FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
 final String? userEmail = firebaseAuth.currentUser?.email;
 final String? uid = firebaseAuth.currentUser?.uid;
 
 final firestore = FirebaseFirestore.instance;
+
+//GET USER DocumentId
+
+Future<List<InventoryItem>> getUser() async {
+   final snapshot = await firestore
+      .collection(userCollection)
+      .where('username', isEqualTo: userEmail)
+      .get();
+  
+  print('Returned ${snapshot.size} documents in fetchInvetoryByEmail call');
+  
+  if (snapshot.docs.isNotEmpty) {
+    List<InventoryItem> items = snapshot.docs
+        .map((doc) => InventoryItem.fromJson(doc.data()))
+        .toList();
+    return items;
+  } else {
+    throw Exception('No inventory found for the given email.');
+  }
+}
 
 // Create user with Map<User>
 Future<void> createUser() async {
@@ -36,14 +57,28 @@ UserCollection buildUserCollection(List<InventoryItem> inventory) {
   if(userEmail == null || uid == null) {
     throw Exception('Cannot build userCollection object without userEmail and uid');
   }
-  return UserCollection(username: userEmail!, inventoryId: uid!, inventory: inventory);
+  return UserCollection(username: userEmail!, inventory: inventory);
 }
 
 Future<void> updateUserAndInventory(List<InventoryItem> inventory) async {
   print('Updating user and inventory with ${inventory.length} items');
   // UserCollection user = buildUserCollection(inventory);
 
-  var user = UserCollection(username: userEmail!, inventoryId: uid!, inventory: inventory);
+  var user = UserCollection(username: userEmail!, inventory: inventory);
+  await firestore
+    .collection(userTest)
+    .doc(uid)
+    .set({
+      'user': user},
+      SetOptions(merge: true)
+    );
+}
+
+Future<void> updateUserCollectionAndInventory(List<InventoryItem> inventory) async {
+  print('Updating user and inventory with ${inventory.length} items');
+  // UserCollection user = buildUserCollection(inventory);
+
+  var user = UserCollection(username: userEmail!, inventory: inventory);
   await firestore
     .collection(userCollection)
     .doc(uid)

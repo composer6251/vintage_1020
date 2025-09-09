@@ -11,7 +11,7 @@ part 'user_collection.g.dart';
 sealed class UserCollection with _$UserCollection {
   const factory UserCollection({ // Optional ID for the item
     required String username,
-    required String inventoryId,
+    // required String inventoryId,
     required List<InventoryItem> inventory,
   }) = _UserCollection; // Freezed generates private implementation class
   // Getter for itemId, defaults to 0 if id is null
