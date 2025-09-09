@@ -16,6 +16,9 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
 
   @override
   void initState() {
+
+    // Get user 
+    // If no user Id, create
     super.initState();
     _itemsFuture = ref
         .read(firestoreProviderProvider.notifier)

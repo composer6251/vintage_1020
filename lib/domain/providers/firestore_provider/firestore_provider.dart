@@ -8,7 +8,8 @@ part 'firestore_provider.g.dart';
 
 FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
-String? userEmail = firebaseAuth.currentUser?.email;
+final String? userEmail = firebaseAuth.currentUser?.email;
+String? test = firebaseAuth.currentUser?.uid;
 
 UserCollection? userCollectionId;
 
@@ -19,6 +20,11 @@ class FirestoreProvider extends _$FirestoreProvider {
     print('Getting user inventory async provider');
     // FirestoreProvider firestoreProvider = FirestoreProvider();
     return [];
+  }
+
+  // collection.set w/merge = true. *CREATES USER IF DOESN'T EXIST, OTHERWISE IT MERGES NEW DATA ONLY */
+  void updateUser() async {
+    await updateUserAndInventory(state);
   }
 
   Future<void> fetchInventoryByUsername() async {
@@ -33,14 +39,11 @@ class FirestoreProvider extends _$FirestoreProvider {
 
   Future<void> getUserCollectionId() async {
     UserCollection results = await getUserInventoryIdByEmail();
-
+    print('User Uuid: $test');
     userCollectionId = results;
   }
 
-  
-
     Future<void> addUserInventoryItem(InventoryItem item) async {
-    var result = await addInventoryItemToUserCollection(item);
     state = [...state,       
       InventoryItem(
         itemImageUrls: item.itemImageUrls,
@@ -56,6 +59,7 @@ class FirestoreProvider extends _$FirestoreProvider {
       ),
     ];
 
+    updateUser();
 
   }
 

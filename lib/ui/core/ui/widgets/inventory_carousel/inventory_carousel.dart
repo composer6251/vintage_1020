@@ -27,7 +27,9 @@ class _InventoryCarouselState extends ConsumerState<InventoryCarousel> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+        Row(mainAxisAlignment: MainAxisAlignment.spaceAround, 
+        children: [
+              
               ],
             ),
         ConstrainedBox(

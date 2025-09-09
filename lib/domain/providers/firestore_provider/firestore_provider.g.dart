@@ -38,7 +38,7 @@ final class FirestoreProviderProvider
   }
 }
 
-String _$firestoreProviderHash() => r'8bee3e11cbd63dbe2b648e0a38721a44b28e9531';
+String _$firestoreProviderHash() => r'f075d6855b82995e9bf76ca510fd6adf88768e2b';
 
 abstract class _$FirestoreProvider extends $Notifier<List<InventoryItem>> {
   List<InventoryItem> build();

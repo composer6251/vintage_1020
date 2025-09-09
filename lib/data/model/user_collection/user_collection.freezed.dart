@@ -15,8 +15,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$UserCollection {
 
- String? get id;// Optional ID for the item
- String get username; String get inventoryId;
+// Optional ID for the item
+ String get username; String get inventoryId; List<InventoryItem> get inventory;
 /// Create a copy of UserCollection
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +29,16 @@ $UserCollectionCopyWith<UserCollection> get copyWith => _$UserCollectionCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserCollection&&(identical(other.id, id) || other.id == id)&&(identical(other.username, username) || other.username == username)&&(identical(other.inventoryId, inventoryId) || other.inventoryId == inventoryId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserCollection&&(identical(other.username, username) || other.username == username)&&(identical(other.inventoryId, inventoryId) || other.inventoryId == inventoryId)&&const DeepCollectionEquality().equals(other.inventory, inventory));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,username,inventoryId);
+int get hashCode => Object.hash(runtimeType,username,inventoryId,const DeepCollectionEquality().hash(inventory));
 
 @override
 String toString() {
-  return 'UserCollection(id: $id, username: $username, inventoryId: $inventoryId)';
+  return 'UserCollection(username: $username, inventoryId: $inventoryId, inventory: $inventory)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $UserCollectionCopyWith<$Res>  {
   factory $UserCollectionCopyWith(UserCollection value, $Res Function(UserCollection) _then) = _$UserCollectionCopyWithImpl;
 @useResult
 $Res call({
- String? id, String username, String inventoryId
+ String username, String inventoryId, List<InventoryItem> inventory
 });
 
 
@@ -66,12 +66,12 @@ class _$UserCollectionCopyWithImpl<$Res>
 
 /// Create a copy of UserCollection
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? username = null,Object? inventoryId = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? username = null,Object? inventoryId = null,Object? inventory = null,}) {
   return _then(_self.copyWith(
-id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String?,username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
+username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
 as String,inventoryId: null == inventoryId ? _self.inventoryId : inventoryId // ignore: cast_nullable_to_non_nullable
-as String,
+as String,inventory: null == inventory ? _self.inventory : inventory // ignore: cast_nullable_to_non_nullable
+as List<InventoryItem>,
   ));
 }
 
@@ -153,10 +153,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String username,  String inventoryId)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String username,  String inventoryId,  List<InventoryItem> inventory)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UserCollection() when $default != null:
-return $default(_that.id,_that.username,_that.inventoryId);case _:
+return $default(_that.username,_that.inventoryId,_that.inventory);case _:
   return orElse();
 
 }
@@ -174,10 +174,10 @@ return $default(_that.id,_that.username,_that.inventoryId);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String username,  String inventoryId)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String username,  String inventoryId,  List<InventoryItem> inventory)  $default,) {final _that = this;
 switch (_that) {
 case _UserCollection():
-return $default(_that.id,_that.username,_that.inventoryId);}
+return $default(_that.username,_that.inventoryId,_that.inventory);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -191,10 +191,10 @@ return $default(_that.id,_that.username,_that.inventoryId);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String username,  String inventoryId)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String username,  String inventoryId,  List<InventoryItem> inventory)?  $default,) {final _that = this;
 switch (_that) {
 case _UserCollection() when $default != null:
-return $default(_that.id,_that.username,_that.inventoryId);case _:
+return $default(_that.username,_that.inventoryId,_that.inventory);case _:
   return null;
 
 }
@@ -206,13 +206,19 @@ return $default(_that.id,_that.username,_that.inventoryId);case _:
 @JsonSerializable()
 
 class _UserCollection implements UserCollection {
-  const _UserCollection({this.id, required this.username, required this.inventoryId});
+  const _UserCollection({required this.username, required this.inventoryId, required final  List<InventoryItem> inventory}): _inventory = inventory;
   factory _UserCollection.fromJson(Map<String, dynamic> json) => _$UserCollectionFromJson(json);
 
-@override final  String? id;
 // Optional ID for the item
 @override final  String username;
 @override final  String inventoryId;
+ final  List<InventoryItem> _inventory;
+@override List<InventoryItem> get inventory {
+  if (_inventory is EqualUnmodifiableListView) return _inventory;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_inventory);
+}
+
 
 /// Create a copy of UserCollection
 /// with the given fields replaced by the non-null parameter values.
@@ -227,16 +233,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserCollection&&(identical(other.id, id) || other.id == id)&&(identical(other.username, username) || other.username == username)&&(identical(other.inventoryId, inventoryId) || other.inventoryId == inventoryId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserCollection&&(identical(other.username, username) || other.username == username)&&(identical(other.inventoryId, inventoryId) || other.inventoryId == inventoryId)&&const DeepCollectionEquality().equals(other._inventory, _inventory));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,username,inventoryId);
+int get hashCode => Object.hash(runtimeType,username,inventoryId,const DeepCollectionEquality().hash(_inventory));
 
 @override
 String toString() {
-  return 'UserCollection(id: $id, username: $username, inventoryId: $inventoryId)';
+  return 'UserCollection(username: $username, inventoryId: $inventoryId, inventory: $inventory)';
 }
 
 
@@ -247,7 +253,7 @@ abstract mixin class _$UserCollectionCopyWith<$Res> implements $UserCollectionCo
   factory _$UserCollectionCopyWith(_UserCollection value, $Res Function(_UserCollection) _then) = __$UserCollectionCopyWithImpl;
 @override @useResult
 $Res call({
- String? id, String username, String inventoryId
+ String username, String inventoryId, List<InventoryItem> inventory
 });
 
 
@@ -264,12 +270,12 @@ class __$UserCollectionCopyWithImpl<$Res>
 
 /// Create a copy of UserCollection
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? username = null,Object? inventoryId = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? username = null,Object? inventoryId = null,Object? inventory = null,}) {
   return _then(_UserCollection(
-id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String?,username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
+username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
 as String,inventoryId: null == inventoryId ? _self.inventoryId : inventoryId // ignore: cast_nullable_to_non_nullable
-as String,
+as String,inventory: null == inventory ? _self._inventory : inventory // ignore: cast_nullable_to_non_nullable
+as List<InventoryItem>,
   ));
 }
 
