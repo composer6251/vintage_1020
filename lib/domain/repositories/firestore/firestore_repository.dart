@@ -1,16 +1,30 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:uuid/uuid.dart';
+import 'package:uuid/v8.dart';
 import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
 import 'package:vintage_1020/data/model/user_collection/user_collection.dart';
 import 'package:vintage_1020/domain/providers/inventory_provider/inventory_provider.dart';
 
 ///  Repository for ****FLUTTER APP DIRECT CRUD OPERATIONS****
 ///  Writing Data (Always to Local Cache First, Then Sync to Cloud)
-final String itemInventoryCollection = 'itemInventory';
-final String userCollection = 'userCollection';
+const String itemInventoryCollection = 'itemInventory';
+const String userCollection = 'userCollection';
 
 final firestore = FirebaseFirestore.instance;
+
+// Create user with Map<User>
+Future<String> createUser(UserCollection user) async {
+  final snapshot = await firestore.collection(userCollection).add({
+    'user': user,
+    'inventoryId': UuidV8,
+  });
+  if (snapshot.id.isNotEmpty) {
+    return snapshot.id;
+  }
+  throw Exception('No inventory found for the given email.');
+}
 
 Future<List<InventoryItem>> fetchAllInventory() async {
   final snapshot = await firestore.collection(itemInventoryCollection).get();
@@ -69,9 +83,13 @@ Future<UserCollection> getUserInventoryIdByEmail() async {
     'Returned ${snapshot.size} documents from USERCOLLECTION in getUserInventoryIdByEmail call',
   );
   if (snapshot.docs.isNotEmpty) {
-    print('snapshot.docs for userCollection: ${snapshot.docs.first.data().entries}');
-    
-    UserCollection userCollection = UserCollection.fromJson(snapshot.docs.first.data());
+    print(
+      'snapshot.docs for userCollection: ${snapshot.docs.first.data().entries}',
+    );
+
+    UserCollection userCollection = UserCollection.fromJson(
+      snapshot.docs.first.data(),
+    );
     return userCollection;
   } else {
     throw Exception('No inventory found for the given email.');

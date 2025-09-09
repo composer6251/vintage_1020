@@ -1,11 +1,5 @@
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:flutter_image_gallery_saver/flutter_image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:photo_gallery/photo_gallery.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:vintage_1020/ui/core/ui/util/url_util.dart';
-import 'package:flutter_image_gallery_saver/flutter_image_gallery_saver.dart';
 
 // create method to create a photo album in the gallery
 // to save images to a specific album in the gallery

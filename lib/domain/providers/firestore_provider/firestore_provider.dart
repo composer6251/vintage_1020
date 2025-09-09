@@ -37,6 +37,8 @@ class FirestoreProvider extends _$FirestoreProvider {
     userCollectionId = results;
   }
 
+  
+
     Future<void> addUserInventoryItem(InventoryItem item) async {
     var result = await addInventoryItemToUserCollection(item);
     state = [...state,       
@@ -52,7 +54,9 @@ class FirestoreProvider extends _$FirestoreProvider {
         primaryImageUrl: item.primaryImageUrl,
         itemSoldDate: item.itemSoldDate,
       ),
-      ];
+    ];
+
+
   }
 
   List<InventoryItem> getInventoryState() {
