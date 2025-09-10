@@ -28,9 +28,6 @@ _InventoryItem _$InventoryItemFromJson(Map<String, dynamic> json) =>
       itemDimensions: (json['itemDimensions'] as Map<String, dynamic>?)?.map(
         (k, e) => MapEntry(k, e as String),
       ),
-      timestamp: json['timestamp'] == null
-          ? null
-          : DateTime.parse(json['timestamp'] as String),
     );
 
 Map<String, dynamic> _$InventoryItemToJson(_InventoryItem instance) =>
@@ -47,5 +44,4 @@ Map<String, dynamic> _$InventoryItemToJson(_InventoryItem instance) =>
       'itemDescription': instance.itemDescription,
       'itemSoldDate': instance.itemSoldDate?.toIso8601String(),
       'itemDimensions': instance.itemDimensions,
-      'timestamp': instance.timestamp?.toIso8601String(),
     };

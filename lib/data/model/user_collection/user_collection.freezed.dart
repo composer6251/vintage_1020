@@ -17,7 +17,7 @@ mixin _$UserCollection {
 
 // Optional ID for the item
  String get username;// required String inventoryId,
- List<InventoryItem> get inventory;
+ Map<String, InventoryItem> get inventory; DateTime get timestamp;
 /// Create a copy of UserCollection
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -30,16 +30,16 @@ $UserCollectionCopyWith<UserCollection> get copyWith => _$UserCollectionCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserCollection&&(identical(other.username, username) || other.username == username)&&const DeepCollectionEquality().equals(other.inventory, inventory));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserCollection&&(identical(other.username, username) || other.username == username)&&const DeepCollectionEquality().equals(other.inventory, inventory)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,username,const DeepCollectionEquality().hash(inventory));
+int get hashCode => Object.hash(runtimeType,username,const DeepCollectionEquality().hash(inventory),timestamp);
 
 @override
 String toString() {
-  return 'UserCollection(username: $username, inventory: $inventory)';
+  return 'UserCollection(username: $username, inventory: $inventory, timestamp: $timestamp)';
 }
 
 
@@ -50,7 +50,7 @@ abstract mixin class $UserCollectionCopyWith<$Res>  {
   factory $UserCollectionCopyWith(UserCollection value, $Res Function(UserCollection) _then) = _$UserCollectionCopyWithImpl;
 @useResult
 $Res call({
- String username, List<InventoryItem> inventory
+ String username, Map<String, InventoryItem> inventory, DateTime timestamp
 });
 
 
@@ -67,11 +67,12 @@ class _$UserCollectionCopyWithImpl<$Res>
 
 /// Create a copy of UserCollection
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? username = null,Object? inventory = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? username = null,Object? inventory = null,Object? timestamp = null,}) {
   return _then(_self.copyWith(
 username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
 as String,inventory: null == inventory ? _self.inventory : inventory // ignore: cast_nullable_to_non_nullable
-as List<InventoryItem>,
+as Map<String, InventoryItem>,timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
+as DateTime,
   ));
 }
 
@@ -153,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String username,  List<InventoryItem> inventory)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String username,  Map<String, InventoryItem> inventory,  DateTime timestamp)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _UserCollection() when $default != null:
-return $default(_that.username,_that.inventory);case _:
+return $default(_that.username,_that.inventory,_that.timestamp);case _:
   return orElse();
 
 }
@@ -174,10 +175,10 @@ return $default(_that.username,_that.inventory);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String username,  List<InventoryItem> inventory)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String username,  Map<String, InventoryItem> inventory,  DateTime timestamp)  $default,) {final _that = this;
 switch (_that) {
 case _UserCollection():
-return $default(_that.username,_that.inventory);}
+return $default(_that.username,_that.inventory,_that.timestamp);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -191,10 +192,10 @@ return $default(_that.username,_that.inventory);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String username,  List<InventoryItem> inventory)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String username,  Map<String, InventoryItem> inventory,  DateTime timestamp)?  $default,) {final _that = this;
 switch (_that) {
 case _UserCollection() when $default != null:
-return $default(_that.username,_that.inventory);case _:
+return $default(_that.username,_that.inventory,_that.timestamp);case _:
   return null;
 
 }
@@ -206,20 +207,21 @@ return $default(_that.username,_that.inventory);case _:
 @JsonSerializable()
 
 class _UserCollection implements UserCollection {
-  const _UserCollection({required this.username, required final  List<InventoryItem> inventory}): _inventory = inventory;
+  const _UserCollection({required this.username, required final  Map<String, InventoryItem> inventory, required this.timestamp}): _inventory = inventory;
   factory _UserCollection.fromJson(Map<String, dynamic> json) => _$UserCollectionFromJson(json);
 
 // Optional ID for the item
 @override final  String username;
 // required String inventoryId,
- final  List<InventoryItem> _inventory;
+ final  Map<String, InventoryItem> _inventory;
 // required String inventoryId,
-@override List<InventoryItem> get inventory {
-  if (_inventory is EqualUnmodifiableListView) return _inventory;
+@override Map<String, InventoryItem> get inventory {
+  if (_inventory is EqualUnmodifiableMapView) return _inventory;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_inventory);
+  return EqualUnmodifiableMapView(_inventory);
 }
 
+@override final  DateTime timestamp;
 
 /// Create a copy of UserCollection
 /// with the given fields replaced by the non-null parameter values.
@@ -234,16 +236,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserCollection&&(identical(other.username, username) || other.username == username)&&const DeepCollectionEquality().equals(other._inventory, _inventory));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserCollection&&(identical(other.username, username) || other.username == username)&&const DeepCollectionEquality().equals(other._inventory, _inventory)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,username,const DeepCollectionEquality().hash(_inventory));
+int get hashCode => Object.hash(runtimeType,username,const DeepCollectionEquality().hash(_inventory),timestamp);
 
 @override
 String toString() {
-  return 'UserCollection(username: $username, inventory: $inventory)';
+  return 'UserCollection(username: $username, inventory: $inventory, timestamp: $timestamp)';
 }
 
 
@@ -254,7 +256,7 @@ abstract mixin class _$UserCollectionCopyWith<$Res> implements $UserCollectionCo
   factory _$UserCollectionCopyWith(_UserCollection value, $Res Function(_UserCollection) _then) = __$UserCollectionCopyWithImpl;
 @override @useResult
 $Res call({
- String username, List<InventoryItem> inventory
+ String username, Map<String, InventoryItem> inventory, DateTime timestamp
 });
 
 
@@ -271,11 +273,12 @@ class __$UserCollectionCopyWithImpl<$Res>
 
 /// Create a copy of UserCollection
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? username = null,Object? inventory = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? username = null,Object? inventory = null,Object? timestamp = null,}) {
   return _then(_UserCollection(
 username: null == username ? _self.username : username // ignore: cast_nullable_to_non_nullable
 as String,inventory: null == inventory ? _self._inventory : inventory // ignore: cast_nullable_to_non_nullable
-as List<InventoryItem>,
+as Map<String, InventoryItem>,timestamp: null == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
+as DateTime,
   ));
 }
 

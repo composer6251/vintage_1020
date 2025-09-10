@@ -134,7 +134,11 @@ Future<List<InventoryItem>> getDocumentById() async {
       .doc(userEmail)
       .get();
 
-  List<MapEntry<String, dynamic>> data = snapshot.data()!.entries.toList();
+  // List<MapEntry<String, dynamic>> data = snapshot.data()!.entries.toList();
+
+  UserCollection userCollection = UserCollection.fromFirestore(snapshot, SnapshotOptions());
+
+  InventoryItem it = InventoryItem.fromFirestore(snapshot, SnapshotOptions());
   //InventoryItem.fromJson(i.data()!)).toList();
 
   List<InventoryItem> itemsTwo = snapshot.data()!.entries.map((e) {
@@ -212,11 +216,11 @@ Future<void> createUserInventoryMap(List<InventoryItem> items) async {
 Future<void> updateUserAndInventory(List<InventoryItem> items) async {
   print('Updating user and inventory with ${inventory.length} items');
 
-  var user = UserCollection(username: userEmail!, inventory: items);
+  // var user = UserCollection(username: userEmail!, inventory: items);
 
-  await firestore.collection(inventory).doc(uid).set({
-    'user': user,
-  }, SetOptions(merge: true));
+  // await firestore.collection(inventory).doc(uid).set({
+  //   'user': user,
+  // }, SetOptions(merge: true));
 }
 
 Future<void> updateUserCollectionAndInventory(
@@ -224,10 +228,10 @@ Future<void> updateUserCollectionAndInventory(
 ) async {
   print('Updating user and inventory with ${inventory.length} items');
 
-  var user = UserCollection(username: userEmail!, inventory: inventory);
-  await firestore.collection(userCollection).doc(uid).set({
-    'user': user,
-  }, SetOptions(merge: true));
+  // var user = UserCollection(username: userEmail!, inventory: inventory);
+  // await firestore.collection(userCollection).doc(uid).set({
+  //   'user': user,
+  // }, SetOptions(merge: true));
 }
 
 //Add a new document to a collection (with an auto-generated ID)
@@ -286,11 +290,11 @@ Future<void> addInventoryItemToUserCollection(InventoryItem item) async {
  * 
  * ****/
 
-UserCollection buildUserCollection(List<InventoryItem> inventory) {
-  if (userEmail == null || uid == null) {
-    throw Exception(
-      'Cannot build userCollection object without userEmail and uid',
-    );
-  }
-  return UserCollection(username: userEmail!, inventory: inventory);
-}
+// UserCollection buildUserCollection(List<InventoryItem> inventory) {
+//   if (userEmail == null || uid == null) {
+//     throw Exception(
+//       'Cannot build userCollection object without userEmail and uid',
+//     );
+//   }
+//   return UserCollection(username: userEmail!, inventory: inventory);
+// }

@@ -22,7 +22,6 @@ sealed class InventoryItem with _$InventoryItem {
     String? itemDescription,
     DateTime? itemSoldDate,
     Map<String, String>? itemDimensions,
-    DateTime? timestamp,
   }) = _InventoryItem; // Freezed generates private implementation class
 
   /// Convert a JSON object into an [InventoryItem] instance.
@@ -46,6 +45,8 @@ sealed class InventoryItem with _$InventoryItem {
       SnapshotOptions? options,
     ) {
       final data = snapshot.data();
+      final Timestamp ts = snapshot.get('timestamp');
+      print('timestamp $ts');
       return InventoryItem(
         id: data?['id'],
         itemPurchaseDate: data?['itemPurchaseDate'],
@@ -60,13 +61,11 @@ sealed class InventoryItem with _$InventoryItem {
             data?['itemImageUrls'] is Iterable ? List.from(data?['itemImageUrls']) : null,
         itemDimensions:
             data?['itemDimensions'] is Iterable ? Map.from(data?['itemDimensions']) : null,
-        timestamp: data?['timestamp'],
       );
   }
 }
 
   Map<String, dynamic> toFirestore(InventoryItem item) {
-    
     return {
       if (item.id != null) "id": item.id,
       "itemPurchaseDate": item.itemPurchaseDate,
@@ -80,6 +79,5 @@ sealed class InventoryItem with _$InventoryItem {
       if (item.itemDescription != null) "itemDescription": item.itemDescription,
       if (item.itemImageUrls != null) "itemImageUrls": item.itemImageUrls,
       if (item.itemDimensions != null) "itemDimensions": item.itemDimensions,
-      if (item.timestamp != null) "timestamp": item.timestamp,
     };
   }
