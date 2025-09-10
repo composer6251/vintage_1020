@@ -61,22 +61,22 @@ sealed class InventoryItem with _$InventoryItem {
             data?['itemDimensions'] is Iterable ? Map.from(data?['itemDimensions']) : null,
       );
   }
+}
 
-  Map<String, dynamic> toFirestore() {
+  Map<String, dynamic> toFirestore(InventoryItem item) {
     
     return {
-      if (id != null) "id": id,
-      "itemPurchaseDate": itemPurchaseDate,
-      if (itemPurchasePrice != null) "itemPurchasePrice": itemPurchasePrice,
-      "itemCategory": itemCategory,
-      if (itemListingDate != null) "itemListingDate": itemListingDate,
-      if (itemListingPrice != null) "itemListingPrice": itemListingPrice,
-      if (itemSoldPrice != null) "itemSoldPrice": itemSoldPrice,
-      if (itemPurchasePrice != null) "itemPurchasePrice": itemPurchasePrice,
-      if (primaryImageUrl != null) "primaryImageUrl": primaryImageUrl,
-      if (itemDescription != null) "itemDescription": itemDescription,
-      if (itemImageUrls != null) "itemImageUrls": itemImageUrls,
-      if (itemDimensions != null) "itemDimensions": itemDimensions,
+      if (item.id != null) "id": item.id,
+      "itemPurchaseDate": item.itemPurchaseDate,
+      if (item.itemPurchasePrice != null) "itemPurchasePrice": item.itemPurchasePrice,
+      "itemCategory": item.itemCategory,
+      if (item.itemListingDate != null) "itemListingDate": item.itemListingDate,
+      if (item.itemListingPrice != null) "itemListingPrice": item.itemListingPrice,
+      if (item.itemSoldPrice != null) "itemSoldPrice": item.itemSoldPrice,
+      if (item.itemPurchasePrice != null) "itemPurchasePrice": item.itemPurchasePrice,
+      if (item.primaryImageUrl != null) "primaryImageUrl": item.primaryImageUrl,
+      if (item.itemDescription != null) "itemDescription": item.itemDescription,
+      if (item.itemImageUrls != null) "itemImageUrls": item.itemImageUrls,
+      if (item.itemDimensions != null) "itemDimensions": item.itemDimensions,
     };
   }
-}

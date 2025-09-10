@@ -17,10 +17,28 @@ final String? uid = firebaseAuth.currentUser?.uid;
 final firestore = FirebaseFirestore.instance;
 
 /***** MAPPERS *****/
+
+/*** IF NO PATH IS SET FOR DOC(), ID IS AUTO-GENERATED */
+/**** TAKES THE STATE OBJECT FROM THE PROVIDER AND UPDATES THE FIRESTORE COLLECTION */
 final ref = firestore.collection(inventory).doc().withConverter(
       fromFirestore: InventoryItem.fromFirestore,
-      toFirestore: (InventoryItem item, _) => item.toFirestore(),
+      toFirestore: (InventoryItem item, _) => toFirestore(item),
 );
+
+final inventoryUpdater = firestore.collection(inventory).doc().withConverter(
+      fromFirestore: InventoryItem.fromFirestore,
+      toFirestore: (InventoryItem item, _) => toFirestore(item),
+);
+
+updateCollectionWithNewDocument(InventoryItem item) {
+  ref.set(item);
+}
+
+// updateCollectionWithNewDocuments(List<InventoryItem> items) {
+//   Map<String, dynamic> toUpdate = items.map((i) => toFirestore(i)) as Map<String, dynamic>;
+  
+//   ref.set(toUpdate);
+// }
 
 // ignore: slash_for_doc_comments
 /*************
@@ -139,6 +157,17 @@ Future<void> createUser() async {
   } catch (ex) {
     throw Exception('Error creating user: $ex');
   }
+}
+
+Future<void> createUserInventoryMap(List<InventoryItem> items) async {
+  print('Updating user and inventory with ${items.length} items');
+
+  List<Map<String, dynamic>> itemsMap = items.map((i) => toFirestore(i)).toList();
+
+  await firestore.collection(inventory).doc().set({
+    'inventory': itemsMap,
+    'timestamp': FieldValue.serverTimestamp(),
+  }, SetOptions(merge: true));
 }
 
 Future<void> updateUserAndInventory(List<InventoryItem> items) async {

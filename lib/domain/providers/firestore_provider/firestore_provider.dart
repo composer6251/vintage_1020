@@ -26,6 +26,11 @@ class FirestoreProvider extends _$FirestoreProvider {
     await updateUserAndInventory(state);
   }
 
+  Future<void> updateInventory() async {
+
+    createUserInventoryMap(state);
+  }
+
   Future<void> fetchInventoryByUsername() async {
     List<InventoryItem> results = await fetchInventoryByEmail();
     state = results;
@@ -62,7 +67,7 @@ class FirestoreProvider extends _$FirestoreProvider {
       ),
     ];
 
-    updateUser();
+    updateInventory();
 
   }
 
