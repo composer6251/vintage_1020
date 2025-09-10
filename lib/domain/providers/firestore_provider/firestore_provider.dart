@@ -18,7 +18,6 @@ class FirestoreProvider extends _$FirestoreProvider {
   @override
   List<InventoryItem> build() {
     print('Getting user inventory async provider');
-    // FirestoreProvider firestoreProvider = FirestoreProvider();
     return [];
   }
 

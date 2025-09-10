@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
@@ -17,14 +16,29 @@ final String? uid = firebaseAuth.currentUser?.uid;
 
 final firestore = FirebaseFirestore.instance;
 
+/***** MAPPERS *****/
+final ref = firestore.collection(inventory).doc().withConverter(
+      fromFirestore: InventoryItem.fromFirestore,
+      toFirestore: (InventoryItem item, _) => item.toFirestore(),
+);
+
+// ignore: slash_for_doc_comments
+/*************
+ ***        **
+ *** 
+ **** GETs ***
+ ***       ***
+ ***       ***
+ *************/
+
 Future<List<InventoryItem>> getUser() async {
-   final snapshot = await firestore
+  final snapshot = await firestore
       .collection(userCollection)
       .where('username', isEqualTo: userEmail)
       .get();
-  
+
   print('Returned ${snapshot.size} documents in fetchInvetoryByEmail call');
-  
+
   if (snapshot.docs.isNotEmpty) {
     List<InventoryItem> items = snapshot.docs
         .map((doc) => InventoryItem.fromJson(doc.data()))
@@ -35,56 +49,27 @@ Future<List<InventoryItem>> getUser() async {
   }
 }
 
-// Create user with Map<User>
-Future<void> createUser() async {
-  try {
-    await firestore
-      .collection(userTest)
-      .doc(uid)
-      .set({
-        'documentId': uid,
-        'username': userEmail,
-      },
-        SetOptions(merge: true)
-      );
-  } catch (ex) {
-      throw Exception('Error creating user: $ex');
-  }
-}
-
-UserCollection buildUserCollection(List<InventoryItem> inventory) {
-  if(userEmail == null || uid == null) {
-    throw Exception('Cannot build userCollection object without userEmail and uid');
-  }
-  return UserCollection(username: userEmail!, inventory: inventory);
-}
-
-Future<void> updateUserAndInventory(List<InventoryItem> items) async {
-  print('Updating user and inventory with ${inventory.length} items');
-  // UserCollection user = buildUserCollection(inventory);
-
-  var user = UserCollection(username: userEmail!, inventory: items);
-  await firestore
-    .collection(inventory)
-    .doc(uid)
-    .set({
-      'user': user},
-      SetOptions(merge: true)
+Future<UserCollection> getUserInventoryIdByEmail() async {
+  print('Fetching firestore inventory with username: $userEmail');
+  final snapshot = await firestore
+      .collection(userCollection)
+      .where('username', isEqualTo: userEmail)
+      .get();
+  print(
+    'Returned ${snapshot.size} documents from USERCOLLECTION in getUserInventoryIdByEmail call',
+  );
+  if (snapshot.docs.isNotEmpty) {
+    print(
+      'snapshot.docs for userCollection: ${snapshot.docs.first.data().entries}',
     );
-}
 
-Future<void> updateUserCollectionAndInventory(List<InventoryItem> inventory) async {
-  print('Updating user and inventory with ${inventory.length} items');
-  // UserCollection user = buildUserCollection(inventory);
-
-  var user = UserCollection(username: userEmail!, inventory: inventory);
-  await firestore
-    .collection(userCollection)
-    .doc(uid)
-    .set({
-      'user': user},
-      SetOptions(merge: true)
+    UserCollection userCollection = UserCollection.fromJson(
+      snapshot.docs.first.data(),
     );
+    return userCollection;
+  } else {
+    throw Exception('No inventory found for the given email.');
+  }
 }
 
 Future<List<InventoryItem>> fetchAllInventory() async {
@@ -134,27 +119,47 @@ Future<List<InventoryItem>> fetchInventoryByUserInventoryId() async {
   }
 }
 
-Future<UserCollection> getUserInventoryIdByEmail() async {
-  print('Fetching firestore inventory with username: $userEmail');
-  final snapshot = await firestore
-      .collection(userCollection)
-      .where('username', isEqualTo: userEmail)
-      .get();
-  print(
-    'Returned ${snapshot.size} documents from USERCOLLECTION in getUserInventoryIdByEmail call',
-  );
-  if (snapshot.docs.isNotEmpty) {
-    print(
-      'snapshot.docs for userCollection: ${snapshot.docs.first.data().entries}',
-    );
+// ignore: slash_for_doc_comments
+/***********
+ *         *
+ *         *
+ ***********
+ *  POSTs. 
+ * 
+ * 
+ */
 
-    UserCollection userCollection = UserCollection.fromJson(
-      snapshot.docs.first.data(),
-    );
-    return userCollection;
-  } else {
-    throw Exception('No inventory found for the given email.');
+// Create user with Map<User>
+Future<void> createUser() async {
+  try {
+    await firestore.collection(userTest).doc(uid).set({
+      'documentId': uid,
+      'username': userEmail,
+    }, SetOptions(merge: true));
+  } catch (ex) {
+    throw Exception('Error creating user: $ex');
   }
+}
+
+Future<void> updateUserAndInventory(List<InventoryItem> items) async {
+  print('Updating user and inventory with ${inventory.length} items');
+
+  var user = UserCollection(username: userEmail!, inventory: items);
+
+  await firestore.collection(inventory).doc(uid).set({
+    'user': user,
+  }, SetOptions(merge: true));
+}
+
+Future<void> updateUserCollectionAndInventory(
+  List<InventoryItem> inventory,
+) async {
+  print('Updating user and inventory with ${inventory.length} items');
+
+  var user = UserCollection(username: userEmail!, inventory: inventory);
+  await firestore.collection(userCollection).doc(uid).set({
+    'user': user,
+  }, SetOptions(merge: true));
 }
 
 //Add a new document to a collection (with an auto-generated ID)
@@ -181,51 +186,43 @@ Future<void> addInventoryItem(InventoryItem item) async {
 Future<void> addInventoryItemToUserCollection(InventoryItem item) async {
   try {
     await firestore
-        .collection(itemInventoryCollection)
-        .add({
-          'itemImageUrls': item.itemImageUrls,
-          'itemDescription': item.itemDescription,
-          'itemPurchaseDate': item.itemPurchaseDate,
-          'itemPurchasePrice': item.itemPurchasePrice,
-          'itemListingDate': item.itemListingDate,
-          'itemListingPrice': item.itemListingPrice,
-          'itemSoldPrice': item.itemSoldPrice,
-          'itemCategory': item.itemCategory,
-          'itemSoldDate': item.itemSoldDate,
-          'primaryImageUrl': item.primaryImageUrl,
-        })
-        .then(
-          (DocumentReference doc) =>
-              print('InventoryItem saved with ID: ${doc.id}'),
-        );
+      .collection(itemInventoryCollection)
+      .add({
+        'itemImageUrls': item.itemImageUrls,
+        'itemDescription': item.itemDescription,
+        'itemPurchaseDate': item.itemPurchaseDate,
+        'itemPurchasePrice': item.itemPurchasePrice,
+        'itemListingDate': item.itemListingDate,
+        'itemListingPrice': item.itemListingPrice,
+        'itemSoldPrice': item.itemSoldPrice,
+        'itemCategory': item.itemCategory,
+        'itemSoldDate': item.itemSoldDate,
+        'primaryImageUrl': item.primaryImageUrl,
+      })
+      .then(
+        (DocumentReference doc) =>
+            print('InventoryItem saved with ID: ${doc.id}'),
+      );
   } catch (e) {
     print('Error updating task: $e');
   }
 }
 
-// Set/Overwrite a document (you specify the ID)
-Future<void> updateTaskById(num itemId, String newTitle) async {
-  try {
-    await firestore.collection('tasks').doc(itemId.toString()).set({
-      'title': newTitle,
-      'description': 'Updated description',
-      'completed': false, // This will overwrite other fields if not careful
-    });
-    print('Task $itemId updated successfully (locally and syncing)');
-  } catch (e) {
-    print('Error updating task: $e');
-  }
-}
+/*** 
+ * 
+ * 
+ * 
+ * PRIVATE 
+ * 
+ * 
+ * 
+ * ****/
 
-// Update specific fields in a document (non-destructive)
-Future<void> updateInventoryItemById(String taskId) async {
-  try {
-    await firestore.collection('tasks').doc(taskId).update({
-      'completed': true,
-      'completedAt': FieldValue.serverTimestamp(),
-    });
-    print('Task $taskId marked completed (locally and syncing)');
-  } catch (e) {
-    print('Error marking task completed: $e');
+UserCollection buildUserCollection(List<InventoryItem> inventory) {
+  if (userEmail == null || uid == null) {
+    throw Exception(
+      'Cannot build userCollection object without userEmail and uid',
+    );
   }
+  return UserCollection(username: userEmail!, inventory: inventory);
 }
