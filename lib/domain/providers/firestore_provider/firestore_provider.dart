@@ -21,13 +21,22 @@ class FirestoreProvider extends _$FirestoreProvider {
     return [];
   }
 
+  Future<List<InventoryItem>> getInventoryByDocumentId() async {
+    try {
+      final inventory = await getDocumentById();
+      state = inventory;
+    } catch (ex) {
+      throw Exception('Error getting document by id: $userEmail with exception $ex');
+    }
+    return state;
+  }
+
   // collection.set w/merge = true. *CREATES USER IF DOESN'T EXIST, OTHERWISE IT MERGES NEW DATA ONLY */
   void updateUser() async {
     await updateUserAndInventory(state);
   }
 
   Future<void> updateInventory() async {
-
     createUserInventoryMap(state);
   }
 
@@ -51,8 +60,9 @@ class FirestoreProvider extends _$FirestoreProvider {
     userCollectionId = results;
   }
 
-    Future<void> addUserInventoryItem(InventoryItem item) async {
-    state = [...state,       
+  Future<void> addUserInventoryItem(InventoryItem item) async {
+    state = [
+      ...state,
       InventoryItem(
         itemImageUrls: item.itemImageUrls,
         itemDescription: item.itemDescription,
@@ -68,7 +78,6 @@ class FirestoreProvider extends _$FirestoreProvider {
     ];
 
     updateInventory();
-
   }
 
   List<InventoryItem> getInventoryState() {

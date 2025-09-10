@@ -9,6 +9,7 @@ const String itemInventoryCollection = 'itemInventory';
 const String userCollection = 'userCollection';
 const String userTest = 'user';
 const String inventory = 'inventory';
+const String inventoryTest = 'inventoryTest';
 FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
 final String? userEmail = firebaseAuth.currentUser?.email;
@@ -20,23 +21,29 @@ final firestore = FirebaseFirestore.instance;
 
 /*** IF NO PATH IS SET FOR DOC(), ID IS AUTO-GENERATED */
 /**** TAKES THE STATE OBJECT FROM THE PROVIDER AND UPDATES THE FIRESTORE COLLECTION */
-final ref = firestore.collection(inventory).doc().withConverter(
+final ref = firestore
+    .collection(inventory)
+    .doc()
+    .withConverter(
       fromFirestore: InventoryItem.fromFirestore,
       toFirestore: (InventoryItem item, _) => toFirestore(item),
-);
+    );
 
-final inventoryUpdater = firestore.collection(inventory).doc().withConverter(
+final inventoryUpdater = firestore
+    .collection(inventory)
+    .doc()
+    .withConverter(
       fromFirestore: InventoryItem.fromFirestore,
       toFirestore: (InventoryItem item, _) => toFirestore(item),
-);
+    );
 
 updateCollectionWithNewDocument(InventoryItem item) {
-  ref.set(item);
+  ref.set(item, SetOptions(merge: true));
 }
 
 // updateCollectionWithNewDocuments(List<InventoryItem> items) {
 //   Map<String, dynamic> toUpdate = items.map((i) => toFirestore(i)) as Map<String, dynamic>;
-  
+
 //   ref.set(toUpdate);
 // }
 
@@ -106,7 +113,7 @@ Future<List<InventoryItem>> fetchAllInventory() async {
 Future<List<InventoryItem>> fetchInventoryByEmail() async {
   print('Fetching firestore inventory with username: $userEmail');
   final snapshot = await firestore
-      .collection(itemInventoryCollection)
+      .collection(inventoryTest)
       .where('username', isEqualTo: userEmail)
       .get();
   print('Returned ${snapshot.size} documents in fetchInvetoryByEmail call');
@@ -120,11 +127,21 @@ Future<List<InventoryItem>> fetchInventoryByEmail() async {
   }
 }
 
+Future<List<InventoryItem>> getDocumentById() async {
+  final snapshot = firestore.collection(inventoryTest).doc(userEmail);
+
+  return snapshot
+      .get()
+      .asStream()
+      .map((i) => InventoryItem.fromJson(i.data()!))
+      .toList();
+}
+
 Future<List<InventoryItem>> fetchInventoryByUserInventoryId() async {
   print('Fetching firestore inventory with username: $userEmail');
   final snapshot = await firestore
       .collection(itemInventoryCollection)
-      .where('username', isEqualTo: 'test@test.com')
+      .where('username', isEqualTo: userEmail)
       .get();
   print('Returned ${snapshot.size} documents in fetchInvetoryByEmail call');
   if (snapshot.docs.isNotEmpty) {
@@ -162,9 +179,12 @@ Future<void> createUser() async {
 Future<void> createUserInventoryMap(List<InventoryItem> items) async {
   print('Updating user and inventory with ${items.length} items');
 
-  List<Map<String, dynamic>> itemsMap = items.map((i) => toFirestore(i)).toList();
+  List<Map<String, dynamic>> itemsMap = items
+      .map((i) => toFirestore(i))
+      .toList();
 
-  await firestore.collection(inventory).doc().set({
+  await firestore.collection(inventoryTest).doc(userEmail).set({
+    'user': userEmail,
     'inventory': itemsMap,
     'timestamp': FieldValue.serverTimestamp(),
   }, SetOptions(merge: true));
@@ -215,23 +235,23 @@ Future<void> addInventoryItem(InventoryItem item) async {
 Future<void> addInventoryItemToUserCollection(InventoryItem item) async {
   try {
     await firestore
-      .collection(itemInventoryCollection)
-      .add({
-        'itemImageUrls': item.itemImageUrls,
-        'itemDescription': item.itemDescription,
-        'itemPurchaseDate': item.itemPurchaseDate,
-        'itemPurchasePrice': item.itemPurchasePrice,
-        'itemListingDate': item.itemListingDate,
-        'itemListingPrice': item.itemListingPrice,
-        'itemSoldPrice': item.itemSoldPrice,
-        'itemCategory': item.itemCategory,
-        'itemSoldDate': item.itemSoldDate,
-        'primaryImageUrl': item.primaryImageUrl,
-      })
-      .then(
-        (DocumentReference doc) =>
-            print('InventoryItem saved with ID: ${doc.id}'),
-      );
+        .collection(itemInventoryCollection)
+        .add({
+          'itemImageUrls': item.itemImageUrls,
+          'itemDescription': item.itemDescription,
+          'itemPurchaseDate': item.itemPurchaseDate,
+          'itemPurchasePrice': item.itemPurchasePrice,
+          'itemListingDate': item.itemListingDate,
+          'itemListingPrice': item.itemListingPrice,
+          'itemSoldPrice': item.itemSoldPrice,
+          'itemCategory': item.itemCategory,
+          'itemSoldDate': item.itemSoldDate,
+          'primaryImageUrl': item.primaryImageUrl,
+        })
+        .then(
+          (DocumentReference doc) =>
+              print('InventoryItem saved with ID: ${doc.id}'),
+        );
   } catch (e) {
     print('Error updating task: $e');
   }
