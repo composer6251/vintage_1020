@@ -128,11 +128,19 @@ Future<List<InventoryItem>> fetchInventoryByEmail() async {
 }
 
 Future<List<InventoryItem>> getDocumentById() async {
-  final DocumentSnapshot<Map<String, dynamic>> snapshot = await firestore.collection(inventoryTest).doc(userEmail).get();
-  
-  var data = InventoryItem.fromJson(snapshot.get('inventory'));
-   //InventoryItem.fromJson(i.data()!)).toList();
+  print('Getting documentById');
+  final DocumentSnapshot<Map<String, dynamic>> snapshot = await firestore
+      .collection(inventoryTest)
+      .doc(userEmail)
+      .get();
 
+  Map<String, dynamic> data = snapshot.get('inventory');
+  //InventoryItem.fromJson(i.data()!)).toList();
+  List<InventoryItem> items = data.entries
+      .map((i) => InventoryItem.fromJson(data))
+      .toList();
+
+  print('items return ${items.length}');
   return List.empty();
 }
 
