@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 mixin _$InventoryItem {
 
  num? get id;// Optional ID for the item
- List<String>? get itemImageUrls; DateTime get itemPurchaseDate; double? get itemPurchasePrice; String get itemCategory; DateTime? get itemListingDate; double? get itemListingPrice; double? get itemSoldPrice; String? get primaryImageUrl; String? get itemDescription; DateTime? get itemSoldDate; Map<String, String>? get itemDimensions;
+ List<String>? get itemImageUrls; DateTime get itemPurchaseDate; double? get itemPurchasePrice; String get itemCategory; DateTime? get itemListingDate; double? get itemListingPrice; double? get itemSoldPrice; String? get primaryImageUrl; String? get itemDescription; DateTime? get itemSoldDate; Map<String, String>? get itemDimensions; DateTime? get timestamp;
 /// Create a copy of InventoryItem
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +29,16 @@ $InventoryItemCopyWith<InventoryItem> get copyWith => _$InventoryItemCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is InventoryItem&&(identical(other.id, id) || other.id == id)&&const DeepCollectionEquality().equals(other.itemImageUrls, itemImageUrls)&&(identical(other.itemPurchaseDate, itemPurchaseDate) || other.itemPurchaseDate == itemPurchaseDate)&&(identical(other.itemPurchasePrice, itemPurchasePrice) || other.itemPurchasePrice == itemPurchasePrice)&&(identical(other.itemCategory, itemCategory) || other.itemCategory == itemCategory)&&(identical(other.itemListingDate, itemListingDate) || other.itemListingDate == itemListingDate)&&(identical(other.itemListingPrice, itemListingPrice) || other.itemListingPrice == itemListingPrice)&&(identical(other.itemSoldPrice, itemSoldPrice) || other.itemSoldPrice == itemSoldPrice)&&(identical(other.primaryImageUrl, primaryImageUrl) || other.primaryImageUrl == primaryImageUrl)&&(identical(other.itemDescription, itemDescription) || other.itemDescription == itemDescription)&&(identical(other.itemSoldDate, itemSoldDate) || other.itemSoldDate == itemSoldDate)&&const DeepCollectionEquality().equals(other.itemDimensions, itemDimensions));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is InventoryItem&&(identical(other.id, id) || other.id == id)&&const DeepCollectionEquality().equals(other.itemImageUrls, itemImageUrls)&&(identical(other.itemPurchaseDate, itemPurchaseDate) || other.itemPurchaseDate == itemPurchaseDate)&&(identical(other.itemPurchasePrice, itemPurchasePrice) || other.itemPurchasePrice == itemPurchasePrice)&&(identical(other.itemCategory, itemCategory) || other.itemCategory == itemCategory)&&(identical(other.itemListingDate, itemListingDate) || other.itemListingDate == itemListingDate)&&(identical(other.itemListingPrice, itemListingPrice) || other.itemListingPrice == itemListingPrice)&&(identical(other.itemSoldPrice, itemSoldPrice) || other.itemSoldPrice == itemSoldPrice)&&(identical(other.primaryImageUrl, primaryImageUrl) || other.primaryImageUrl == primaryImageUrl)&&(identical(other.itemDescription, itemDescription) || other.itemDescription == itemDescription)&&(identical(other.itemSoldDate, itemSoldDate) || other.itemSoldDate == itemSoldDate)&&const DeepCollectionEquality().equals(other.itemDimensions, itemDimensions)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,const DeepCollectionEquality().hash(itemImageUrls),itemPurchaseDate,itemPurchasePrice,itemCategory,itemListingDate,itemListingPrice,itemSoldPrice,primaryImageUrl,itemDescription,itemSoldDate,const DeepCollectionEquality().hash(itemDimensions));
+int get hashCode => Object.hash(runtimeType,id,const DeepCollectionEquality().hash(itemImageUrls),itemPurchaseDate,itemPurchasePrice,itemCategory,itemListingDate,itemListingPrice,itemSoldPrice,primaryImageUrl,itemDescription,itemSoldDate,const DeepCollectionEquality().hash(itemDimensions),timestamp);
 
 @override
 String toString() {
-  return 'InventoryItem(id: $id, itemImageUrls: $itemImageUrls, itemPurchaseDate: $itemPurchaseDate, itemPurchasePrice: $itemPurchasePrice, itemCategory: $itemCategory, itemListingDate: $itemListingDate, itemListingPrice: $itemListingPrice, itemSoldPrice: $itemSoldPrice, primaryImageUrl: $primaryImageUrl, itemDescription: $itemDescription, itemSoldDate: $itemSoldDate, itemDimensions: $itemDimensions)';
+  return 'InventoryItem(id: $id, itemImageUrls: $itemImageUrls, itemPurchaseDate: $itemPurchaseDate, itemPurchasePrice: $itemPurchasePrice, itemCategory: $itemCategory, itemListingDate: $itemListingDate, itemListingPrice: $itemListingPrice, itemSoldPrice: $itemSoldPrice, primaryImageUrl: $primaryImageUrl, itemDescription: $itemDescription, itemSoldDate: $itemSoldDate, itemDimensions: $itemDimensions, timestamp: $timestamp)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $InventoryItemCopyWith<$Res>  {
   factory $InventoryItemCopyWith(InventoryItem value, $Res Function(InventoryItem) _then) = _$InventoryItemCopyWithImpl;
 @useResult
 $Res call({
- num? id, List<String>? itemImageUrls, DateTime itemPurchaseDate, double? itemPurchasePrice, String itemCategory, DateTime? itemListingDate, double? itemListingPrice, double? itemSoldPrice, String? primaryImageUrl, String? itemDescription, DateTime? itemSoldDate, Map<String, String>? itemDimensions
+ num? id, List<String>? itemImageUrls, DateTime itemPurchaseDate, double? itemPurchasePrice, String itemCategory, DateTime? itemListingDate, double? itemListingPrice, double? itemSoldPrice, String? primaryImageUrl, String? itemDescription, DateTime? itemSoldDate, Map<String, String>? itemDimensions, DateTime? timestamp
 });
 
 
@@ -66,7 +66,7 @@ class _$InventoryItemCopyWithImpl<$Res>
 
 /// Create a copy of InventoryItem
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? itemImageUrls = freezed,Object? itemPurchaseDate = null,Object? itemPurchasePrice = freezed,Object? itemCategory = null,Object? itemListingDate = freezed,Object? itemListingPrice = freezed,Object? itemSoldPrice = freezed,Object? primaryImageUrl = freezed,Object? itemDescription = freezed,Object? itemSoldDate = freezed,Object? itemDimensions = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? itemImageUrls = freezed,Object? itemPurchaseDate = null,Object? itemPurchasePrice = freezed,Object? itemCategory = null,Object? itemListingDate = freezed,Object? itemListingPrice = freezed,Object? itemSoldPrice = freezed,Object? primaryImageUrl = freezed,Object? itemDescription = freezed,Object? itemSoldDate = freezed,Object? itemDimensions = freezed,Object? timestamp = freezed,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as num?,itemImageUrls: freezed == itemImageUrls ? _self.itemImageUrls : itemImageUrls // ignore: cast_nullable_to_non_nullable
@@ -80,7 +80,8 @@ as double?,primaryImageUrl: freezed == primaryImageUrl ? _self.primaryImageUrl :
 as String?,itemDescription: freezed == itemDescription ? _self.itemDescription : itemDescription // ignore: cast_nullable_to_non_nullable
 as String?,itemSoldDate: freezed == itemSoldDate ? _self.itemSoldDate : itemSoldDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,itemDimensions: freezed == itemDimensions ? _self.itemDimensions : itemDimensions // ignore: cast_nullable_to_non_nullable
-as Map<String, String>?,
+as Map<String, String>?,timestamp: freezed == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 
@@ -162,10 +163,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( num? id,  List<String>? itemImageUrls,  DateTime itemPurchaseDate,  double? itemPurchasePrice,  String itemCategory,  DateTime? itemListingDate,  double? itemListingPrice,  double? itemSoldPrice,  String? primaryImageUrl,  String? itemDescription,  DateTime? itemSoldDate,  Map<String, String>? itemDimensions)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( num? id,  List<String>? itemImageUrls,  DateTime itemPurchaseDate,  double? itemPurchasePrice,  String itemCategory,  DateTime? itemListingDate,  double? itemListingPrice,  double? itemSoldPrice,  String? primaryImageUrl,  String? itemDescription,  DateTime? itemSoldDate,  Map<String, String>? itemDimensions,  DateTime? timestamp)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _InventoryItem() when $default != null:
-return $default(_that.id,_that.itemImageUrls,_that.itemPurchaseDate,_that.itemPurchasePrice,_that.itemCategory,_that.itemListingDate,_that.itemListingPrice,_that.itemSoldPrice,_that.primaryImageUrl,_that.itemDescription,_that.itemSoldDate,_that.itemDimensions);case _:
+return $default(_that.id,_that.itemImageUrls,_that.itemPurchaseDate,_that.itemPurchasePrice,_that.itemCategory,_that.itemListingDate,_that.itemListingPrice,_that.itemSoldPrice,_that.primaryImageUrl,_that.itemDescription,_that.itemSoldDate,_that.itemDimensions,_that.timestamp);case _:
   return orElse();
 
 }
@@ -183,10 +184,10 @@ return $default(_that.id,_that.itemImageUrls,_that.itemPurchaseDate,_that.itemPu
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( num? id,  List<String>? itemImageUrls,  DateTime itemPurchaseDate,  double? itemPurchasePrice,  String itemCategory,  DateTime? itemListingDate,  double? itemListingPrice,  double? itemSoldPrice,  String? primaryImageUrl,  String? itemDescription,  DateTime? itemSoldDate,  Map<String, String>? itemDimensions)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( num? id,  List<String>? itemImageUrls,  DateTime itemPurchaseDate,  double? itemPurchasePrice,  String itemCategory,  DateTime? itemListingDate,  double? itemListingPrice,  double? itemSoldPrice,  String? primaryImageUrl,  String? itemDescription,  DateTime? itemSoldDate,  Map<String, String>? itemDimensions,  DateTime? timestamp)  $default,) {final _that = this;
 switch (_that) {
 case _InventoryItem():
-return $default(_that.id,_that.itemImageUrls,_that.itemPurchaseDate,_that.itemPurchasePrice,_that.itemCategory,_that.itemListingDate,_that.itemListingPrice,_that.itemSoldPrice,_that.primaryImageUrl,_that.itemDescription,_that.itemSoldDate,_that.itemDimensions);}
+return $default(_that.id,_that.itemImageUrls,_that.itemPurchaseDate,_that.itemPurchasePrice,_that.itemCategory,_that.itemListingDate,_that.itemListingPrice,_that.itemSoldPrice,_that.primaryImageUrl,_that.itemDescription,_that.itemSoldDate,_that.itemDimensions,_that.timestamp);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -200,10 +201,10 @@ return $default(_that.id,_that.itemImageUrls,_that.itemPurchaseDate,_that.itemPu
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( num? id,  List<String>? itemImageUrls,  DateTime itemPurchaseDate,  double? itemPurchasePrice,  String itemCategory,  DateTime? itemListingDate,  double? itemListingPrice,  double? itemSoldPrice,  String? primaryImageUrl,  String? itemDescription,  DateTime? itemSoldDate,  Map<String, String>? itemDimensions)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( num? id,  List<String>? itemImageUrls,  DateTime itemPurchaseDate,  double? itemPurchasePrice,  String itemCategory,  DateTime? itemListingDate,  double? itemListingPrice,  double? itemSoldPrice,  String? primaryImageUrl,  String? itemDescription,  DateTime? itemSoldDate,  Map<String, String>? itemDimensions,  DateTime? timestamp)?  $default,) {final _that = this;
 switch (_that) {
 case _InventoryItem() when $default != null:
-return $default(_that.id,_that.itemImageUrls,_that.itemPurchaseDate,_that.itemPurchasePrice,_that.itemCategory,_that.itemListingDate,_that.itemListingPrice,_that.itemSoldPrice,_that.primaryImageUrl,_that.itemDescription,_that.itemSoldDate,_that.itemDimensions);case _:
+return $default(_that.id,_that.itemImageUrls,_that.itemPurchaseDate,_that.itemPurchasePrice,_that.itemCategory,_that.itemListingDate,_that.itemListingPrice,_that.itemSoldPrice,_that.primaryImageUrl,_that.itemDescription,_that.itemSoldDate,_that.itemDimensions,_that.timestamp);case _:
   return null;
 
 }
@@ -215,7 +216,7 @@ return $default(_that.id,_that.itemImageUrls,_that.itemPurchaseDate,_that.itemPu
 @JsonSerializable()
 
 class _InventoryItem implements InventoryItem {
-  const _InventoryItem({this.id, final  List<String>? itemImageUrls, required this.itemPurchaseDate, this.itemPurchasePrice, required this.itemCategory, this.itemListingDate, this.itemListingPrice, this.itemSoldPrice, this.primaryImageUrl, this.itemDescription, this.itemSoldDate, final  Map<String, String>? itemDimensions}): _itemImageUrls = itemImageUrls,_itemDimensions = itemDimensions;
+  const _InventoryItem({this.id, final  List<String>? itemImageUrls, required this.itemPurchaseDate, this.itemPurchasePrice, required this.itemCategory, this.itemListingDate, this.itemListingPrice, this.itemSoldPrice, this.primaryImageUrl, this.itemDescription, this.itemSoldDate, final  Map<String, String>? itemDimensions, this.timestamp}): _itemImageUrls = itemImageUrls,_itemDimensions = itemDimensions;
   factory _InventoryItem.fromJson(Map<String, dynamic> json) => _$InventoryItemFromJson(json);
 
 @override final  num? id;
@@ -248,6 +249,7 @@ class _InventoryItem implements InventoryItem {
   return EqualUnmodifiableMapView(value);
 }
 
+@override final  DateTime? timestamp;
 
 /// Create a copy of InventoryItem
 /// with the given fields replaced by the non-null parameter values.
@@ -262,16 +264,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _InventoryItem&&(identical(other.id, id) || other.id == id)&&const DeepCollectionEquality().equals(other._itemImageUrls, _itemImageUrls)&&(identical(other.itemPurchaseDate, itemPurchaseDate) || other.itemPurchaseDate == itemPurchaseDate)&&(identical(other.itemPurchasePrice, itemPurchasePrice) || other.itemPurchasePrice == itemPurchasePrice)&&(identical(other.itemCategory, itemCategory) || other.itemCategory == itemCategory)&&(identical(other.itemListingDate, itemListingDate) || other.itemListingDate == itemListingDate)&&(identical(other.itemListingPrice, itemListingPrice) || other.itemListingPrice == itemListingPrice)&&(identical(other.itemSoldPrice, itemSoldPrice) || other.itemSoldPrice == itemSoldPrice)&&(identical(other.primaryImageUrl, primaryImageUrl) || other.primaryImageUrl == primaryImageUrl)&&(identical(other.itemDescription, itemDescription) || other.itemDescription == itemDescription)&&(identical(other.itemSoldDate, itemSoldDate) || other.itemSoldDate == itemSoldDate)&&const DeepCollectionEquality().equals(other._itemDimensions, _itemDimensions));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _InventoryItem&&(identical(other.id, id) || other.id == id)&&const DeepCollectionEquality().equals(other._itemImageUrls, _itemImageUrls)&&(identical(other.itemPurchaseDate, itemPurchaseDate) || other.itemPurchaseDate == itemPurchaseDate)&&(identical(other.itemPurchasePrice, itemPurchasePrice) || other.itemPurchasePrice == itemPurchasePrice)&&(identical(other.itemCategory, itemCategory) || other.itemCategory == itemCategory)&&(identical(other.itemListingDate, itemListingDate) || other.itemListingDate == itemListingDate)&&(identical(other.itemListingPrice, itemListingPrice) || other.itemListingPrice == itemListingPrice)&&(identical(other.itemSoldPrice, itemSoldPrice) || other.itemSoldPrice == itemSoldPrice)&&(identical(other.primaryImageUrl, primaryImageUrl) || other.primaryImageUrl == primaryImageUrl)&&(identical(other.itemDescription, itemDescription) || other.itemDescription == itemDescription)&&(identical(other.itemSoldDate, itemSoldDate) || other.itemSoldDate == itemSoldDate)&&const DeepCollectionEquality().equals(other._itemDimensions, _itemDimensions)&&(identical(other.timestamp, timestamp) || other.timestamp == timestamp));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,const DeepCollectionEquality().hash(_itemImageUrls),itemPurchaseDate,itemPurchasePrice,itemCategory,itemListingDate,itemListingPrice,itemSoldPrice,primaryImageUrl,itemDescription,itemSoldDate,const DeepCollectionEquality().hash(_itemDimensions));
+int get hashCode => Object.hash(runtimeType,id,const DeepCollectionEquality().hash(_itemImageUrls),itemPurchaseDate,itemPurchasePrice,itemCategory,itemListingDate,itemListingPrice,itemSoldPrice,primaryImageUrl,itemDescription,itemSoldDate,const DeepCollectionEquality().hash(_itemDimensions),timestamp);
 
 @override
 String toString() {
-  return 'InventoryItem(id: $id, itemImageUrls: $itemImageUrls, itemPurchaseDate: $itemPurchaseDate, itemPurchasePrice: $itemPurchasePrice, itemCategory: $itemCategory, itemListingDate: $itemListingDate, itemListingPrice: $itemListingPrice, itemSoldPrice: $itemSoldPrice, primaryImageUrl: $primaryImageUrl, itemDescription: $itemDescription, itemSoldDate: $itemSoldDate, itemDimensions: $itemDimensions)';
+  return 'InventoryItem(id: $id, itemImageUrls: $itemImageUrls, itemPurchaseDate: $itemPurchaseDate, itemPurchasePrice: $itemPurchasePrice, itemCategory: $itemCategory, itemListingDate: $itemListingDate, itemListingPrice: $itemListingPrice, itemSoldPrice: $itemSoldPrice, primaryImageUrl: $primaryImageUrl, itemDescription: $itemDescription, itemSoldDate: $itemSoldDate, itemDimensions: $itemDimensions, timestamp: $timestamp)';
 }
 
 
@@ -282,7 +284,7 @@ abstract mixin class _$InventoryItemCopyWith<$Res> implements $InventoryItemCopy
   factory _$InventoryItemCopyWith(_InventoryItem value, $Res Function(_InventoryItem) _then) = __$InventoryItemCopyWithImpl;
 @override @useResult
 $Res call({
- num? id, List<String>? itemImageUrls, DateTime itemPurchaseDate, double? itemPurchasePrice, String itemCategory, DateTime? itemListingDate, double? itemListingPrice, double? itemSoldPrice, String? primaryImageUrl, String? itemDescription, DateTime? itemSoldDate, Map<String, String>? itemDimensions
+ num? id, List<String>? itemImageUrls, DateTime itemPurchaseDate, double? itemPurchasePrice, String itemCategory, DateTime? itemListingDate, double? itemListingPrice, double? itemSoldPrice, String? primaryImageUrl, String? itemDescription, DateTime? itemSoldDate, Map<String, String>? itemDimensions, DateTime? timestamp
 });
 
 
@@ -299,7 +301,7 @@ class __$InventoryItemCopyWithImpl<$Res>
 
 /// Create a copy of InventoryItem
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? itemImageUrls = freezed,Object? itemPurchaseDate = null,Object? itemPurchasePrice = freezed,Object? itemCategory = null,Object? itemListingDate = freezed,Object? itemListingPrice = freezed,Object? itemSoldPrice = freezed,Object? primaryImageUrl = freezed,Object? itemDescription = freezed,Object? itemSoldDate = freezed,Object? itemDimensions = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? itemImageUrls = freezed,Object? itemPurchaseDate = null,Object? itemPurchasePrice = freezed,Object? itemCategory = null,Object? itemListingDate = freezed,Object? itemListingPrice = freezed,Object? itemSoldPrice = freezed,Object? primaryImageUrl = freezed,Object? itemDescription = freezed,Object? itemSoldDate = freezed,Object? itemDimensions = freezed,Object? timestamp = freezed,}) {
   return _then(_InventoryItem(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as num?,itemImageUrls: freezed == itemImageUrls ? _self._itemImageUrls : itemImageUrls // ignore: cast_nullable_to_non_nullable
@@ -313,7 +315,8 @@ as double?,primaryImageUrl: freezed == primaryImageUrl ? _self.primaryImageUrl :
 as String?,itemDescription: freezed == itemDescription ? _self.itemDescription : itemDescription // ignore: cast_nullable_to_non_nullable
 as String?,itemSoldDate: freezed == itemSoldDate ? _self.itemSoldDate : itemSoldDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,itemDimensions: freezed == itemDimensions ? _self._itemDimensions : itemDimensions // ignore: cast_nullable_to_non_nullable
-as Map<String, String>?,
+as Map<String, String>?,timestamp: freezed == timestamp ? _self.timestamp : timestamp // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 

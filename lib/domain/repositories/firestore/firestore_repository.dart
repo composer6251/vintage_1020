@@ -134,14 +134,26 @@ Future<List<InventoryItem>> getDocumentById() async {
       .doc(userEmail)
       .get();
 
-  Map<String, dynamic> data = snapshot.get('inventory');
+  List<MapEntry<String, dynamic>> data = snapshot.data()!.entries.toList();
   //InventoryItem.fromJson(i.data()!)).toList();
-  List<InventoryItem> items = data.entries
-      .map((i) => InventoryItem.fromJson(data))
-      .toList();
 
-  print('items return ${items.length}');
-  return List.empty();
+  List<InventoryItem> itemsTwo = snapshot.data()!.entries.map((e) {
+    print('e.value ${e.value} ');
+    return InventoryItem.fromFirestore(e.value, SnapshotOptions());
+  }).toList();
+  
+  // List<InventoryItem> items = snapshot.data()!.entries.map((e) {
+  //   print('e.value ${e.value} ');
+  //   return InventoryItem.fromJson(e.value);
+  
+  // }).toList();
+
+
+      // .map((i) => InventoryItem.fromJson(data))
+      // .toList();
+
+  print('items return ${itemsTwo.length}');
+  return itemsTwo;
 }
 
 Future<List<InventoryItem>> fetchInventoryByUserInventoryId() async {
