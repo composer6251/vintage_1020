@@ -49,6 +49,7 @@ sealed class InventoryItem with _$InventoryItem {
       print('timestamp $ts');
       print('itemPurchaseDate ${data?['itemPurchaseDate']}');
       print('itemListingDate ${data?['itemListingDate']}');
+      print('itemImageUrls ${data?['itemImageUrls']}');
       print('inventory ${data?['inventory']}');
 
     InventoryItem item = InventoryItem(
