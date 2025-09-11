@@ -47,7 +47,11 @@ sealed class InventoryItem with _$InventoryItem {
       final data = snapshot.data();
       final Timestamp ts = snapshot.get('timestamp');
       print('timestamp $ts');
-      return InventoryItem(
+      print('itemPurchaseDate ${data?['itemPurchaseDate']}');
+      print('itemListingDate ${data?['itemListingDate']}');
+      print('inventory ${data?['inventory']}');
+
+    InventoryItem item = InventoryItem(
         id: data?['id'],
         itemPurchaseDate: data?['itemPurchaseDate'],
         itemPurchasePrice: data?['itemPurchasePrice'],
@@ -55,6 +59,7 @@ sealed class InventoryItem with _$InventoryItem {
         itemListingDate: data?['itemListingDate'],
         itemListingPrice: data?['itemListingPrice'],
         itemSoldPrice: data?['itemSoldPrice'],
+        itemSoldDate: data?['itemSoldDate'],
         primaryImageUrl: data?['primaryImageUrl'],
         itemDescription: data?['itemDescription'],
         itemImageUrls:
@@ -62,6 +67,8 @@ sealed class InventoryItem with _$InventoryItem {
         itemDimensions:
             data?['itemDimensions'] is Iterable ? Map.from(data?['itemDimensions']) : null,
       );
+
+      return item;
   }
 }
 
@@ -75,6 +82,7 @@ sealed class InventoryItem with _$InventoryItem {
       if (item.itemListingPrice != null) "itemListingPrice": item.itemListingPrice,
       if (item.itemSoldPrice != null) "itemSoldPrice": item.itemSoldPrice,
       if (item.itemPurchasePrice != null) "itemPurchasePrice": item.itemPurchasePrice,
+      if (item.itemSoldDate != null) "itemSoldDate": item.itemSoldDate,
       if (item.primaryImageUrl != null) "primaryImageUrl": item.primaryImageUrl,
       if (item.itemDescription != null) "itemDescription": item.itemDescription,
       if (item.itemImageUrls != null) "itemImageUrls": item.itemImageUrls,

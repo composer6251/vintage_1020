@@ -24,7 +24,7 @@ class FirestoreProvider extends _$FirestoreProvider {
   Future<List<InventoryItem>> getInventoryByDocumentId() async {
     try {
       final inventory = await getDocumentById();
-      state = inventory;
+      state = inventory.inventory!;
     } catch (ex) {
       throw Exception('Error getting document by id: $userEmail with exception $ex');
     }

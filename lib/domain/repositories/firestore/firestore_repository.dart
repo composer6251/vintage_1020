@@ -21,25 +21,25 @@ final firestore = FirebaseFirestore.instance;
 
 /*** IF NO PATH IS SET FOR DOC(), ID IS AUTO-GENERATED */
 /**** TAKES THE STATE OBJECT FROM THE PROVIDER AND UPDATES THE FIRESTORE COLLECTION */
-final ref = firestore
-    .collection(inventory)
-    .doc()
-    .withConverter(
-      fromFirestore: InventoryItem.fromFirestore,
-      toFirestore: (InventoryItem item, _) => toFirestore(item),
-    );
+// final ref = firestore
+//     .collection(inventory)
+//     .doc()
+//     .withConverter(
+//       fromFirestore: InventoryItem.fromFirestore,
+//       toFirestore: (InventoryItem item, _) => toFirestore(item),
+//     );
 
-final inventoryUpdater = firestore
-    .collection(inventory)
-    .doc()
-    .withConverter(
-      fromFirestore: InventoryItem.fromFirestore,
-      toFirestore: (InventoryItem item, _) => toFirestore(item),
-    );
+// final inventoryUpdater = firestore
+//     .collection(inventory)
+//     .doc()
+//     .withConverter(
+//       fromFirestore: InventoryItem.fromFirestore,
+//       toFirestore: (InventoryItem item, _) => toFirestore(item),
+//     );
 
-updateCollectionWithNewDocument(InventoryItem item) {
-  ref.set(item, SetOptions(merge: true));
-}
+// updateCollectionWithNewDocument(InventoryItem item) {
+//   ref.set(item, SetOptions(merge: true));
+// }
 
 // updateCollectionWithNewDocuments(List<InventoryItem> items) {
 //   Map<String, dynamic> toUpdate = items.map((i) => toFirestore(i)) as Map<String, dynamic>;
@@ -127,7 +127,7 @@ Future<List<InventoryItem>> fetchInventoryByEmail() async {
   }
 }
 
-Future<List<InventoryItem>> getDocumentById() async {
+Future<UserCollection> getDocumentById() async {
   print('Getting documentById');
   final DocumentSnapshot<Map<String, dynamic>> snapshot = await firestore
       .collection(inventoryTest)
@@ -136,16 +136,29 @@ Future<List<InventoryItem>> getDocumentById() async {
 
   // List<MapEntry<String, dynamic>> data = snapshot.data()!.entries.toList();
 
-  UserCollection userCollection = UserCollection.fromFirestore(snapshot, SnapshotOptions());
+UserCollection userCollection = UserCollection(username: '', inventory: [], timestamp: DateTime.now());
+try {
 
-  InventoryItem it = InventoryItem.fromFirestore(snapshot, SnapshotOptions());
-  //InventoryItem.fromJson(i.data()!)).toList();
-
-  List<InventoryItem> itemsTwo = snapshot.data()!.entries.map((e) {
-    print('e.value ${e.value} ');
-    return InventoryItem.fromFirestore(e.value, SnapshotOptions());
-  }).toList();
+  List<dynamic> items = snapshot.get('inventory');
   
+  for (var item in items) {
+    
+    // InventoryItem(itemCategory: item.)
+  }
+
+  userCollection = UserCollection.fromFirestore(snapshot, SnapshotOptions());
+
+  // InventoryItem it = InventoryItem.fromFirestore(snapshot, SnapshotOptions());
+  // //InventoryItem.fromJson(i.data()!)).toList();
+
+  // List<InventoryItem> itemsTwo = snapshot.data()!.entries.map((e) {
+  //   print('e.value ${e.value} ');
+  //   return InventoryItem.fromFirestore(e.value, SnapshotOptions());
+  // }).toList();
+  return userCollection;
+} catch(ex) {
+  print('Exception retrieving by documentId $userEmail with exception: $ex');
+}
   // List<InventoryItem> items = snapshot.data()!.entries.map((e) {
   //   print('e.value ${e.value} ');
   //   return InventoryItem.fromJson(e.value);
@@ -155,9 +168,7 @@ Future<List<InventoryItem>> getDocumentById() async {
 
       // .map((i) => InventoryItem.fromJson(data))
       // .toList();
-
-  print('items return ${itemsTwo.length}');
-  return itemsTwo;
+  return userCollection;
 }
 
 Future<List<InventoryItem>> fetchInventoryByUserInventoryId() async {

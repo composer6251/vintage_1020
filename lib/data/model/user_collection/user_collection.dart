@@ -13,7 +13,7 @@ sealed class UserCollection with _$UserCollection {
   const factory UserCollection({ // Optional ID for the item
     required String username,
     // required String inventoryId,
-    required List<dynamic> inventory,
+    required List<InventoryItem>? inventory,
     required DateTime timestamp
   }) = _UserCollection; // Freezed generates private implementation class
 
@@ -28,10 +28,11 @@ sealed class UserCollection with _$UserCollection {
     ) {
       final data = snapshot.data();
       final Timestamp ts = snapshot.get('timestamp');
+      print('inventory ${data?['inventory']}');
       print('timestamp $ts');
       return UserCollection(
         username: data?['user'],
-        inventory: data?['inventory'],
+        inventory: data?['inventory'] is Iterable ? List.from(data?['inventory']) : null,
         timestamp: ts.toDate(),
       );
   }
