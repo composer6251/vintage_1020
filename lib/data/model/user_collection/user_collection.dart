@@ -18,20 +18,24 @@ sealed class UserCollection with _$UserCollection {
 
   /// Convert a JSON object into an [UserCollection] instance.
   /// This enables type-safe reading of the API response.
-  factory UserCollection.fromJson(Map<String, dynamic> json) =>
+  factory UserCollection.fromJson(Map<String, dynamic> json, List<InventoryItem> items) =>
       _$UserCollectionFromJson(json);
 
       factory UserCollection.fromFirestore(
       DocumentSnapshot<Map<String, dynamic>> snapshot,
       SnapshotOptions? options,
+      List<InventoryItem> items,
     ) {
       final data = snapshot.data();
       final Timestamp ts = snapshot.get('timestamp');
       print('inventory ${data?['inventory']}');
+      var inventory =  data?['inventory'];
       print('timestamp $ts');
+      // print('Inventory List ${List.from(data?['inventory'])}');
       return UserCollection(
         username: data?['user'],
-        inventory: data?['inventory'] is Iterable ? List.from(data?['inventory']) : null,
+        inventory: items,
+        // inventory: data?['inventory'] is List ? List.from(data?['inventory']) : null,
         timestamp: ts.toDate(),
       );
   }

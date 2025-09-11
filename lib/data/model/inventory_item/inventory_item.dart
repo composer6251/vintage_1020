@@ -51,6 +51,7 @@ sealed class InventoryItem with _$InventoryItem {
       print('itemListingDate ${data?['itemListingDate']}');
       print('itemImageUrls ${data?['itemImageUrls']}');
       print('inventory ${data?['inventory']}');
+      // print('Inventory List ${List.from(data?['inventory'])}');
 
     InventoryItem item = InventoryItem(
         id: data?['id'],

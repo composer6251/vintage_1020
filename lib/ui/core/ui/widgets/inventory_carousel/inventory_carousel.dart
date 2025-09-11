@@ -46,7 +46,7 @@ class _InventoryCarouselState extends ConsumerState<InventoryCarousel> {
                     width: widget.width,
                   ),
                 )
-                .toList(),
+                .toList()
           ),
         ),
       ],

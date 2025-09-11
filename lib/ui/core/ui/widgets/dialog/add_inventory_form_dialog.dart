@@ -41,12 +41,15 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         AssetPathEntity? pathEntity = await createInventoryPhotoAlbum(
           appNameForImages
         );
+        // TODO: ASSET PATH ENTITY ID = FDE1D2FB-DF9A-42A9-BCFC-3FBA06425E1D/L0/040.     Can this be used to retrieve images
+        // TODO: Or private: /private/var/mobile/Containers/Data/Application/DA0066AD-4C69-4BBD-AFC8-CD5B9A637FE0/tmp/flutter-images/51dbdf2d254d12d9162c869c5d2a712b_exif.jpg
         if (pathEntity == null) {
           print('Failed to create album: $appNameForImages');
           return;
         }
         
         AssetEntity savedImage = await saveImage(image.path, null);
+        AssetEntity assetImageSave = await saveImage('resources/savedAssets/1', null);
         // Adds image reference to the album created above
         await PhotoManager.plugin.copyAssetToGallery(savedImage, pathEntity);
         

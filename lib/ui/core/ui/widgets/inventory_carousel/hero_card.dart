@@ -25,7 +25,7 @@ class HeroLayoutCard extends StatelessWidget {
           child: Image(
             fit: BoxFit.fitWidth,
             image: AssetImage(
-              item.primaryImageUrl!,
+              item.itemImageUrls!.first,
             ), // TODO: make the actual defaultImageUrl
           ),
         ),
