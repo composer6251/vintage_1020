@@ -13,10 +13,10 @@ sealed class UserCollection with _$UserCollection {
   const factory UserCollection({ // Optional ID for the item
     required String username,
     // required String inventoryId,
-    required Map<String, InventoryItem> inventory,
+    required List<dynamic> inventory,
     required DateTime timestamp
   }) = _UserCollection; // Freezed generates private implementation class
-  // Getter for itemId, defaults to 0 if id is null
+
   /// Convert a JSON object into an [UserCollection] instance.
   /// This enables type-safe reading of the API response.
   factory UserCollection.fromJson(Map<String, dynamic> json) =>

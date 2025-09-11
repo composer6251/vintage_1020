@@ -162,6 +162,7 @@ Future<List<InventoryItem>> getDocumentById() async {
 
 Future<List<InventoryItem>> fetchInventoryByUserInventoryId() async {
   print('Fetching firestore inventory with username: $userEmail');
+  
   final snapshot = await firestore
       .collection(itemInventoryCollection)
       .where('username', isEqualTo: userEmail)
