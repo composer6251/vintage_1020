@@ -74,28 +74,28 @@ Future<List<InventoryItem>> getUser() async {
   }
 }
 
-Future<UserCollection> getUserInventoryIdByEmail() async {
-  print('Fetching firestore inventory with username: $userEmail');
-  final snapshot = await firestore
-      .collection(userCollection)
-      .where('username', isEqualTo: userEmail)
-      .get();
-  print(
-    'Returned ${snapshot.size} documents from USERCOLLECTION in getUserInventoryIdByEmail call',
-  );
-  if (snapshot.docs.isNotEmpty) {
-    print(
-      'snapshot.docs for userCollection: ${snapshot.docs.first.data().entries}',
-    );
+// Future<UserCollection> getUserInventoryIdByEmail() async {
+//   print('Fetching firestore inventory with username: $userEmail');
+//   final snapshot = await firestore
+//       .collection(userCollection)
+//       .where('username', isEqualTo: userEmail)
+//       .get();
+//   print(
+//     'Returned ${snapshot.size} documents from USERCOLLECTION in getUserInventoryIdByEmail call',
+//   );
+//   if (snapshot.docs.isNotEmpty) {
+//     print(
+//       'snapshot.docs for userCollection: ${snapshot.docs.first.data().entries}',
+//     );
 
-    UserCollection userCollection = UserCollection.fromJson(
-      snapshot.docs.first.data(),
-    );
-    return userCollection;
-  } else {
-    throw Exception('No inventory found for the given email.');
-  }
-}
+//     UserCollection userCollection = UserCollection.fromJson(
+//       snapshot.docs.first.data(), snapshot.docs
+//     );
+//     return userCollection;
+//   } else {
+//     throw Exception('No inventory found for the given email.');
+//   }
+// }
 
 Future<List<InventoryItem>> fetchAllInventory() async {
   final snapshot = await firestore.collection(itemInventoryCollection).get();
@@ -140,34 +140,18 @@ UserCollection userCollection = UserCollection(username: '', inventory: [], time
 try {
 
   List<dynamic> items = snapshot.get('inventory');
+  Map<String, dynamic> inventoryMap = items.first;
   
-  for (var item in items) {
-    
-    // InventoryItem(itemCategory: item.)
-  }
+  InventoryItem item = buildInventoryItem(inventoryMap);
+  List<InventoryItem> inventoryItems = [item];
 
-  userCollection = UserCollection.fromFirestore(snapshot, SnapshotOptions());
-
-  // InventoryItem it = InventoryItem.fromFirestore(snapshot, SnapshotOptions());
-  // //InventoryItem.fromJson(i.data()!)).toList();
-
-  // List<InventoryItem> itemsTwo = snapshot.data()!.entries.map((e) {
-  //   print('e.value ${e.value} ');
-  //   return InventoryItem.fromFirestore(e.value, SnapshotOptions());
-  // }).toList();
+  userCollection = UserCollection.fromFirestore(snapshot, SnapshotOptions(), List.from(inventoryItems));
+  
   return userCollection;
+
 } catch(ex) {
   print('Exception retrieving by documentId $userEmail with exception: $ex');
 }
-  // List<InventoryItem> items = snapshot.data()!.entries.map((e) {
-  //   print('e.value ${e.value} ');
-  //   return InventoryItem.fromJson(e.value);
-  
-  // }).toList();
-
-
-      // .map((i) => InventoryItem.fromJson(data))
-      // .toList();
   return userCollection;
 }
 
@@ -301,6 +285,20 @@ Future<void> addInventoryItemToUserCollection(InventoryItem item) async {
  * 
  * 
  * ****/
+
+ InventoryItem buildInventoryItem(Map<String, dynamic> inventoryMap) {
+    return InventoryItem(
+    id: 0,
+    itemDimensions: inventoryMap["itemDimensions"] is Map ? Map.from(inventoryMap['itemImageUrls']) : null,
+    itemSoldPrice: inventoryMap['itemSoldPrice'],
+    primaryImageUrl: inventoryMap['primaryImageUrl'],
+    itemImageUrls: inventoryMap['itemImageUrls'] is List ? List.from(inventoryMap['itemImageUrls']) : null,
+    itemDescription: inventoryMap['itemDescription'], 
+    itemListingDate: inventoryMap['itemListingDate'].toDate(),
+    itemPurchaseDate: inventoryMap['itemPurchaseDate'].toDate(),
+    itemSoldDate: inventoryMap['itemSoldDate'].toDate(), 
+    itemCategory: inventoryMap['itemCategory']);
+ }
 
 // UserCollection buildUserCollection(List<InventoryItem> inventory) {
 //   if (userEmail == null || uid == null) {
