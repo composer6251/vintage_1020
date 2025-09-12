@@ -49,11 +49,10 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         }
         
         AssetEntity savedImage = await saveImage(image.path, null);
-        AssetEntity assetImageSave = await saveImage('resources/savedAssets/1', null);
+
         // Adds image reference to the album created above
         await PhotoManager.plugin.copyAssetToGallery(savedImage, pathEntity);
         
-        // /var/mobile/Containers/Data/Application/B0972C49-6E37-45E2-A7DF-11F5C2FB97D2/Documents/Vintage_1020
         String? photoUrl = await PhotoManager.plugin.getFullFile(
           savedImage.id,
           isOrigin: false,
