@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
@@ -28,6 +30,59 @@ final firestore = FirebaseFirestore.instance;
  ***       ***
  *************/
 
+/********INVENTORY TEST COLLECTION */
+
+Future<UserCollection> getDocumentById() async {
+  print('Getting documentById');
+  final DocumentSnapshot<Map<String, dynamic>> snapshot = await firestore
+      .collection(inventoryTest)
+      .doc(userEmail)
+      .get();
+
+  UserCollection userCollection = UserCollection(username: '', inventory: [], timestamp: DateTime.now());
+  try {
+
+    List<dynamic> items = snapshot.get('inventory');
+    if(items.isEmpty) throw('No inventory yet.') ;
+
+    List<InventoryItem> test = (snapshot.get('inventory') as List).map((s) => InventoryItem.fromJson(s)).toList();
+
+    List<InventoryItem> inventory = [];
+    for (var item in items) {
+      inventory.add(InventoryItem.fromJson(snapshot.get('inventory')));
+    }
+    // InventoryItem.fromJson(snapshot.get('inventory'));
+    // List<Map<String, dynamic>> inventoryMap = items;
+    
+    // InventoryItem item = buildInventoryItem(inventoryMap);
+    // List<InventoryItem> inventoryItems = [item];
+
+    userCollection = UserCollection.fromFirestore(snapshot, SnapshotOptions(), List.empty());
+    
+    return userCollection;
+
+  } catch(ex) {
+    print('Exception retrieving by documentId $userEmail with exception: $ex');
+  }
+    return userCollection;
+  }
+
+Future<void> createUserInventoryMap(List<InventoryItem> items) async {
+
+  List<Map<String, dynamic>> itemsMap = items
+      .map((i) => toFirestore(i))
+      .toList();
+
+  await firestore.collection(inventoryTest).doc(userEmail).set({
+    'user': userEmail,
+    'inventory': itemsMap,
+    'timestamp': FieldValue.serverTimestamp(),
+  }, SetOptions(merge: true));
+}
+
+
+
+/*****ITEM INVENTORY COLLECTION */
 Future<List<InventoryItem>> getUser() async {
   final snapshot = await firestore
       .collection(userCollection)
@@ -76,32 +131,6 @@ Future<List<InventoryItem>> fetchInventoryByEmail() async {
   }
 }
 
-Future<UserCollection> getDocumentById() async {
-  print('Getting documentById');
-  final DocumentSnapshot<Map<String, dynamic>> snapshot = await firestore
-      .collection(inventoryTest)
-      .doc(userEmail)
-      .get();
-
-  UserCollection userCollection = UserCollection(username: '', inventory: [], timestamp: DateTime.now());
-  try {
-
-    List<dynamic> items = snapshot.get('inventory');
-    Map<String, dynamic> inventoryMap = items.first;
-    
-    InventoryItem item = buildInventoryItem(inventoryMap);
-    List<InventoryItem> inventoryItems = [item];
-
-    userCollection = UserCollection.fromFirestore(snapshot, SnapshotOptions(), List.from(inventoryItems));
-    
-    return userCollection;
-
-  } catch(ex) {
-    print('Exception retrieving by documentId $userEmail with exception: $ex');
-  }
-    return userCollection;
-  }
-
 Future<List<InventoryItem>> fetchInventoryByUserInventoryId() async {
   print('Fetching firestore inventory with username: $userEmail');
   
@@ -120,16 +149,6 @@ Future<List<InventoryItem>> fetchInventoryByUserInventoryId() async {
   }
 }
 
-// ignore: slash_for_doc_comments
-/***********
- *         *
- *         *
- ***********
- *  POSTs. 
- * 
- * 
- */
-
 // Create user with Map<User>
 Future<void> createUser() async {
   try {
@@ -142,18 +161,15 @@ Future<void> createUser() async {
   }
 }
 
-Future<void> createUserInventoryMap(List<InventoryItem> items) async {
-
-  List<Map<String, dynamic>> itemsMap = items
-      .map((i) => toFirestore(i))
-      .toList();
-
-  await firestore.collection(inventoryTest).doc(userEmail).set({
-    'user': userEmail,
-    'inventory': itemsMap,
-    'timestamp': FieldValue.serverTimestamp(),
-  }, SetOptions(merge: true));
-}
+// ignore: slash_for_doc_comments
+/***********
+ *         *
+ *         *
+ ***********
+ *  POSTs. 
+ * 
+ * 
+ */
 
 Future<void> updateUserAndInventory(List<InventoryItem> items) async {
   print('Updating user and inventory with ${inventory.length} items');
