@@ -3,7 +3,12 @@ import 'package:intl/intl.dart';
 import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
 
 class HeroLayoutCard extends StatelessWidget {
-  HeroLayoutCard({super.key, required this.item, required this.height, required this.width});
+  HeroLayoutCard({
+    super.key,
+    required this.item,
+    required this.height,
+    required this.width,
+  });
 
   final InventoryItem item;
   final double height;
@@ -11,10 +16,7 @@ class HeroLayoutCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // If no height/width are passed, size yourself according to defaults.
-    // height ??= MediaQuery.sizeOf(context).height;
-    // width ??= MediaQuery.sizeOf(context).height;
-      
+    print('Item: ${item.toJson()}');
     return Stack(
       alignment: AlignmentDirectional.bottomStart,
       children: <Widget>[
@@ -25,7 +27,7 @@ class HeroLayoutCard extends StatelessWidget {
           child: Image(
             fit: BoxFit.fitWidth,
             image: AssetImage(
-              item.itemImageUrls!.first,
+              item.itemImageUrls.first
             ), // TODO: make the actual defaultImageUrl
           ),
         ),

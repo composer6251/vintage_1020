@@ -9,9 +9,10 @@ part 'inventory_item.g.dart';
 // _$InventoryItem is a mixin that allows InventoryItem to inherit properties from the generated class (part 'inventory_item_rp.freezed.dart')
 @freezed
 sealed class InventoryItem with _$InventoryItem {
-  const factory InventoryItem({
+   factory InventoryItem({
     num? id, // Optional ID for the item
-    List<String>? itemImageUrls,
+    @Default([])
+    List<String> itemImageUrls,
     required DateTime itemPurchaseDate,
     double? itemPurchasePrice,
     required String itemCategory,
@@ -45,13 +46,8 @@ sealed class InventoryItem with _$InventoryItem {
       SnapshotOptions? options,
     ) {
       final data = snapshot.data();
-      final Timestamp ts = snapshot.get('timestamp');
-      print('timestamp $ts');
-      print('itemPurchaseDate ${data?['itemPurchaseDate']}');
-      print('itemListingDate ${data?['itemListingDate']}');
-      print('itemImageUrls ${data?['itemImageUrls']}');
+
       print('inventory ${data?['inventory']}');
-      // print('Inventory List ${List.from(data?['inventory'])}');
 
     InventoryItem item = InventoryItem(
         id: data?['id'],
@@ -65,7 +61,7 @@ sealed class InventoryItem with _$InventoryItem {
         primaryImageUrl: data?['primaryImageUrl'],
         itemDescription: data?['itemDescription'],
         itemImageUrls:
-            data?['itemImageUrls'] is Iterable ? List.from(data?['itemImageUrls']) : null,
+            data?['itemImageUrls'] as List<String>,
         itemDimensions:
             data?['itemDimensions'] is Iterable ? Map.from(data?['itemDimensions']) : null,
       );

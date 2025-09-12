@@ -11,7 +11,6 @@ part 'user_collection.g.dart';
 sealed class UserCollection with _$UserCollection {
   const factory UserCollection({ // Optional ID for the item
     required String username,
-    // required String inventoryId,
     required List<InventoryItem>? inventory,
     required DateTime timestamp
   }) = _UserCollection; // Freezed generates private implementation class
@@ -27,11 +26,10 @@ sealed class UserCollection with _$UserCollection {
       List<InventoryItem> items,
     ) {
       final data = snapshot.data();
+
       final Timestamp ts = snapshot.get('timestamp');
       print('inventory ${data?['inventory']}');
-      var inventory =  data?['inventory'];
-      print('timestamp $ts');
-      // print('Inventory List ${List.from(data?['inventory'])}');
+
       return UserCollection(
         username: data?['user'],
         inventory: items,
