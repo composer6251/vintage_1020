@@ -143,7 +143,6 @@ Future<void> createUser() async {
 }
 
 Future<void> createUserInventoryMap(List<InventoryItem> items) async {
-  print('Updating user and inventory with ${items.length} items');
 
   List<Map<String, dynamic>> itemsMap = items
       .map((i) => toFirestore(i))
@@ -239,7 +238,7 @@ Future<void> addInventoryItemToUserCollection(InventoryItem item) async {
     itemDimensions: inventoryMap["itemDimensions"] is Map ? Map.from(inventoryMap['itemImageUrls']) : null,
     itemSoldPrice: inventoryMap['itemSoldPrice'],
     primaryImageUrl: inventoryMap['primaryImageUrl'],
-    itemImageUrls: inventoryMap['itemImageUrls'], //is List ? List.from(inventoryMap['itemImageUrls']) : null,
+    itemImageUrls: inventoryMap['itemImageUrls'] as List<String>, //is List ? List.from(inventoryMap['itemImageUrls']) : null,
     itemDescription: inventoryMap['itemDescription'], 
     itemListingDate: inventoryMap['itemListingDate'].toDate(),
     itemPurchaseDate: inventoryMap['itemPurchaseDate'].toDate(),

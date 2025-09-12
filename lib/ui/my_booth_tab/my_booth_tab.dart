@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vintage_1020/domain/providers/firestore_provider/firestore_provider.dart';
@@ -16,17 +15,17 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
 
   @override
   void initState() {
-
-    // Get user 
+    // Get user
     // If no user Id, create
     super.initState();
     _itemsFuture = ref
         .read(firestoreProviderProvider.notifier)
-        .getInventoryByDocumentId();
+        .updateInventory();
+    //.getInventoryByDocumentId();
     // _itemsFuture = ref
     //     .read(firestoreProviderProvider.notifier)
     //     .fetchAllInventoryTest();
-    }
+  }
 
   @override
   Widget build(BuildContext context) {
