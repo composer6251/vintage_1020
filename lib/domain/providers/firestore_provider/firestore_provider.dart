@@ -24,7 +24,7 @@ class FirestoreProvider extends _$FirestoreProvider {
   Future<List<InventoryItem>> getInventoryByDocumentId() async {
     try {
       final inventory = await getDocumentById();
-      state = inventory.inventory!;
+      state = inventory;
     } catch (ex) {
       throw Exception('Error getting document by id: $userEmail with exception $ex');
     }
@@ -52,13 +52,7 @@ class FirestoreProvider extends _$FirestoreProvider {
 
   Future<void> updateUserInventory() async {
     await updateUserAndInventory(state);
-  }
-
-  // Future<void> getUserCollectionId() async {
-  //   UserCollection results = await getUserInventoryIdByEmail();
-  //   print('User Uuid: $test');
-  //   userCollectionId = results;
-  // }
+}
 
   Future<void> addUserInventoryItem(InventoryItem item) async {
     state = [

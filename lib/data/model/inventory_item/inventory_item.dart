@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:vintage_1020/constants/inventory_categories.dart';
+import 'package:vintage_1020/data/model/json_converters/TimestampConverter.dart';
 
 // tells riverpod these are part of the code for this file.
 part 'inventory_item.freezed.dart';
@@ -32,14 +32,30 @@ sealed class InventoryItem with _$InventoryItem {
 
   /// Convert a JSON object into an [InventoryItem] instance.
   /// This enables type-safe reading of the API response.
-  // factory InventoryItem.toJson(List<InventoryItem> json) =>
-  //     _$InventoryItemToJson(json);
-
-    // factory InventoryItem.fromFirestore(Map<String, dynamic> json) =>
-    //   _$InventoryItemFromJson(json);
-
-    // factory InventoryItem.toFirestore(Map<String, dynamic> json) =>
-    //   _$InventoryItemFromJson(json);
+factory InventoryItem.inventoryItemFromJson(Map<String, dynamic> json) =>
+    _InventoryItem(
+      id: json['id'] as num?,
+      itemImageUrls:
+          (json['itemImageUrls'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      itemPurchaseDate: const TimestampConverter().fromJson(json['itemPurchaseDate']),
+      itemPurchasePrice: (json['itemPurchasePrice'] as num?)?.toDouble(),
+      itemCategory: json['itemCategory'] as String,
+      itemListingDate: const TimestampConverter().fromJson(json['itemListingDate']),
+      // itemListingDate: json['itemListingDate'] == null
+      //     ? null
+      //     : DateTime.parse(json['itemListingDate'] as String),
+      itemListingPrice: (json['itemListingPrice'] as num?)?.toDouble(),
+      itemSoldPrice: (json['itemSoldPrice'] as num?)?.toDouble(),
+      primaryImageUrl: json['primaryImageUrl'] as String?,
+      itemDescription: json['itemDescription'] as String?,
+      itemSoldDate: const TimestampConverter().fromJson(json['itemSoldDate']),
+      itemDimensions: (json['itemDimensions'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, e as String),
+      ),
+    );
 
     factory InventoryItem.fromFirestore(
       DocumentSnapshot<Map<String, dynamic>> snapshot,

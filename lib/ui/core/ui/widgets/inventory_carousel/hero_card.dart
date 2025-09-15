@@ -16,7 +16,6 @@ class HeroLayoutCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('Item: ${item.toJson()}');
     return Stack(
       alignment: AlignmentDirectional.bottomStart,
       children: <Widget>[

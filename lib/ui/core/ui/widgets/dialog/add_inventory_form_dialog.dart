@@ -8,6 +8,8 @@ import 'package:photo_manager/photo_manager.dart';
 import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
 import 'package:vintage_1020/domain/providers/firestore_provider/firestore_provider.dart';
 import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
+import 'package:path_provider/path_provider.dart' as sys_path;
+import 'package:path/path.dart' as path;
 
 /// **A HookConsumerWidget IS ESSENTIALLY A STATELESS WIDGET, BUT UTILIZES FLUTTER HOOKS TO MANAGE STATE ***
 class AddInventoryFormDialog extends HookConsumerWidget {
@@ -31,34 +33,58 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     final _selectedPhotos = useState<List<XFile?>?>(null);
     final itemImageUrls = useState<List<String>>([]);
     final _defaultItemImageUrl = useState<String>('');
-    Future<Directory?>? _appDocumentsDirectory;
 
     void saveImageToAlbum(XFile image) async {
       if (image.path.isEmpty) return;
+      // Get directory on local device for storing images.
+      final appDir = await sys_path.getApplicationDocumentsDirectory();
+      // Get filename of image
+      String appDirPath = appDir.path;
+      print('appDir Path: $appDirPath');
+      // final String name = image.name;
+      // print('fileName Path: $name');
+
+      // // final fileName = path.basename(appDirPath);
+      // final fileName = ('$appNameForImages/testOne');
+
+      // final savedFilePath = '${appDir.path}/$fileName';
+      // final p = await image.saveTo(savedFilePath);
+      // print('fileName saved: $savedFilePath');
+
+      // try {
+      //   final savedFile = await file.copy(savedFilePath);
+      //   final p = savedFile.path;
+      //   print('Ppath: $p');
+      // } catch (ex) {
+      //   print('ex for savedFile: $ex');
+      // }
 
       try {
         // Create album if it doesn't exist
         AssetPathEntity? pathEntity = await createInventoryPhotoAlbum(
-          appNameForImages
+          appNameForImages,
         );
-        // TODO: ASSET PATH ENTITY ID = FDE1D2FB-DF9A-42A9-BCFC-3FBA06425E1D/L0/040.     Can this be used to retrieve images
-        // TODO: Or private: /private/var/mobile/Containers/Data/Application/DA0066AD-4C69-4BBD-AFC8-CD5B9A637FE0/tmp/flutter-images/51dbdf2d254d12d9162c869c5d2a712b_exif.jpg
         if (pathEntity == null) {
           print('Failed to create album: $appNameForImages');
           return;
         }
-        
-        AssetEntity savedImage = await saveImage(image.path, null);
 
+        AssetEntity savedImage = await saveImage(image.path, null);
+        final assetEntityFile = await savedImage.file;
+        // final copiedPath = await assetEntityFile?.copy(savedFilePath);
         // Adds image reference to the album created above
         await PhotoManager.plugin.copyAssetToGallery(savedImage, pathEntity);
-        
+
         String? photoUrl = await PhotoManager.plugin.getFullFile(
           savedImage.id,
           isOrigin: false,
         );
+        // print(
+        //   // 'savedFilePath: $savedFilePath \n photoUrl: $photoUrl \n assetEnt: ${copiedPath!.path}',
+        // );
         // Update state with selected image Urls
-        itemImageUrls.value = List.from(itemImageUrls.value)..add(photoUrl!);
+        itemImageUrls.value = List.from(itemImageUrls.value)
+          ..addAll([photoUrl!]);
       } catch (ex) {
         print('Error saving image to album: $ex');
       }
@@ -83,6 +109,9 @@ class AddInventoryFormDialog extends HookConsumerWidget {
       }
       if (itemImageUrls.value.isEmpty) {
         itemImageUrls.value = [image!.path];
+        print(
+          'updating itemImageUrls is empty in takePhoto. Path: ${image.path}',
+        );
       } else {
         print('No image selected');
       }
@@ -92,7 +121,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
       print('Picking multiple images from gallery...');
       final picker = ImagePicker();
       final List<XFile> pickedFiles = await picker.pickMultiImage();
-      // image_picker_E4D233DB-43C2-48BE-B1DF-2709A22E2E6D-71685-00001D8C32BE1DB7.jpg
+
       if (pickedFiles.isNotEmpty) {
         _selectedPhotos.value = pickedFiles;
         // SAVE FILES

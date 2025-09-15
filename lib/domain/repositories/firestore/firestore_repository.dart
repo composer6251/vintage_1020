@@ -32,43 +32,28 @@ final firestore = FirebaseFirestore.instance;
 
 /********INVENTORY TEST COLLECTION */
 
-Future<UserCollection> getDocumentById() async {
+Future<List<InventoryItem>> getDocumentById() async {
   print('Getting documentById');
   final DocumentSnapshot<Map<String, dynamic>> snapshot = await firestore
       .collection(inventoryTest)
       .doc(userEmail)
       .get();
 
-  UserCollection userCollection = UserCollection(username: '', inventory: [], timestamp: DateTime.now());
-  try {
-
     List<dynamic> items = snapshot.get('inventory');
-    if(items.isEmpty) throw('No inventory yet.') ;
-
-    List<InventoryItem> test = (snapshot.get('inventory') as List).map((s) => InventoryItem.fromJson(s)).toList();
-
-    List<InventoryItem> inventory = [];
-    for (var item in items) {
-      inventory.add(InventoryItem.fromJson(snapshot.get('inventory')));
-    }
-    // InventoryItem.fromJson(snapshot.get('inventory'));
-    // List<Map<String, dynamic>> inventoryMap = items;
     
-    // InventoryItem item = buildInventoryItem(inventoryMap);
-    // List<InventoryItem> inventoryItems = [item];
-
-    userCollection = UserCollection.fromFirestore(snapshot, SnapshotOptions(), List.empty());
+    // If there's no inventory, throw exception to indicate the user needs to add inventory.
+    if (items.isEmpty) throw ('No inventory.');
     
-    return userCollection;
+    List<InventoryItem> test = (snapshot.get('inventory') as List)
+        .map((s) => InventoryItem.inventoryItemFromJson(s))
+        .toList();
 
-  } catch(ex) {
-    print('Exception retrieving by documentId $userEmail with exception: $ex');
-  }
-    return userCollection;
-  }
+    print('test: ${test.length}');
+    
+    return test;
+}
 
 Future<void> createUserInventoryMap(List<InventoryItem> items) async {
-
   List<Map<String, dynamic>> itemsMap = items
       .map((i) => toFirestore(i))
       .toList();
@@ -80,16 +65,12 @@ Future<void> createUserInventoryMap(List<InventoryItem> items) async {
   }, SetOptions(merge: true));
 }
 
-
-
 /*****ITEM INVENTORY COLLECTION */
 Future<List<InventoryItem>> getUser() async {
   final snapshot = await firestore
       .collection(userCollection)
       .where('username', isEqualTo: userEmail)
       .get();
-
-  print('Returned ${snapshot.size} documents in fetchInvetoryByEmail call');
 
   if (snapshot.docs.isNotEmpty) {
     List<InventoryItem> items = snapshot.docs
@@ -133,7 +114,7 @@ Future<List<InventoryItem>> fetchInventoryByEmail() async {
 
 Future<List<InventoryItem>> fetchInventoryByUserInventoryId() async {
   print('Fetching firestore inventory with username: $userEmail');
-  
+
   final snapshot = await firestore
       .collection(itemInventoryCollection)
       .where('username', isEqualTo: userEmail)
@@ -248,19 +229,26 @@ Future<void> addInventoryItemToUserCollection(InventoryItem item) async {
  * 
  * ****/
 
- InventoryItem buildInventoryItem(Map<String, dynamic> inventoryMap) {
-    return InventoryItem(
+InventoryItem buildInventoryItem(Map<String, dynamic> inventoryMap) {
+  return InventoryItem(
     id: 0,
-    itemDimensions: inventoryMap["itemDimensions"] is Map ? Map.from(inventoryMap['itemImageUrls']) : null,
+    itemDimensions: inventoryMap["itemDimensions"] is Map
+        ? Map.from(inventoryMap['itemImageUrls'])
+        : null,
     itemSoldPrice: inventoryMap['itemSoldPrice'],
     primaryImageUrl: inventoryMap['primaryImageUrl'],
-    itemImageUrls: inventoryMap['itemImageUrls'] as List<String>, //is List ? List.from(inventoryMap['itemImageUrls']) : null,
-    itemDescription: inventoryMap['itemDescription'], 
+    itemImageUrls:
+        inventoryMap['itemImageUrls']
+            as List<
+              String
+            >, //is List ? List.from(inventoryMap['itemImageUrls']) : null,
+    itemDescription: inventoryMap['itemDescription'],
     itemListingDate: inventoryMap['itemListingDate'].toDate(),
     itemPurchaseDate: inventoryMap['itemPurchaseDate'].toDate(),
-    itemSoldDate: inventoryMap['itemSoldDate'].toDate(), 
-    itemCategory: inventoryMap['itemCategory']);
- }
+    itemSoldDate: inventoryMap['itemSoldDate'].toDate(),
+    itemCategory: inventoryMap['itemCategory'],
+  );
+}
 
 // UserCollection buildUserCollection(List<InventoryItem> inventory) {
 //   if (userEmail == null || uid == null) {
