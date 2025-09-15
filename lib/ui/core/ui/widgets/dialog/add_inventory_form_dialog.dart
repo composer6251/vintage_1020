@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:io' as io;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -31,16 +32,18 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     final soldDate = useState(DateTime.now());
     final _photo = useState<XFile?>(null);
     final _selectedPhotos = useState<List<XFile?>?>(null);
+    final _savedFiles = useState<List<File>>([]);
     final itemImageUrls = useState<List<String>>([]);
     final _defaultItemImageUrl = useState<String>('');
 
-    void saveImageToAlbum(XFile image) async {
+    void saveImageToAlbum(XFile image, String index) async {
       if (image.path.isEmpty) return;
       // Get directory on local device for storing images.
       final appDir = await sys_path.getApplicationDocumentsDirectory();
       // Get filename of image
       String appDirPath = appDir.path;
       print('appDir Path: $appDirPath');
+
       // final String name = image.name;
       // print('fileName Path: $name');
 
@@ -79,9 +82,6 @@ class AddInventoryFormDialog extends HookConsumerWidget {
           savedImage.id,
           isOrigin: false,
         );
-        // print(
-        //   // 'savedFilePath: $savedFilePath \n photoUrl: $photoUrl \n assetEnt: ${copiedPath!.path}',
-        // );
         // Update state with selected image Urls
         itemImageUrls.value = List.from(itemImageUrls.value)
           ..addAll([photoUrl!]);
@@ -104,7 +104,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         }
         _photo.value = image;
 
-        saveImageToAlbum(image);
+        saveImageToAlbum(image, "0");
         print('Image taken and saved to state ${_photo.value?.path}');
       }
       if (itemImageUrls.value.isEmpty) {
@@ -117,6 +117,41 @@ class AddInventoryFormDialog extends HookConsumerWidget {
       }
     }
 
+    saveFiles(List<XFile> imageFileList) async {
+      int index = 0;
+      List<String> savedImagesPaths = [];
+
+      List<File> savedFiles = [];
+      
+      for (var x in imageFileList) {
+        final appDir = await sys_path.getApplicationDocumentsDirectory();
+        // Get filename of image
+        String appDirPath = appDir.path;
+        File c = File(
+          '${appDirPath}/media$index.jpg',
+        ); //File has to be created first
+        c.writeAsBytesSync(await x.readAsBytes());
+        index++;
+        savedImagesPaths.add(appDirPath);
+        savedFiles.add(c);
+      }
+      itemImageUrls.value = List.from(itemImageUrls.value)
+        ..addAll(savedImagesPaths);
+      // itemImageUrls.value = List.from(itemImageUrls.value)..addAll(savedFiles);
+    }
+
+    loadFiles() async {
+      Directory directory = await sys_path.getApplicationDocumentsDirectory();
+      final mediaFiles = io.Directory('$directory/')
+          .listSync()
+          .whereType<File>()
+          .where((file) => file.path.split('/').last.startsWith('media'));
+      Iterable<File> files = mediaFiles.whereType<File>();
+      for (final file in files) {
+        _savedFiles.value.add(file);
+      }
+    }
+
     Future<void> pickMultipleImagesFromGallery() async {
       print('Picking multiple images from gallery...');
       final picker = ImagePicker();
@@ -125,10 +160,13 @@ class AddInventoryFormDialog extends HookConsumerWidget {
       if (pickedFiles.isNotEmpty) {
         _selectedPhotos.value = pickedFiles;
         // SAVE FILES
-        for (var pickedFile in pickedFiles) {
-          // Save each picked file to the app documents directory
-          saveImageToAlbum(pickedFile);
-        }
+        // for (var pickedFile in pickedFiles) {
+        //   // Save each picked file to the app documents directory
+        //   saveImageToAlbum(pickedFile);
+        // }
+
+        saveFiles(pickedFiles);
+        loadFiles();
 
         print('${pickedFiles.length} images picked.');
         // Images were successfully picked
