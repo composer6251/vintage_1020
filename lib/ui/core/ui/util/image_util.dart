@@ -1,5 +1,10 @@
+import 'dart:io';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
+
+import 'package:path_provider/path_provider.dart' as sys_path;
+import 'package:path/path.dart' as path;
 
 // create method to create a photo album in the gallery
 // to save images to a specific album in the gallery
@@ -60,6 +65,74 @@ void saveImageToAlbum(AssetEntity entity, AssetPathEntity pathEntity) async {
     print('Error saving image to album: $e');
   }
 }
+
+// Take in List<XFile>
+
+// get appDir
+
+// File file = writeAsBytes from XFile read as bytes
+
+// Add to list
+
+Future<List<File>> saveImageAndReturnFile(List<XFile> images) async {
+    int index = 0;
+
+    List<File> savedImages = [];
+    for(var x in images) {
+      final appDir = await sys_path.getApplicationDocumentsDirectory();
+
+      // Get filename of image
+      String appDirPath = appDir.path;
+
+      
+      File file = File('$appDirPath/$index.jpg');
+      File savedFile = await file.writeAsBytes(await x.readAsBytes());
+
+      savedImages.add(savedFile);
+    }
+
+    return savedImages;
+}
+
+    Future<List<XFile>> pickMultipleImagesFromGallery() async {
+      print('Picking multiple images from gallery...');
+      final picker = ImagePicker();
+      final List<XFile> pickedFiles = await picker.pickMultiImage();
+
+      return pickedFiles;
+    }
+
+Future<List<String>> saveImageCurrent(XFile image, String index) async {
+      if (image.path.isEmpty) return [];
+      // Get directory on local device for storing images.
+      final appDir = await sys_path.getApplicationDocumentsDirectory();
+      
+      // Get filename of image
+      String appDirPath = appDir.path;
+      print('appDir Path: $appDirPath');
+
+        // Create album if it doesn't exist
+        AssetPathEntity? pathEntity = await createInventoryPhotoAlbum(
+          appNameForImages,
+        );
+        if (pathEntity == null) {
+          print('Failed to create album: $appNameForImages');
+          return [];
+        }
+
+        AssetEntity savedImage = await saveImage(image.path, null);
+        final assetEntityFile = await savedImage.file;
+
+        // Adds image reference to the album created above
+        await PhotoManager.plugin.copyAssetToGallery(savedImage, pathEntity);
+
+        String? photoUrl = await PhotoManager.plugin.getFullFile(
+          savedImage.id,
+          isOrigin: false,
+        );
+        // Return imageUrl
+        return [photoUrl!];
+    }
 
 Future<String?> getFullFile(String id, {bool isOrigin = true}) async {
   String? photoUrl;
