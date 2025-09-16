@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
-import 'package:vintage_1020/domain/repositories/firestore/firestore_repository.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/add_inventory_form_dialog.dart';
 import 'package:vintage_1020/ui/edit_inventory_item/edit_inventory_tab.dart';
 import 'package:vintage_1020/ui/image_testing.dart';
