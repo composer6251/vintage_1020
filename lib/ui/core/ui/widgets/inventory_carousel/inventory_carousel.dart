@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
+import 'package:vintage_1020/domain/providers/firestore_provider/firestore_provider.dart';
+import 'package:vintage_1020/domain/providers/inventory_provider/inventory_provider.dart';
+import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/hero_card.dart';
 
 class InventoryCarousel extends ConsumerStatefulWidget {
@@ -22,13 +27,19 @@ class InventoryCarousel extends ConsumerStatefulWidget {
 }
 
 class _InventoryCarouselState extends ConsumerState<InventoryCarousel> {
+  List<File>? itemImages;
+
+  void setItemImages(List<String> itemImageUrls) {
+    loadInventoryPhotoAlbum();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final items = ref.watch(firestoreProviderProvider);
+
     return Column(
       children: [
-        Row(mainAxisAlignment: MainAxisAlignment.spaceAround, 
-        children: [
+        Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
               
               ],
             ),
@@ -46,7 +57,7 @@ class _InventoryCarouselState extends ConsumerState<InventoryCarousel> {
                     width: widget.width,
                   ),
                 )
-                .toList()
+                .toList(),
           ),
         ),
       ],
