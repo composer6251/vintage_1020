@@ -34,19 +34,44 @@ loadFileFromLocal(String imageUrl) async {
  * 4. Get files from assets.
  */
 
-Future<AssetPathEntity> loadInventoryPhotoAlbum() async {
+Future<List<File?>> getAssetsFromInventoryAlbum() async {
+  
   List<AssetPathEntity> currentPhotoAlbums =
       await PhotoManager.getAssetPathList(
         type: RequestType.image,
         hasAll: false,
       );
+  
   AssetPathEntity album =
       currentPhotoAlbums.firstWhere((e) => e.name == appNameForImages);
 
   int assetCount = await album.assetCountAsync;
   List<AssetEntity> assets = await album.getAssetListRange(start: 0, end: assetCount);
 
-  List<Future<File?>> images = assets.map((a) => a.loadFile()).toList();
+  // List<File?> images = assets.map((a) =>  a.loadFile()).toList();
+  
+  return getAssets(assets);
+}
+
+Future<List<File?>> getAssets(List<AssetEntity> assets) async {
+
+  List<File?> files = [];
+  for(AssetEntity asset in assets) {
+    files.add(await asset.loadFile());
+  }
+  return files;
+}
+
+Future<AssetPathEntity> loadInventoryPhotoAlbum() async {
+  
+  List<AssetPathEntity> currentPhotoAlbums =
+      await PhotoManager.getAssetPathList(
+        type: RequestType.image,
+        hasAll: false,
+      );
+
+  AssetPathEntity album =
+      currentPhotoAlbums.firstWhere((e) => e.name == appNameForImages);
   
   return album;
 }

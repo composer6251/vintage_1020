@@ -26,15 +26,15 @@ class _ImageTestingState extends State<ImageTesting> {
     final _selectedImages = useState<List<XFile?>?>(null);
     final _savedImages = useState<List<File>>([]);
 
-  void pickImages() async {
-    List<XFile> selectedImages = await pickMultipleImagesFromGallery();
+    void pickImages() async {
+      List<XFile> selectedImages = await pickMultipleImagesFromGallery();
 
-    _selectedImages.value = selectedImages;
+      _selectedImages.value = selectedImages;
 
-    List<File> savedImages = await saveImageAndReturnFile(selectedImages);
-    _savedImages.value = savedImages;
-    
-  }
+      List<File> savedImages = await saveImageAndReturnFile(selectedImages);
+      _savedImages.value = savedImages;
+      
+    }
 
     return Scaffold(
       appBar: AppBar(actions: [
