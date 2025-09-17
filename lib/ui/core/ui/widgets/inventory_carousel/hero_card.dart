@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
+import 'package:vintage_1020/data/model/inventory_item_local/inventory_item_local.dart';
 
 class HeroLayoutCard extends StatelessWidget {
   HeroLayoutCard({
@@ -10,7 +9,7 @@ class HeroLayoutCard extends StatelessWidget {
     required this.width,
   });
 
-  final InventoryItem item;
+  final InventoryItemLocal item;
   final double height;
   final double width;
 
@@ -25,8 +24,8 @@ class HeroLayoutCard extends StatelessWidget {
           minWidth: width * 7 / 8,
           child: Image(
             fit: BoxFit.fitWidth,
-            image: AssetImage(
-              item.itemImageUrls.first
+            image: FileImage(
+                
             ), // TODO: make the actual defaultImageUrl
           ),
         ),
