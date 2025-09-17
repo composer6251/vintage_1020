@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vintage_1020/constants/api_urls.dart';
 import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
-import 'package:vintage_1020/domain/api/b_t_api/b_t_api.dart';
 import 'package:vintage_1020/domain/repositories/inventory_repository.dart';
 
 part 'async_inventory_notifier_provider.g.dart';
@@ -22,7 +21,7 @@ class AsyncInventoryNotifierProvider extends _$AsyncInventoryNotifierProvider {
   late final InventoryRepository inventoryRepository;
   List<InventoryItem> items = [];
 
-  /****BUILD IS MEANT FOR LINKING UP WITH REPOSITORY AND INITIALIZING STAT */
+  /// **BUILD IS MEANT FOR LINKING UP WITH REPOSITORY AND INITIALIZING STAT
   @override
   Future<List<InventoryItem>> build() async {
     /*****INITIALIZE STATE */

@@ -2,10 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:vintage_1020/domain/providers/firestore_provider/firestore_image_provider.dart';
-import 'package:vintage_1020/domain/providers/firestore_provider/firestore_provider.dart';
 import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
 
 class ImageTesting extends StatefulHookWidget {
@@ -21,16 +18,16 @@ class _ImageTestingState extends State<ImageTesting> {
 
   @override
   Widget build(BuildContext context) {
-    final _selectedImages = useState<List<XFile?>?>(null);
-    final _savedImages = useState<List<File>>([]);
+    final selectedImages0 = useState<List<XFile?>?>(null);
+    final savedImages0 = useState<List<File>>([]);
 
     void pickImages() async {
       List<XFile> selectedImages = await pickMultipleImagesFromGallery();
 
-      _selectedImages.value = selectedImages;
+      selectedImages0.value = selectedImages;
 
       List<File> savedImages = await saveImageAndReturnFile(selectedImages);
-      _savedImages.value = savedImages;
+      savedImages0.value = savedImages;
       
     }
 
@@ -40,8 +37,8 @@ class _ImageTestingState extends State<ImageTesting> {
         TextButton(onPressed: loadInventoryPhotoAlbum, child: Text('Select Album'))
       ],
       ),
-      body: _savedImages.value.isNotEmpty ?
-        Image.file(_savedImages.value.first) : 
+      body: savedImages0.value.isNotEmpty ?
+        Image.file(savedImages0.value.first) : 
         Text('Please select photos')
       ,);
   }

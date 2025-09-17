@@ -49,14 +49,11 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
               mainAxisSize: MainAxisSize.max,
               children: [
                 InventoryCarousel(
-                  models: items,
                   width: width,
                   height: height * .50,
                   flexWeights: [3],
                 ),
-
                 InventoryCarousel(
-                  models: items,
                   width: width,
                   height: height * .40,
                   flexWeights: [1, 2, 1],

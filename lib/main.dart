@@ -10,7 +10,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:vintage_1020/ui/auth_gate/user_auth_gate.dart';
 
 import 'firebase_options.dart';
-import 'package:vintage_1020/ui/edit_inventory_item/edit_inventory_tab.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

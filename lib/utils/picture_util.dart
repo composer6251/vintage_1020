@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -31,7 +30,7 @@ import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
     }
   }
 
-    /****CREATE ALBUM IN PHOTOS LIBRARY ON IOS FOR VINTAGE_1020 IF IT DOESN'T ALREADY EXIST */
+    /// **CREATE ALBUM IN PHOTOS LIBRARY ON IOS FOR VINTAGE_1020 IF IT DOESN'T ALREADY EXIST
     Future<AssetPathEntity?> createInventoryPhotoAlbum(String albumName) async {
 
       List<AssetPathEntity> currentPhotoAlbums = await PhotoManager.getAssetPathList(

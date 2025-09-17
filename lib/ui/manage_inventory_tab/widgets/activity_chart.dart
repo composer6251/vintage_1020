@@ -101,34 +101,24 @@ class ActivityChart extends StatelessWidget {
     switch (value.toInt()) {
       case 1:
         text = '\$100';
-        break;
       case 2:
         text = '\$200';
-        break;
       case 3:
         text = '\$300';
-        break;
       case 4:
         text = '\$400';
-        break;
       case 5:
         text = '\$500';
-        break;
       case 6:
         text = '\$600';
-        break;
       case 7:
         text = '\$700';
-        break;
       case 8:
         text = '\$800';
-        break;
       case 9:
         text = '\$900';
-        break;
       case 10:
         text = '\$1000';
-        break;
       default:
         return Container();
     }
@@ -159,16 +149,12 @@ class ActivityChart extends StatelessWidget {
     switch (value.toInt()) {
       case 2:
         text = const Text('SEPT', style: style);
-        break;
       case 7:
         text = const Text('OCT', style: style);
-        break;
       case 12:
         text = const Text('DEC', style: style);
-        break;
       default:
         text = const Text('');
-        break;
     }
 
     return SideTitleWidget(

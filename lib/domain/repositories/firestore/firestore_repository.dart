@@ -1,9 +1,7 @@
-import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
-import 'package:vintage_1020/data/model/user_collection/user_collection.dart';
 
 ///  Repository for ****FLUTTER APP DIRECT CRUD OPERATIONS****
 ///  Writing Data (Always to Local Cache First, Then Sync to Cloud)
@@ -30,7 +28,7 @@ final firestore = FirebaseFirestore.instance;
  ***       ***
  *************/
 
-/********INVENTORY TEST COLLECTION */
+/// ******INVENTORY TEST COLLECTION
 
 Future<List<InventoryItem>> getDocumentById() async {
   print('Getting documentById');
@@ -65,7 +63,7 @@ Future<void> createUserInventoryMap(List<InventoryItem> items) async {
   }, SetOptions(merge: true));
 }
 
-/*****ITEM INVENTORY COLLECTION */
+/// ***ITEM INVENTORY COLLECTION
 Future<List<InventoryItem>> getUser() async {
   final snapshot = await firestore
       .collection(userCollection)
@@ -219,15 +217,15 @@ Future<void> addInventoryItemToUserCollection(InventoryItem item) async {
   }
 }
 
-/*** 
- * 
- * 
- * 
- * PRIVATE 
- * 
- * 
- * 
- * ****/
+/// *
+/// 
+/// 
+/// 
+/// PRIVATE 
+/// 
+/// 
+/// 
+/// ***
 
 InventoryItem buildInventoryItem(Map<String, dynamic> inventoryMap) {
   return InventoryItem(

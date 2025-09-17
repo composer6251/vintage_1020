@@ -10,7 +10,6 @@ import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
 import 'package:vintage_1020/domain/providers/firestore_provider/firestore_provider.dart';
 import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
 import 'package:path_provider/path_provider.dart' as sys_path;
-import 'package:path/path.dart' as path;
 
 /// **A HookConsumerWidget IS ESSENTIALLY A STATELESS WIDGET, BUT UTILIZES FLUTTER HOOKS TO MANAGE STATE ***
 class AddInventoryFormDialog extends HookConsumerWidget {
@@ -30,11 +29,11 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     final purchaseDate = useState(DateTime.now());
     final listingDate = useState(DateTime.now());
     final soldDate = useState(DateTime.now());
-    final _photo = useState<XFile?>(null);
-    final _selectedPhotos = useState<List<XFile?>?>(null);
-    final _savedFiles = useState<List<File>>([]);
+    final photo = useState<XFile?>(null);
+    final selectedPhotos = useState<List<XFile?>?>(null);
+    final savedFiles0 = useState<List<File>>([]);
     final itemImageUrls = useState<List<String>>([]);
-    final _defaultItemImageUrl = useState<String>('');
+    final defaultItemImageUrl = useState<String>('');
 
     void saveImageToAlbum(XFile image, String index) async {
       if (image.path.isEmpty) return;
@@ -98,13 +97,13 @@ class AddInventoryFormDialog extends HookConsumerWidget {
       if (image != null) {
         // If we have no default image, set the first taken image as default
         // TODO: AFTER SAVING, THIS SHOULD BE BASED OFF OF WHAT THE PROVIDER HAS
-        if (_defaultItemImageUrl.value.isEmpty) {
-          _defaultItemImageUrl.value = image.path;
+        if (defaultItemImageUrl.value.isEmpty) {
+          defaultItemImageUrl.value = image.path;
         }
-        _photo.value = image;
+        photo.value = image;
 
         saveImageToAlbum(image, "0");
-        print('Image taken and saved to state ${_photo.value?.path}');
+        print('Image taken and saved to state ${photo.value?.path}');
       }
       if (itemImageUrls.value.isEmpty) {
         itemImageUrls.value = [image!.path];
@@ -127,7 +126,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         // Get filename of image
         String appDirPath = appDir.path;
         File c = File(
-          '${appDirPath}/media$index.jpg',
+          '$appDirPath/media$index.jpg',
         ); //File has to be created first
         c.writeAsBytesSync(await x.readAsBytes());
         index++;
@@ -147,7 +146,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
           .where((file) => file.path.split('/').last.startsWith('media'));
       Iterable<File> files = mediaFiles.whereType<File>();
       for (final file in files) {
-        _savedFiles.value.add(file);
+        savedFiles0.value.add(file);
       }
     }
 
@@ -157,7 +156,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
       final List<XFile> pickedFiles = await picker.pickMultiImage();
 
       if (pickedFiles.isNotEmpty) {
-        _selectedPhotos.value = pickedFiles;
+        selectedPhotos.value = pickedFiles;
         // SAVE FILES
         // for (var pickedFile in pickedFiles) {
         //   // Save each picked file to the app documents directory

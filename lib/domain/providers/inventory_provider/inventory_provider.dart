@@ -1,14 +1,12 @@
 import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vintage_1020/constants/api_urls.dart';
 import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
 import 'package:http/http.dart' as http;
 import 'package:vintage_1020/domain/repositories/inventory_repository.dart';
-import 'package:vintage_1020/domain/repositories/inventory_repository_impl.dart';
 
 part 'inventory_provider.g.dart';
 
@@ -62,6 +60,7 @@ class InventoryNotifier extends _$InventoryNotifier {
     final response = await http.get(Uri.https(apiBaseUrl, '/inventory/$id'));
 
     final json = jsonDecode(response.body);
+    return null;
   }
 
   void buildUserInventory(List<InventoryItem> items) {

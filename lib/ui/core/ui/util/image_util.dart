@@ -1,17 +1,15 @@
 import 'dart:io';
-import 'dart:io' as io;
 
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:path_provider/path_provider.dart' as sys_path;
-import 'package:path/path.dart' as path;
 
 // create method to create a photo album in the gallery
 // to save images to a specific album in the gallery
 
 final String appNameForImages = 'Vintage_1020';
 
-loadFileFromLocal(String imageUrl) async {
+Future<Future<List<AssetPathEntity>>> loadFileFromLocal(String imageUrl) async {
   Directory directory = await sys_path.getApplicationDocumentsDirectory();
 
   AssetPathEntity album = await loadInventoryPhotoAlbum();
@@ -26,13 +24,12 @@ loadFileFromLocal(String imageUrl) async {
   return album.getSubPathList();
 }
 
-/*****
- * TODO: 
- * 1. get album according to app name
- * 2. get assets in album
- * 3. add assetId and albumId to InventoryItem
- * 4. Get files from assets.
- */
+/// ***
+/// TODO: 
+/// 1. get album according to app name
+/// 2. get assets in album
+/// 3. add assetId and albumId to InventoryItem
+/// 4. Get files from assets.
 
 Future<List<File?>> getAssetsFromInventoryAlbum() async {
   
@@ -90,12 +87,12 @@ Future<String> handleImageSelection(XFile image, String? imageName) async {
 
   // TODO: SHOULD THIS BE IMAGE.PATH OR GET FULL FILE RETURNED PATH?
   String? url = await getFullFile(image.path, isOrigin: false);
-  print('image.path: ${image.path}' + '\nurl: $url');
+  print('image.path: ${image.path}' '\nurl: $url');
 
   return image.path;
 }
 
-/****CREATE ALBUM IN PHOTOS LIBRARY ON IOS FOR VINTAGE_1020 IF IT DOESN'T ALREADY EXIST */
+/// **CREATE ALBUM IN PHOTOS LIBRARY ON IOS FOR VINTAGE_1020 IF IT DOESN'T ALREADY EXIST
 Future<AssetPathEntity?> createInventoryPhotoAlbum(String albumName) async {
   List<AssetPathEntity> currentPhotoAlbums =
       await PhotoManager.getAssetPathList(

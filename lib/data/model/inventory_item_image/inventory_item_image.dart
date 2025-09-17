@@ -94,7 +94,7 @@ factory InventoryItemImage.inventoryItemImageFromJson(Map<String, dynamic> json)
       if (item.itemSoldDate != null) "itemSoldDate": item.itemSoldDate,
       if (item.primaryImageUrl != null) "primaryImageUrl": item.primaryImageUrl,
       if (item.itemDescription != null) "itemDescription": item.itemDescription,
-      if (item.itemImages != null) "itemImageUrls": item.itemImages,
+      "itemImageUrls": item.itemImages,
       if (item.itemDimensions != null) "itemDimensions": item.itemDimensions,
     };
   }
