@@ -1,51 +1,81 @@
 
 
-// import 'package:path/path.dart';
-// import 'dart:async';
-// import 'package:sqflite/sqflite.dart';
-// import 'package:vintage_1020/data/model/inventory_item.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:path/path.dart';
+import 'dart:async';
+import 'package:path_provider/path_provider.dart' as sys_path;
+import 'package:path/path.dart' as path;
+import 'package:sqflite/sqflite.dart' as sql;
+import 'package:sqflite/sqlite_api.dart';
+import 'package:uuid/uuid.dart';
+import 'package:vintage_1020/data/model/inventory_item/inventory.dart';
+import 'package:vintage_1020/data/model/inventory_item_local/inventory_item_local.dart';
+
+final String dbName = 'vintage_1020.db';
+final Uuid uuid = Uuid();
+final String? userEmail = FirebaseAuth.instance.currentUser?.email;
+
+final String buildCreateUserTableSql = 'CREATE TABLE user(id TEXT PRIMARY KEY, email TEXT, inventory_id)';
+final String buildCreateInventoryTableSql = 'CREATE TABLE inventory_item(id TEXT PRIMARY KEY, email TEXT, primaryImageUrl TEXT, itemDescription TEXT, itemImageUrls TEXT, itemCategory TEXT, itemPurchasePrice REAL, itemListingPrice REAL, itemSoldPrice REAL, itemPurchaseDate TEXT, itemListingDate TEXT, itemSoldDate TEXT, itemDimensions TEXT)';
+
+final String userTable = 'user';
+final String inventoryItemTable = 'inventoryItem';
+
+Future<Database> _getDatabase() async {
+
+  final dbPath = await sql.getDatabasesPath();
+  
+  final db = await sql.openDatabase(
+    path.join(dbPath, dbName),
+    onCreate: (db, version) {
+      return db.execute(
+        buildCreateUserTableSql,
+      );
+    },
+    version: 1
+  );
+  return db;
+}
+
+class LocalDb {
+
+  void insertIntoInventoryItem(InventoryItemLocal item) async {
+    final db = await _getDatabase();
+
+    db.insert(
+      dbName, {
+        'id': item.id,
+        'primaryImageUrl': item.primaryImageUrl,
+        'itemDescription': item.itemDescription,
+        'itemImageUrls': item.itemImageUrls,
+        'itemCategory': item.itemCategory,
+        'itemPurchasePrice': item.itemPurchasePrice,
+        'itemListingPrice': item.itemListingPrice,
+        'itemSoldPrice': item.itemSoldPrice,
+        'itemPurchaseDate': item.itemPurchaseDate,
+        'itemListingDate': item.itemListingDate,
+        'itemSoldDate': item.itemSoldDate,
+        'itemDimensions': item.itemDimensions
+      }
+    );
+  }
+
+  Future<List<Set<InventoryItemLocal>>> getUserInventoryLocal() async {
+    final db = await _getDatabase();
+    final data = await db.query(inventoryItemTable, where: 'email = $userEmail');
+
+    List<Set<InventoryItemLocal>> inventory = await data.map((row) => {
+      InventoryItemLocal.fromJson(row)
+    }).toList();
+
+    return inventory;
+  }
 
 
-// class LocalDatabase {
-
-//   // Open the database and store the reference.
-//   void createDatabase() async { final database = (
-//     // Set the path to the database. Note: Using the `join` function from the
-//     // `path` package is best practice to ensure the path is correctly
-//     // constructed for each platform.
-//     join(await getDatabasesPath(), 'vintage_1020.db'),
-//     // When the database is first created, create a table to store dogs.
-//     onCreate: (db, version) {
-//       // Run the CREATE TABLE statement on the database.
-//       return db.execute(
-//         'CREATE TABLE dogs(id INTEGER PRIMARY KEY, name TEXT, age INTEGER)',
-//       );
-//     },
-//     // Set the version. This executes the onCreate function and provides a
-//     // path to perform database upgrades and downgrades.
-//     version: 1,
-//   );
-//   }
-//   // Define a function that inserts dogs into the database
-//   Future<void> addInventoryItem(InventoryItem item) async {
-//     // Get a reference to the database.
-//     final db = await database;
-
-//     // Insert the Dog into the correct table. You might also specify the
-//     // `conflictAlgorithm` to use in case the same dog is inserted twice.
-//     //
-//     // In this case, replace any previous data.
-//     await db.insert(
-//       'inventory',
-//       item,
-//       // conflictAlgorithm: ConflictAlgorithm.replace,
-//     );
-//   }
-
-
-//   Future printAllRowsInTable() async {
-//     final db = await albumTestDatabaseInstance.database;
-//     // show the results: print all rows in the db
-//     print(await db.query(tableAlbumTest));
-//   }
+// Future printAllRowsInTable() async {
+//   final db = await albumTestDatabaseInstance.database;
+//   // show the results: print all rows in the db
+//   print(await db.query(tableAlbumTest));
 // }
+
+}

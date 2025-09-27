@@ -34,8 +34,8 @@ class _ImageTestingState extends State<ImageTesting> {
     return Scaffold(
       appBar: AppBar(actions: [
         TextButton(onPressed: pickImages, child: Text('Select Images')),
-        TextButton(onPressed: loadInventoryPhotoAlbum, child: Text('Select Album'))
-      ],
+        TextButton(onPressed: getAssetsFromInventoryAlbum, child: Text('Select Album'))
+        ],
       ),
       body: savedImages0.value.isNotEmpty ?
         Image.file(savedImages0.value.first) : 

@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:vintage_1020/data/model/json_converters/TimestampConverter.dart';
+import 'package:vintage_1020/domain/sqflite/local_db.dart';
 
  class InventoryItemLocal {
-    num? id; // Optional ID for the item
+    final String id = uuid.v8(); // Optional ID for the item
+    String? userEmail;
     String? primaryImageUrl;
     String? itemDescription;
     List<File>? itemImages;
@@ -19,7 +21,6 @@ import 'package:vintage_1020/data/model/json_converters/TimestampConverter.dart'
     Map<String, String>? itemDimensions;
     
     InventoryItemLocal.fromJson(Map<String, dynamic> json) : 
-      id = json['id'],
       primaryImageUrl = json['primaryImageUrl'],
       itemDescription = json['itemDescription'],
       itemImageUrls = json['itemImageUrls'],
@@ -33,7 +34,6 @@ import 'package:vintage_1020/data/model/json_converters/TimestampConverter.dart'
       itemDimensions = json['itemDimensions'];
 
     Map<String, dynamic> toJson() => {
-      'id': id,
       'primaryImageUrl': primaryImageUrl,
       'itemDescription': itemDescription,
       'itemImageUrls': itemImageUrls,

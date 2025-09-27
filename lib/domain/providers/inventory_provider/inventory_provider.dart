@@ -6,7 +6,9 @@ import 'package:uuid/uuid.dart';
 import 'package:vintage_1020/constants/api_urls.dart';
 import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
 import 'package:http/http.dart' as http;
+import 'package:vintage_1020/data/model/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/domain/repositories/inventory_repository.dart';
+import 'package:vintage_1020/domain/sqflite/local_db.dart';
 
 part 'inventory_provider.g.dart';
 
@@ -14,10 +16,8 @@ enum InventoryFilter { all, sold, notSold }
 
 final userEmail = FirebaseAuth.instance.currentUser?.email;
 
-
 @riverpod
 class InventoryNotifier extends _$InventoryNotifier {
-  final _uuid = const Uuid();
   late final InventoryRepository inventoryRepository;
   InventoryFilter _inventoryFilter = InventoryFilter.all;
   List<InventoryItem> _items = [];
@@ -27,7 +27,7 @@ class InventoryNotifier extends _$InventoryNotifier {
   InventoryFilter get currentFilter => _inventoryFilter;
 
   @override
-  List<InventoryItem> build() {
+  List<InventoryItemLocal> build() {
     inventoryRepository = ref.watch(
       inventoryRepository as ProviderListenable<InventoryRepository>,
     );
@@ -63,7 +63,7 @@ class InventoryNotifier extends _$InventoryNotifier {
     return null;
   }
 
-  void buildUserInventory(List<InventoryItem> items) {
+  void buildUserInventory(List<InventoryItemLocal> items) {
     state = items;
   }
 
@@ -86,25 +86,37 @@ class InventoryNotifier extends _$InventoryNotifier {
     }
   }
 
-  void addInventoryItem(InventoryItem item) {
+  void addInventoryItem(InventoryItemLocal item) {
+    // InventoryItemLocal item = InventoryItemLocal(
+    //     itemImageUrls: item.itemImageUrls,
+    //     itemDescription: item.itemDescription,
+    //     itemPurchaseDate: item.itemPurchaseDate,
+    //     itemPurchasePrice: item.itemPurchasePrice,
+    //     itemCategory: item.itemCategory,
+    //     itemListingDate: item.itemListingDate,
+    //     itemListingPrice: item.itemListingPrice,
+    //     itemSoldPrice: item.itemSoldPrice,
+    //     primaryImageUrl: item.primaryImageUrl,
+    //     itemSoldDate: item.itemSoldDate,
+    //   );
     state = [
       ...state,
-      InventoryItem(
-        itemImageUrls: item.itemImageUrls,
-        itemDescription: item.itemDescription,
-        itemPurchaseDate: item.itemPurchaseDate,
-        itemPurchasePrice: item.itemPurchasePrice,
-        itemCategory: item.itemCategory,
-        itemListingDate: item.itemListingDate,
-        itemListingPrice: item.itemListingPrice,
-        itemSoldPrice: item.itemSoldPrice,
-        primaryImageUrl: item.primaryImageUrl,
-        itemSoldDate: item.itemSoldDate,
-      ),
+      item
     ];
+    saveInventoryItemToLocal(item);
   }
 
   void addInventoryImage() {}
+
+  void saveInventoryItemToLocal(InventoryItemLocal item) {
+    LocalDb().insertIntoInventoryItem(item);
+  }
+
+  Future<List<Set<InventoryItemLocal>>> getUserInventory() async {
+    List<Set<InventoryItemLocal>> inventory = await LocalDb().getUserInventoryLocal();
+
+    return inventory;
+  }
 
   // void toggleInventoryStatus(num id) {
   //   state = [
@@ -113,16 +125,16 @@ class InventoryNotifier extends _$InventoryNotifier {
   //   ];
   // }
 
-  void makeCurrentInventoryItem(num id) {
-    state = [
-      for (final item in state)
-        if (item.id == id)
-          item.copyWith(id: 0)
-        // Assign a new ID to make it current
-        else
-          item,
-    ];
-  }
+  // void makeCurrentInventoryItem(num id) {
+  //   state = [
+  //     for (final item in state)
+  //       if (item.id == id)
+  //         item.copyWith(id: 0)
+  //       // Assign a new ID to make it current
+  //       else
+  //         item,
+  //   ];
+  // }
 
   void removeInventoryItem(num id) {
     state = state.where((item) => item.id != id).toList();

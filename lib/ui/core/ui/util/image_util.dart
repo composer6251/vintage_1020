@@ -29,6 +29,8 @@ Future<List<File?>> getAssetsFromInventoryAlbum() async {
   return getAssets(assets);
 }
 
+
+
 Future<List<File?>> getAssets(List<AssetEntity> assets) async {
   List<File?> files = [];
   for (AssetEntity asset in assets) {
@@ -36,6 +38,11 @@ Future<List<File?>> getAssets(List<AssetEntity> assets) async {
   }
 
   return files;
+}
+
+getFileFromAssetId() {
+
+  String? verboseFilePath = PhotoManager.getVerboseFilePath();
 }
 
 Future<AssetPathEntity> loadInventoryPhotoAlbum() async {

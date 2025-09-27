@@ -69,3 +69,7 @@ pubspec.lock
 pubspec.lock
 ios/Podfile.lock
 pubspec.lock
+
+
+# MASON BRICKS
+.mason
