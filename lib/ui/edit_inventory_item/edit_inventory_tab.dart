@@ -8,19 +8,16 @@ class EditItemTab extends ConsumerWidget {
     
     final double height = MediaQuery.sizeOf(context).height;
     final double width = MediaQuery.sizeOf(context).width;
-  
 
     return Scaffold(
       body: Column(
         children: [
           InventoryCarousel(
-            models: [],
             width: width,
             height: height * .30,
             flexWeights: [3],
           ),
           InventoryCarousel(
-            models: [],
             width: width,
             height: height * .25,
             flexWeights: [1, 2, 1],

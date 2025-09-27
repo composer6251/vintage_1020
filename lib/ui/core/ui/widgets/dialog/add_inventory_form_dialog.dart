@@ -11,7 +11,7 @@ import 'package:vintage_1020/domain/providers/firestore_provider/firestore_provi
 import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
 import 'package:path_provider/path_provider.dart' as sys_path;
 
-/// **A HookConsumerWidget IS ESSENTIALLY A STATELESS WIDGET, BUT UTILIZES FLUTTER HOOKS TO MANAGE STATE ***
+/// **A HOOKCONSUMER WIDGET IS ESSENTIALLY A STATELESS WIDGET, BUT UTILIZES FLUTTER HOOKS TO MANAGE STATE ***
 class AddInventoryFormDialog extends HookConsumerWidget {
   const AddInventoryFormDialog({super.key});
 
@@ -30,7 +30,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     final listingDate = useState(DateTime.now());
     final soldDate = useState(DateTime.now());
     final photo = useState<XFile?>(null);
-    final selectedPhotos = useState<List<XFile?>?>(null);
+    final selectedImages = useState<List<XFile?>?>(null);
     final savedFiles0 = useState<List<File>>([]);
     final itemImageUrls = useState<List<String>>([]);
     final defaultItemImageUrl = useState<String>('');
@@ -43,24 +43,6 @@ class AddInventoryFormDialog extends HookConsumerWidget {
       String appDirPath = appDir.path;
       print('appDir Path: $appDirPath');
 
-      // final String name = image.name;
-      // print('fileName Path: $name');
-
-      // // final fileName = path.basename(appDirPath);
-      // final fileName = ('$appNameForImages/testOne');
-
-      // final savedFilePath = '${appDir.path}/$fileName';
-      // final p = await image.saveTo(savedFilePath);
-      // print('fileName saved: $savedFilePath');
-
-      // try {
-      //   final savedFile = await file.copy(savedFilePath);
-      //   final p = savedFile.path;
-      //   print('Ppath: $p');
-      // } catch (ex) {
-      //   print('ex for savedFile: $ex');
-      // }
-
       try {
         // Create album if it doesn't exist
         AssetPathEntity? pathEntity = await createInventoryPhotoAlbum(
@@ -72,7 +54,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         }
 
         AssetEntity savedImage = await saveImage(image.path, null);
-        
+
         // Adds image reference to the album created above
         await PhotoManager.plugin.copyAssetToGallery(savedImage, pathEntity);
 
@@ -120,8 +102,9 @@ class AddInventoryFormDialog extends HookConsumerWidget {
       List<String> savedImagesPaths = [];
 
       List<File> savedFiles = [];
-      
+
       for (var x in imageFileList) {
+        saveImageCurrent(x, "");
         final appDir = await sys_path.getApplicationDocumentsDirectory();
         // Get filename of image
         String appDirPath = appDir.path;
@@ -135,7 +118,6 @@ class AddInventoryFormDialog extends HookConsumerWidget {
       }
       itemImageUrls.value = List.from(itemImageUrls.value)
         ..addAll(savedImagesPaths);
-      // itemImageUrls.value = List.from(itemImageUrls.value)..addAll(savedFiles);
     }
 
     loadFiles() async {
@@ -150,28 +132,11 @@ class AddInventoryFormDialog extends HookConsumerWidget {
       }
     }
 
-    Future<void> pickMultipleImagesFromGallery() async {
-      print('Picking multiple images from gallery...');
-      final picker = ImagePicker();
-      final List<XFile> pickedFiles = await picker.pickMultiImage();
+    Future<void> selectImages() async {
+      List<XFile> selectedImages = await pickMultipleImagesFromGallery();
 
-      if (pickedFiles.isNotEmpty) {
-        selectedPhotos.value = pickedFiles;
-        // SAVE FILES
-        // for (var pickedFile in pickedFiles) {
-        //   // Save each picked file to the app documents directory
-        //   saveImageToAlbum(pickedFile);
-        // }
-
-        saveFiles(pickedFiles);
-        loadFiles();
-
-        print('${pickedFiles.length} images picked.');
-        // Images were successfully picked
-      } else {
-        // User canceled the picker or selected nothing
-        print('No images selected.');
-      }
+        // saveFiles(selectedImages);
+        // loadFiles();
     }
 
     Future<void> selectDate(String type) async {
@@ -211,18 +176,6 @@ class AddInventoryFormDialog extends HookConsumerWidget {
             .addUserInventoryItem(itemToSave);
 
         Navigator.of(context).pop(); // Close the dialog
-
-        // saveInventoryItem(itemToSave)
-        //     .then((savedItem) {
-        //       if (savedItem != null) {
-        //         print('Inventory item saved successfully: ${savedItem.id}');
-        //       } else {
-        //         print('Failed to save inventory item');
-        //       }
-        //     })
-        //     .catchError((error) {
-        //       print('Error saving inventory item: $error');
-        //     });
       }
     }
 
@@ -359,7 +312,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
                 elevation: WidgetStatePropertyAll<double>(8.0),
                 backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
               ),
-              onPressed: pickMultipleImagesFromGallery,
+              onPressed: selectImages,
             ),
             IconButton(
               icon: const Icon(Icons.check),

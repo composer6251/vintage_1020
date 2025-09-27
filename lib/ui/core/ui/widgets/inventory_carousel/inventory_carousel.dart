@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
 import 'package:vintage_1020/domain/providers/firestore_provider/firestore_provider.dart';
 import 'package:vintage_1020/domain/providers/inventory_local_provider/inventory_local_provider.dart';
 import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
@@ -11,13 +10,10 @@ import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/hero_card.dar
 class InventoryCarousel extends ConsumerStatefulWidget {
   const InventoryCarousel({
     super.key,
-    // required this.models,
     required this.width,
     required this.height,
     required this.flexWeights,
   });
-
-  // final List<InventoryItem> models;
   final double width;
   final double height;
   final List<int> flexWeights;
