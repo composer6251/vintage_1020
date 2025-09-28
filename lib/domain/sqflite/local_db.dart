@@ -19,22 +19,24 @@ final String buildCreateUserTableSql = 'CREATE TABLE user(id TEXT PRIMARY KEY, e
 final String buildCreateInventoryTableSql = 'CREATE TABLE inventory_item(id TEXT PRIMARY KEY, email TEXT, primaryImageUrl TEXT, itemDescription TEXT, itemImageUrls TEXT, itemCategory TEXT, itemPurchasePrice REAL, itemListingPrice REAL, itemSoldPrice REAL, itemPurchaseDate TEXT, itemListingDate TEXT, itemSoldDate TEXT, itemDimensions TEXT)';
 
 final String userTable = 'user';
-final String inventoryItemTable = 'inventoryItem';
+final String inventoryItemTable = 'inventory_item';
 
 Future<Database> _getDatabase() async {
-
+  print('creating DB');
   final dbPath = await sql.getDatabasesPath();
   
   final db = await sql.openDatabase(
     path.join(dbPath, dbName),
-    onCreate: (db, version) {
-      return db.execute(
-        buildCreateUserTableSql,
-      );
-    },
+    onCreate: _createUserAndInventoryTables,
     version: 1
   );
   return db;
+}
+
+Future<void> _createUserAndInventoryTables(Database db, int version) async {
+  print('\nCreating user and inventory tables\n');
+  await db.execute(buildCreateUserTableSql);
+  await db.execute(buildCreateInventoryTableSql);
 }
 
 class LocalDb {
@@ -62,7 +64,7 @@ class LocalDb {
 
   Future<List<Set<InventoryItemLocal>>> getUserInventoryLocal() async {
     final db = await _getDatabase();
-    final data = await db.query(inventoryItemTable, where: 'email = $userEmail');
+    final data = await db.query(inventoryItemTable, where: 'email = "dfennell31@gmail.com"');
 
     List<Set<InventoryItemLocal>> inventory = await data.map((row) => {
       InventoryItemLocal.fromJson(row)
