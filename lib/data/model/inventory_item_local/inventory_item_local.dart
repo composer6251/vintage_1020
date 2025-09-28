@@ -19,6 +19,20 @@ import 'package:vintage_1020/domain/sqflite/local_db.dart';
     DateTime? itemListingDate;
     DateTime? itemSoldDate;
     Map<String, String>? itemDimensions;
+
+    InventoryItemLocal.toLocalDb(
+      this.userEmail, 
+      this.primaryImageUrl, 
+      this.itemDescription,
+      this.itemImageUrls,
+      this.itemCategory,
+      this.itemPurchasePrice,
+      this.itemListingPrice,
+      this.itemSoldPrice,
+      this.itemPurchaseDate,
+      this.itemListingDate,
+      this.itemSoldDate,
+      this.itemDimensions);
     
     InventoryItemLocal.fromJson(Map<String, dynamic> json) : 
       primaryImageUrl = json['primaryImageUrl'],
