@@ -33,7 +33,6 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
   Widget build(BuildContext context) {
     final double height = MediaQuery.sizeOf(context).height;
     final double width = MediaQuery.sizeOf(context).width;
-    // final items = ref.watch(firestoreProviderProvider);
     return Scaffold(
       body: FutureBuilder(
         /*FUTURE FUNCTION TO RETRIEVE DATA AND UPDATE PROVIDER*/

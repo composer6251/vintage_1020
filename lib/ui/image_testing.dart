@@ -26,7 +26,7 @@ class _ImageTestingState extends State<ImageTesting> {
 
       selectedImages0.value = selectedImages;
 
-      List<File> savedImages = await saveImageAndReturnFile(selectedImages);
+      List<File> savedImages = await saveImagesAndReturnFile(selectedImages);
       savedImages0.value = savedImages;
       
     }

@@ -21,7 +21,7 @@ import 'package:vintage_1020/domain/sqflite/local_db.dart';
     Map<String, String>? itemDimensions;
 
     InventoryItemLocal.toLocalDb(
-      this.userEmail, 
+      this.userEmail,
       this.primaryImageUrl, 
       this.itemDescription,
       this.itemImageUrls,

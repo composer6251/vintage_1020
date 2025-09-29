@@ -9,6 +9,7 @@ import 'package:photo_manager/photo_manager.dart';
 import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
 import 'package:vintage_1020/data/model/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/domain/providers/firestore_provider/firestore_provider.dart';
+import 'package:vintage_1020/domain/providers/inventory_provider/inventory_provider.dart';
 import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
 import 'package:path_provider/path_provider.dart' as sys_path;
 
@@ -31,113 +32,35 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     final listingDate = useState(DateTime.now());
     final soldDate = useState(DateTime.now());
     final photo = useState<XFile?>(null);
-    final selectedImages = useState<List<XFile?>?>(null);
-    final savedFiles0 = useState<List<File>>([]);
+    final selectedImages = useState<List<XFile>>([]);
+    final selectedImagesAsFiles = useState<List<File>>([]);
     final itemImageUrls = useState<List<String>>([]);
     final defaultItemImageUrl = useState<String>('');
 
-    void saveImageToAlbum(XFile image, String index) async {
-      if (image.path.isEmpty) return;
-      // Get directory on local device for storing images.
-      final appDir = await sys_path.getApplicationDocumentsDirectory();
-      // Get filename of image
-      String appDirPath = appDir.path;
-      print('appDir Path: $appDirPath');
 
-      try {
-        // Create album if it doesn't exist
-        AssetPathEntity? pathEntity = await createInventoryPhotoAlbum(
-          appNameForImages,
-        );
-        if (pathEntity == null) {
-          print('Failed to create album: $appNameForImages');
-          return;
-        }
+    /// AFTER USER SELECTS PHOTOS OR TAKES A PHOTO, UPDATE THE EPHEMERAL STATE
+    void updateSelectedImagesState(List<File> imagesToAdd) {
 
-        AssetEntity savedImage = await saveImage(image.path, null);
+      final List<File> newImagesState = List.from(selectedImagesAsFiles.value)..addAll(imagesToAdd);
+      selectedImagesAsFiles.value = newImagesState;
 
-        // Adds image reference to the album created above
-        await PhotoManager.plugin.copyAssetToGallery(savedImage, pathEntity);
-
-        String? photoUrl = await PhotoManager.plugin.getFullFile(
-          savedImage.id,
-          isOrigin: false,
-        );
-        // Update state with selected image Urls
-        itemImageUrls.value = List.from(itemImageUrls.value)
-          ..addAll([photoUrl!]);
-      } catch (ex) {
-        print('Error saving image to album: $ex');
-      }
     }
-
+    /// TAKE PHOTO ON PHOTO AND USE FOR ITEM
     Future<void> takePhoto() async {
-      final picker = ImagePicker();
-      XFile? image = await picker.pickImage(
-        source: ImageSource.camera,
-        imageQuality: 90,
-      );
-      if (image != null) {
-        // If we have no default image, set the first taken image as default
-        // TODO: AFTER SAVING, THIS SHOULD BE BASED OFF OF WHAT THE PROVIDER HAS
-        if (defaultItemImageUrl.value.isEmpty) {
-          defaultItemImageUrl.value = image.path;
-        }
-        photo.value = image;
 
-        saveImageToAlbum(image, "0");
-        print('Image taken and saved to state ${photo.value?.path}');
-      }
-      if (itemImageUrls.value.isEmpty) {
-        itemImageUrls.value = [image!.path];
-        print(
-          'updating itemImageUrls is empty in takePhoto. Path: ${image.path}',
-        );
-      } else {
-        print('No image selected');
-      }
-    }
+      File? photoTaken = await takeCameraPhoto();
 
-    saveFiles(List<XFile> imageFileList) async {
-      int index = 0;
-      List<String> savedImagesPaths = [];
-
-      List<File> savedFiles = [];
-
-      for (var x in imageFileList) {
-        saveImageCurrent(x, "");
-        final appDir = await sys_path.getApplicationDocumentsDirectory();
-        // Get filename of image
-        String appDirPath = appDir.path;
-        File c = File(
-          '$appDirPath/media$index.jpg',
-        ); //File has to be created first
-        c.writeAsBytesSync(await x.readAsBytes());
-        index++;
-        savedImagesPaths.add(appDirPath);
-        savedFiles.add(c);
-      }
-      itemImageUrls.value = List.from(itemImageUrls.value)
-        ..addAll(savedImagesPaths);
-    }
-
-    loadFiles() async {
-      Directory directory = await sys_path.getApplicationDocumentsDirectory();
-      final mediaFiles = io.Directory('$directory/')
-          .listSync()
-          .whereType<File>()
-          .where((file) => file.path.split('/').last.startsWith('media'));
-      Iterable<File> files = mediaFiles.whereType<File>();
-      for (final file in files) {
-        savedFiles0.value.add(file);
-      }
+      // UPDATE STATE. PASS IN IMAGES AS LIST
+      updateSelectedImagesState([photoTaken]);
     }
 
     Future<void> selectImages() async {
-      List<XFile> selectedImages = await pickMultipleImagesFromGallery();
-
-        // saveFiles(selectedImages);
-        // loadFiles();
+      List<XFile> selectedImagesFromGallery = await pickMultipleImagesFromGallery();
+      final List<XFile> files = selectedImagesFromGallery;
+      final List<XFile> newImagesState = List.from(selectedImages.value)..addAll(files);
+      
+      // Add to selected images to ephemeral state
+      selectedImages.value = newImagesState;
     }
 
     Future<void> selectDate(String type) async {
@@ -159,17 +82,38 @@ class AddInventoryFormDialog extends HookConsumerWidget {
       purchaseDate.value = pickedDate;
     }
 
-    void submit() {
-      // final InventoryItemLocal itemToDB = InventoryItemLocal.toLocalDb(
-      //   itemCategory: 'Furniture',
-      //   itemImageUrls: itemImageUrls.value,
-      //   itemPurchaseDate: purchaseDate.value,
-      //   itemPurchasePrice: double.tryParse(itemPurchasePriceController.text),
-      //   itemListingDate: listingDate.value,
-      //   itemListingPrice: double.tryParse(itemListingPriceController.text),
-      //   itemSoldDate: soldDate.value,
-      //   double.tryParse(itemSoldPriceController.text),
-      // );
+    void submit() async {
+      // TODO :
+      // onSubmit:
+      // 1. save files(image_util.)
+      List<File> savedImages = await saveXFileListAndReturnSavedPaths(selectedImages.value);
+      // 2. get savedImages paths
+      List<String> savedImagesPaths = savedImages.map((i) => i.path).toList();
+
+      // 3. update itemImageUrls with savedImages paths
+      List<String> updatedItemImageUrls = List.from(itemImageUrls.value)..addAll(savedImagesPaths);
+      itemImageUrls.value = updatedItemImageUrls;
+      // 4. If there's only one image, make it the default image
+      if(itemImageUrls.value.length == 1) {
+        defaultItemImageUrl.value = itemImageUrls.value.first;
+      }
+      // 5. save inventoryItem through provider
+      // 6. save inventoryItem to localDB
+
+      final InventoryItemLocal itemToDB = InventoryItemLocal.toLocalDb(
+        null,
+        defaultItemImageUrl.value,
+        '',
+        itemImageUrls.value,
+        'DEFAULT CATEGORY',
+        double.tryParse(itemPurchasePriceController.text),
+        double.tryParse(itemListingPriceController.text),
+        double.tryParse(itemPurchasePriceController.text),
+        purchaseDate.value,
+        listingDate.value,
+        soldDate.value,
+        null
+      );
       final InventoryItem itemToSave = InventoryItem(
         itemCategory: 'Furniture',
         itemImageUrls: itemImageUrls.value,
@@ -183,8 +127,8 @@ class AddInventoryFormDialog extends HookConsumerWidget {
 
       if (formKey.currentState?.validate() ?? false) {
         ref
-            .watch(firestoreProviderProvider.notifier)
-            .addUserInventoryItem(itemToSave);
+            .watch(inventoryProvider.notifier)
+            .addInventoryItem(itemToDB);
 
         Navigator.of(context).pop(); // Close the dialog
       }

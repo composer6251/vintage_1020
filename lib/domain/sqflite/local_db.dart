@@ -21,26 +21,37 @@ final String buildCreateInventoryTableSql = 'CREATE TABLE inventory_item(id TEXT
 final String userTable = 'user';
 final String inventoryItemTable = 'inventory_item';
 
+
+class LocalDb {
 Future<Database> _getDatabase() async {
   print('creating DB');
   final dbPath = await sql.getDatabasesPath();
   
   final db = await sql.openDatabase(
     path.join(dbPath, dbName),
-    onCreate: _createUserAndInventoryTables,
-    version: 1
+    version: 1,
   );
+  
+  _createUserAndInventoryTables(db);
+  
   return db;
 }
-
-Future<void> _createUserAndInventoryTables(Database db, int version) async {
+Future<void> _createUserAndInventoryTables(Database db) async {
   print('\nCreating user and inventory tables\n');
-  await db.execute(buildCreateUserTableSql);
-  await db.execute(buildCreateInventoryTableSql);
+  // TODO check if table exists
+  var userTbl = await db.query('sqlite_master', where: 'name = ?', whereArgs: [userTable]);
+  var invTbl = await db.query('sqlite_master', where: 'name = ?', whereArgs: [inventoryItemTable]);
+
+  if(userTbl.isEmpty) {
+    await db.execute(buildCreateUserTableSql);
+  }
+  if(invTbl.isEmpty) {
+    await db.execute(buildCreateInventoryTableSql);
+
+  }
+  var tables = await db.query('sqlite_master', where: 'name = ?', whereArgs: [userTable, inventoryItemTable]);
+  print('tables created or already existed ${tables.length}');
 }
-
-class LocalDb {
-
   void insertIntoInventoryItem(InventoryItemLocal item) async {
     final db = await _getDatabase();
 
