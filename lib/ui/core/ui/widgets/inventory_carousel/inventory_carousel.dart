@@ -33,7 +33,7 @@ class _InventoryCarouselState extends ConsumerState<InventoryCarousel> {
   @override
   Widget build(BuildContext context) {
     // final items = ref.watch(firestoreProviderProvider);
-    final List<InventoryItemLocal> images = ref.watch(inventoryLocalProvider.notifier).getUserInventory();
+    final List<InventoryItemLocal> images = ref.watch(inventoryLocalProvider);
 
     return Column(
       children: [

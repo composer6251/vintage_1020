@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:vintage_1020/domain/providers/inventory_local_provider/inventory_local_provider.dart';
 import 'package:vintage_1020/domain/providers/inventory_provider/inventory_provider.dart';
 
 class ActivityGraph extends HookConsumerWidget {
@@ -9,7 +10,7 @@ class ActivityGraph extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // TODO: implement build
-    final items = ref.watch(inventoryNotifierProvider);
+    final items = ref.watch(inventoryLocalProvider);
     // String getDateKey
     final soldItems = useMemoized(() {
       for (var item in items) {

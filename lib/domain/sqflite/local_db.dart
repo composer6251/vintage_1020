@@ -26,9 +26,14 @@ class LocalDb {
     print('creating DB');
     final dbPath = await sql.getDatabasesPath();
 
-    final db = await sql.openDatabase(path.join(dbPath, dbName), version: 1);
+    final db = await sql.openDatabase(
+      path.join(dbPath, dbName),
+      onCreate: (db, version) {
+        return db.execute(buildCreateInventoryTableSql);
+      }, 
+      version: 1);
 
-    _createUserAndInventoryTables(db);
+    // _createUserAndInventoryTables(db);
 
     return db;
   }
@@ -61,10 +66,10 @@ class LocalDb {
     print('tables created or already existed ${tables.length}');
   }
 
-  void insertIntoInventoryItem(InventoryItemLocal item) async {
+  void insertIntoInventoryItemUrlList(InventoryItemLocal item) async {
     final db = await _getDatabase();
 
-    db.insert(dbName, {
+    db.insert(inventoryItemTable, {
       'id': item.id,
       'primaryImageUrl': item.primaryImageUrl,
       'itemDescription': item.itemDescription,
@@ -73,9 +78,27 @@ class LocalDb {
       'itemPurchasePrice': item.itemPurchasePrice,
       'itemListingPrice': item.itemListingPrice,
       'itemSoldPrice': item.itemSoldPrice,
-      'itemPurchaseDate': item.itemPurchaseDate,
-      'itemListingDate': item.itemListingDate,
-      'itemSoldDate': item.itemSoldDate,
+      'itemPurchaseDate': item.itemPurchaseDate?.toIso8601String(),
+      'itemListingDate': item.itemListingDate?.toIso8601String(),
+      'itemSoldDate': item.itemSoldDate?.toIso8601String(),
+      'itemDimensions': item.itemDimensions,
+    });
+  }
+
+    void insertIntoInventoryItem(InventoryItemLocal item) async {
+    final db = await _getDatabase();
+
+    db.insert(inventoryItemTable, {
+      'id': item.id,
+      'primaryImageUrl': item.primaryImageUrl,
+      'itemDescription': item.itemDescription,
+      'itemCategory': item.itemCategory,
+      'itemPurchasePrice': item.itemPurchasePrice,
+      'itemListingPrice': item.itemListingPrice,
+      'itemSoldPrice': item.itemSoldPrice,
+      'itemPurchaseDate': item.itemPurchaseDate?.toIso8601String(),
+      'itemListingDate': item.itemListingDate?.toIso8601String(),
+      'itemSoldDate': item.itemSoldDate?.toIso8601String(),
       'itemDimensions': item.itemDimensions,
     });
   }
