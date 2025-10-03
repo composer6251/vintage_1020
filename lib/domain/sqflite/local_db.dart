@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:path/path.dart';
 import 'dart:async';
@@ -30,8 +32,9 @@ class LocalDb {
       path.join(dbPath, dbName),
       onCreate: (db, version) {
         return db.execute(buildCreateInventoryTableSql);
-      }, 
-      version: 1);
+      },
+      version: 1,
+    );
 
     // _createUserAndInventoryTables(db);
 
@@ -73,7 +76,7 @@ class LocalDb {
       'id': item.id,
       'primaryImageUrl': item.primaryImageUrl,
       'itemDescription': item.itemDescription,
-      'itemImageUrls': item.itemImageUrls,
+      'itemImageUrls': json.encode(item.itemImageUrls), // sqflite does have a List type, so encode to String
       'itemCategory': item.itemCategory,
       'itemPurchasePrice': item.itemPurchasePrice,
       'itemListingPrice': item.itemListingPrice,
@@ -85,7 +88,7 @@ class LocalDb {
     });
   }
 
-    void insertIntoInventoryItem(InventoryItemLocal item) async {
+  void insertIntoInventoryItem(InventoryItemLocal item) async {
     final db = await _getDatabase();
 
     db.insert(inventoryItemTable, {
@@ -102,18 +105,24 @@ class LocalDb {
       'itemDimensions': item.itemDimensions,
     });
   }
+  ///
+  ///1. json encode imageUrls for db
+  ///2. json decode imageUrls from db
+  ///3. 
 
   Future<List<Set<InventoryItemLocal>>> getUserInventoryLocal() async {
     printAllRowsInTable();
     final db = await _getDatabase();
     final data = await db.query(
       inventoryItemTable,
-      where: 'email = "dfennell31@gmail.com"',
+      where: 'email = "$userEmail"',
     );
     print('Records retrieved from local DB: ${data.length}');
-    List<Set<InventoryItemLocal>> inventory = await data
-        .map((row) => {InventoryItemLocal.fromJson(row)})
-        .toList();
+    
+    List<Set<InventoryItemLocal>> inventory = data.map((row) => {
+      
+      InventoryItemLocal.fromLocalDB(row)
+    }).toList();
     print(
       'Records from local DB mapped to InventoryItemLocal: ${inventory.length}',
     );

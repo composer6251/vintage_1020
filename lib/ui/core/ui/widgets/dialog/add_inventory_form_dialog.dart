@@ -6,11 +6,13 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:uuid/uuid.dart';
 import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
 import 'package:vintage_1020/data/model/inventory_item_local/inventory_item_local.dart';
-import 'package:vintage_1020/domain/providers/firestore_provider/firestore_provider.dart';
-import 'package:vintage_1020/domain/providers/inventory_local_provider/inventory_local_provider.dart';
-import 'package:vintage_1020/domain/providers/inventory_provider/inventory_provider.dart';
+import 'package:vintage_1020/domain/providers/firestore_provider/firestore_provider.dart' hide userEmail;
+import 'package:vintage_1020/domain/providers/inventory_local_provider/inventory_local_provider.dart' hide userEmail;
+import 'package:vintage_1020/domain/providers/inventory_provider/inventory_provider.dart' hide userEmail;
+import 'package:vintage_1020/domain/sqflite/local_db.dart';
 import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
 import 'package:path_provider/path_provider.dart' as sys_path;
 
@@ -102,7 +104,8 @@ class AddInventoryFormDialog extends HookConsumerWidget {
       // 5. save inventoryItem through provider
       // 6. save inventoryItem to localDB
       final InventoryItemLocal itemToDB = InventoryItemLocal.toLocalDb(
-        null,
+        uuid.v6(),
+        userEmail,
         defaultItemImageUrl.value,
         '',
         itemImageUrls.value,
@@ -114,16 +117,6 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         listingDate.value,
         soldDate.value,
         null,
-      );
-      final InventoryItem itemToSave = InventoryItem(
-        itemCategory: 'Furniture',
-        itemImageUrls: itemImageUrls.value,
-        itemPurchaseDate: purchaseDate.value,
-        itemPurchasePrice: double.tryParse(itemPurchasePriceController.text),
-        itemListingDate: listingDate.value,
-        itemListingPrice: double.tryParse(itemListingPriceController.text),
-        itemSoldDate: soldDate.value,
-        itemSoldPrice: double.tryParse(itemSoldPriceController.text),
       );
 
       if (formKey.currentState?.validate() ?? false) {
