@@ -25,7 +25,7 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
     //     .read(firestoreProviderProvider.notifier)
     //     .getInventoryByDocumentId();
     _itemsFuture = ref
-        .read(inventoryProvider.notifier)
+        .read(inventoryLocalProvider.notifier)
         .getUserInventory();
   }
 

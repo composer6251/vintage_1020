@@ -18,10 +18,10 @@ class InventoryLocal extends _$InventoryLocal{
     return [];
   }
 
-  List<InventoryItemLocal> getInventoryLocal() {
+  Future<List<Set<InventoryItemLocal>>> getUserInventory() async {
+    List<Set<InventoryItemLocal>> inventory = await LocalDb().getUserInventoryLocal();
 
-
-    return [];
+    return inventory;
   }
 
     Future<void> addUserInventoryItemLocal(InventoryItemLocal item) async {

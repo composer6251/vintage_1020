@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:vintage_1020/data/model/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/domain/providers/firestore_provider/firestore_provider.dart';
 import 'package:vintage_1020/domain/providers/inventory_local_provider/inventory_local_provider.dart';
 import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
@@ -31,8 +32,8 @@ class _InventoryCarouselState extends ConsumerState<InventoryCarousel> {
 
   @override
   Widget build(BuildContext context) {
-    final items = ref.watch(firestoreProviderProvider);
-    final images = ref.watch(inventoryLocalProvider.notifier).getInventoryLocal();
+    // final items = ref.watch(firestoreProviderProvider);
+    final List<InventoryItemLocal> images = ref.watch(inventoryLocalProvider.notifier).getUserInventory();
 
     return Column(
       children: [

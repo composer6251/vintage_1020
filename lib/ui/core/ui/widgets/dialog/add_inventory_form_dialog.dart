@@ -9,6 +9,7 @@ import 'package:photo_manager/photo_manager.dart';
 import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
 import 'package:vintage_1020/data/model/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/domain/providers/firestore_provider/firestore_provider.dart';
+import 'package:vintage_1020/domain/providers/inventory_local_provider/inventory_local_provider.dart';
 import 'package:vintage_1020/domain/providers/inventory_provider/inventory_provider.dart';
 import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
 import 'package:path_provider/path_provider.dart' as sys_path;
@@ -37,17 +38,15 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     final itemImageUrls = useState<List<String>>([]);
     final defaultItemImageUrl = useState<String>('');
 
-
     /// AFTER USER SELECTS PHOTOS OR TAKES A PHOTO, UPDATE THE EPHEMERAL STATE
     void updateSelectedImagesState(List<File> imagesToAdd) {
-
-      final List<File> newImagesState = List.from(selectedImagesAsFiles.value)..addAll(imagesToAdd);
+      final List<File> newImagesState = List.from(selectedImagesAsFiles.value)
+        ..addAll(imagesToAdd);
       selectedImagesAsFiles.value = newImagesState;
-
     }
+
     /// TAKE PHOTO ON PHOTO AND USE FOR ITEM
     Future<void> takePhoto() async {
-
       File? photoTaken = await takeCameraPhoto();
 
       // UPDATE STATE. PASS IN IMAGES AS LIST
@@ -55,10 +54,12 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     }
 
     Future<void> selectImages() async {
-      List<XFile> selectedImagesFromGallery = await pickMultipleImagesFromGallery();
+      List<XFile> selectedImagesFromGallery =
+          await pickMultipleImagesFromGallery();
       final List<XFile> files = selectedImagesFromGallery;
-      final List<XFile> newImagesState = List.from(selectedImages.value)..addAll(files);
-      
+      final List<XFile> newImagesState = List.from(selectedImages.value)
+        ..addAll(files);
+
       // Add to selected images to ephemeral state
       selectedImages.value = newImagesState;
     }
@@ -83,23 +84,23 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     }
 
     void submit() async {
-      // TODO :
-      // onSubmit:
       // 1. save files(image_util.)
-      List<File> savedImages = await saveXFileListAndReturnSavedPaths(selectedImages.value);
+      List<File> savedImages = await saveXFileListAndReturnSavedPaths(
+        selectedImages.value,
+      );
       // 2. get savedImages paths
       List<String> savedImagesPaths = savedImages.map((i) => i.path).toList();
 
       // 3. update itemImageUrls with savedImages paths
-      List<String> updatedItemImageUrls = List.from(itemImageUrls.value)..addAll(savedImagesPaths);
+      List<String> updatedItemImageUrls = List.from(itemImageUrls.value)
+        ..addAll(savedImagesPaths);
       itemImageUrls.value = updatedItemImageUrls;
       // 4. If there's only one image, make it the default image
-      if(itemImageUrls.value.length == 1) {
+      if (itemImageUrls.value.length == 1) {
         defaultItemImageUrl.value = itemImageUrls.value.first;
       }
       // 5. save inventoryItem through provider
       // 6. save inventoryItem to localDB
-
       final InventoryItemLocal itemToDB = InventoryItemLocal.toLocalDb(
         null,
         defaultItemImageUrl.value,
@@ -112,7 +113,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         purchaseDate.value,
         listingDate.value,
         soldDate.value,
-        null
+        null,
       );
       final InventoryItem itemToSave = InventoryItem(
         itemCategory: 'Furniture',
@@ -127,8 +128,8 @@ class AddInventoryFormDialog extends HookConsumerWidget {
 
       if (formKey.currentState?.validate() ?? false) {
         ref
-            .watch(inventoryProvider.notifier)
-            .addInventoryItem(itemToDB);
+            .watch(inventoryLocalProvider.notifier)
+            .addUserInventoryItemLocal(itemToDB);
 
         Navigator.of(context).pop(); // Close the dialog
       }
