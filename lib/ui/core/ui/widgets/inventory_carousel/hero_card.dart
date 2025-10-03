@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:vintage_1020/data/model/inventory_item_local/inventory_item_local.dart';
 
@@ -15,18 +17,18 @@ class HeroLayoutCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return item.primaryImageUrl == null ? Center(child: Text('Add pictures'),)
+    :
+     Stack(
       alignment: AlignmentDirectional.bottomStart,
       children: <Widget>[
         OverflowBox(
           maxHeight: height,
           maxWidth: width * 7 / 8,
           minWidth: width * 7 / 8,
-          child: Image(
-            fit: BoxFit.fitWidth,
-            image: FileImage(
-              item.itemImages!.first
-            ), // TODO: make the actual defaultImageUrl
+          child: Image.file(
+            File(item.primaryImageUrl!),
+
           ),
         ),
         // Padding(
