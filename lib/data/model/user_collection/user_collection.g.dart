@@ -9,10 +9,9 @@ part of 'user_collection.dart';
 _UserCollection _$UserCollectionFromJson(Map<String, dynamic> json) =>
     _UserCollection(
       username: json['username'] as String,
-      inventory: (json['inventory'] as Map<String, dynamic>).map(
-        (k, e) =>
-            MapEntry(k, InventoryItem.fromJson(e as Map<String, dynamic>)),
-      ),
+      inventory: (json['inventory'] as List<dynamic>?)
+          ?.map((e) => InventoryItem.fromJson(e as Map<String, dynamic>))
+          .toList(),
       timestamp: DateTime.parse(json['timestamp'] as String),
     );
 

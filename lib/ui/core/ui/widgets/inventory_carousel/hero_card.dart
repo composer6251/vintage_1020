@@ -17,7 +17,7 @@ class HeroLayoutCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return item.primaryImageUrl == null ? Center(child: Text('Add pictures'),)
+    return item.itemImageUrls!.isEmpty ? Container()
     :
      Stack(
       alignment: AlignmentDirectional.bottomStart,

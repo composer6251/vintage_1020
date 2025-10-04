@@ -39,21 +39,26 @@ class InventoryItemLocal {
 
   InventoryItemLocal.fromLocalDB(Map<String, dynamic> data)
     : id = data['id'],
-      primaryImageUrl = data['primaryImageUrl'],
+      userEmail = data?['email'],
+      primaryImageUrl = data?['primaryImageUrl'],
       itemDescription = data['itemDescription'],
-      itemImageUrls = List<String>.from(jsonDecode(data['itemImageUrls'])), // sqflite strings back to list of strings
-      itemCategory = data['itemPurchaitemCategoryseDate'],
+      itemImageUrls = data['itemImageUrls'] != null ? List<String>.from(jsonDecode(data['itemImageUrls'])) : [], // sqflite strings back to list of strings
+      itemCategory = data['itemCategory'],
       itemPurchasePrice = data['itemPurchasePrice'],
       itemListingPrice = data['itemListingPrice'],
       itemSoldPrice = data['itemSoldPrice'],
-      itemPurchaseDate = data['itemPurchaseDate'] as DateTime,
-      itemListingDate = data['itemListingDate'] as DateTime,
-      itemSoldDate = data['itemSoldDate'] as DateTime,
-      itemDimensions = data['itemDimensions'];
+      itemPurchaseDate = DateTime.parse(data['itemPurchaseDate']) as DateTime?,
+      itemListingDate = DateTime.parse(data['itemListingDate']) as DateTime?,
+      itemSoldDate = DateTime.parse(data['itemSoldDate']) as DateTime?,
+      itemDimensions = data['itemDimensions'] is Iterable ? Map.from(data?['itemDimensions']) : null;
 
     List<File>? get getItemImages {
       
       return itemImageUrls?.map((url) => File(url)).toList();
+    }
+    File get getPrimaryImage {
+      
+      return File(primaryImageUrl!);
     }
 
 

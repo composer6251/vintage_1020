@@ -6,17 +6,20 @@ part of 'inventory_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(InventoryNotifier)
-const inventoryNotifierProvider = InventoryNotifierProvider._();
+const inventoryProvider = InventoryNotifierProvider._();
 
 final class InventoryNotifierProvider
-    extends $NotifierProvider<InventoryNotifier, List<InventoryItem>> {
+    extends $NotifierProvider<InventoryNotifier, List<InventoryItemLocal>> {
   const InventoryNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'inventoryNotifierProvider',
+        name: r'inventoryProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
@@ -30,34 +33,32 @@ final class InventoryNotifierProvider
   InventoryNotifier create() => InventoryNotifier();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(List<InventoryItem> value) {
+  Override overrideWithValue(List<InventoryItemLocal> value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<List<InventoryItem>>(value),
+      providerOverride: $SyncValueProvider<List<InventoryItemLocal>>(value),
     );
   }
 }
 
-String _$inventoryNotifierHash() => r'6a2aa2bc213126e81df12e18f30e8e73e3fc6e8e';
+String _$inventoryNotifierHash() => r'd2a75fbf5cd358b95e9cc1ad5be2cc6f4dc80e87';
 
-abstract class _$InventoryNotifier extends $Notifier<List<InventoryItem>> {
-  List<InventoryItem> build();
+abstract class _$InventoryNotifier extends $Notifier<List<InventoryItemLocal>> {
+  List<InventoryItemLocal> build();
   @$mustCallSuper
   @override
   void runBuild() {
     final created = build();
-    final ref = this.ref as $Ref<List<InventoryItem>, List<InventoryItem>>;
+    final ref =
+        this.ref as $Ref<List<InventoryItemLocal>, List<InventoryItemLocal>>;
     final element =
         ref.element
             as $ClassProviderElement<
-              AnyNotifier<List<InventoryItem>, List<InventoryItem>>,
-              List<InventoryItem>,
+              AnyNotifier<List<InventoryItemLocal>, List<InventoryItemLocal>>,
+              List<InventoryItemLocal>,
               Object?,
               Object?
             >;
     element.handleValue(ref, created);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -87,18 +87,6 @@ class InventoryNotifier extends _$InventoryNotifier {
   }
 
   void addInventoryItem(InventoryItemLocal item) {
-    // InventoryItemLocal item = InventoryItemLocal(
-    //     itemImageUrls: item.itemImageUrls,
-    //     itemDescription: item.itemDescription,
-    //     itemPurchaseDate: item.itemPurchaseDate,
-    //     itemPurchasePrice: item.itemPurchasePrice,
-    //     itemCategory: item.itemCategory,
-    //     itemListingDate: item.itemListingDate,
-    //     itemListingPrice: item.itemListingPrice,
-    //     itemSoldPrice: item.itemSoldPrice,
-    //     primaryImageUrl: item.primaryImageUrl,
-    //     itemSoldDate: item.itemSoldDate,
-    //   );
     state = [
       ...state,
       item
@@ -112,8 +100,13 @@ class InventoryNotifier extends _$InventoryNotifier {
     LocalDb().insertIntoInventoryItem(item);
   }
 
-  Future<List<Set<InventoryItemLocal>>> getUserInventory() async {
-    List<Set<InventoryItemLocal>> inventory = await LocalDb().getUserInventoryLocal();
+  Future<List<InventoryItemLocal>> getUserInventory() async {
+    List<InventoryItemLocal> inventory = await LocalDb().getUserInventoryLocal();
+    // Get item ids for current state to avoid duplicates
+
+    // Create new list with unique ids
+
+    state = [...state, ...inventory];
 
     return inventory;
   }

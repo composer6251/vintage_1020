@@ -21,27 +21,24 @@ class _AuthGateState extends ConsumerState<UserAuthGate> {
   void initState() {
     super.initState();
 
-    // _authStateSubscription = FirebaseAuth.instance.authStateChanges().listen((
-    //   user,
-    // ) async {
-    //   if (user != null && !_apiCallTriggeredForCurrentUser) {
-    //     print(
-    //       'User ${user.email} is signed in! Triggering API call via Riverpod.',
-    //     );
-    //     _apiCallTriggeredForCurrentUser =
-    //         true; // Set flag to prevent re-triggering
-    //     ref.read(userNotifierProvider.notifier).setUserEmail(user.email!);
-    //     String userEmail = ref.read(userNotifierProvider).userEmail;
-    //     print(userEmail);
+    _authStateSubscription = FirebaseAuth.instance.authStateChanges().listen((
+      user,
+    ) async {
+      if (user != null && !_apiCallTriggeredForCurrentUser) {
+        print(
+          'User ${user.email} is signed in! Triggering API call via Riverpod.',
+        );
+        _apiCallTriggeredForCurrentUser =
+            true; // Set flag to prevent re-triggering
         
-    //   } else if (user == null) {
-    //     print('User signed out. Clearing API data in Riverpod.');
-    //     _apiCallTriggeredForCurrentUser = false; // Reset flag for next login
+      } else if (user == null) {
+        print('User signed out. Clearing API data in Riverpod.');
+        _apiCallTriggeredForCurrentUser = false; // Reset flag for next login
 
-    //     // Clear any user-specific data from your providers when the user logs out
-    //     // ref.read(inventoryNotifierProvider.notifier).clearUserInventory();
-    //   }
-    // });
+        // Clear any user-specific data from your providers when the user logs out
+        // ref.read(inventoryNotifierProvider.notifier).clearUserInventory();
+      }
+    });
   }
 
   @override

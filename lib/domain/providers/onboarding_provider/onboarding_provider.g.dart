@@ -6,6 +6,9 @@ part of 'onboarding_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(hasSeenOnBoardingScreen)
 const hasSeenOnBoardingScreenProvider = HasSeenOnBoardingScreenProvider._();
 
@@ -47,6 +50,3 @@ final class HasSeenOnBoardingScreenProvider
 
 String _$hasSeenOnBoardingScreenHash() =>
     r'3097ce6a40cb295c79eb153e3a09d0d98c88bde3';
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

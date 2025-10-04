@@ -11,10 +11,12 @@ import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/hero_card.dar
 class InventoryCarousel extends ConsumerStatefulWidget {
   const InventoryCarousel({
     super.key,
+    required this.inventoryItems,
     required this.width,
     required this.height,
     required this.flexWeights,
   });
+  final List<InventoryItemLocal> inventoryItems;
   final double width;
   final double height;
   final List<int> flexWeights;

@@ -25,7 +25,6 @@ final String inventoryItemTable = 'inventory_item';
 
 class LocalDb {
   Future<Database> _getDatabase() async {
-    print('creating DB');
     final dbPath = await sql.getDatabasesPath();
 
     final db = await sql.openDatabase(
@@ -35,8 +34,6 @@ class LocalDb {
       },
       version: 1,
     );
-
-    // _createUserAndInventoryTables(db);
 
     return db;
   }
@@ -74,6 +71,7 @@ class LocalDb {
 
     db.insert(inventoryItemTable, {
       'id': item.id,
+      'email': userEmail,
       'primaryImageUrl': item.primaryImageUrl,
       'itemDescription': item.itemDescription,
       'itemImageUrls': json.encode(item.itemImageUrls), // sqflite does have a List type, so encode to String
@@ -93,8 +91,10 @@ class LocalDb {
 
     db.insert(inventoryItemTable, {
       'id': item.id,
+      'email': userEmail,
       'primaryImageUrl': item.primaryImageUrl,
       'itemDescription': item.itemDescription,
+      'itemImageUrls': json.encode(item.itemImageUrls), // sqflite does have a List type, so encode to String
       'itemCategory': item.itemCategory,
       'itemPurchasePrice': item.itemPurchasePrice,
       'itemListingPrice': item.itemListingPrice,
@@ -105,29 +105,33 @@ class LocalDb {
       'itemDimensions': item.itemDimensions,
     });
   }
-  ///
-  ///1. json encode imageUrls for db
-  ///2. json decode imageUrls from db
-  ///3. 
 
-  Future<List<Set<InventoryItemLocal>>> getUserInventoryLocal() async {
+  Future<List<InventoryItemLocal>> getUserInventoryLocal() async {
     printAllRowsInTable();
     final db = await _getDatabase();
     final data = await db.query(
       inventoryItemTable,
       where: 'email = "$userEmail"',
     );
-    print('Records retrieved from local DB: ${data.length}');
-    
     List<Set<InventoryItemLocal>> inventory = data.map((row) => {
       
       InventoryItemLocal.fromLocalDB(row)
     }).toList();
-    print(
-      'Records from local DB mapped to InventoryItemLocal: ${inventory.length}',
-    );
 
-    return inventory;
+    // Create List from the List<Set> returned
+    List<InventoryItemLocal> flattenedInventory = [];
+
+    for(Set<InventoryItemLocal> set in inventory) {
+      flattenedInventory.addAll(set);
+    }
+
+    return flattenedInventory;
+  }
+
+  Future<void> deleteInventoryItem(String id) async {
+
+      final db = await _getDatabase();
+      final int deletedId = await db.delete(inventoryItemTable, where: 'id = ');
   }
 
   Future printAllRowsInTable() async {
@@ -135,7 +139,5 @@ class LocalDb {
     // show the results: print all rows in the db
     print('\n\n\nPRINTING RESULTS FROM ALL ITEMS IN INVENTORY ITEM TABLE');
     print(await db.query(inventoryItemTable));
-    print('\n\n\nPRINTING RESULTS FROM ALL ITEMS IN INVENTORY ITEM TABLE');
-    print(await db.query(userTable));
   }
 }

@@ -32,6 +32,7 @@ class InventoryOverviewTab extends ConsumerWidget {
             hintText: 'Search',
           ),
           InventoryCarousel(
+            inventoryItems: [],
             height: height / 2,
             width: width,
             flexWeights: [1, 2, 1],

@@ -6,6 +6,9 @@ part of 'firestore_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+
 @ProviderFor(FirestoreProvider)
 const firestoreProviderProvider = FirestoreProviderProvider._();
 
@@ -38,7 +41,7 @@ final class FirestoreProviderProvider
   }
 }
 
-String _$firestoreProviderHash() => r'dee96b8ec6f2d5f0c8ab7d8578ba2273160f1415';
+String _$firestoreProviderHash() => r'5b75d465e89eb3dd31666c03469e432258367d89';
 
 abstract class _$FirestoreProvider extends $Notifier<List<InventoryItem>> {
   List<InventoryItem> build();
@@ -58,6 +61,3 @@ abstract class _$FirestoreProvider extends $Notifier<List<InventoryItem>> {
     element.handleValue(ref, created);
   }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
