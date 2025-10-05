@@ -21,9 +21,6 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
   @override
   void initState() {
     super.initState();
-    // _itemsFuture = ref
-    //     .read(firestoreProviderProvider.notifier)
-    //     .getInventoryByDocumentId();
     _itemsFuture = ref
         .read(inventoryLocalProvider.notifier)
         .getUserInventory();

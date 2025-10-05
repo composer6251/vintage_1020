@@ -17,10 +17,9 @@ class AuthGate extends HookConsumerWidget {
           return SignInScreen(
             showAuthActionSwitch: true,
             providers: [
-              // This is where you list the authentication providers you want to offer.
               EmailAuthProvider(),
-              // If you enabled Google Sign-In, you'd add:
-              // GoogleProvider(clientId: "YOUR_WEBCLIENT_ID"), // Replace with your actual Web Client ID if supporting web
+              // To enable google sign
+              // GoogleProvider(clientId: "YOUR_WEBCLIENT_ID"), // Replace with  actual Web Client ID if supporting web
             ],
             // Customize the header (top part) of the sign-in screen
             headerBuilder: (context, constraints, shrinkOffset) {
@@ -64,11 +63,6 @@ class AuthGate extends HookConsumerWidget {
             },
           );
         }
-      // Get user credentials:
-      // TODO: Add email to SharedPreferences or Hive
-      final userEmail = snapshot.data?.email ?? 'No email';
-      // getInventoryByUserEmail(userEmail);
-      // ref.watch(userNotifierProvider.notifier).setUserEmail(userEmail);
         return UiContainer();
       },
     );

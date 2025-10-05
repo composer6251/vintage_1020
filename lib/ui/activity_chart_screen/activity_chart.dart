@@ -140,6 +140,8 @@ class ActivityChart extends StatelessWidget {
         reservedSize: 50,
       );
 
+/// TODO: UPDATE BY DATES OF INVENTORY PURCHASING/LISTING/SELLING DATES
+/// OR JUST SELLING DATES
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
       fontWeight: FontWeight.bold,
@@ -171,7 +173,7 @@ class ActivityChart extends StatelessWidget {
         getTitlesWidget: bottomTitleWidgets,
       );
 
-  FlGridData get gridData => const FlGridData(show: false);
+  FlGridData get gridData => const FlGridData(show: true);
 
   FlBorderData get borderData => FlBorderData(
         show: true,
@@ -184,6 +186,9 @@ class ActivityChart extends StatelessWidget {
         ),
       );
 
+/// UPDATE LineChartBarData
+/// X, Y Based. X = 0 is Left, Y = 0 is bottom
+/// TODO: ADD LOGIC FOR SPECIAL SALES. GRAND OPENING, CHRISTMAS EXTRAVAGANZA...ETC
   LineChartBarData get lineChartBarData1_1 => LineChartBarData(
         isCurved: true,
         color: Colors.red,

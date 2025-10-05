@@ -68,9 +68,6 @@ Future<List<XFile>> pickMultipleImagesFromGallery() async {
   return pickedFiles;
 }
 
-
-
-///
 //**************** IMAGE SAVING ************
 
 // SAVING WITH FILE.copy

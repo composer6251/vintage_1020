@@ -56,6 +56,7 @@ class InventoryItemLocal {
       
       return itemImageUrls?.map((url) => File(url)).toList();
     }
+    
     File get getPrimaryImage {
       
       return File(primaryImageUrl!);

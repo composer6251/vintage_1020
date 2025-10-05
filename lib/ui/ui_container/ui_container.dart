@@ -6,7 +6,7 @@ import 'package:vintage_1020/ui/core/ui/widgets/dialog/add_inventory_form_dialog
 import 'package:vintage_1020/ui/edit_inventory_item/edit_inventory_tab.dart';
 import 'package:vintage_1020/ui/image_testing.dart';
 import 'package:vintage_1020/ui/manage_inventory_tab/manage_inventory_tab.dart';
-import 'package:vintage_1020/ui/manage_inventory_tab/widgets/activity_chart.dart';
+import 'package:vintage_1020/ui/activity_chart_screen/activity_chart.dart';
 import 'package:vintage_1020/ui/my_booth_tab/my_booth_tab.dart';
 
 class UiContainer extends StatefulHookConsumerWidget {
@@ -23,7 +23,6 @@ class _HomeScreenState extends ConsumerState<UiContainer> {
   @override
   void initState() {
     super.initState();
-    // createUser();
   }
 
   void openAddInventoryDialog() {
@@ -60,7 +59,6 @@ class _HomeScreenState extends ConsumerState<UiContainer> {
           mainAxisSize: MainAxisSize.min,
           children: [
             TabViewsContent(
-              // userEmail: widget.userEmail
             ),
           ],
         ),
@@ -83,7 +81,6 @@ class TabViewsContent extends HookConsumerWidget {
     Tab(text: 'Manage', icon: Icon(Icons.chair_rounded)),
     Tab(text: 'Edit', icon: Icon(Icons.price_check)),
     Tab(text: 'Sales', icon: Icon(Icons.bar_chart)),
-    Tab(text: 'TEST', icon: Icon(Icons.bar_chart)),
   ];
 
   @override
@@ -118,7 +115,6 @@ class TabViewsContent extends HookConsumerWidget {
               ManageInventoryTab(),
               EditItemTab(),
               ActivityChart(isShowingMainData: true),
-              ImageTesting(),
             ],
           ),
         ),

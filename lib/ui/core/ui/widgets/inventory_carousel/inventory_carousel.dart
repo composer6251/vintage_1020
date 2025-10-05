@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:vintage_1020/data/model/inventory_item_local/inventory_item_local.dart';
-import 'package:vintage_1020/domain/providers/firestore_provider/firestore_provider.dart';
 import 'package:vintage_1020/domain/providers/inventory_local_provider/inventory_local_provider.dart';
 import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/hero_card.dart';
@@ -28,15 +27,15 @@ class InventoryCarousel extends ConsumerStatefulWidget {
 class _InventoryCarouselState extends ConsumerState<InventoryCarousel> {
   List<File?> itemImages = [];
 
+
   void setItemImages(List<String> itemImageUrls) async {
-     itemImages = await getAssetsFromInventoryAlbum();
+    itemImages = await getAssetsFromInventoryAlbum();
   }
 
   @override
   Widget build(BuildContext context) {
-    // final items = ref.watch(firestoreProviderProvider);
-    final List<InventoryItemLocal> images = ref.watch(inventoryLocalProvider);
-
+    final List<InventoryItemLocal> inventory = ref.watch(inventoryLocalProvider);
+    List<File>? images = inventory.first.getItemImages;
     return Column(
       children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
@@ -49,7 +48,7 @@ class _InventoryCarouselState extends ConsumerState<InventoryCarousel> {
             // controller: controller,
             itemSnapping: true,
             flexWeights: widget.flexWeights,
-            children: images
+            children: inventory
                 .map(
                   (i) => HeroLayoutCard(
                     item: i,

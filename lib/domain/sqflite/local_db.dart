@@ -8,7 +8,6 @@ import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:sqflite/sqlite_api.dart';
 import 'package:uuid/uuid.dart';
-import 'package:vintage_1020/data/model/inventory_item/inventory.dart';
 import 'package:vintage_1020/data/model/inventory_item_local/inventory_item_local.dart';
 
 final String dbName = 'vintage_1020.db';
@@ -23,7 +22,6 @@ final String buildCreateInventoryTableSql =
 final String userTable = 'user';
 final String inventoryItemTable = 'inventory_item';
 
-class LocalDb {
   Future<Database> _getDatabase() async {
     final dbPath = await sql.getDatabasesPath();
 
@@ -37,6 +35,7 @@ class LocalDb {
 
     return db;
   }
+class LocalDb {
 
   Future<void> _createUserAndInventoryTables(Database db) async {
     print('\nCreating user and inventory tables\n');
