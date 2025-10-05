@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:vintage_1020/data/model/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/domain/providers/inventory_local_provider/inventory_local_provider.dart';
+import 'package:path_provider/path_provider.dart' as sys_path;
+import 'package:path/path.dart' as path;
 
 class HeroLayoutCard extends ConsumerWidget {
   HeroLayoutCard({
@@ -16,11 +18,13 @@ class HeroLayoutCard extends ConsumerWidget {
   final InventoryItemLocal item;
   final double height;
   final double width;
+  final Directory appDir =  sys_path.getApplicationDocumentsDirectory() as Directory;
+
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(inventoryLocalProvider.notifier);
-    return item.itemImageUrls!.isEmpty
+    return item.primaryImageUrl == null
         ? Container()
         : Stack(
             alignment: AlignmentDirectional.bottomStart,
@@ -29,7 +33,9 @@ class HeroLayoutCard extends ConsumerWidget {
                 maxHeight: height,
                 maxWidth: width * 7 / 8,
                 minWidth: width * 7 / 8,
-                child: Image.file(File(item.primaryImageUrl!)),
+                child: Image.memory(item.getPrimaryImage.readAsBytesSync()),
+                // child: Image.file(item.getPrimaryImage)
+                // child: Image.file(File(item.getPrimaryImage.path)),
               ),
               // Padding(
               //   padding: const EdgeInsets.fromLTRB(18.0, 18, 18, 18),

@@ -51,5 +51,7 @@
 	</array>
 	<key>NSPhotoLibraryUsageDescription</key>
     <string>In order to access your photo library</string>
+	<key>NSCameraUsageDescription</key>
+    <string>Camera Photos are only used to store for usage associated with vintage_1020</string>
 </dict>
 </plist>
