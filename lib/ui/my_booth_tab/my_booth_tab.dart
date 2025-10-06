@@ -60,7 +60,6 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
                   height: height * .40,
                   flexWeights: [1, 2, 1],
                 ),
-                // TextButton(onPressed:() => getInventoryByEmail(userEmail), child: Text('Refresh Inventory'))
               ],
             );
           }

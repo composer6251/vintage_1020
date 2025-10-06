@@ -20,6 +20,8 @@ class InventoryItemLocal {
   DateTime? itemListingDate;
   DateTime? itemSoldDate;
   Map<String, String>? itemDimensions;
+
+
   // TODO ADD itemImageUrls List -> String, String ...etc
   InventoryItemLocal.toLocalDb(
     this.id,

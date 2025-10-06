@@ -35,7 +35,6 @@ class _InventoryCarouselState extends ConsumerState<InventoryCarousel> {
   @override
   Widget build(BuildContext context) {
     final List<InventoryItemLocal> inventory = ref.watch(inventoryLocalProvider);
-    List<File>? images = inventory.first.getItemImages;
     return Column(
       children: [
         Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [

@@ -57,18 +57,14 @@ class InventoryLocal extends _$InventoryLocal {
     return state;
   }
 
-  Future<List<InventoryItemLocal>> deleteUserInventoryByEmail() async {
-    LocalDb().deleteUserInventory();
+  Future<int> deleteUserInventoryByEmail() async {
+    int numberOfDeletedItems = await LocalDb().deleteUserInventory();
 
     List<InventoryItemLocal> items = await LocalDb().getUserInventoryLocal();
     if (items.isEmpty) {
-      state = [];
+      state = [...items];
     }
 
-    return items;
-  }
-
-  void resetState() {
-    state = [];
+    return numberOfDeletedItems;
   }
 }
