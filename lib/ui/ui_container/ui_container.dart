@@ -35,17 +35,17 @@ class _HomeScreenState extends ConsumerState<UiContainer> {
     );
   }
 
-  deleteUserInventory() async {
-    List<InventoryItemLocal> items = await ref
+  void deleteUserInventory() async {
+    int numberOfDeletedItems = await ref
         .watch(inventoryLocalProvider.notifier)
         .deleteUserInventoryByEmail();
 
-    String message = 'Deleted User Inventory of ${items.length} items';
+    String message = 'Deleted User Inventory of $numberOfDeletedItems items';
 
     showSnackBar(message);
   }
 
-  showSnackBar(String message) {
+  void showSnackBar(String message) {
     var sb = SnackBar(content: Text(message));
     ScaffoldMessenger.of(context).showSnackBar(sb);
   }

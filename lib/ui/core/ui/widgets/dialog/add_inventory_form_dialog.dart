@@ -34,22 +34,23 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     final purchaseDate = useState(DateTime.now());
     final listingDate = useState(DateTime.now());
     final soldDate = useState(DateTime.now());
-    final photo = useState<XFile?>(null);
     final selectedImages = useState<List<XFile>>([]);
     final selectedImagesAsFiles = useState<List<File>>([]);
     final itemImageUrls = useState<List<String>>([]);
     final defaultItemImageUrl = useState<String>('');
 
     /// AFTER USER SELECTS PHOTOS OR TAKES A PHOTO, UPDATE THE EPHEMERAL STATE
-    void updateSelectedImagesState(List<File> imagesToAdd) {
-      final List<File> newImagesState = List.from(selectedImagesAsFiles.value)
+    void updateSelectedImagesState(List<XFile> imagesToAdd) {
+      final List<XFile> newImagesState = List.from(selectedImagesAsFiles.value)
         ..addAll(imagesToAdd);
-      selectedImagesAsFiles.value = newImagesState;
+      selectedImages.value = newImagesState;
     }
 
     /// TAKE PHOTO ON PHOTO AND USE FOR ITEM
     Future<void> takePhoto() async {
-      File? photoTaken = await takeCameraPhoto();
+      final XFile? photoTaken = await takeCameraPhoto();
+      
+      if(photoTaken == null) return;
 
       // UPDATE STATE. PASS IN IMAGES AS LIST
       updateSelectedImagesState([photoTaken]);
@@ -58,12 +59,10 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     Future<void> selectImages() async {
       List<XFile> selectedImagesFromGallery =
           await pickMultipleImagesFromGallery();
-      final List<XFile> files = selectedImagesFromGallery;
-      final List<XFile> newImagesState = List.from(selectedImages.value)
-        ..addAll(files);
+      
+      if(selectedImagesFromGallery.isEmpty) return;
 
-      // Add to selected images to ephemeral state
-      selectedImages.value = newImagesState;
+      updateSelectedImagesState(selectedImagesFromGallery);
     }
 
     Future<void> selectDate(String type) async {
@@ -83,6 +82,11 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         return;
       }
       purchaseDate.value = pickedDate;
+    }
+
+
+    void closeDialog(){
+        Navigator.of(context).pop(); // Close the dialog
     }
 
     void submit() async {
@@ -123,8 +127,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         ref
             .watch(inventoryLocalProvider.notifier)
             .addUserInventoryItemLocal(itemToDB);
-
-        Navigator.of(context).pop(); // Close the dialog
+        closeDialog();
       }
     }
 

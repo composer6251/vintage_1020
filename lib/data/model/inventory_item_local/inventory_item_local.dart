@@ -20,6 +20,8 @@ class InventoryItemLocal {
   DateTime? itemListingDate;
   DateTime? itemSoldDate;
   Map<String, String>? itemDimensions;
+  
+  
   // TODO ADD itemImageUrls List -> String, String ...etc
   InventoryItemLocal.toLocalDb(
     this.id,
@@ -51,6 +53,7 @@ class InventoryItemLocal {
       itemListingDate = DateTime.parse(data['itemListingDate']) as DateTime?,
       itemSoldDate = DateTime.parse(data['itemSoldDate']) as DateTime?,
       itemDimensions = data['itemDimensions'] is Iterable ? Map.from(data?['itemDimensions']) : null;
+      
 
     List<File>? get getItemImages {
       

@@ -36,7 +36,7 @@ final String appNameForImages = 'Vintage_1020';
 
 ///
 /// OPEN CAMERA AND RETURN PHOTO TAKEN
-Future<File> takeCameraPhoto() async {
+Future<XFile?> takeCameraPhoto() async {
   // INSTANTIATE IMAGE PICKER
   final picker = ImagePicker();
 
@@ -45,10 +45,10 @@ Future<File> takeCameraPhoto() async {
     source: ImageSource.camera,
     imageQuality: 90,
   );
-  File file = getFileFromXFile(image!);
-  AlertDialog(content: Text('Picking photo with path ${file.path}'));
+  // File file = getFileFromXFile(image!);
+  // AlertDialog(content: Text('Picking photo with path ${file.path}'));
 
-  return file;
+  return image;
 }
 
 /// CONVERT XFILE FROM SELECTED PHOTO/TAKEN PHOTO TO FILE TYPE

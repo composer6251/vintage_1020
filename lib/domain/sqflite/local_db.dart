@@ -132,15 +132,17 @@ class LocalDb {
 
   Future<void> deleteInventoryItem(String id) async {
     final db = await _getDatabase();
-    final int deletedId = await db.delete(inventoryItemTable, where: 'id = ');
+    await db.delete(inventoryItemTable, where: 'id = ');
   }
 
-  Future<void> deleteUserInventory() async {
+  Future<int> deleteUserInventory() async {
     print('\n\n\n DELETING USER INVENTORY FOR EMAIL: $userEmail');
 
     final db = await _getDatabase();
     final int deletedId = await db.delete(inventoryItemTable, where: 'email = "$userEmail"');
     print('\n\n\n DELETED USER INVENTORY: $deletedId');
+
+    return deletedId;
 
   }
 
