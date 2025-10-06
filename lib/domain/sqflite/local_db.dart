@@ -90,23 +90,25 @@ class LocalDb {
   void insertIntoInventoryItem(InventoryItemLocal item) async {
     final db = await _getDatabase();
 
-    db.insert(inventoryItemTable, {
-      'id': item.id,
-      'email': userEmail,
-      'primaryImageUrl': item.primaryImageUrl,
-      'itemDescription': item.itemDescription,
-      'itemImageUrls': json.encode(
-        item.itemImageUrls,
-      ), // sqflite does have a List type, so encode to String
-      'itemCategory': item.itemCategory,
-      'itemPurchasePrice': item.itemPurchasePrice,
-      'itemListingPrice': item.itemListingPrice,
-      'itemSoldPrice': item.itemSoldPrice,
-      'itemPurchaseDate': item.itemPurchaseDate?.toIso8601String(),
-      'itemListingDate': item.itemListingDate?.toIso8601String(),
-      'itemSoldDate': item.itemSoldDate?.toIso8601String(),
-      'itemDimensions': item.itemDimensions,
-    });
+    db.insert(inventoryItemTable, item.toMapForLocalDB());
+
+    // db.insert(inventoryItemTable, {
+    //   'id': item.id,
+    //   'email': userEmail,
+    //   'primaryImageUrl': item.primaryImageUrl,
+    //   'itemDescription': item.itemDescription,
+    //   'itemImageUrls': json.encode(
+    //     item.itemImageUrls,
+    //   ), // sqflite does have a List type, so encode to String
+    //   'itemCategory': item.itemCategory,
+    //   'itemPurchasePrice': item.itemPurchasePrice,
+    //   'itemListingPrice': item.itemListingPrice,
+    //   'itemSoldPrice': item.itemSoldPrice,
+    //   'itemPurchaseDate': item.itemPurchaseDate?.toIso8601String(),
+    //   'itemListingDate': item.itemListingDate?.toIso8601String(),
+    //   'itemSoldDate': item.itemSoldDate?.toIso8601String(),
+    //   'itemDimensions': item.itemDimensions,
+    // });
   }
 
   Future<List<InventoryItemLocal>> getUserInventoryLocal() async {
@@ -139,9 +141,11 @@ class LocalDb {
     print('\n\n\n DELETING USER INVENTORY FOR EMAIL: $userEmail');
 
     final db = await _getDatabase();
-    final int deletedId = await db.delete(inventoryItemTable, where: 'email = "$userEmail"');
+    final int deletedId = await db.delete(
+      inventoryItemTable,
+      where: 'email = "$userEmail"',
+    );
     print('\n\n\n DELETED USER INVENTORY: $deletedId');
-
   }
 
   Future printAllRowsInTable() async {

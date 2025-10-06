@@ -7,34 +7,13 @@ import 'package:photo_manager/photo_manager.dart';
 import 'package:path_provider/path_provider.dart' as sys_path;
 import 'package:path/path.dart' as path;
 
-/******* IMAGE CHEAT SHEET
- *      ImagePicker returns XFile types, which are abstractions so that they are platform independent. 
- *      XFiles can be cast to File types.
- *      
- *      *The path_provider package can be utilized to get the application documents directory to use a save location path
- *      
- *      Image Files can be saved via File.copy
- *      
- *      
- * 
- * 
- *      The UI layer can render File types
- * 
- * 
- * 
- * 
- */
 
-///
 ///CONSTANTS *****************************
 
 final String appNameForImages = 'Vintage_1020';
 
-///
 /// ************** IMAGE SELECTING *********
-///
 
-///
 /// OPEN CAMERA AND RETURN PHOTO TAKEN
 Future<File> takeCameraPhoto() async {
   // INSTANTIATE IMAGE PICKER
@@ -82,7 +61,7 @@ Future<List<File>> saveXFileListAndReturnSavedPaths(List<XFile> xFiles) async {
 
 List<String> getPathsForSavedFiles(List<File> savedFiles) {
   List<String> paths = [];
-  for (var savedFile in savedFiles) {
+  for (File savedFile in savedFiles) {
     paths.add(savedFile.path);
   }
 
@@ -220,11 +199,6 @@ Future<List<String>> saveSingleXFileImageController(
     image.path,
     null,
   );
-  final assetEntityFile = await savedImage.file;
-
-  print(
-    'IMAGE_UTIL.saveImageCurrent saved image path(assetEntityFile.path): ${assetEntityFile?.path}',
-  );
 
   // Adds image reference to the album created above
   await PhotoManager.plugin.copyAssetToGallery(savedImage, pathEntity);
@@ -233,8 +207,7 @@ Future<List<String>> saveSingleXFileImageController(
     savedImage.id,
     isOrigin: false,
   );
-  print('IMAGE_UTIL.saveImageCurrent photoURL: $photoUrl');
-  // Return imageUrl
+
   return [photoUrl!];
 }
 

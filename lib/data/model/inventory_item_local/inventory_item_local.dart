@@ -42,7 +42,9 @@ class InventoryItemLocal {
       userEmail = data?['email'],
       primaryImageUrl = data?['primaryImageUrl'],
       itemDescription = data['itemDescription'],
-      itemImageUrls = data['itemImageUrls'] != null ? List<String>.from(jsonDecode(data['itemImageUrls'])) : [], // sqflite strings back to list of strings
+      itemImageUrls = data['itemImageUrls'] != null
+          ? List<String>.from(jsonDecode(data['itemImageUrls']))
+          : [], // sqflite strings back to list of strings
       itemCategory = data['itemCategory'],
       itemPurchasePrice = data['itemPurchasePrice'],
       itemListingPrice = data['itemListingPrice'],
@@ -50,18 +52,35 @@ class InventoryItemLocal {
       itemPurchaseDate = DateTime.parse(data['itemPurchaseDate']) as DateTime?,
       itemListingDate = DateTime.parse(data['itemListingDate']) as DateTime?,
       itemSoldDate = DateTime.parse(data['itemSoldDate']) as DateTime?,
-      itemDimensions = data['itemDimensions'] is Iterable ? Map.from(data?['itemDimensions']) : null;
+      itemDimensions = data['itemDimensions'] is Iterable
+          ? Map.from(data?['itemDimensions'])
+          : null;
 
-    List<File>? get getItemImages {
-      
-      return itemImageUrls?.map((url) => File(url)).toList();
-    }
-    
-    File get getPrimaryImage {
-      
-      return File(primaryImageUrl!);
-    }
+  Map<String, dynamic> toMapForLocalDB() {
+    return <String, dynamic>{
+      "id": id,
+      "email": userEmail,
+      "primaryImageUrl": primaryImageUrl,
+      "itemDescription": itemDescription,
+      "itemImageUrls": jsonEncode(itemImageUrls),
+      "itemCategory": itemCategory,
+      "itemPurchasePrice": itemPurchasePrice,
+      "itemListingPrice": itemListingPrice,
+      "itemSoldPrice": itemSoldPrice,
+      "itemPurchaseDate": itemPurchaseDate?.toIso8601String(),
+      "itemListingDate": itemListingDate?.toIso8601String(),
+      "itemSoldDate": itemSoldDate?.toIso8601String(),
+      "itemDimensions": itemDimensions,
+    };
+  }
 
+  List<File>? get getItemImages {
+    return itemImageUrls?.map((url) => File(url)).toList();
+  }
+
+  File get getPrimaryImage {
+    return File(primaryImageUrl!);
+  }
 
   InventoryItemLocal.fromJson(Map<String, dynamic> json)
     : id = json['id'],
