@@ -6,6 +6,7 @@ import 'package:vintage_1020/domain/providers/inventory_local_provider/inventory
 import 'package:vintage_1020/domain/providers/inventory_provider/inventory_provider.dart';
 import 'package:vintage_1020/domain/sqflite/local_db.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/inventory_carousel.dart';
+import 'package:vintage_1020/utils/scaffold_state_provider.dart';
 
 class MyBoothTab extends ConsumerStatefulWidget {
   // late final Future<void> _itemsFuture;
@@ -21,9 +22,8 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
   @override
   void initState() {
     super.initState();
-    _itemsFuture = ref
-        .read(inventoryLocalProvider.notifier)
-        .getUserInventory();
+    /***ASYNC CALL TO GET USER INVENTORY WHILE FUTURE BUILDER AWAITS */
+    _itemsFuture = ref.read(inventoryLocalProvider.notifier).getUserInventory();
   }
 
   @override

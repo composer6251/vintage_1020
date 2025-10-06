@@ -2,6 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
+import 'package:vintage_1020/data/model/inventory_item_local/inventory_item_local.dart';
+import 'package:vintage_1020/domain/providers/inventory_local_provider/inventory_local_provider.dart';
+import 'package:vintage_1020/domain/sqflite/local_db.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/add_inventory_form_dialog.dart';
 import 'package:vintage_1020/ui/edit_inventory_item/edit_inventory_tab.dart';
 import 'package:vintage_1020/ui/image_testing.dart';
@@ -32,6 +35,21 @@ class _HomeScreenState extends ConsumerState<UiContainer> {
     );
   }
 
+  deleteUserInventory() async {
+    List<InventoryItemLocal> items = await ref
+        .watch(inventoryLocalProvider.notifier)
+        .deleteUserInventoryByEmail();
+
+    String message = 'Deleted User Inventory of ${items.length} items';
+
+    showSnackBar(message);
+  }
+
+  showSnackBar(String message) {
+    var sb = SnackBar(content: Text(message));
+    ScaffoldMessenger.of(context).showSnackBar(sb);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,6 +63,10 @@ class _HomeScreenState extends ConsumerState<UiContainer> {
               auth.currentUser?.sendEmailVerification();
             },
           ),
+          TextButton(
+            onPressed: deleteUserInventory,
+            child: Text('Delete User Inventory'),
+          ),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
@@ -57,10 +79,7 @@ class _HomeScreenState extends ConsumerState<UiContainer> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
-          children: [
-            TabViewsContent(
-            ),
-          ],
+          children: [TabViewsContent()],
         ),
       ),
       floatingActionButton: FloatingActionButton(

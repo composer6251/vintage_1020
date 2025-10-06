@@ -11,6 +11,8 @@ import 'package:vintage_1020/ui/auth_gate/user_auth_gate.dart';
 
 import 'firebase_options.dart';
 
+import 'package:vintage_1020/utils/globals.dart' as globals;
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (kIsWeb) {
@@ -19,27 +21,23 @@ Future<void> main() async {
     );
     // INITIALIZE Firestore persistence
     FirebaseFirestore.instance.settings = Settings(persistenceEnabled: true);
-    
-
   } else {
     await Firebase.initializeApp();
-    @Riverpod(keepAlive: true)
-    InventoryRepository inventoryRepository(Ref ref) => InventoryRepositoryImpl();
+    // @Riverpod(keepAlive: true)
+    // InventoryRepository inventoryRepository(Ref ref) => InventoryRepositoryImpl();
   }
   // Wrap entire app in ProviderScope to use RiverPod
   runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  List<InventoryItem> getUserInventory() {
-    return [];
-  }
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      /***KEY TO ACCESS BUILD CONTEXT THROUGHOUT APP FOR SNACKBARS...ETC */
+      scaffoldMessengerKey: globals.scaffoldKey,
       debugShowCheckedModeBanner: false,
       title: 'Vintage 1020',
       theme: ThemeData(
@@ -47,7 +45,7 @@ class MyApp extends StatelessWidget {
           // primary: Colors.white, // Date pickersubmit, tab bar selected button color
           secondary: Colors.black,
           primaryContainer: Colors.red,
-          secondaryContainer: Colors.redAccent, 
+          secondaryContainer: Colors.redAccent,
           surface: Colors.white, // Background color
           onSurface: Colors.black, // Search bar text color
           onPrimary: Colors.black,

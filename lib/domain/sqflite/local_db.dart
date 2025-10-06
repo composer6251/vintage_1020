@@ -22,21 +22,21 @@ final String buildCreateInventoryTableSql =
 final String userTable = 'user';
 final String inventoryItemTable = 'inventory_item';
 
-  Future<Database> _getDatabase() async {
-    final dbPath = await sql.getDatabasesPath();
+Future<Database> _getDatabase() async {
+  final dbPath = await sql.getDatabasesPath();
 
-    final db = await sql.openDatabase(
-      path.join(dbPath, dbName),
-      onCreate: (db, version) {
-        return db.execute(buildCreateInventoryTableSql);
-      },
-      version: 1,
-    );
+  final db = await sql.openDatabase(
+    path.join(dbPath, dbName),
+    onCreate: (db, version) {
+      return db.execute(buildCreateInventoryTableSql);
+    },
+    version: 1,
+  );
 
-    return db;
-  }
+  return db;
+}
+
 class LocalDb {
-
   Future<void> _createUserAndInventoryTables(Database db) async {
     print('\nCreating user and inventory tables\n');
     // TODO check if table exists
@@ -73,7 +73,9 @@ class LocalDb {
       'email': userEmail,
       'primaryImageUrl': item.primaryImageUrl,
       'itemDescription': item.itemDescription,
-      'itemImageUrls': json.encode(item.itemImageUrls), // sqflite does have a List type, so encode to String
+      'itemImageUrls': json.encode(
+        item.itemImageUrls,
+      ), // sqflite does have a List type, so encode to String
       'itemCategory': item.itemCategory,
       'itemPurchasePrice': item.itemPurchasePrice,
       'itemListingPrice': item.itemListingPrice,
@@ -93,7 +95,9 @@ class LocalDb {
       'email': userEmail,
       'primaryImageUrl': item.primaryImageUrl,
       'itemDescription': item.itemDescription,
-      'itemImageUrls': json.encode(item.itemImageUrls), // sqflite does have a List type, so encode to String
+      'itemImageUrls': json.encode(
+        item.itemImageUrls,
+      ), // sqflite does have a List type, so encode to String
       'itemCategory': item.itemCategory,
       'itemPurchasePrice': item.itemPurchasePrice,
       'itemListingPrice': item.itemListingPrice,
@@ -112,15 +116,14 @@ class LocalDb {
       inventoryItemTable,
       where: 'email = "$userEmail"',
     );
-    List<Set<InventoryItemLocal>> inventory = data.map((row) => {
-      
-      InventoryItemLocal.fromLocalDB(row)
-    }).toList();
+    List<Set<InventoryItemLocal>> inventory = data
+        .map((row) => {InventoryItemLocal.fromLocalDB(row)})
+        .toList();
 
     // Create List from the List<Set> returned
     List<InventoryItemLocal> flattenedInventory = [];
 
-    for(Set<InventoryItemLocal> set in inventory) {
+    for (Set<InventoryItemLocal> set in inventory) {
       flattenedInventory.addAll(set);
     }
 
@@ -128,9 +131,17 @@ class LocalDb {
   }
 
   Future<void> deleteInventoryItem(String id) async {
+    final db = await _getDatabase();
+    final int deletedId = await db.delete(inventoryItemTable, where: 'id = ');
+  }
 
-      final db = await _getDatabase();
-      final int deletedId = await db.delete(inventoryItemTable, where: 'id = ');
+  Future<void> deleteUserInventory() async {
+    print('\n\n\n DELETING USER INVENTORY FOR EMAIL: $userEmail');
+
+    final db = await _getDatabase();
+    final int deletedId = await db.delete(inventoryItemTable, where: 'email = "$userEmail"');
+    print('\n\n\n DELETED USER INVENTORY: $deletedId');
+
   }
 
   Future printAllRowsInTable() async {

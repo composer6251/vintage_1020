@@ -42,6 +42,7 @@ class _InventoryCarouselState extends ConsumerState<InventoryCarousel> {
               
               ],
             ),
+        // AlertDialog(content: Text('Picking photo with path ${inventory.map((i) => Text(i.getPrimaryImage.path))}')),
         ConstrainedBox(
           constraints: BoxConstraints(maxHeight: widget.height * .7),
           child: CarouselView.weighted(

@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'dart:developer' as developer;
 
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:path_provider/path_provider.dart' as sys_path;
@@ -23,8 +25,6 @@ import 'package:path/path.dart' as path;
  * 
  */
 
-
-
 ///
 ///CONSTANTS *****************************
 
@@ -32,22 +32,21 @@ final String appNameForImages = 'Vintage_1020';
 
 ///
 /// ************** IMAGE SELECTING *********
-/// 
+///
 
 ///
 /// OPEN CAMERA AND RETURN PHOTO TAKEN
 Future<File> takeCameraPhoto() async {
-    
   // INSTANTIATE IMAGE PICKER
   final picker = ImagePicker();
-  
+
   // OPEN CAMERA APP TO TAKE PICTURE
   XFile? image = await picker.pickImage(
     source: ImageSource.camera,
     imageQuality: 90,
   );
-
   File file = getFileFromXFile(image!);
+  AlertDialog(content: Text('Picking photo with path ${file.path}'));
 
   return file;
 }
@@ -72,7 +71,6 @@ Future<List<XFile>> pickMultipleImagesFromGallery() async {
 
 // SAVING WITH FILE.copy
 Future<List<File>> saveXFileListAndReturnSavedPaths(List<XFile> xFiles) async {
-
   // GET FILES FROM XFILES
   List<File> files = xFiles.map((xFile) => getFileFromXFile(xFile)).toList();
 
@@ -85,7 +83,6 @@ Future<List<File>> saveXFileListAndReturnSavedPaths(List<XFile> xFiles) async {
 List<String> getPathsForSavedFiles(List<File> savedFiles) {
   List<String> paths = [];
   for (var savedFile in savedFiles) {
-    
     paths.add(savedFile.path);
   }
 
@@ -93,34 +90,31 @@ List<String> getPathsForSavedFiles(List<File> savedFiles) {
 }
 
 Future<List<File>> saveFiles(List<File> imageFiles) async {
-
   List<File> copiedFiles = [];
 
-  for(File imageFile in imageFiles) {
+  for (File imageFile in imageFiles) {
     final File copiedFile = await copySingleImageFile(imageFile);
 
     copiedFiles.add(copiedFile);
   }
 
   // ERROR OR NO FILES
-  if(copiedFiles.isEmpty) {
+  if (copiedFiles.isEmpty) {
     return [];
   }
 
   return copiedFiles;
-
 }
 
 /// COPIES A FILE TO LOCAL STORAGE AND RETURNS IT
 Future<File> copySingleImageFile(File image) async {
-
   // GET DIRECTORY TO SAVE TO
   final Directory appDir = await sys_path.getApplicationDocumentsDirectory();
   // GET FILE NAME
   final String fileName = path.basename(image.path);
   // CREATE FILE PATH TO SAVE IMAGE
   final String filePathToSave = '${appDir.path}/$fileName';
-  
+
   print('Saving File with path $filePathToSave');
 
   // COPY IMAGE
@@ -167,10 +161,15 @@ Future<List<String>> saveImageCurrent(XFile image, String index) async {
     return [];
   }
 
-  AssetEntity savedImage = await saveImageWithPathViaPhotoManager(image.path, null);
+  AssetEntity savedImage = await saveImageWithPathViaPhotoManager(
+    image.path,
+    null,
+  );
   final assetEntityFile = await savedImage.file;
-  
-  print('IMAGE_UTIL.saveImageCurrent saved image path(assetEntityFile.path): ${assetEntityFile?.path}');
+
+  print(
+    'IMAGE_UTIL.saveImageCurrent saved image path(assetEntityFile.path): ${assetEntityFile?.path}',
+  );
 
   // Adds image reference to the album created above
   await PhotoManager.plugin.copyAssetToGallery(savedImage, pathEntity);
@@ -185,7 +184,10 @@ Future<List<String>> saveImageCurrent(XFile image, String index) async {
 }
 
 // Saving with PhotoManager
-Future<AssetEntity> saveImageWithPathViaPhotoManager(String imagePath, String? category) async {
+Future<AssetEntity> saveImageWithPathViaPhotoManager(
+  String imagePath,
+  String? category,
+) async {
   AssetEntity savedImage = await PhotoManager.editor.saveImageWithPath(
     imagePath,
   );
@@ -193,7 +195,10 @@ Future<AssetEntity> saveImageWithPathViaPhotoManager(String imagePath, String? c
   return savedImage;
 }
 
-Future<List<String>> saveSingleXFileImageController(XFile image, String index) async {
+Future<List<String>> saveSingleXFileImageController(
+  XFile image,
+  String index,
+) async {
   if (image.path.isEmpty) return [];
   // Get directory on local device for storing images.
   final appDir = await sys_path.getApplicationDocumentsDirectory();
@@ -211,10 +216,15 @@ Future<List<String>> saveSingleXFileImageController(XFile image, String index) a
     return [];
   }
 
-  AssetEntity savedImage = await saveImageWithPathViaPhotoManager(image.path, null);
+  AssetEntity savedImage = await saveImageWithPathViaPhotoManager(
+    image.path,
+    null,
+  );
   final assetEntityFile = await savedImage.file;
-  
-  print('IMAGE_UTIL.saveImageCurrent saved image path(assetEntityFile.path): ${assetEntityFile?.path}');
+
+  print(
+    'IMAGE_UTIL.saveImageCurrent saved image path(assetEntityFile.path): ${assetEntityFile?.path}',
+  );
 
   // Adds image reference to the album created above
   await PhotoManager.plugin.copyAssetToGallery(savedImage, pathEntity);
@@ -227,7 +237,6 @@ Future<List<String>> saveSingleXFileImageController(XFile image, String index) a
   // Return imageUrl
   return [photoUrl!];
 }
-
 
 ///
 /// ************** IMAGE LOADING ***********
@@ -287,11 +296,8 @@ Future<List<File?>> getAssetsFromAssetEntities(List<AssetEntity> assets) async {
 }
 
 getFileFromAssetId() {
-
   String? verboseFilePath = PhotoManager.getVerboseFilePath();
 }
-
-
 
 Future<String> handleImageSelection(XFile image, String? imageName) async {
   // Create new album if it doesn't exist
@@ -303,7 +309,10 @@ Future<String> handleImageSelection(XFile image, String? imageName) async {
   print('image path: ${image.path}');
 
   // Save image to disk
-  AssetEntity assetEntity = await saveImageWithPathViaPhotoManager(image.path, imageName!);
+  AssetEntity assetEntity = await saveImageWithPathViaPhotoManager(
+    image.path,
+    imageName!,
+  );
   String? savedImagePath = await assetEntity.getMediaUrl();
   print('Saved Image Media URL: $savedImagePath');
 

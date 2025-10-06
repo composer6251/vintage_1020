@@ -18,8 +18,6 @@ class HeroLayoutCard extends ConsumerWidget {
   final InventoryItemLocal item;
   final double height;
   final double width;
-  final Directory appDir =  sys_path.getApplicationDocumentsDirectory() as Directory;
-
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -33,9 +31,9 @@ class HeroLayoutCard extends ConsumerWidget {
                 maxHeight: height,
                 maxWidth: width * 7 / 8,
                 minWidth: width * 7 / 8,
-                child: Image.memory(item.getPrimaryImage.readAsBytesSync()),
+                // child: Image.memory(item.getPrimaryImage.readAsBytesSync()),
                 // child: Image.file(item.getPrimaryImage)
-                // child: Image.file(File(item.getPrimaryImage.path)),
+                child: Image.file(File(item.getPrimaryImage.path)),
               ),
               // Padding(
               //   padding: const EdgeInsets.fromLTRB(18.0, 18, 18, 18),
