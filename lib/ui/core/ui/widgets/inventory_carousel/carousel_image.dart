@@ -20,8 +20,8 @@ class CarouselImage extends ConsumerWidget {
     final double width = MediaQuery.sizeOf(context).width;
    
    return  SizedBox(
-    height: height / .5,
-    width: width / .5,
+    height: height,
+    width: width,
     child: Image.file(File(url)));
   }
 }

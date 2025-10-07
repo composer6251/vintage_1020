@@ -21,7 +21,6 @@ class HeroLayoutCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
 
       print('ITEM HAS ${item.itemImageUrls?.length} images');
-    // ref.watch(inventoryLocalProvider.notifier);
     return item.primaryImageUrl == null
         ? Container(child: Text('You have no inventory yet. Press the + in the bottom right corner to add an item!'),)
         : Row(
@@ -29,9 +28,15 @@ class HeroLayoutCard extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: item.itemImageUrls!.map((url) =>
                Expanded(
-                 child: CarouselImage(
-                  url: url
-                  ),
+                 child: Align(
+                  alignment: Alignment.bottomCenter,
+                   child: AspectRatio(
+                    aspectRatio: 16 / 9,
+                     child: CarouselImage(
+                      url: url
+                      ),
+                   ),
+                 ),
                )).toList(),
           );
             

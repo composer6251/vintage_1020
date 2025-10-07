@@ -51,8 +51,8 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
                 InventoryCarousel(
                   inventoryItems: inventory,
                   width: width,
-                  height: height * .50,
-                  flexWeights: [3],
+                  height: height * .80,
+                  flexWeights: [5],
                 ),
                 InventoryCarousel(
                   inventoryItems: inventory,
