@@ -23,9 +23,11 @@ class HeroLayoutCard extends ConsumerWidget {
       print('ITEM HAS ${item.itemImageUrls?.length} images');
     // ref.watch(inventoryLocalProvider.notifier);
     return item.primaryImageUrl == null
-        ? Container()
-        : Stack(
-            alignment: AlignmentDirectional.bottomStart,
+        ? Container(child: Text('You have no inventory yet. Press the + in the bottom right corner to add an item!'),)
+        : Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: item.itemImageUrls!.map((url) =>
                CarouselImage(
                 url: url
