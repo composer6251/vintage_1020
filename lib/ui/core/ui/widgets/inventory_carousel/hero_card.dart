@@ -26,12 +26,13 @@ class HeroLayoutCard extends ConsumerWidget {
         ? Container(child: Text('You have no inventory yet. Press the + in the bottom right corner to add an item!'),)
         : Row(
             mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: item.itemImageUrls!.map((url) =>
-               CarouselImage(
-                url: url
-                )).toList(),
+               Expanded(
+                 child: CarouselImage(
+                  url: url
+                  ),
+               )).toList(),
           );
             
   }
