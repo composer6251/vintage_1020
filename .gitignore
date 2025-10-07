@@ -48,8 +48,25 @@ app.*.map.json
 pubspec.lock
 .vscode/
 devtools_options.yaml
-how-to.md
-ios/
 ios/Runner.xcodeproj/
+macos/Podfile.lock
+macos/Podfile
+
+# Security
+index.html
+
+# Riverpod
+*.g.dart
+*.freezed.dart
+*.g
+*.freezed
+
+ios/Podfile.lock
+ios/Podfile.lock
+macos/Podfile.lock
+package-lock.json
+pubspec.lock
 
 
+# MASON BRICKS
+.mason

@@ -1,0 +1,6 @@
+
+/// *NON-FREEZED VERSION SO WE DON'T USE CODE GENERATION
+class Inventory {
+
+  
+}

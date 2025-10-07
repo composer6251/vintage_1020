@@ -1,4 +1,13 @@
-# cmoney_1020
+# vintage_1020
+Hosted website:
+
+https://vintage-1020-498ff.firebaseapp.com
+
+## DEPENDENCY INSTALLATION
+1. Install Flutter sdk
+2. Install cocoapods
+brew install cocoapods
+
 
 ## RUNNING THE APP
 Command Line:
