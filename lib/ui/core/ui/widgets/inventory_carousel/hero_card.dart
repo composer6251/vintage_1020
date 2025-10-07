@@ -9,13 +9,13 @@ class HeroLayoutCard extends ConsumerWidget {
   HeroLayoutCard({
     super.key,
     required this.item,
-    required this.height,
-    required this.width,
+    // required this.height,
+    // required this.width,
   });
 
   final InventoryItemLocal item;
-  final double height;
-  final double width;
+  // final double height;
+  // final double width;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,7 +29,7 @@ class HeroLayoutCard extends ConsumerWidget {
             children: item.itemImageUrls!.map((url) =>
                Expanded(
                  child: Align(
-                  alignment: Alignment.bottomCenter,
+                  alignment: Alignment.topCenter,
                    child: AspectRatio(
                     aspectRatio: 16 / 9,
                      child: CarouselImage(

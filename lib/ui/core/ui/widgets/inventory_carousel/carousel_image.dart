@@ -15,13 +15,10 @@ class CarouselImage extends ConsumerWidget {
   
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
-    final double height = MediaQuery.sizeOf(context).height;
-    final double width = MediaQuery.sizeOf(context).width;
    
    return  SizedBox(
-    height: height,
-    width: width,
-    child: Image.file(File(url)));
+    child: Image.file(
+      fit: BoxFit.fill,
+      File(url)));
   }
 }

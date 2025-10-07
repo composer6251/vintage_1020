@@ -33,8 +33,8 @@ class InventoryOverviewTab extends ConsumerWidget {
           ),
           InventoryCarousel(
             inventoryItems: [],
-            height: height / 2,
-            width: width,
+            // height: height / 2,
+            // width: width,
             flexWeights: [1, 2, 1],
           ),
       ],

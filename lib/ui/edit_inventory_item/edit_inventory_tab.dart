@@ -14,14 +14,14 @@ class EditItemTab extends ConsumerWidget {
         children: [
           InventoryCarousel(
             inventoryItems: [],
-            width: width,
-            height: height * .30,
+            // width: width,
+            // height: height * .30,
             flexWeights: [3],
           ),
           InventoryCarousel(
             inventoryItems: [],
-            width: width,
-            height: height * .25,
+            // width: width,
+            // height: height * .25,
             flexWeights: [1, 2, 1],
           ),
         ],

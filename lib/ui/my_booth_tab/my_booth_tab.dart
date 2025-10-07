@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vintage_1020/data/model/inventory_item_local/inventory_item_local.dart';
@@ -31,7 +33,7 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
     final double height = MediaQuery.sizeOf(context).height;
     final double width = MediaQuery.sizeOf(context).width;
     // variable to store inventory once async call completes
-    final inventory = ref.watch(inventoryLocalProvider);
+    final List<InventoryItemLocal> inventory = ref.watch(inventoryLocalProvider);
     return Scaffold(
       body: FutureBuilder(
         /*FUTURE FUNCTION TO RETRIEVE DATA AND UPDATE PROVIDER*/
@@ -46,19 +48,29 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
             );
           } else if (asyncSnapshot.hasData) {
             return Column(
-              mainAxisSize: MainAxisSize.max,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                InventoryCarousel(
-                  inventoryItems: inventory,
-                  width: width,
-                  height: height * .80,
-                  flexWeights: [5],
+                Flexible(
+                  flex: 2,
+                  fit: FlexFit.loose,
+                  child: Container(
+                    child: Image.file(File(inventory.first.primaryImageUrl!)),),
                 ),
-                InventoryCarousel(
-                  inventoryItems: inventory,
-                  width: width,
-                  height: height * .40,
-                  flexWeights: [1, 2, 1],
+                // InventoryCarousel(
+                //   inventoryItems: inventory,
+                //   width: width,
+                //   height: height,
+                //   flexWeights: [6],
+                // ),
+                Flexible(
+                  flex: 2,
+                  fit: FlexFit.loose,
+                  child: InventoryCarousel(
+                    inventoryItems: inventory,
+                    // width: width,
+                    // height: height * .20,
+                    flexWeights: [5],
+                  ),
                 ),
               ],
             );

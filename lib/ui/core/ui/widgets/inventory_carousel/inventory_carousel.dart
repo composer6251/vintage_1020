@@ -11,13 +11,13 @@ class InventoryCarousel extends ConsumerStatefulWidget {
   const InventoryCarousel({
     super.key,
     required this.inventoryItems,
-    required this.width,
-    required this.height,
+    // required this.width,
+    // required this.height,
     required this.flexWeights,
   });
   final List<InventoryItemLocal> inventoryItems;
-  final double width;
-  final double height;
+  // final double width;
+  // final double height;
   final List<int> flexWeights;
 
   @override
@@ -35,26 +35,21 @@ class _InventoryCarouselState extends ConsumerState<InventoryCarousel> {
   @override
   Widget build(BuildContext context) {
     final List<InventoryItemLocal> inventory = ref.watch(inventoryLocalProvider);
-    return Column(
-      children: [
-        ConstrainedBox(
-          constraints: BoxConstraints(maxHeight: widget.height * .7),
-          child: CarouselView.weighted(
-            // controller: controller,
-            itemSnapping: true,
-            flexWeights: widget.flexWeights,
-            children: inventory
-                .map(
-                  (i) => HeroLayoutCard(
-                    item: i,
-                    height: widget.height,
-                    width: widget.width,
-                  ),
-                )
-                .toList(),
-          ),
-        ),
-      ],
-    );
+    return 
+        CarouselView.weighted(
+          // controller: controller,
+          // itemSnapping: true,
+          flexWeights: widget.flexWeights,
+          children: inventory
+              .map(
+                (i) => HeroLayoutCard(
+                  item: i,
+                  // height: widget.height,
+                  // width: widget.width,
+                ),
+              )
+              .toList(),
+        );
+
   }
 }
