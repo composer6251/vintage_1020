@@ -50,7 +50,7 @@ class AsyncInventoryNotifierProvider extends _$AsyncInventoryNotifierProvider {
     }
   }
 
-    void makeCurrentInventoryItem(num id) {
+    void makeCurrentInventoryItem(String id) {
       final currentItems = state.value ?? [];
       final updatedItems = [
         for (final item in currentItems)

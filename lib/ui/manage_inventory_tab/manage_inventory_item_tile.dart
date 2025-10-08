@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:vintage_1020/data/model/inventory_item_local/inventory_item_local.dart';
+import 'package:vintage_1020/domain/providers/inventory_local_provider/inventory_local_provider.dart';
 
-class ManageInventoryItemTile extends StatelessWidget {
+class ManageInventoryItemTile extends HookConsumerWidget {
   const ManageInventoryItemTile({
     super.key,
     required this.model,
@@ -11,12 +14,12 @@ class ManageInventoryItemTile extends StatelessWidget {
     required this.height,
   });
 
-  final InventoryItem model;
+  final InventoryItemLocal model;
   final double width;
   final double height;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     Future<void> launchWebApp() async {
       // TODO:
       Uri uri = Uri(scheme: 'web', host: 'localhost', port: 60219);
@@ -46,7 +49,7 @@ class ManageInventoryItemTile extends StatelessWidget {
               Text(
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                model.itemCategory,
+                model.itemCategory ?? '',
               ),
               Text(
                 overflow: TextOverflow.ellipsis,
