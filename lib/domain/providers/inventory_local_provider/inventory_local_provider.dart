@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:hooks_riverpod/legacy.dart';
 import 'package:path/path.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vintage_1020/data/model/inventory_item_local/inventory_item_local.dart';
@@ -11,8 +14,6 @@ part 'inventory_local_provider.g.dart';
 
 
 final userEmail = FirebaseAuth.instance.currentUser?.email;
-
-final ScaffoldMessengerState _scaffold = globals.scaffoldKey.currentState!;
 
 @Riverpod(keepAlive: true)
 class InventoryLocal extends _$InventoryLocal {
@@ -68,3 +69,34 @@ class InventoryLocal extends _$InventoryLocal {
     return numberOfDeletedItems;
   }
 }
+
+enum InventoryFilter { all, myBooth, notListed, sold, furniture, archived, deleted }
+// CREATE FILTER PROVIDER AND DEFAULT TO ALL
+final filteredInventoryProvider = StateProvider((_) => InventoryFilter.myBooth);
+
+final inventoryFilter = Provider<List<InventoryItemLocal>>((ref) {
+
+    final List<InventoryItemLocal> inventory = ref.watch(inventoryLocalProvider);
+    final filter = ref.watch(filteredInventoryProvider);
+
+    switch(filter) {
+      case InventoryFilter.myBooth:
+        return inventory.where((item) => item.itemListingDate != null && item.itemSoldDate == null).toList();
+      case InventoryFilter.notListed:
+        return inventory.where((item) => item.itemListingDate != null).toList();
+      case InventoryFilter.sold:
+        return inventory.where((item) => item.itemSoldDate != null).toList();
+      case InventoryFilter.furniture:
+        return inventory.where((item) => item.itemCategory == 'Furniture').toList();
+      // TODO: IMPLEMENT
+      case InventoryFilter.archived:
+        return inventory;
+      // TODO: IMPLEMENT
+      case InventoryFilter.deleted:
+        return inventory;
+      case InventoryFilter.all:
+        return inventory;
+      
+    }
+  });
+

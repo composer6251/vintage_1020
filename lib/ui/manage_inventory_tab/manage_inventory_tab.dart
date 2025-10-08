@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
 import 'package:vintage_1020/data/model/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/domain/providers/inventory_local_provider/inventory_local_provider.dart';
 import 'package:vintage_1020/domain/providers/inventory_notifier/async_inventory_notifier_provider.dart';
@@ -14,9 +13,7 @@ class ManageInventoryTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
 
     final List<InventoryItemLocal> inventory = ref.watch(inventoryLocalProvider);
-
-    final double height = MediaQuery.sizeOf(context).height;
-    final double width = MediaQuery.sizeOf(context).width;
+    final filterType = ref.read(filteredInventoryProvider.notifier).state = InventoryFilter.all;
 
     void redirectToEditInventoryItem(InventoryItemLocal item) {
       ref.read(asyncInventoryNotifierProviderProvider.notifier).makeCurrentInventoryItem(item.id!);
@@ -26,31 +23,20 @@ class ManageInventoryTab extends ConsumerWidget {
 
     return Column(
       children: [
+        Container(child: Text('Inventory items for ${filterType.name} is ${inventory.length}'),),
         Expanded(
           flex: 4,
-          child: ListView.separated(
+          child: ListView.builder(
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
                   redirectToEditInventoryItem(inventory[index]);
-                  // ref
-                  //   .read(inventoryNotifierProvider.notifier)
-                  //   .makeCurrentInventoryItem(items[index].id);
-                    
-                  // Navigator.pushNamed(
-                  //   context,
-                  //   '/edit-inventory-item',
-                  //   arguments: items[index],
-                  // );
                 },
                 child: ManageInventoryItemTile(
                   model: inventory[index],
-                  width: width / 2,
-                  height: height / 4.25,
                 ),
               );
             },
-            separatorBuilder: (_, _) => Divider(),
             itemCount: inventory.length,
           ),
         ),

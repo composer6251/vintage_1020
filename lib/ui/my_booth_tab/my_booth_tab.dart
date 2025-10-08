@@ -6,6 +6,7 @@ import 'package:vintage_1020/data/model/inventory_item_local/inventory_item_loca
 import 'package:vintage_1020/domain/providers/firestore_provider/firestore_provider.dart';
 import 'package:vintage_1020/domain/providers/inventory_local_provider/inventory_local_provider.dart';
 import 'package:vintage_1020/domain/providers/inventory_provider/inventory_provider.dart';
+import 'package:vintage_1020/domain/providers/my_booth/my_booth_provider.dart';
 import 'package:vintage_1020/domain/sqflite/local_db.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/inventory_carousel.dart';
 import 'package:vintage_1020/utils/scaffold_state_provider.dart';
@@ -30,6 +31,7 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
 
   @override
   Widget build(BuildContext context) {
+
     final double height = MediaQuery.sizeOf(context).height;
     final double width = MediaQuery.sizeOf(context).width;
     // variable to store inventory once async call completes
@@ -50,6 +52,7 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+              Container(child: Text('Inventory items is ${inventory.length}'),),
                 Flexible(
                   flex: 2,
                   fit: FlexFit.loose,

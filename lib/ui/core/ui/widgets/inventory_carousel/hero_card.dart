@@ -19,7 +19,8 @@ class HeroLayoutCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
+    final double height = MediaQuery.sizeOf(context).height;
+    final double width = MediaQuery.sizeOf(context).width;
       print('ITEM HAS ${item.itemImageUrls?.length} images');
     return item.primaryImageUrl == null
         ? Container(child: Text('You have no inventory yet. Press the + in the bottom right corner to add an item!'),)

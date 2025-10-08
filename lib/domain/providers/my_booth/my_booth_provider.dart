@@ -28,6 +28,7 @@ class MyBoothProvider extends _$MyBoothProvider {
     List<InventoryItemLocal> currentBoothInventory = await LocalDb().getUserInventoryLocal();
     // TODO Sort currentImageUrls by flag indicating they are listed.
     List<InventoryItemLocal> listedInventory = currentBoothInventory.where((item) => item.itemListingDate != null && item.itemSoldDate == null).toList();
+    List<String>? currentBoothInventoryUrls = [];
 
     MyBooth currentBooth = MyBooth(uuid.v6(), userEmail, [], listedInventory);
     state = currentBooth;

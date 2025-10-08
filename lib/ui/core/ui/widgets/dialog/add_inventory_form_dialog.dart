@@ -113,7 +113,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         defaultItemImageUrl.value,
         '',
         itemImageUrls.value,
-        'DEFAULT CATEGORY',
+        '',
         double.tryParse(itemPurchasePriceController.text),
         double.tryParse(itemListingPriceController.text),
         double.tryParse(itemPurchasePriceController.text),

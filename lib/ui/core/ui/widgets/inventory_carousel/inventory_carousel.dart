@@ -20,36 +20,39 @@ class InventoryCarousel extends ConsumerStatefulWidget {
   // final double height;
   final List<int> flexWeights;
 
+
+
   @override
   ConsumerState<InventoryCarousel> createState() => _InventoryCarouselState();
 }
 
 class _InventoryCarouselState extends ConsumerState<InventoryCarousel> {
-  List<File?> itemImages = [];
-
-
-  void setItemImages(List<String> itemImageUrls) async {
-    itemImages = await getAssetsFromInventoryAlbum();
-  }
 
   @override
   Widget build(BuildContext context) {
+    final double height = MediaQuery.sizeOf(context).height;
+    final double width = MediaQuery.sizeOf(context).width;
     final List<InventoryItemLocal> inventory = ref.watch(inventoryLocalProvider);
     return 
-        CarouselView.weighted(
-          // controller: controller,
-          // itemSnapping: true,
-          flexWeights: widget.flexWeights,
-          children: inventory
-              .map(
-                (i) => HeroLayoutCard(
-                  item: i,
-                  // height: widget.height,
-                  // width: widget.width,
-                ),
-              )
-              .toList(),
-        );
+        ConstrainedBox(
+          // constraints: BoxConstraints.expand(),
+          constraints: BoxConstraints(minHeight: height, maxHeight: height),
+          child: 
+          CarouselView.weighted(
+            // controller: controller,
+            itemSnapping: true,
+            flexWeights: widget.flexWeights,
+            children: inventory
+                .map(
+                  (i) => HeroLayoutCard(
+                    item: i,
+                    // height: widget.height,
+                    // width: widget.width,
+                  ),
+                )
+                .toList(),
+          ),
+       );
 
   }
 }
