@@ -13,7 +13,7 @@ class ManageInventoryTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
 
     final List<InventoryItemLocal> inventory = ref.watch(inventoryLocalProvider);
-    final filterType = ref.read(filteredInventoryProvider.notifier).state = InventoryFilter.all;
+    final filterType = ref.watch(filteredInventoryProvider.notifier).state = InventoryFilter.all;
 
     void redirectToEditInventoryItem(InventoryItemLocal item) {
       ref.read(asyncInventoryNotifierProviderProvider.notifier).makeCurrentInventoryItem(item.id!);
