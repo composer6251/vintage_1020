@@ -50,6 +50,10 @@ class _HomeScreenState extends ConsumerState<UiContainer> {
     ScaffoldMessenger.of(context).showSnackBar(sb);
   }
 
+  void dropInventoryItemTable() {
+    LocalDb().dropInventoryItemTable();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +64,7 @@ class _HomeScreenState extends ConsumerState<UiContainer> {
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () {
-              auth.currentUser?.sendEmailVerification();
+              dropInventoryItemTable();
             },
           ),
           TextButton(

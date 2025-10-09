@@ -33,8 +33,6 @@ final int db_version_two = 2;
 
 Future<Database> _getDatabase() async {
   final dbPath = await sql.getDatabasesPath();
-  // TODO: REMOVE AFTER IMPLEMENTING UPGRADE LOGIC
-  // dropInventoryItemTable();
 
   final db = await sql.openDatabase(
     path.join(dbPath, dbName),
@@ -50,11 +48,7 @@ Future<Database> _getDatabase() async {
   return db;
 }
 
-void dropInventoryItemTable() async {
-  final db = await _getDatabase();
 
-  db.delete(inventoryItemTable);
-}
 
 class LocalDb {
   Future<void> _createUserAndInventoryTables(Database db) async {
@@ -84,6 +78,12 @@ class LocalDb {
     );
     print('tables created or already existed ${tables.length}');
   }
+
+  void dropInventoryItemTable() async {
+  final db = await _getDatabase();
+
+  db.delete(inventoryItemTable);
+}
 
   void insertIntoInventoryItemUrlList(InventoryItemLocal item) async {
     final db = await _getDatabase();
