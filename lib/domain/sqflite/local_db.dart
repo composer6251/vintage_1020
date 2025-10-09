@@ -21,29 +21,39 @@ final String buildCreateInventoryTableSql =
 final String deleteDateColumnName = 'deleteDate TEXT';
 final String isCurrentBoothItem = 'isCurrentBoothItem REAL';
 
-final String addItemDeleteDateToItemInventorySql = 'ALTER TABLE $inventoryItemTable ADD COLUMN $deleteDateColumnName';
-final String addIsCurrentBoothItemToItemInventorySql = 'ALTER TABLE $inventoryItemTable ADD COLUMN $isCurrentBoothItem';
-
+final String addItemDeleteDateToItemInventorySql =
+    'ALTER TABLE $inventoryItemTable ADD COLUMN $deleteDateColumnName';
+final String addIsCurrentBoothItemToItemInventorySql =
+    'ALTER TABLE $inventoryItemTable ADD COLUMN $isCurrentBoothItem';
 
 final String userTable = 'user';
 final String inventoryItemTable = 'inventory_item';
 
 final int db_version_two = 2;
 
-Future<Database> _getDatabase(int dbVersion) async {
+Future<Database> _getDatabase() async {
   final dbPath = await sql.getDatabasesPath();
+  // TODO: REMOVE AFTER IMPLEMENTING UPGRADE LOGIC
+  // dropInventoryItemTable();
 
-  return await sql.openDatabase(
+  final db = await sql.openDatabase(
     path.join(dbPath, dbName),
     version: 1,
     onCreate: (db, version) {
-       db.execute(buildCreateInventoryTableSql);
+      db.execute(buildCreateInventoryTableSql);
     },
     onUpgrade: (db, oldVersion, newVersion) async {
       await db.execute(addItemDeleteDateToItemInventorySql);
       await db.execute(addIsCurrentBoothItemToItemInventorySql);
     },
   );
+  return db;
+}
+
+void dropInventoryItemTable() async {
+  final db = await _getDatabase();
+
+  db.delete(inventoryItemTable);
 }
 
 class LocalDb {
@@ -76,7 +86,7 @@ class LocalDb {
   }
 
   void insertIntoInventoryItemUrlList(InventoryItemLocal item) async {
-    final db = await _getDatabase(2);
+    final db = await _getDatabase();
 
     db.insert(inventoryItemTable, {
       'id': item.id,
@@ -98,15 +108,14 @@ class LocalDb {
   }
 
   void insertIntoInventoryItem(InventoryItemLocal item) async {
-    final db = await _getDatabase(2);
+    final db = await _getDatabase();
 
     db.insert(inventoryItemTable, item.toMapForLocalDB());
-
   }
 
   Future<List<InventoryItemLocal>> getUserInventoryLocal() async {
     printAllRowsInTable();
-    final db = await _getDatabase(2);
+    final db = await _getDatabase();
     final data = await db.query(
       inventoryItemTable,
       where: 'email = "$userEmail"',
@@ -128,7 +137,7 @@ class LocalDb {
   Future<int> deleteUserInventory() async {
     print('\n\n\n DELETING USER INVENTORY FOR EMAIL: $userEmail');
 
-    final db = await _getDatabase(2);
+    final db = await _getDatabase();
     final int deletedId = await db.delete(
       inventoryItemTable,
       where: 'email = "$userEmail"',
@@ -138,7 +147,7 @@ class LocalDb {
   }
 
   Future<int> hardDeleteInventoryItem(String id) async {
-    final db = await _getDatabase(2);
+    final db = await _getDatabase();
 
     final int deletedId = await db.delete(
       inventoryItemTable,
@@ -149,7 +158,7 @@ class LocalDb {
   }
 
   Future<int> softDeleteInventoryItem(String id) async {
-    final db = await _getDatabase(db_version_two);
+    final db = await _getDatabase();
 
     // final int deletedId = await db.update(
     //   inventoryItemTable, {
@@ -163,8 +172,8 @@ class LocalDb {
     return deletedId;
   }
 
-    Future<int> addInventoryItemToCurrentBooth(String id) async {
-    final db = await _getDatabase(2);
+  Future<int> addInventoryItemToCurrentBooth(String id) async {
+    final db = await _getDatabase();
 
     // final int deletedId = await db.update(
     //   inventoryItemTable, {
@@ -179,7 +188,7 @@ class LocalDb {
   }
 
   Future printAllRowsInTable() async {
-    final db = await _getDatabase(2);
+    final db = await _getDatabase();
     // show the results: print all rows in the db
     print('\n\n\nPRINTING RESULTS FROM ALL ITEMS IN INVENTORY ITEM TABLE');
     print(await db.query(inventoryItemTable));
