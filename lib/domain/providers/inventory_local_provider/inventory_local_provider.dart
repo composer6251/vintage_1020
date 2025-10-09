@@ -9,9 +9,7 @@ import 'package:vintage_1020/data/model/inventory_item_local/inventory_item_loca
 import 'package:vintage_1020/domain/sqflite/local_db.dart';
 import 'package:vintage_1020/utils/globals.dart' as globals;
 
-
 part 'inventory_local_provider.g.dart';
-
 
 final userEmail = FirebaseAuth.instance.currentUser?.email;
 
@@ -68,35 +66,74 @@ class InventoryLocal extends _$InventoryLocal {
 
     return numberOfDeletedItems;
   }
+
+  Future<int> deleteInventoryItem(String id) async {
+    // Remove from state
+    state = state.where((item) => item.id != id).toList();
+    // Hard delete
+    int numberOfDeletedItems = await LocalDb().softDeleteInventoryItem(id);
+
+    return numberOfDeletedItems;
+  }
+
+  // void toggleInventoryStatus(num id) {
+  //   state = [
+  //     for (final item in state)
+  //       if (item.id == id) item.copyWith(id: _uuid.v4()) else item,
+  //   ];
+  // }
+
+  // void makeCurrentInventoryItem(num id) {
+  //   state = [
+  //     for (final item in state)
+  //       if (item.id == id)
+  //         item.copyWith(id: 0)
+  //       // Assign a new ID to make it current
+  //       else
+  //         item,
+  //   ];
+  // }
 }
 
-enum InventoryFilter { all, myBooth, notListed, sold, furniture, archived, deleted }
+enum InventoryFilter {
+  all,
+  myBooth,
+  notListed,
+  sold,
+  furniture,
+  archived,
+  deleted,
+}
+
 // CREATE FILTER PROVIDER AND DEFAULT TO ALL
 final filteredInventoryProvider = StateProvider((_) => InventoryFilter.myBooth);
 
 final inventoryFilter = Provider<List<InventoryItemLocal>>((ref) {
+  final List<InventoryItemLocal> inventory = ref.watch(inventoryLocalProvider);
+  final filter = ref.watch(filteredInventoryProvider);
 
-    final List<InventoryItemLocal> inventory = ref.watch(inventoryLocalProvider);
-    final filter = ref.watch(filteredInventoryProvider);
-
-    switch(filter) {
-      case InventoryFilter.myBooth:
-        return inventory.where((item) => item.itemListingDate != null && item.itemSoldDate == null).toList();
-      case InventoryFilter.notListed:
-        return inventory.where((item) => item.itemListingDate != null).toList();
-      case InventoryFilter.sold:
-        return inventory.where((item) => item.itemSoldDate != null).toList();
-      case InventoryFilter.furniture:
-        return inventory.where((item) => item.itemCategory == 'Furniture').toList();
-      // TODO: IMPLEMENT
-      case InventoryFilter.archived:
-        return inventory;
-      // TODO: IMPLEMENT
-      case InventoryFilter.deleted:
-        return inventory;
-      case InventoryFilter.all:
-        return inventory;
-      
-    }
-  });
-
+  switch (filter) {
+    case InventoryFilter.myBooth:
+      return inventory
+          .where(
+            (item) => item.itemListingDate != null && item.itemSoldDate == null,
+          )
+          .toList();
+    case InventoryFilter.notListed:
+      return inventory.where((item) => item.itemListingDate != null).toList();
+    case InventoryFilter.sold:
+      return inventory.where((item) => item.itemSoldDate != null).toList();
+    case InventoryFilter.furniture:
+      return inventory
+          .where((item) => item.itemCategory == 'Furniture')
+          .toList();
+    // TODO: IMPLEMENT
+    case InventoryFilter.archived:
+      return inventory;
+    // TODO: IMPLEMENT
+    case InventoryFilter.deleted:
+      return inventory;
+    case InventoryFilter.all:
+      return inventory;
+  }
+});

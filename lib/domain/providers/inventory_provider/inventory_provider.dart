@@ -118,11 +118,11 @@ class InventoryNotifier extends _$InventoryNotifier {
   //   ];
   // }
 
-  // void makeCurrentInventoryItem(num id) {
+  // void makeCurrentInventoryItem(String id) {
   //   state = [
   //     for (final item in state)
   //       if (item.id == id)
-  //         item.copyWith(id: 0)
+  //         item.id(id: 0)
   //       // Assign a new ID to make it current
   //       else
   //         item,

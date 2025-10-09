@@ -17,7 +17,7 @@ final String? userEmail = FirebaseAuth.instance.currentUser?.email;
 final String buildCreateUserTableSql =
     'CREATE TABLE user(id TEXT PRIMARY KEY, email TEXT, inventory_id)';
 final String buildCreateInventoryTableSql =
-    'CREATE TABLE inventory_item(id TEXT PRIMARY KEY, email TEXT, primaryImageUrl TEXT, itemDescription TEXT, itemImageUrls TEXT, itemCategory TEXT, itemPurchasePrice REAL, itemListingPrice REAL, itemSoldPrice REAL, itemPurchaseDate TEXT, itemListingDate TEXT, itemSoldDate TEXT, itemDimensions TEXT)';
+    'CREATE TABLE inventory_item(id TEXT PRIMARY KEY, email TEXT, primaryImageUrl TEXT, itemDescription TEXT, itemImageUrls TEXT, itemCategory TEXT, itemPurchasePrice REAL, itemListingPrice REAL, itemSoldPrice REAL, itemPurchaseDate TEXT, itemListingDate TEXT, itemSoldDate TEXT, itemDimensions TEXT, itemDeleteDate TEXT)';
 
 final String userTable = 'user';
 final String inventoryItemTable = 'inventory_item';
@@ -132,11 +132,6 @@ class LocalDb {
     return flattenedInventory;
   }
 
-  Future<void> deleteInventoryItem(String id) async {
-    final db = await _getDatabase();
-    await db.delete(inventoryItemTable, where: 'id = ');
-  }
-
   Future<int> deleteUserInventory() async {
     print('\n\n\n DELETING USER INVENTORY FOR EMAIL: $userEmail');
 
@@ -145,10 +140,34 @@ class LocalDb {
       inventoryItemTable,
       where: 'email = "$userEmail"',
     );
-    print('\n\n\n DELETED USER INVENTORY: $deletedId');
 
     return deletedId;
+  }
 
+  Future<int> hardDeleteInventoryItem(String id) async {
+    final db = await _getDatabase();
+
+    final int deletedId = await db.delete(
+      inventoryItemTable,
+      where: 'id = "$id"',
+    );
+
+    return deletedId;
+  }
+
+  Future<int> softDeleteInventoryItem(String id) async {
+    final db = await _getDatabase();
+
+    // final int deletedId = await db.update(
+    //   inventoryItemTable, {
+    //   'itemDeleteDate': DateTime.now().toIso8601String(),
+    //   'where ?': 'id = $id',
+    // });
+    final int deletedId = await db.update(inventoryItemTable, {
+      'itemDeleteDate': DateTime.now().toIso8601String(),
+    }, where: 'id = $id');
+
+    return deletedId;
   }
 
   Future printAllRowsInTable() async {

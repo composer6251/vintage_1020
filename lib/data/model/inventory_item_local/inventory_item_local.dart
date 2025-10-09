@@ -20,7 +20,7 @@ class InventoryItemLocal {
   DateTime? itemListingDate;
   DateTime? itemSoldDate;
   Map<String, String>? itemDimensions;
-
+  DateTime? itemDeleteDate;
 
   // TODO ADD itemImageUrls List -> String, String ...etc
   InventoryItemLocal.toLocalDb(
@@ -56,7 +56,8 @@ class InventoryItemLocal {
       itemSoldDate = DateTime.parse(data['itemSoldDate']) as DateTime?,
       itemDimensions = data['itemDimensions'] is Iterable
           ? Map.from(data?['itemDimensions'])
-          : null;
+          : null,
+      itemDeleteDate = DateTime.parse(data['itemDeleteDate']) as DateTime?;
 
   Map<String, dynamic> toMapForLocalDB() {
     return <String, dynamic>{
