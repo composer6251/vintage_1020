@@ -36,48 +36,74 @@ class ManageInventoryItemTile extends HookConsumerWidget {
     
         if(isSold) {
          return Banner(
-           location: BannerLocation.bottomStart,
+           location: BannerLocation.topStart,
            color: const Color.fromARGB(255, 13, 94, 16),
            message: 'SOLD',
          );
         }
-        
-          if(isListed && !isSold) {
-            return Banner(
-              location: BannerLocation.bottomStart,
-              color: const Color.fromARGB(255, 243, 228, 95),
-              message: 'Listed',
-            );
-          }
-
-
-          if(!isListed && !isSold) {
-            Banner(
-              location: BannerLocation.bottomStart,
-              color: const Color.fromARGB(255, 220, 15, 66),
-              message: 'Not Listed',
-            );
-          }
-            
+        if(isListed && !isSold) {
+          return Banner(
+            location: BannerLocation.topStart,
+            color: const Color.fromARGB(255, 243, 228, 95),
+            message: 'Listed',
+          );
+        }
+        if(!isListed && !isSold) {
+          Banner(
+            location: BannerLocation.topStart,
+            color: const Color.fromARGB(255, 220, 15, 66),
+            message: 'Not Listed',
+          );
+        }       
     }
 
+    void showMutationIcons() {
+
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Flexible(
-          flex: 2,
+          flex: 4,
           child: Stack(
-            children: [ 
+            children: [
+              model.primaryImageUrl == null ?
+              Container(child: Text('No Primary Image set for Item'))
+              :
               Image.asset(
                 model.primaryImageUrl!,
               ),
-            Center(
-              child: Banner(
+              Banner(
                 location: BannerLocation.topStart,
                 color: const Color.fromARGB(255, 13, 94, 16),
                 message: 'SOLD',
               ),
-            ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Flexible(
+                    flex: 2,
+                    child: Text(
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                      model.itemListingPrice != null
+                          ? NumberFormat.currency(symbol: '\$').format(model.itemListingPrice)
+                          : 'N/A',
+                    ),
+                  ),
+                  Spacer(flex: 2,),
+                  Flexible(
+                    flex: 2,
+                    child: Text(
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                      model.itemSoldPrice != null
+                          ? NumberFormat.currency(symbol: '\$').format(model.itemSoldPrice)
+                          : 'N/A',
+                    ),
+                  ),
+                ],
+              ),
                 ]),
         ),
         Flexible(
@@ -85,51 +111,39 @@ class ManageInventoryItemTile extends HookConsumerWidget {
           child: SizedBox(
             child: Column(
               mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                FaIcon(FontAwesomeIcons.deskpro),
-                Text(
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-                  model.itemListingPrice != null
-                      ? NumberFormat.currency(symbol: '\$').format(model.itemListingPrice)
-                      : 'N/A',
+                IconButton(
+                  iconSize: 40,
+                  padding: EdgeInsets.all(0),
+                  tooltip: 'Add to current booth',
+                  onPressed: (){} ,
+                  icon: FaIcon(FontAwesomeIcons.tentArrowDownToLine),
                 ),
-                Text(
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-                  model.itemSoldPrice != null
-                      ? NumberFormat.currency(symbol: '\$').format(model.itemSoldPrice)
-                      : 'N/A',
+                IconButton(
+                  padding: EdgeInsets.all(0),
+                  color: Colors.red[800],
+                  iconSize: 40,
+                  onPressed: () {},
+                  icon: Icon(Icons.delete),
                 ),
+                // Text(
+                //   overflow: TextOverflow.ellipsis,
+                //   style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                //   model.itemListingPrice != null
+                //       ? NumberFormat.currency(symbol: '\$').format(model.itemListingPrice)
+                //       : 'N/A',
+                // ),
+                // Text(
+                //   overflow: TextOverflow.ellipsis,
+                //   style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                //   model.itemSoldPrice != null
+                //       ? NumberFormat.currency(symbol: '\$').format(model.itemSoldPrice)
+                //       : 'N/A',
+                // ),
               ],
             ),
           ),
-        ),
-          // Flexible(
-          //   fit: FlexFit.tight,
-          //   child: Checkbox(
-          //     onChanged: (value) => {},
-          //     value: false,
-          //   ),
-          // ),
-        IconButton(
-          padding: EdgeInsets.all(0),
-          tooltip: 'Add to current booth',
-          onPressed: (){} ,
-          icon: FaIcon(FontAwesomeIcons.tentArrowDownToLine),
-        ),
-        IconButton(
-          padding: EdgeInsets.all(0),
-          tooltip: 'Archive(will not show up automatically in inventory)',
-          onPressed: (){} ,
-          icon: Icon(Icons.archive_outlined),
-        ),
-        IconButton(
-          padding: EdgeInsets.all(0),
-          color: Colors.red[800],
-          iconSize: 40,
-          onPressed: () {},
-          icon: Icon(Icons.delete),
         ),
       ],
     );

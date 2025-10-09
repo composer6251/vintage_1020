@@ -13,7 +13,6 @@ class ManageInventoryTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
 
     final List<InventoryItemLocal> inventory = ref.watch(inventoryLocalProvider);
-    final filterType = ref.watch(filteredInventoryProvider.notifier).state = InventoryFilter.all;
 
     void redirectToEditInventoryItem(InventoryItemLocal item) {
       ref.read(asyncInventoryNotifierProviderProvider.notifier).makeCurrentInventoryItem(item.id!);
@@ -23,7 +22,7 @@ class ManageInventoryTab extends ConsumerWidget {
 
     return Column(
       children: [
-        Container(child: Text('Inventory items for ${filterType.name} is ${inventory.length}'),),
+        Container(child: Text('Inventory items is ${inventory.length}'),),
         Expanded(
           flex: 4,
           child: ListView.builder(
