@@ -17,23 +17,33 @@ final String? userEmail = FirebaseAuth.instance.currentUser?.email;
 final String buildCreateUserTableSql =
     'CREATE TABLE user(id TEXT PRIMARY KEY, email TEXT, inventory_id)';
 final String buildCreateInventoryTableSql =
-    'CREATE TABLE inventory_item(id TEXT PRIMARY KEY, email TEXT, primaryImageUrl TEXT, itemDescription TEXT, itemImageUrls TEXT, itemCategory TEXT, itemPurchasePrice REAL, itemListingPrice REAL, itemSoldPrice REAL, itemPurchaseDate TEXT, itemListingDate TEXT, itemSoldDate TEXT, itemDimensions TEXT, itemDeleteDate TEXT)';
+    'CREATE TABLE inventory_item(id TEXT PRIMARY KEY, email TEXT, primaryImageUrl TEXT, itemDescription TEXT, itemImageUrls TEXT, itemCategory TEXT, itemPurchasePrice REAL, itemListingPrice REAL, itemSoldPrice REAL, itemPurchaseDate TEXT, itemListingDate TEXT, itemSoldDate TEXT, itemDimensions TEXT, itemDeleteDate TEXT, isCurrentBoothItem REAL)';
+final String deleteDateColumnName = 'deleteDate TEXT';
+final String isCurrentBoothItem = 'isCurrentBoothItem REAL';
+
+final String addItemDeleteDateToItemInventorySql = 'ALTER TABLE $inventoryItemTable ADD COLUMN $deleteDateColumnName';
+final String addIsCurrentBoothItemToItemInventorySql = 'ALTER TABLE $inventoryItemTable ADD COLUMN $isCurrentBoothItem';
+
 
 final String userTable = 'user';
 final String inventoryItemTable = 'inventory_item';
 
-Future<Database> _getDatabase() async {
+final int db_version_two = 2;
+
+Future<Database> _getDatabase(int dbVersion) async {
   final dbPath = await sql.getDatabasesPath();
 
-  final db = await sql.openDatabase(
+  return await sql.openDatabase(
     path.join(dbPath, dbName),
-    onCreate: (db, version) {
-      return db.execute(buildCreateInventoryTableSql);
-    },
     version: 1,
+    onCreate: (db, version) {
+       db.execute(buildCreateInventoryTableSql);
+    },
+    onUpgrade: (db, oldVersion, newVersion) async {
+      await db.execute(addItemDeleteDateToItemInventorySql);
+      await db.execute(addIsCurrentBoothItemToItemInventorySql);
+    },
   );
-
-  return db;
 }
 
 class LocalDb {
@@ -66,7 +76,7 @@ class LocalDb {
   }
 
   void insertIntoInventoryItemUrlList(InventoryItemLocal item) async {
-    final db = await _getDatabase();
+    final db = await _getDatabase(2);
 
     db.insert(inventoryItemTable, {
       'id': item.id,
@@ -75,7 +85,7 @@ class LocalDb {
       'itemDescription': item.itemDescription,
       'itemImageUrls': json.encode(
         item.itemImageUrls,
-      ), // sqflite does have a List type, so encode to String
+      ), // sqflite does NOT have a List type, so encode to String
       'itemCategory': item.itemCategory,
       'itemPurchasePrice': item.itemPurchasePrice,
       'itemListingPrice': item.itemListingPrice,
@@ -88,32 +98,15 @@ class LocalDb {
   }
 
   void insertIntoInventoryItem(InventoryItemLocal item) async {
-    final db = await _getDatabase();
+    final db = await _getDatabase(2);
 
     db.insert(inventoryItemTable, item.toMapForLocalDB());
 
-    // db.insert(inventoryItemTable, {
-    //   'id': item.id,
-    //   'email': userEmail,
-    //   'primaryImageUrl': item.primaryImageUrl,
-    //   'itemDescription': item.itemDescription,
-    //   'itemImageUrls': json.encode(
-    //     item.itemImageUrls,
-    //   ), // sqflite does have a List type, so encode to String
-    //   'itemCategory': item.itemCategory,
-    //   'itemPurchasePrice': item.itemPurchasePrice,
-    //   'itemListingPrice': item.itemListingPrice,
-    //   'itemSoldPrice': item.itemSoldPrice,
-    //   'itemPurchaseDate': item.itemPurchaseDate?.toIso8601String(),
-    //   'itemListingDate': item.itemListingDate?.toIso8601String(),
-    //   'itemSoldDate': item.itemSoldDate?.toIso8601String(),
-    //   'itemDimensions': item.itemDimensions,
-    // });
   }
 
   Future<List<InventoryItemLocal>> getUserInventoryLocal() async {
     printAllRowsInTable();
-    final db = await _getDatabase();
+    final db = await _getDatabase(2);
     final data = await db.query(
       inventoryItemTable,
       where: 'email = "$userEmail"',
@@ -135,7 +128,7 @@ class LocalDb {
   Future<int> deleteUserInventory() async {
     print('\n\n\n DELETING USER INVENTORY FOR EMAIL: $userEmail');
 
-    final db = await _getDatabase();
+    final db = await _getDatabase(2);
     final int deletedId = await db.delete(
       inventoryItemTable,
       where: 'email = "$userEmail"',
@@ -145,7 +138,7 @@ class LocalDb {
   }
 
   Future<int> hardDeleteInventoryItem(String id) async {
-    final db = await _getDatabase();
+    final db = await _getDatabase(2);
 
     final int deletedId = await db.delete(
       inventoryItemTable,
@@ -156,7 +149,7 @@ class LocalDb {
   }
 
   Future<int> softDeleteInventoryItem(String id) async {
-    final db = await _getDatabase();
+    final db = await _getDatabase(db_version_two);
 
     // final int deletedId = await db.update(
     //   inventoryItemTable, {
@@ -165,13 +158,28 @@ class LocalDb {
     // });
     final int deletedId = await db.update(inventoryItemTable, {
       'itemDeleteDate': DateTime.now().toIso8601String(),
-    }, where: 'id = $id');
+    }, where: 'id = "$id"');
 
     return deletedId;
   }
 
+    Future<int> addInventoryItemToCurrentBooth(String id) async {
+    final db = await _getDatabase(2);
+
+    // final int deletedId = await db.update(
+    //   inventoryItemTable, {
+    //   'itemDeleteDate': DateTime.now().toIso8601String(),
+    //   'where ?': 'id = $id',
+    // });
+    final int updatedId = await db.update(inventoryItemTable, {
+      'itemLis': DateTime.now().toIso8601String(),
+    }, where: 'id = "$id"');
+
+    return updatedId;
+  }
+
   Future printAllRowsInTable() async {
-    final db = await _getDatabase();
+    final db = await _getDatabase(2);
     // show the results: print all rows in the db
     print('\n\n\nPRINTING RESULTS FROM ALL ITEMS IN INVENTORY ITEM TABLE');
     print(await db.query(inventoryItemTable));

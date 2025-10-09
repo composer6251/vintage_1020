@@ -21,6 +21,7 @@ class InventoryItemLocal {
   DateTime? itemSoldDate;
   Map<String, String>? itemDimensions;
   DateTime? itemDeleteDate;
+  int? isCurrentBoothItem = 0;
 
   // TODO ADD itemImageUrls List -> String, String ...etc
   InventoryItemLocal.toLocalDb(
@@ -37,6 +38,8 @@ class InventoryItemLocal {
     this.itemListingDate,
     this.itemSoldDate,
     this.itemDimensions,
+    this.itemDeleteDate,
+    this.isCurrentBoothItem,
   );
 
   InventoryItemLocal.fromLocalDB(Map<String, dynamic> data)
@@ -57,7 +60,8 @@ class InventoryItemLocal {
       itemDimensions = data['itemDimensions'] is Iterable
           ? Map.from(data?['itemDimensions'])
           : null,
-      itemDeleteDate = DateTime.parse(data['itemDeleteDate']) as DateTime?;
+      itemDeleteDate = DateTime.parse(data['itemDeleteDate']) as DateTime?,
+      isCurrentBoothItem = data['isCurrentBoothItem'] as int;
 
   Map<String, dynamic> toMapForLocalDB() {
     return <String, dynamic>{
@@ -74,6 +78,8 @@ class InventoryItemLocal {
       "itemListingDate": itemListingDate?.toIso8601String(),
       "itemSoldDate": itemSoldDate?.toIso8601String(),
       "itemDimensions": itemDimensions,
+      "itemDeleteDate": itemDeleteDate?.toIso8601String(),
+      "isCurrentBoothItem": isCurrentBoothItem,
     };
   }
 

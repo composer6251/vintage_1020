@@ -55,6 +55,7 @@ class ManageInventoryItemTile extends HookConsumerWidget {
     }
 
     void deleteInventoryItem(String itemId) async {
+      Navigator.pop(context);
       int deletedId = await ref
           .read(inventoryLocalProvider.notifier)
           .deleteInventoryItem(itemId);

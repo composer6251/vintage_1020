@@ -21,9 +21,11 @@ class InventoryLocal extends _$InventoryLocal {
   }
 
   Future<List<InventoryItemLocal>> fetchInitialUserInventory() async {
-    List<InventoryItemLocal> inventory = await LocalDb()
+    List<InventoryItemLocal> inventoryWithArchives = await LocalDb()
         .getUserInventoryLocal();
 
+    // TODO: Add this to DB fetch
+    List<InventoryItemLocal> inventory = inventoryWithArchives.where((item) => item.itemDeleteDate != null).toList();
     state = [...inventory];
 
     return inventory;
@@ -46,6 +48,8 @@ class InventoryLocal extends _$InventoryLocal {
         item.itemListingDate,
         item.itemSoldDate,
         item.itemDimensions,
+        item.itemDeleteDate,
+        item.isCurrentBoothItem,
       ),
     ];
 
@@ -132,7 +136,7 @@ final inventoryFilter = Provider<List<InventoryItemLocal>>((ref) {
       return inventory;
     // TODO: IMPLEMENT
     case InventoryFilter.deleted:
-      return inventory;
+      return inventory.where((item) => item.itemSoldDate != null).toList();
     case InventoryFilter.all:
       return inventory;
   }

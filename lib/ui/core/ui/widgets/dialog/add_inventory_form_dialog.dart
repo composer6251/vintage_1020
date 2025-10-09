@@ -121,6 +121,8 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         listingDate.value,
         soldDate.value,
         null,
+        null,
+        null,
       );
 
       if (formKey.currentState?.validate() ?? false) {
