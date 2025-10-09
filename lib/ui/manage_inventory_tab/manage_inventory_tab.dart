@@ -24,8 +24,9 @@ class ManageInventoryTab extends ConsumerWidget {
       children: [
         Container(child: Text('Inventory items is ${inventory.length}'),),
         Expanded(
-          flex: 4,
+          // flex: 4,
           child: ListView.builder(
+            itemExtent: 200,
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {

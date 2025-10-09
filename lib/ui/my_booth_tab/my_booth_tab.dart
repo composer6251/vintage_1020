@@ -20,13 +20,15 @@ class MyBoothTab extends ConsumerStatefulWidget {
 
 class _MyBoothTabState extends ConsumerState<MyBoothTab> {
   late Future<void> _itemsFuture;
-  late List<InventoryItemLocal> inventory;
+  late List<InventoryItemLocal> inventory = [];
 
   @override
   void initState() {
     super.initState();
     /***ASYNC CALL TO GET USER INVENTORY WHILE FUTURE BUILDER AWAITS */
-    _itemsFuture = ref.read(inventoryLocalProvider.notifier).getUserInventory();
+    if(inventory.isEmpty) {
+    _itemsFuture = ref.read(inventoryLocalProvider.notifier).fetchInitialUserInventory();
+    }
   }
 
   @override
@@ -70,8 +72,6 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
                   fit: FlexFit.loose,
                   child: InventoryCarousel(
                     inventoryItems: inventory,
-                    // width: width,
-                    // height: height * .20,
                     flexWeights: [5],
                   ),
                 ),
