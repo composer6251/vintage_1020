@@ -22,13 +22,8 @@ class InventoryLocal extends _$InventoryLocal {
   }
 
   Future<List<InventoryItemLocal>> fetchInitialUserInventory() async {
-    List<InventoryItemLocal> inventoryWithArchives = [];
-    try {
-      inventoryWithArchives = await LocalDb().getUserInventoryLocal();
-    } catch (ex) {
-      dev.log('Error fetchingInitialUserInventory: ${ex.toString}');
-      dev.log('Error fetchingInitialUserInventory: $ex');
-    }
+
+    List<InventoryItemLocal> inventoryWithArchives = await LocalDb().getUserInventoryLocal();
 
     List<InventoryItemLocal> inventory = [];
     try {
@@ -62,7 +57,9 @@ class InventoryLocal extends _$InventoryLocal {
         item.itemPurchaseDate,
         item.itemListingDate,
         item.itemSoldDate,
-        item.itemDimensions,
+        item.itemHeight,
+        item.itemWidth,
+        item.itemDepth,
         item.itemDeleteDate,
         item.isCurrentBoothItem,
       ),

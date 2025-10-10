@@ -1,20 +1,13 @@
 import 'dart:io';
-import 'dart:io' as io;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:photo_manager/photo_manager.dart';
-import 'package:uuid/uuid.dart';
-import 'package:vintage_1020/data/model/inventory_item/inventory_item.dart';
 import 'package:vintage_1020/data/model/inventory_item_local/inventory_item_local.dart';
-import 'package:vintage_1020/domain/providers/firestore_provider/firestore_provider.dart' hide userEmail;
 import 'package:vintage_1020/domain/providers/inventory_local_provider/inventory_local_provider.dart' hide userEmail;
-import 'package:vintage_1020/domain/providers/inventory_provider/inventory_provider.dart' hide userEmail;
 import 'package:vintage_1020/domain/sqflite/local_db.dart';
 import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
-import 'package:path_provider/path_provider.dart' as sys_path;
 
 /// **A HOOKCONSUMER WIDGET IS ESSENTIALLY A STATELESS WIDGET, BUT UTILIZES FLUTTER HOOKS TO MANAGE STATE ***
 class AddInventoryFormDialog extends HookConsumerWidget {
@@ -28,6 +21,9 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     final itemPurchasePriceController = useTextEditingController();
     final itemListingPriceController = useTextEditingController();
     final itemSoldPriceController = useTextEditingController();
+    final itemHeightController = useTextEditingController();
+    final itemWidthController = useTextEditingController();
+    final itemDepthController = useTextEditingController();
 
     final initialDate = useState(DateTime.now());
 
@@ -38,6 +34,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     final selectedImagesAsFiles = useState<List<File>>([]);
     final itemImageUrls = useState<List<String>>([]);
     final defaultItemImageUrl = useState<String>('');
+    final addToBooth = useState<bool>(false);
 
     /// AFTER USER SELECTS PHOTOS OR TAKES A PHOTO, UPDATE THE EPHEMERAL STATE
     void updateSelectedImagesState(List<XFile> imagesToAdd) {
@@ -120,9 +117,12 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         purchaseDate.value,
         listingDate.value,
         soldDate.value,
+        int.tryParse(itemHeightController.text),
+        int.tryParse(itemWidthController.text),
+        int.tryParse(itemDepthController.text),
         null,
-        null,
-        null,
+        addToBooth.value ? 1 : 0,
+
       );
 
       if (formKey.currentState?.validate() ?? false) {
@@ -146,43 +146,11 @@ class AddInventoryFormDialog extends HookConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           mainAxisSize: MainAxisSize.min,
           children: [
-            // DropdownButtonFormField<String>(
-            //   value: 'Test',
-            //   onChanged: (value) {
-            //     if (value != null) {}
-            //   },
-            //   items: const [
-            //     DropdownMenuItem(
-            //       value: 'furn',
-            //       child: Text('Furniture'),
-            //     ),
-            //     DropdownMenuItem(
-            //       value: 'lam',
-            //       child: Text('Lamps'),
-            //     ),
-            //     // DropdownMenuItem(
-            //     //   value: 'Wall Decor',
-            //     //   child: Text('Wall Decor'),
-            //     // ),
-            //     // DropdownMenuItem(
-            //     //   value: 'Painting',
-            //     //   child: Text('Paintings'),
-            //     // ),
-            //     // DropdownMenuItem(
-            //     //   value: 'Picture',
-            //     //   child: Text('Pictures'),
-            //     // ),
-            //     // DropdownMenuItem(
-            //     //   value: 'Miscellaneous',
-            //     //   child: Text('Miscellaneous'),
-            //     // ),
-            //   ],
-            // ),
             TextFormField(
               controller: itemPurchasePriceController,
               decoration: const InputDecoration(
                 fillColor: Colors.blue,
-                labelText: 'Purchase Price',
+                labelText: 'Purchase Price(REQUIRED)',
               ),
               keyboardType: TextInputType.numberWithOptions(decimal: true),
               validator: (value) =>
@@ -217,23 +185,23 @@ class AddInventoryFormDialog extends HookConsumerWidget {
                     : 'Listing Date: ${listingDate.value.toLocal().month}/${listingDate.value.toLocal().day}/${listingDate.value.toLocal().year}',
               ),
             ),
-            TextFormField(
-              controller: itemSoldPriceController,
-              decoration: const InputDecoration(labelText: 'Selling Price'),
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
+            Row(
+              children: [
+                Text('H:'),
+                TextFormField(
+                  controller: itemHeightController,
+                ),
+                Text('W:'),
+                TextFormField(
+                  controller: itemWidthController,
+                ),
+                Text('D:'),
+                TextFormField(
+                  controller: itemDepthController,
+                ),
+              ],
             ),
-            OutlinedButton(
-              style: ButtonStyle(
-                elevation: WidgetStatePropertyAll<double>(8.0),
-                backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
-              ),
-              onPressed: () => selectDate('Sold'),
-              child: Text(
-                soldDate.value == null
-                    ? 'Select Sold Date'
-                    : 'Sold Date: ${soldDate.value.toLocal().month}/${soldDate.value.toLocal().day}/${soldDate.value.toLocal().year}',
-              ),
-            ),
+            CheckboxListTile(value: addToBooth.value, onChanged: (value) => value)
           ],
         ),
       ),

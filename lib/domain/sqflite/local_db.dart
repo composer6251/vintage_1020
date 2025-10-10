@@ -10,6 +10,8 @@ import 'package:sqflite/sqlite_api.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vintage_1020/data/model/inventory_item_local/inventory_item_local.dart';
 
+import 'dart:developer' as dev;
+
 final String dbName = 'vintage_1020.db';
 final Uuid uuid = Uuid();
 final String? userEmail = FirebaseAuth.instance.currentUser?.email;
@@ -103,7 +105,7 @@ class LocalDb {
       'itemPurchaseDate': item.itemPurchaseDate?.toIso8601String(),
       'itemListingDate': item.itemListingDate?.toIso8601String(),
       'itemSoldDate': item.itemSoldDate?.toIso8601String(),
-      'itemDimensions': item.itemDimensions,
+      
     });
   }
 
@@ -119,6 +121,10 @@ class LocalDb {
       inventoryItemTable,
       where: 'email = "$userEmail"',
     );
+
+    if(data.isEmpty) {
+      dev.log('Data returned from getUserInventory is empty');
+    }
     List<Set<InventoryItemLocal>> inventory = data
         .map((row) => {InventoryItemLocal.fromLocalDB(row)})
         .toList();

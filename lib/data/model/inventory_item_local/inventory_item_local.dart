@@ -1,10 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:vintage_1020/data/model/json_converters/TimestampConverter.dart';
-import 'package:vintage_1020/domain/sqflite/local_db.dart';
-
 class InventoryItemLocal {
   final String id;
   String? userEmail;
@@ -19,9 +15,11 @@ class InventoryItemLocal {
   DateTime? itemPurchaseDate;
   DateTime? itemListingDate;
   DateTime? itemSoldDate;
-  Map<String, String>? itemDimensions;
+  int? itemHeight;
+  int? itemWidth;
+  int? itemDepth;
   DateTime? itemDeleteDate;
-  int? isCurrentBoothItem = 0;
+  int? isCurrentBoothItem;
 
   // TODO ADD itemImageUrls List -> String, String ...etc
   InventoryItemLocal.toLocalDb(
@@ -37,7 +35,9 @@ class InventoryItemLocal {
     this.itemPurchaseDate,
     this.itemListingDate,
     this.itemSoldDate,
-    this.itemDimensions,
+    this.itemHeight,
+    this.itemWidth,
+    this.itemDepth,
     this.itemDeleteDate,
     this.isCurrentBoothItem,
   );
@@ -49,7 +49,7 @@ class InventoryItemLocal {
       itemDescription = data['itemDescription'],
       itemImageUrls = data['itemImageUrls'] != null
           ? List<String>.from(jsonDecode(data['itemImageUrls']))
-          : [], // sqflite strings back to list of strings
+          : null, // sqflite strings back to list of strings
       itemCategory = data['itemCategory'],
       itemPurchasePrice = data['itemPurchasePrice'],
       itemListingPrice = data['itemListingPrice'],
@@ -57,11 +57,14 @@ class InventoryItemLocal {
       itemPurchaseDate = DateTime.parse(data['itemPurchaseDate']) as DateTime?,
       itemListingDate = DateTime.parse(data['itemListingDate']) as DateTime?,
       itemSoldDate = DateTime.parse(data['itemSoldDate']) as DateTime?,
-      itemDimensions = data['itemDimensions'] is Iterable
-          ? Map.from(data?['itemDimensions'])
-          : null,
+      itemHeight = data?['itemHeight'],
+      itemWidth = data?['itemWidth'],
+      itemDepth = data?['itemDepth'],
+      // itemDimensions = data?['itemDimensions'] is Iterable?
+      //     ? Map.from(data?['itemDimensions'])
+      //     : null,
       itemDeleteDate = DateTime.parse(data['itemDeleteDate']) as DateTime?,
-      isCurrentBoothItem = data['isCurrentBoothItem'] as int;
+      isCurrentBoothItem = data?['isCurrentBoothItem'] as int;
 
   Map<String, dynamic> toMapForLocalDB() {
     return <String, dynamic>{
@@ -77,7 +80,9 @@ class InventoryItemLocal {
       "itemPurchaseDate": itemPurchaseDate?.toIso8601String(),
       "itemListingDate": itemListingDate?.toIso8601String(),
       "itemSoldDate": itemSoldDate?.toIso8601String(),
-      "itemDimensions": itemDimensions,
+      "itemHeight": itemHeight,
+      "itemWidth": itemWidth,
+      "itemDepth": itemDepth,
       "itemDeleteDate": itemDeleteDate?.toIso8601String(),
       "isCurrentBoothItem": isCurrentBoothItem,
     };
@@ -103,7 +108,9 @@ class InventoryItemLocal {
       itemPurchaseDate = json['itemPurchaseDate'] as DateTime,
       itemListingDate = json['itemListingDate'] as DateTime,
       itemSoldDate = json['itemSoldDate'] as DateTime,
-      itemDimensions = json['itemDimensions'];
+      itemHeight = json['itemHeight'],
+      itemWidth = json['itemWidth'],
+      itemDepth = json['itemDepth'];
 
   Map<String, dynamic> toJson() => {
     'id': id,
@@ -117,6 +124,10 @@ class InventoryItemLocal {
     'itemPurchaseDate': itemPurchaseDate,
     'itemListingDate': itemListingDate,
     'itemSoldDate': itemSoldDate,
-    'itemDimensions': itemDimensions,
+    'itemHeight': itemHeight,
+    'itemWidth': itemWidth,
+    'itemDepth': itemDepth,
+    'itemDeleteDate': itemDeleteDate,
+    'isCurrentBoothItem': isCurrentBoothItem,
   };
 }
