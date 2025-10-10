@@ -26,7 +26,7 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
   void initState() {
     super.initState();
     /***ASYNC CALL TO GET USER INVENTORY WHILE FUTURE BUILDER AWAITS */
-    if(inventory.isEmpty) {
+    if(inventory == null || inventory.isEmpty) {
     _itemsFuture = ref.read(inventoryLocalProvider.notifier).fetchInitialUserInventory();
     }
   }
@@ -54,8 +54,11 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+              // TODO: FIX 
               Container(child: Text('Inventory items is ${inventory.length}'),),
-                Flexible(
+                inventory.first.primaryImageUrl == null ? 
+                Container(child: Text('Inventory primary imageUrl is null'),)
+                :Flexible(
                   flex: 2,
                   fit: FlexFit.loose,
                   child: Container(

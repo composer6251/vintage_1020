@@ -114,7 +114,6 @@ class LocalDb {
   }
 
   Future<List<InventoryItemLocal>> getUserInventoryLocal() async {
-    printAllRowsInTable();
     final db = await _getDatabase();
     final data = await db.query(
       inventoryItemTable,
@@ -190,7 +189,6 @@ class LocalDb {
   Future printAllRowsInTable() async {
     final db = await _getDatabase();
     // show the results: print all rows in the db
-    print('\n\n\nPRINTING RESULTS FROM ALL ITEMS IN INVENTORY ITEM TABLE');
     print(await db.query(inventoryItemTable));
   }
 }

@@ -8,6 +8,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vintage_1020/data/model/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/domain/sqflite/local_db.dart';
 import 'package:vintage_1020/utils/globals.dart' as globals;
+import 'dart:developer' as dev;
 
 part 'inventory_local_provider.g.dart';
 
@@ -21,11 +22,25 @@ class InventoryLocal extends _$InventoryLocal {
   }
 
   Future<List<InventoryItemLocal>> fetchInitialUserInventory() async {
-    List<InventoryItemLocal> inventoryWithArchives = await LocalDb()
-        .getUserInventoryLocal();
+    List<InventoryItemLocal> inventoryWithArchives = [];
+    try {
+      inventoryWithArchives = await LocalDb().getUserInventoryLocal();
+    } catch (ex) {
+      dev.log('Error fetchingInitialUserInventory: ${ex.toString}');
+      dev.log('Error fetchingInitialUserInventory: $ex');
+    }
 
-    // TODO: Add this to DB fetch
-    List<InventoryItemLocal> inventory = inventoryWithArchives.where((item) => item.itemDeleteDate != null).toList();
+    List<InventoryItemLocal> inventory = [];
+    try {
+      inventory = inventoryWithArchives
+          .where((item) => item.itemDeleteDate != null)
+          .toList();
+    } catch (ex) {
+      dev.log(
+        'Error caught deserializing DB fetchInitialInventoryLocal: ${ex.toString()}',
+      );
+    }
+
     state = [...inventory];
 
     return inventory;
