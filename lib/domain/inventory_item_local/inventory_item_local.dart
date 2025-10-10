@@ -22,7 +22,7 @@ class InventoryItemLocal {
   int? itemDepth;
   @Default(null)
   DateTime? itemDeleteDate;
-  int? isCurrentBoothItem;
+  double? isCurrentBoothItem;
 
   InventoryItemLocal.toLocalDb(
     this.id,
@@ -56,7 +56,7 @@ class InventoryItemLocal {
       itemPurchasePrice = data['itemPurchasePrice'],
       itemListingPrice = data['itemListingPrice'],
       itemSoldPrice = data['itemSoldPrice'],
-      itemPurchaseDate = DateTime.parse(data['itemPurchaseDate']) as DateTime?,
+      itemPurchaseDate = data['itemPurchaseDate'] != null ? DateTime.parse(data['itemPurchaseDate']) as DateTime? : null,
       itemListingDate = DateTime.parse(data['itemListingDate']) as DateTime?,
       itemSoldDate = DateTime.parse(data['itemSoldDate']) as DateTime?,
       itemHeight = data?['itemHeight'],
@@ -65,8 +65,8 @@ class InventoryItemLocal {
       // itemDimensions = data?['itemDimensions'] is Iterable?
       //     ? Map.from(data?['itemDimensions'])
       //     : null,
-      itemDeleteDate = DateTime.parse(data['itemDeleteDate']) as DateTime?,
-      isCurrentBoothItem = data?['isCurrentBoothItem'] as int;
+      itemDeleteDate =  data['itemDeleteDate'] != null ? DateTime.parse(data['itemDeleteDate']) as DateTime? : null,
+      isCurrentBoothItem = data['isCurrentBoothItem'] as double?;
 
   Map<String, dynamic> toMapForLocalDB() {
     return <String, dynamic>{

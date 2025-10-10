@@ -22,10 +22,9 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
   void initState() {
     super.initState();
     print('my booth initState');
-    // _itemsFuture = ref
-    //     .read(inventoryLocalProvider.notifier)
-    //     .fetchInitialUserInventory();
-    inventoryFuture = LocalDb().getUserInventoryLocal();
+    inventoryFuture = ref
+        .read(inventoryLocalProvider.notifier)
+        .fetchInitialUserInventory();
   }
 
   @override
@@ -51,18 +50,16 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 // TODO: FIX
-                // Flexible(
-                //   flex: 2,
-                //   fit: FlexFit.loose,
-                //   child: Container(
-                //     child: Image.file(File(inventory.first.primaryImageUrl)),),
-                // ),
-                // InventoryCarousel(
-                //   inventoryItems: inventory,
-                //   width: width,
-                //   height: height,
-                //   flexWeights: [6],
-                // ),
+                Flexible(
+                  flex: 2,
+                  fit: FlexFit.loose,
+                  child: Container(
+                    child: Image.file(File(inventory.first.primaryImageUrl!)),),
+                ),
+                InventoryCarousel(
+                  inventoryItems: inventory,
+                  flexWeights: [6],
+                ),
                 Flexible(
                   flex: 2,
                   fit: FlexFit.loose,
