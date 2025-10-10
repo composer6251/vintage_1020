@@ -5,9 +5,8 @@ import 'package:vintage_1020/data/providers/inventory_provider/inventory_provide
 import 'package:vintage_1020/data/providers/async_inventory_notifier/async_inventory_notifier_provider.dart';
 import 'package:vintage_1020/ui/manage_inventory_tab/widgets/manage_inventory_item_tile.dart';
 
-class ManageInventoryTab extends ConsumerWidget {
-  const ManageInventoryTab({super.key});
-  // final TabController controller;
+class ManageInventoryViewModel extends ConsumerWidget {
+  const ManageInventoryViewModel({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
