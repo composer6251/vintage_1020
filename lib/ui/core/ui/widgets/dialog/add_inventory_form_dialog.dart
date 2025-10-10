@@ -20,7 +20,6 @@ class AddInventoryFormDialog extends HookConsumerWidget {
 
     final itemPurchasePriceController = useTextEditingController();
     final itemListingPriceController = useTextEditingController();
-    final itemSoldPriceController = useTextEditingController();
     final itemHeightController = useTextEditingController();
     final itemWidthController = useTextEditingController();
     final itemDepthController = useTextEditingController();
@@ -83,27 +82,26 @@ class AddInventoryFormDialog extends HookConsumerWidget {
 
 
     void closeDialog(){
-        Navigator.of(context).pop(); // Close the dialog
+        Navigator.of(context).pop();
     }
 
     void submit() async {
-      // 1. save files(image_util.)
+      // save files
       List<File> savedImages = await saveXFileListAndReturnSavedPaths(
         selectedImages.value,
       );
-      // 2. get savedImages paths
+      // get savedImages paths
       List<String> savedImagesPaths = savedImages.map((i) => i.path).toList();
 
-      // 3. update itemImageUrls with savedImages paths
+      // update itemImageUrls with savedImages paths
       List<String> updatedItemImageUrls = List.from(itemImageUrls.value)
         ..addAll(savedImagesPaths);
       itemImageUrls.value = updatedItemImageUrls;
-      // 4. If there's only one image, make it the default image
+      // If there's only one image, make it the default image
       if (itemImageUrls.value.length == 1) {
         defaultItemImageUrl.value = itemImageUrls.value.first;
       }
-      // 5. save inventoryItem through provider
-      // 6. save inventoryItem to localDB
+      
       final InventoryItemLocal itemToDB = InventoryItemLocal.toLocalDb(
         uuid.v6(),
         userEmail,
@@ -150,7 +148,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
               controller: itemPurchasePriceController,
               decoration: const InputDecoration(
                 fillColor: Colors.blue,
-                labelText: 'Purchase Price(REQUIRED)',
+                labelText: 'Purchase Price(required)',
               ),
               keyboardType: TextInputType.numberWithOptions(decimal: true),
               validator: (value) =>
@@ -163,9 +161,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
               ),
               onPressed: () => selectDate('Purchase'),
               child: Text(
-                purchaseDate.value == null
-                    ? 'Select Purchase Date'
-                    : 'Purchase Date: ${purchaseDate.value.toLocal().month}/${purchaseDate.value.toLocal().day}/${purchaseDate.value.toLocal().year}',
+                    'Purchase Date: ${purchaseDate.value.toLocal().month}/${purchaseDate.value.toLocal().day}/${purchaseDate.value.toLocal().year}',
               ),
             ),
             TextFormField(
@@ -180,12 +176,11 @@ class AddInventoryFormDialog extends HookConsumerWidget {
               ),
               onPressed: () => selectDate('Listing'),
               child: Text(
-                listingDate.value == null
-                    ? 'Select Listing Date'
-                    : 'Listing Date: ${listingDate.value.toLocal().month}/${listingDate.value.toLocal().day}/${listingDate.value.toLocal().year}',
+                'Listing Date: ${listingDate.value.toLocal().month}/${listingDate.value.toLocal().day}/${listingDate.value.toLocal().year}',
               ),
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text('H:'),
                 TextFormField(

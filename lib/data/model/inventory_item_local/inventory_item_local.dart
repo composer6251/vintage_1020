@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:convert';
 
+import 'package:freezed_annotation/freezed_annotation.dart';
+
 class InventoryItemLocal {
   final String id;
   String? userEmail;
@@ -18,6 +20,7 @@ class InventoryItemLocal {
   int? itemHeight;
   int? itemWidth;
   int? itemDepth;
+  @Default(null)
   DateTime? itemDeleteDate;
   int? isCurrentBoothItem;
 

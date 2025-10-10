@@ -15,6 +15,12 @@ import 'dart:developer' as dev;
 final String dbName = 'vintage_1020.db';
 final Uuid uuid = Uuid();
 final String? userEmail = FirebaseAuth.instance.currentUser?.email;
+// CHECK IF USER HAS SIGNED IN BEFORE
+final DateTime? test = FirebaseAuth.instance.currentUser?.metadata.lastSignInTime;
+
+// CHECK IF USER PHONE HAS LOCAL vintage_1020.db INSTANCE
+
+// CHECK IF USER DB instance has inventory table
 
 final String buildCreateUserTableSql =
     'CREATE TABLE user(id TEXT PRIMARY KEY, email TEXT, inventory_id)';
@@ -49,6 +55,11 @@ Future<Database> _getDatabase() async {
   );
   return db;
 }
+
+// Check firebaseAuth to see if user has logged in before
+//If user created account, then local sqflite DB should be created
+
+
 
 
 
