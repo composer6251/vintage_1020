@@ -25,7 +25,7 @@ final DateTime? test = FirebaseAuth.instance.currentUser?.metadata.lastSignInTim
 final String buildCreateUserTableSql =
     'CREATE TABLE user(id TEXT PRIMARY KEY, email TEXT, inventory_id)';
 final String buildCreateInventoryTableSql =
-    'CREATE TABLE inventory_item(id TEXT PRIMARY KEY, email TEXT, primaryImageUrl TEXT, itemDescription TEXT, itemImageUrls TEXT, itemCategory TEXT, itemPurchasePrice REAL, itemListingPrice REAL, itemSoldPrice REAL, itemPurchaseDate TEXT, itemListingDate TEXT, itemSoldDate TEXT, itemDimensions TEXT, itemDeleteDate TEXT, isCurrentBoothItem REAL)';
+    'CREATE TABLE inventory_item(id TEXT PRIMARY KEY, email TEXT, primaryImageUrl TEXT, itemDescription TEXT, itemImageUrls TEXT, itemCategory TEXT, itemPurchasePrice REAL, itemListingPrice REAL, itemSoldPrice REAL, itemPurchaseDate TEXT, itemListingDate TEXT, itemSoldDate TEXT, itemHeight REAL, itemWidth REAL, itemDepth REAL, itemDeleteDate TEXT, isCurrentBoothItem REAL)';
 final String deleteDateColumnName = 'deleteDate TEXT';
 final String isCurrentBoothItem = 'isCurrentBoothItem REAL';
 
@@ -59,10 +59,6 @@ Future<Database> _getDatabase() async {
 // Check firebaseAuth to see if user has logged in before
 //If user created account, then local sqflite DB should be created
 
-
-
-
-
 class LocalDb {
   Future<void> _createUserAndInventoryTables(Database db) async {
     print('\nCreating user and inventory tables\n');
@@ -92,33 +88,11 @@ class LocalDb {
     print('tables created or already existed ${tables.length}');
   }
 
-  void dropInventoryItemTable() async {
+void dropInventoryItemTable() async {
   final db = await _getDatabase();
 
   db.delete(inventoryItemTable);
 }
-
-  void insertIntoInventoryItemUrlList(InventoryItemLocal item) async {
-    final db = await _getDatabase();
-
-    db.insert(inventoryItemTable, {
-      'id': item.id,
-      'email': userEmail,
-      'primaryImageUrl': item.primaryImageUrl,
-      'itemDescription': item.itemDescription,
-      'itemImageUrls': json.encode(
-        item.itemImageUrls,
-      ), // sqflite does NOT have a List type, so encode to String
-      'itemCategory': item.itemCategory,
-      'itemPurchasePrice': item.itemPurchasePrice,
-      'itemListingPrice': item.itemListingPrice,
-      'itemSoldPrice': item.itemSoldPrice,
-      'itemPurchaseDate': item.itemPurchaseDate?.toIso8601String(),
-      'itemListingDate': item.itemListingDate?.toIso8601String(),
-      'itemSoldDate': item.itemSoldDate?.toIso8601String(),
-      
-    });
-  }
 
   void insertIntoInventoryItem(InventoryItemLocal item) async {
     final db = await _getDatabase();
@@ -176,11 +150,6 @@ class LocalDb {
   Future<int> softDeleteInventoryItem(String id) async {
     final db = await _getDatabase();
 
-    // final int deletedId = await db.update(
-    //   inventoryItemTable, {
-    //   'itemDeleteDate': DateTime.now().toIso8601String(),
-    //   'where ?': 'id = $id',
-    // });
     final int deletedId = await db.update(inventoryItemTable, {
       'itemDeleteDate': DateTime.now().toIso8601String(),
     }, where: 'id = "$id"');
@@ -197,7 +166,8 @@ class LocalDb {
     //   'where ?': 'id = $id',
     // });
     final int updatedId = await db.update(inventoryItemTable, {
-      'itemLis': DateTime.now().toIso8601String(),
+      'itemListingDate': DateTime.now().toIso8601String(),
+      'isCurrentBoothItem': 1,
     }, where: 'id = "$id"');
 
     return updatedId;

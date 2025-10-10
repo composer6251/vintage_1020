@@ -18,12 +18,15 @@ final userEmail = FirebaseAuth.instance.currentUser?.email;
 class InventoryLocal extends _$InventoryLocal {
   @override
   List<InventoryItemLocal> build() {
+    print('provider build');
+
     return [];
   }
 
   Future<List<InventoryItemLocal>> fetchInitialUserInventory() async {
-
-    List<InventoryItemLocal> inventoryWithArchives = await LocalDb().getUserInventoryLocal();
+    List<InventoryItemLocal> inventoryWithArchives = await LocalDb()
+        .getUserInventoryLocal();
+    print('Fetch from DB return ${inventoryWithArchives.length} items');
 
     List<InventoryItemLocal> inventory = [];
     try {
@@ -35,7 +38,7 @@ class InventoryLocal extends _$InventoryLocal {
         'Error caught deserializing DB fetchInitialInventoryLocal: ${ex.toString()}',
       );
     }
-
+    print('fetching initial inventory with ${inventory.length} items');
     state = [...inventory];
 
     return inventory;
@@ -130,16 +133,20 @@ final inventoryFilter = Provider<List<InventoryItemLocal>>((ref) {
 
   switch (filter) {
     case InventoryFilter.myBooth:
+      print('Filter BOOTH');
       return inventory
           .where(
             (item) => item.itemListingDate != null && item.itemSoldDate == null,
           )
           .toList();
     case InventoryFilter.notListed:
+      print('Filter NOT LISTED');
       return inventory.where((item) => item.itemListingDate != null).toList();
     case InventoryFilter.sold:
+      print('Filter SOLD');
       return inventory.where((item) => item.itemSoldDate != null).toList();
     case InventoryFilter.furniture:
+      print('Filter FURNITURE');
       return inventory
           .where((item) => item.itemCategory == 'Furniture')
           .toList();
@@ -148,6 +155,7 @@ final inventoryFilter = Provider<List<InventoryItemLocal>>((ref) {
       return inventory;
     // TODO: IMPLEMENT
     case InventoryFilter.deleted:
+      print('Filter DELETED');
       return inventory.where((item) => item.itemSoldDate != null).toList();
     case InventoryFilter.all:
       return inventory;

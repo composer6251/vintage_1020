@@ -80,7 +80,6 @@ class AddInventoryFormDialog extends HookConsumerWidget {
       purchaseDate.value = pickedDate;
     }
 
-
     void closeDialog(){
         Navigator.of(context).pop();
     }
@@ -180,23 +179,40 @@ class AddInventoryFormDialog extends HookConsumerWidget {
               ),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text('H:'),
-                TextFormField(
-                  controller: itemHeightController,
+                Flexible(
+                  flex: 2,
+                  child: TextFormField(
+                    decoration: InputDecoration(hintText: 'Height'),
+                    controller: itemHeightController,
+                  ),
                 ),
-                Text('W:'),
-                TextFormField(
-                  controller: itemWidthController,
+                Flexible(
+                  flex: 2,
+                  child: TextFormField(
+                    decoration: InputDecoration(hintText: 'Width'),
+                    controller: itemWidthController,
+                  ),
                 ),
-                Text('D:'),
-                TextFormField(
-                  controller: itemDepthController,
+                Flexible(
+                  flex: 2,
+                  child: TextFormField(
+                    decoration: InputDecoration(hintText: 'Depth'),
+                    controller: itemDepthController,
+                  ),
                 ),
               ],
             ),
-            CheckboxListTile(value: addToBooth.value, onChanged: (value) => value)
+            Row(
+              children: [
+                Text(
+                  style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+                  'Add to booth?'
+                  ),
+                Checkbox(value: addToBooth.value, onChanged: (value) => !addToBooth.value),
+              ],
+            )
           ],
         ),
       ),

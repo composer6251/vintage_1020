@@ -24,7 +24,6 @@ class InventoryItemLocal {
   DateTime? itemDeleteDate;
   int? isCurrentBoothItem;
 
-  // TODO ADD itemImageUrls List -> String, String ...etc
   InventoryItemLocal.toLocalDb(
     this.id,
     this.userEmail,

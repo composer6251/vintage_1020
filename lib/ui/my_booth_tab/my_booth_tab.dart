@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vintage_1020/data/model/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/domain/providers/inventory_local_provider/inventory_local_provider.dart';
+import 'package:vintage_1020/domain/sqflite/local_db.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/inventory_carousel.dart';
 
 class MyBoothTab extends ConsumerStatefulWidget {
@@ -15,25 +16,28 @@ class MyBoothTab extends ConsumerStatefulWidget {
 
 class _MyBoothTabState extends ConsumerState<MyBoothTab> {
   late Future<void> _itemsFuture;
-  late List<InventoryItemLocal> inventory = [];
+  late Future<List<InventoryItemLocal>> inventoryFuture;
 
   @override
   void initState() {
     super.initState();
-    if(inventory.isEmpty) {
-    _itemsFuture = ref.read(inventoryLocalProvider.notifier).fetchInitialUserInventory();
-    }
+    print('my booth initState with empty inventory');
+    // _itemsFuture = ref
+    //     .read(inventoryLocalProvider.notifier)
+    //     .fetchInitialUserInventory();
+    inventoryFuture = LocalDb().getUserInventoryLocal();
   }
 
   @override
   Widget build(BuildContext context) {
-
     // variable to store inventory once async call completes
-    final List<InventoryItemLocal> inventory = ref.watch(inventoryLocalProvider);
+    final List<InventoryItemLocal> inventory = ref.watch(
+      inventoryLocalProvider,
+    );
     return Scaffold(
-      body: FutureBuilder(
+      body: FutureBuilder<List<InventoryItemLocal>>(
         /*FUTURE FUNCTION TO RETRIEVE DATA AND UPDATE PROVIDER*/
-        future: _itemsFuture,
+        future: inventoryFuture,
         builder: (context, asyncSnapshot) {
           // AFTER THE ASYNC CALL FINISHES, HANDLE THE RETURN
           if (asyncSnapshot.connectionState == ConnectionState.waiting) {
@@ -46,7 +50,7 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-              // TODO: FIX 
+                // TODO: FIX
                 // Flexible(
                 //   flex: 2,
                 //   fit: FlexFit.loose,

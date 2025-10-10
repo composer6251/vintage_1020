@@ -16,7 +16,6 @@ class ManageInventoryTab extends ConsumerWidget {
 
     void redirectToEditInventoryItem(InventoryItemLocal item) {
       ref.read(asyncInventoryNotifierProviderProvider.notifier).makeCurrentInventoryItem(item.id!);
-      // controller.index = 2; // Switch to EditItemTab
       Navigator.pushNamed(context, '/edit-inventory-item', arguments: item);
     }
 
