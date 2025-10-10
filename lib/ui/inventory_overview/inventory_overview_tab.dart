@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vintage_1020/domain/providers/inventory_notifier/async_inventory_notifier_provider.dart';
+import 'package:vintage_1020/data/providers/inventory_notifier/async_inventory_notifier_provider.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/inventory_carousel.dart';
 
 class InventoryOverviewTab extends ConsumerWidget {

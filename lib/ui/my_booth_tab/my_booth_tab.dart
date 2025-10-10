@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vintage_1020/data/model/inventory_item_local/inventory_item_local.dart';
-import 'package:vintage_1020/domain/providers/inventory_local_provider/inventory_local_provider.dart';
-import 'package:vintage_1020/domain/sqflite/local_db.dart';
+import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
+import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
+import 'package:vintage_1020/data/local_db/local_db.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/inventory_carousel.dart';
 
 class MyBoothTab extends ConsumerStatefulWidget {
