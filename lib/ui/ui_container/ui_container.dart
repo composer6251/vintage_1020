@@ -62,8 +62,8 @@ class _HomeScreenState extends ConsumerState<UiContainer> {
         toolbarHeight: 40.0,
         backgroundColor: Colors.blue[700],
         actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
+          TextButton(
+            child: Text('Drop Inventory'),
             onPressed: () {
               dropInventoryItemTable();
             },

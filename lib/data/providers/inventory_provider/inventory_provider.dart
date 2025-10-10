@@ -20,7 +20,7 @@ class InventoryLocal extends _$InventoryLocal {
   List<InventoryItemLocal> build() {
     print('provider build');
 
-    return state;
+    return [];
   }
 
   Future<List<InventoryItemLocal>> fetchInitialUserInventory() async {

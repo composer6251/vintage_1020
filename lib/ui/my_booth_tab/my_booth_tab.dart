@@ -8,20 +8,20 @@ import 'package:vintage_1020/data/local_db/local_db.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/inventory_carousel.dart';
 
 class MyBoothTab extends ConsumerStatefulWidget {
-  // late final Future<void> _itemsFuture;
 
   @override
   ConsumerState<MyBoothTab> createState() => _MyBoothTabState();
 }
 
 class _MyBoothTabState extends ConsumerState<MyBoothTab> {
-  late Future<void> _itemsFuture;
+  late Future<void>? _itemsFuture;
   late Future<List<InventoryItemLocal>> inventoryFuture;
+  late List<InventoryItemLocal> inventory;
 
   @override
   void initState() {
     super.initState();
-    print('my booth initState with empty inventory');
+    print('my booth initState');
     // _itemsFuture = ref
     //     .read(inventoryLocalProvider.notifier)
     //     .fetchInitialUserInventory();
