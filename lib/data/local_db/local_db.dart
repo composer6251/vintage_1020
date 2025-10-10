@@ -91,7 +91,7 @@ class LocalDb {
 void dropInventoryItemTable() async {
   final db = await _getDatabase();
 
-  db.delete(inventoryItemTable);
+  db.execute('DROP TABLE $inventoryItemTable');
 }
 
   void insertIntoInventoryItem(InventoryItemLocal item) async {
