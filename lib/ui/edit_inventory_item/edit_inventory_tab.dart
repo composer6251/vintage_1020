@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vintage_1020/data/providers/current_inventory_item/current_inventory_item.dart';
-import 'package:vintage_1020/domain/inventory_item/inventory_item.dart';
-import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
-import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/inventory_carousel.dart';
 
 class EditItemTab extends ConsumerWidget {
@@ -12,6 +9,9 @@ class EditItemTab extends ConsumerWidget {
     final item = ref.watch(currentInventoryItemProvider);
   
     return Scaffold(
+      appBar: AppBar(actions: [
+        TextButton(onPressed: () => Navigator.pop(context), child: Text('Return to inventory'),)
+      ],),
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

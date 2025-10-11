@@ -9,8 +9,6 @@ class HeroLayoutCard extends ConsumerWidget {
   HeroLayoutCard({
     super.key,
     required this.item,
-    // required this.height,
-    // required this.width,
   });
 
   final InventoryItemLocal item;

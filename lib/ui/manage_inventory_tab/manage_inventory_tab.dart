@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vintage_1020/data/providers/current_inventory_item/current_inventory_item.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
-import 'package:vintage_1020/data/providers/async_inventory_notifier/async_inventory_notifier_provider.dart';
 import 'package:vintage_1020/ui/manage_inventory_tab/widgets/manage_inventory_item_tile.dart';
 
 class ManageInventoryTab extends ConsumerWidget {

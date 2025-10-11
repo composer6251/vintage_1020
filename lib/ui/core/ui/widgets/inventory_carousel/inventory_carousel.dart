@@ -33,13 +33,6 @@ class _InventoryCarouselState extends ConsumerState<InventoryCarousel> {
     final double width = MediaQuery.sizeOf(context).width;
     print('INVENTORY CAROUSEL WIDGET Inventory size ${widget.inventoryItems.length}');
 
-    final List<InventoryItemLocal> inventory = ref
-        .watch(inventoryLocalProvider)
-        .where(
-          (item) => item.itemListingDate != null && item.itemSoldDate == null,
-        )
-        .toList();
-    print('INVENTORY CAROUSEL Inventory size ${inventory.length}');
     return ConstrainedBox(
       // constraints: BoxConstraints.expand(),
       constraints: BoxConstraints(minHeight: height, maxHeight: height),

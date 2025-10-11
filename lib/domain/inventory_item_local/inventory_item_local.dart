@@ -1,13 +1,8 @@
 import 'dart:io';
 import 'dart:convert';
 
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:uuid/uuid.dart';
-import 'package:vintage_1020/data/local_db/local_db.dart';
-final Uuid uuid = Uuid();
 class InventoryItemLocal {
-  @Default(Uuid())
-  String id;
+  String id = '';
   String? userEmail;
   String? primaryImageUrl;
   String? itemDescription;
@@ -23,11 +18,10 @@ class InventoryItemLocal {
   int? itemHeight;
   int? itemWidth;
   int? itemDepth;
-  @Default(null)
   DateTime? itemDeleteDate;
   double? isCurrentBoothItem;
 
-  InventoryItemLocal.empty(uuid.v4());
+  InventoryItemLocal.empty();
 
   InventoryItemLocal.toLocalDb(
     this.id,
