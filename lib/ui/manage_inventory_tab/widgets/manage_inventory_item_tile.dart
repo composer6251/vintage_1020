@@ -86,7 +86,10 @@ class ManageInventoryItemTile extends HookConsumerWidget {
       showSnackBar('Deleted 1 item with id $itemId', context);
     }
 
-    return Card(
+    return model == null ? 
+    Container() 
+    : 
+    Card(
       elevation: 3.0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),

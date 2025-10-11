@@ -8,9 +8,10 @@ import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/hero_card.dart';
 
 class InventoryCarousel extends ConsumerStatefulWidget {
-  const InventoryCarousel({
+  InventoryCarousel({
     super.key,
     required this.inventoryItems,
+    this.filter,
     // required this.width,
     // required this.height,
     required this.flexWeights,
@@ -19,40 +20,43 @@ class InventoryCarousel extends ConsumerStatefulWidget {
   // final double width;
   // final double height;
   final List<int> flexWeights;
-
-
+  final InventoryFilter? filter;
 
   @override
   ConsumerState<InventoryCarousel> createState() => _InventoryCarouselState();
 }
 
 class _InventoryCarouselState extends ConsumerState<InventoryCarousel> {
-
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.sizeOf(context).height;
     final double width = MediaQuery.sizeOf(context).width;
-    final List<InventoryItemLocal> inventory = ref.watch(inventoryLocalProvider);
-    return 
-        ConstrainedBox(
-          // constraints: BoxConstraints.expand(),
-          constraints: BoxConstraints(minHeight: height, maxHeight: height),
-          child: 
-          CarouselView.weighted(
-            // controller: controller,
-            itemSnapping: true,
-            flexWeights: widget.flexWeights,
-            children: inventory
-                .map(
-                  (i) => HeroLayoutCard(
-                    item: i,
-                    // height: widget.height,
-                    // width: widget.width,
-                  ),
-                )
-                .toList(),
-          ),
-       );
+    print('INVENTORY CAROUSEL WIDGET Inventory size ${widget.inventoryItems.length}');
 
+    final List<InventoryItemLocal> inventory = ref
+        .watch(inventoryLocalProvider)
+        .where(
+          (item) => item.itemListingDate != null && item.itemSoldDate == null,
+        )
+        .toList();
+    print('INVENTORY CAROUSEL Inventory size ${inventory.length}');
+    return ConstrainedBox(
+      // constraints: BoxConstraints.expand(),
+      constraints: BoxConstraints(minHeight: height, maxHeight: height),
+      child: CarouselView.weighted(
+        // controller: controller,
+        itemSnapping: true,
+        flexWeights: widget.flexWeights,
+        children: widget.inventoryItems
+            .map(
+              (i) => HeroLayoutCard(
+                item: i,
+                // height: widget.height,
+                // width: widget.width,
+              ),
+            )
+            .toList(),
+      ),
+    );
   }
 }

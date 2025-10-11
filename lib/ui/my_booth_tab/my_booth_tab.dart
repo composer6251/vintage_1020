@@ -8,7 +8,6 @@ import 'package:vintage_1020/data/local_db/local_db.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/inventory_carousel.dart';
 
 class MyBoothTab extends ConsumerStatefulWidget {
-
   @override
   ConsumerState<MyBoothTab> createState() => _MyBoothTabState();
 }
@@ -33,6 +32,7 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
     final List<InventoryItemLocal> inventory = ref.watch(
       inventoryLocalProvider,
     );
+    print('\n\nMY BOOTH inventory size: ${inventory?.length}');
     return Scaffold(
       body: FutureBuilder<List<InventoryItemLocal>>(
         /*FUTURE FUNCTION TO RETRIEVE DATA AND UPDATE PROVIDER*/
@@ -50,22 +50,27 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 // TODO: FIX
+                // Flexible(
+                //   flex: 2,
+                //   fit: FlexFit.loose,
+                //   child: Container(
+                //     child: Image.file(File(inventory.first.primaryImageUrl!)),),
+                // ),
                 Flexible(
                   flex: 2,
-                  fit: FlexFit.loose,
-                  child: Container(
-                    child: Image.file(File(inventory.first.primaryImageUrl!)),),
-                ),
-                InventoryCarousel(
-                  inventoryItems: inventory,
-                  flexWeights: [6],
+                  child: InventoryCarousel(
+                    inventoryItems: inventory,
+                    filter: InventoryFilter.myBooth,
+                    flexWeights: [3],
+                  ),
                 ),
                 Flexible(
                   flex: 2,
                   fit: FlexFit.loose,
                   child: InventoryCarousel(
                     inventoryItems: inventory,
-                    flexWeights: [5],
+                    filter: InventoryFilter.myBooth,
+                    flexWeights: [3],
                   ),
                 ),
               ],

@@ -2,9 +2,12 @@ import 'dart:io';
 import 'dart:convert';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-
+import 'package:uuid/uuid.dart';
+import 'package:vintage_1020/data/local_db/local_db.dart';
+final Uuid uuid = Uuid();
 class InventoryItemLocal {
-  final String id;
+  @Default(Uuid())
+  String id;
   String? userEmail;
   String? primaryImageUrl;
   String? itemDescription;
@@ -23,6 +26,8 @@ class InventoryItemLocal {
   @Default(null)
   DateTime? itemDeleteDate;
   double? isCurrentBoothItem;
+
+  InventoryItemLocal.empty(uuid.v4());
 
   InventoryItemLocal.toLocalDb(
     this.id,
@@ -56,16 +61,24 @@ class InventoryItemLocal {
       itemPurchasePrice = data['itemPurchasePrice'],
       itemListingPrice = data['itemListingPrice'],
       itemSoldPrice = data['itemSoldPrice'],
-      itemPurchaseDate = data['itemPurchaseDate'] != null ? DateTime.parse(data['itemPurchaseDate']) as DateTime? : null,
-      itemListingDate = DateTime.parse(data['itemListingDate']) as DateTime?,
-      itemSoldDate = DateTime.parse(data['itemSoldDate']) as DateTime?,
+      itemPurchaseDate = data['itemPurchaseDate'] != null
+          ? DateTime.parse(data['itemPurchaseDate']) as DateTime?
+          : null,
+      itemListingDate = data['itemListingDate'] != null
+          ? DateTime.parse(data['itemListingDate']) as DateTime?
+          : null,
+      itemSoldDate = data['itemSoldDate'] != null
+          ? DateTime.parse(data['itemSoldDate']) as DateTime?
+          : null,
       itemHeight = data?['itemHeight'],
       itemWidth = data?['itemWidth'],
       itemDepth = data?['itemDepth'],
       // itemDimensions = data?['itemDimensions'] is Iterable?
       //     ? Map.from(data?['itemDimensions'])
       //     : null,
-      itemDeleteDate =  data['itemDeleteDate'] != null ? DateTime.parse(data['itemDeleteDate']) as DateTime? : null,
+      itemDeleteDate = data['itemDeleteDate'] != null
+          ? DateTime.parse(data['itemDeleteDate']) as DateTime?
+          : null,
       isCurrentBoothItem = data['isCurrentBoothItem'] as double?;
 
   Map<String, dynamic> toMapForLocalDB() {

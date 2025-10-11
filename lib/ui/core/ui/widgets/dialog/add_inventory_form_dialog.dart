@@ -73,10 +73,6 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         listingDate.value = pickedDate;
         return;
       }
-      if (type == 'Sold') {
-        soldDate.value = pickedDate;
-        return;
-      }
       purchaseDate.value = pickedDate;
     }
 
@@ -102,7 +98,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
       }
       
       final InventoryItemLocal itemToDB = InventoryItemLocal.toLocalDb(
-        uuid.v6(),
+        '',
         userEmail,
         defaultItemImageUrl.value,
         '',

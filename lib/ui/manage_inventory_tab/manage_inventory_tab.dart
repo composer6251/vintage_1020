@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vintage_1020/data/providers/current_inventory_item/current_inventory_item.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
 import 'package:vintage_1020/data/providers/async_inventory_notifier/async_inventory_notifier_provider.dart';
@@ -11,17 +12,18 @@ class ManageInventoryTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
-    final List<InventoryItemLocal> inventory = ref.watch(inventoryLocalProvider);
+    final List<InventoryItemLocal> inventory = ref.watch(
+      inventoryLocalProvider,
+    );
 
     void redirectToEditInventoryItem(InventoryItemLocal item) {
-      ref.read(asyncInventoryNotifierProviderProvider.notifier).makeCurrentInventoryItem(item.id!);
-      Navigator.pushNamed(context, '/edit-inventory-item', arguments: item);
+      ref.read(currentInventoryItemProvider.notifier).updateCurrentInventoryItem(item);
+      Navigator.pushNamed(context, '/edit-inventory-item');
     }
 
     return Column(
       children: [
-        Container(child: Text('Inventory items is ${inventory.length}'),),
+        Container(child: Text('Inventory items is ${inventory.length}')),
         Expanded(
           // flex: 4,
           child: ListView.builder(
@@ -31,9 +33,7 @@ class ManageInventoryTab extends ConsumerWidget {
                 onTap: () {
                   redirectToEditInventoryItem(inventory[index]);
                 },
-                child: ManageInventoryItemTile(
-                  model: inventory[index],
-                ),
+                child: ManageInventoryItemTile(model: inventory[index]),
               );
             },
             itemCount: inventory.length,

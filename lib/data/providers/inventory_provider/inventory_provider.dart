@@ -29,19 +29,20 @@ class InventoryLocal extends _$InventoryLocal {
     print('Fetch from DB return ${inventoryWithArchives.length} items');
 
     List<InventoryItemLocal> inventory = [];
-    try {
-      inventory = inventoryWithArchives
-          .where((item) => item.itemDeleteDate != null)
-          .toList();
-    } catch (ex) {
-      dev.log(
-        'Error caught deserializing DB fetchInitialInventoryLocal: ${ex.toString()}',
-      );
-    }
-    print('fetching initial inventory with ${inventory.length} items');
-    state = [...inventory];
+    // try {
+    //   inventory = inventoryWithArchives
+    //       .where((item) => item.itemDeleteDate != null)
+    //       .toList();
+    // } catch (ex) {
 
-    return inventory;
+    //   print(
+    //     'Error caught deserializing DB fetchInitialInventoryLocal: ${ex.toString()}',
+    //   );
+    // }
+    // print('fetching initial inventory with ${inventory.length} items');
+    state = [...inventoryWithArchives];
+
+    return inventoryWithArchives;
   }
 
   Future<void> addUserInventoryItemLocal(InventoryItemLocal item) async {
@@ -64,7 +65,7 @@ class InventoryLocal extends _$InventoryLocal {
         item.itemWidth,
         item.itemDepth,
         item.itemDeleteDate,
-        item.isCurrentBoothItem,
+        item.isCurrentBoothItem ?? 1,
       ),
     ];
 
@@ -73,6 +74,10 @@ class InventoryLocal extends _$InventoryLocal {
 
   List<InventoryItemLocal> getInventoryState() {
     return state;
+  }
+
+  InventoryItemLocal getCurrentInventoryItemById(String id) {
+    return state.where((item) => item.id == id).single;
   }
 
   Future<int> deleteUserInventoryByEmail() async {
@@ -102,11 +107,12 @@ class InventoryLocal extends _$InventoryLocal {
   //   ];
   // }
 
-  // void makeCurrentInventoryItem(num id) {
+  // void makeCurrentInventoryItem(String id) {
+
   //   state = [
   //     for (final item in state)
   //       if (item.id == id)
-  //         item.copyWith(id: 0)
+  //         state(id: 0)
   //       // Assign a new ID to make it current
   //       else
   //         item,
@@ -122,6 +128,7 @@ enum InventoryFilter {
   furniture,
   archived,
   deleted,
+  current,
 }
 
 // CREATE FILTER PROVIDER AND DEFAULT TO ALL
@@ -130,10 +137,15 @@ final filteredInventoryProvider = StateProvider((_) => InventoryFilter.myBooth);
 final inventoryFilter = Provider<List<InventoryItemLocal>>((ref) {
   final List<InventoryItemLocal> inventory = ref.watch(inventoryLocalProvider);
   final filter = ref.watch(filteredInventoryProvider);
+  // final id = ref.watch(currentInventoryItemProvider.notifier);
 
   switch (filter) {
     case InventoryFilter.myBooth:
       print('Filter BOOTH');
+      List<InventoryItemLocal> inventoryByFlag = inventory
+          .where((item) => item.isCurrentBoothItem == 1.0)
+          .toList();
+      print('inventory by flag $inventoryByFlag');
       return inventory
           .where(
             (item) => item.itemListingDate != null && item.itemSoldDate == null,
@@ -157,6 +169,8 @@ final inventoryFilter = Provider<List<InventoryItemLocal>>((ref) {
     case InventoryFilter.deleted:
       print('Filter DELETED');
       return inventory.where((item) => item.itemSoldDate != null).toList();
+    case InventoryFilter.current:
+      return inventory; //.where((item) => item.id == id).toList();
     case InventoryFilter.all:
       return inventory;
   }
