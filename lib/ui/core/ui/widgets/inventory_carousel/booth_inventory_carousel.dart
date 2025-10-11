@@ -7,26 +7,22 @@ import 'package:vintage_1020/data/providers/inventory_provider/inventory_provide
 import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/hero_card.dart';
 
-class InventoryCarousel extends ConsumerStatefulWidget {
-  InventoryCarousel({
+class BoothInventoryCarousel extends ConsumerStatefulWidget {
+  BoothInventoryCarousel({
     super.key,
     required this.inventoryItems,
     this.filter,
-    // required this.width,
-    // required this.height,
     required this.flexWeights,
   });
   final List<InventoryItemLocal> inventoryItems;
-  // final double width;
-  // final double height;
   final List<int> flexWeights;
   final InventoryFilter? filter;
 
   @override
-  ConsumerState<InventoryCarousel> createState() => _InventoryCarouselState();
+  ConsumerState<BoothInventoryCarousel> createState() => _InventoryCarouselState();
 }
 
-class _InventoryCarouselState extends ConsumerState<InventoryCarousel> {
+class _InventoryCarouselState extends ConsumerState<BoothInventoryCarousel> {
   @override
   Widget build(BuildContext context) {
     final double height = MediaQuery.sizeOf(context).height;
@@ -34,18 +30,14 @@ class _InventoryCarouselState extends ConsumerState<InventoryCarousel> {
     print('INVENTORY CAROUSEL WIDGET Inventory size ${widget.inventoryItems.length}');
 
     return ConstrainedBox(
-      // constraints: BoxConstraints.expand(),
       constraints: BoxConstraints(minHeight: height, maxHeight: height),
       child: CarouselView.weighted(
-        // controller: controller,
         itemSnapping: true,
         flexWeights: widget.flexWeights,
         children: widget.inventoryItems
             .map(
               (i) => HeroLayoutCard(
                 item: i,
-                // height: widget.height,
-                // width: widget.width,
               ),
             )
             .toList(),

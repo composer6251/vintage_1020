@@ -8,42 +8,14 @@ part 'current_inventory_item.g.dart';
 class CurrentInventoryItem extends _$CurrentInventoryItem {
   @override
   InventoryItemLocal build() {
-    return InventoryItemLocal.empty();
+    state = InventoryItemLocal.empty();
+    return state;
   }
 
   void updateCurrentInventoryItem(InventoryItemLocal item) {
+    print('updating current inventory item ${item.id}');
     state = item;
+
+    print('New state after updating current item: ${state.id}');
   }
-
-  /*******
-final name = SomeNotifierProvider.someModifier<MyNotifier, Result>(MyNotifier.new);
- 
-class MyNotifier extends SomeNotifier<Result> {
-  @override
-  Result build() {
-    <your logic here>
-  }
-  <your methods here>
-}
- */
-  // Filter to hold current inventory item id
-  // final currentInventoryItemProvider =
-  //     NotifierProvider<InventoryItemLocal, String>(() {
-  //       return CurrentInventoryNotifier();
-  //     });
-
-  // class CurrentInventoryNotifier extends Provider<InventoryItemLocal> {
-  //   @override
-  //   InventoryItemLocal build() {
-  //     return InventoryItemLocal;
-  //   }
-
-  // }
-
-  // final singleInventoryFilter = Provider<InventoryItemLocal>((ref) {
-  //   final List<InventoryItemLocal> inventory = ref.watch(inventoryLocalProvider);
-  //   // final id = ref.watch(currentInventoryItemProvider);
-
-  //   return inventory.where((item) => item.id == id).single;
-  // });
 }

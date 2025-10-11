@@ -15,8 +15,11 @@ class ManageInventoryTab extends ConsumerWidget {
       inventoryLocalProvider,
     );
 
-    void redirectToEditInventoryItem(InventoryItemLocal item) {
-      ref.read(currentInventoryItemProvider.notifier).updateCurrentInventoryItem(item);
+    void redirectToEditInventoryItem(InventoryItemLocal item) async {
+      print('redirect to edit inventor with item ${item.id}');
+      ref
+          .read(currentInventoryItemProvider.notifier)
+          .updateCurrentInventoryItem(item);
       Navigator.pushNamed(context, '/edit-inventory-item');
     }
 
@@ -24,12 +27,12 @@ class ManageInventoryTab extends ConsumerWidget {
       children: [
         Container(child: Text('Inventory items is ${inventory.length}')),
         Expanded(
-          // flex: 4,
           child: ListView.builder(
             itemExtent: 200,
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
+                  print('Item index select on manage inventory: $index');
                   redirectToEditInventoryItem(inventory[index]);
                 },
                 child: ManageInventoryItemTile(model: inventory[index]),

@@ -2,10 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vintage_1020/data/providers/current_inventory_item/current_inventory_item.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
 import 'package:vintage_1020/data/local_db/local_db.dart';
-import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/inventory_carousel.dart';
+import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/edit_item_inventory_carousel.dart';
+import 'package:vintage_1020/ui/my_booth_tab/widgets/booth_item.dart';
 
 class MyBoothTab extends ConsumerStatefulWidget {
   @override
@@ -13,7 +15,6 @@ class MyBoothTab extends ConsumerStatefulWidget {
 }
 
 class _MyBoothTabState extends ConsumerState<MyBoothTab> {
-  late Future<void>? _itemsFuture;
   late Future<List<InventoryItemLocal>> inventoryFuture;
   late List<InventoryItemLocal> inventory;
 
@@ -26,13 +27,20 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
         .fetchInitialUserInventory();
   }
 
+  void redirectToEditInventoryItem(InventoryItemLocal item) {
+    print('redirect from booth item: ${item.id}');
+    ref
+        .read(currentInventoryItemProvider.notifier)
+        .updateCurrentInventoryItem(item);
+    Navigator.pushNamed(context, '/edit-inventory-item');
+  }
+
   @override
   Widget build(BuildContext context) {
     // variable to store inventory once async call completes
     final List<InventoryItemLocal> inventory = ref.watch(
       inventoryLocalProvider,
     );
-    print('\n\nMY BOOTH inventory size: ${inventory?.length}');
     return Scaffold(
       body: FutureBuilder<List<InventoryItemLocal>>(
         /*FUTURE FUNCTION TO RETRIEVE DATA AND UPDATE PROVIDER*/
@@ -49,19 +57,49 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // TODO: FIX
-                // Flexible(
-                //   flex: 2,
-                //   fit: FlexFit.loose,
-                //   child: Container(
-                //     child: Image.file(File(inventory.first.primaryImageUrl!)),),
-                // ),
-                Flexible(
-                  flex: 2,
-                  child: InventoryCarousel(
-                    inventoryItems: inventory,
-                    filter: InventoryFilter.myBooth,
-                    flexWeights: [3],
+                Positioned.fill(
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Colors.transparent,
+                          Colors.black.withValues(alpha: 0.7),
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        stops: const [0.6, 0.95],
+                      ),
+                    ),
+                  ),
+                ),
+                Card(
+                  elevation: 3.0,
+                  shadowColor: Colors.blueAccent,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text('Booth items: ${inventory.length}'),
+                      Text('Booth cost: ${inventory.length}'),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemExtent: 200,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          redirectToEditInventoryItem(inventory[index]);
+                        },
+                        child: Card(
+                          elevation: 4,
+                          child: BoothItem(model: inventory[index]),
+                        ),
+                      );
+                    },
+                    itemCount: inventory.length,
                   ),
                 ),
                 Flexible(
@@ -70,7 +108,7 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
                   child: InventoryCarousel(
                     inventoryItems: inventory,
                     filter: InventoryFilter.myBooth,
-                    flexWeights: [3],
+                    flexWeights: [4],
                   ),
                 ),
               ],

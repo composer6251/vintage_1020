@@ -98,7 +98,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
       }
       
       final InventoryItemLocal itemToDB = InventoryItemLocal.toLocalDb(
-        '',
+        uuid.v6(),
         userEmail,
         defaultItemImageUrl.value,
         '',

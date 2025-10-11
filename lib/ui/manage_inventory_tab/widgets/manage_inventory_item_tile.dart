@@ -30,7 +30,7 @@ class ManageInventoryItemTile extends HookConsumerWidget {
     final double height = MediaQuery.sizeOf(context).height;
     final double width = MediaQuery.sizeOf(context).width;
 
-    Widget? getBanner() {
+    Widget getBanner() {
       if (isSold) {
         return Banner(
           location: BannerLocation.topStart,
@@ -46,17 +46,18 @@ class ManageInventoryItemTile extends HookConsumerWidget {
         );
       }
       if (!isListed && !isSold) {
-        Banner(
+        return Banner(
           location: BannerLocation.topStart,
           color: const Color.fromARGB(255, 220, 15, 66),
           message: 'Not Listed',
         );
       }
+      return Container();
     }
 
     void deleteInventoryItem(String itemId) async {
       Navigator.pop(context);
-      int deletedId = await ref
+      await ref
           .read(inventoryLocalProvider.notifier)
           .deleteInventoryItem(itemId);
     }
@@ -104,16 +105,12 @@ class ManageInventoryItemTile extends HookConsumerWidget {
             child: Stack(
               children: [
                 model.primaryImageUrl == null
-                    ? Container(child: Text('No Primary Image set for Item'))
-                    : ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
-                        child: Image.asset(model.primaryImageUrl!),
-                      ),
-                Banner(
-                  location: BannerLocation.topStart,
-                  color: const Color.fromARGB(255, 13, 94, 16),
-                  message: 'SOLD',
-                ),
+                ? Container(child: Text('No Primary Image set for Item'))
+                : ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Image.asset(model.primaryImageUrl!),
+                  ),
+                getBanner()
               ],
             ),
           ),
