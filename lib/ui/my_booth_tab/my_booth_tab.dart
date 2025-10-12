@@ -79,8 +79,9 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Text('Booth items: ${inventory.length}'),
-                      Text('Booth cost: ${inventory.length}'),
+                      Text('Total items: ${inventory.length}'),
+                      Text('Total cost: ${inventory.length}'),
+                      Text('Total value: ${inventory.length}'),
                     ],
                   ),
                 ),

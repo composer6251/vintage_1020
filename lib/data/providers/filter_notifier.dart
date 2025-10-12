@@ -10,19 +10,21 @@ part 'filter_notifier.g.dart';
 class FilterNotifier extends _$FilterNotifier{
 
   @override
-  Map<InventoryFilter, bool> build() {
-    return ({
-      InventoryFilter.all: true,
-      InventoryFilter.myBooth: false,
-      InventoryFilter.listed: false,
-      InventoryFilter.sold: false,
-      InventoryFilter.furniture: false,
-      InventoryFilter.deleted: false,
-      InventoryFilter.current: false,
-    });
+  InventoryFilter build() {
+
+    return InventoryFilter.all;
+    // return ({
+    //   InventoryFilter.all: true,
+    //   InventoryFilter.myBooth: false,
+    //   InventoryFilter.listed: false,
+    //   InventoryFilter.sold: false,
+    //   InventoryFilter.furniture: false,
+    //   InventoryFilter.deleted: false,
+    //   InventoryFilter.current: false,
+    // });
   }
 
-  void setCurrentFilters(Map<InventoryFilter, bool> filters) {
-    state = filters;
+  void setCurrentFilters(InventoryFilter filter) {
+    state = filter;
   }
 }

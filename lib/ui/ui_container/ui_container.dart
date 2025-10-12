@@ -118,10 +118,14 @@ class TabViewsContent extends HookConsumerWidget {
         constraints: BoxConstraints(maxHeight: height, maxWidth: width),
         child: Scaffold(
           appBar: AppBar(
+            title: Text('WELCOME VINTAGE 1020!!!'),
+            titleTextStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
+            centerTitle: true,
+            toolbarHeight: 30,
+            elevation: 100,
             automaticallyImplyLeading: false,
             backgroundColor: Colors.blue[700],
             bottom: TabBar(
-              // controller: _tabController,
               dividerColor: Colors.white,
               isScrollable: false,
               indicatorAnimation: TabIndicatorAnimation.elastic,

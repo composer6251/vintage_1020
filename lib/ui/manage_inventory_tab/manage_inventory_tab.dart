@@ -3,7 +3,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:vintage_1020/data/providers/current_inventory_item/current_inventory_item.dart';
+import 'package:vintage_1020/data/providers/filter_notifier.dart';
 import 'package:vintage_1020/data/providers/inventory_filter_provider/inventory_filter_provider.dart';
+import 'package:vintage_1020/data/providers/inventory_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
 import 'package:vintage_1020/ui/manage_inventory_tab/widgets/manage_inventory_item_tile.dart';
@@ -13,16 +15,19 @@ class ManageInventoryTab extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final List<InventoryItemLocal> inventory = ref.watch(
-      inventoryLocalProvider,
-    );
+
+    // NEW PROVIDER
+    final List<InventoryItemLocal> filteredInventory = ref.watch(inventoryProvider);
 
     final selectedFilter = useState<Set<InventoryFilter>>({InventoryFilter.all});
 
     void updateSelectedFilter(Set<InventoryFilter> newFilter) {
       Set<InventoryFilter> currentFilters = selectedFilter.value;
       currentFilters.addAll(newFilter);
-      selectedFilter.value =  currentFilters;
+      selectedFilter.value =  newFilter;
+
+      // UPDATE PROVIDER WITH FILTER
+      ref.read(inventoryProvider.notifier).setFilteredInventory(newFilter.first);
     }
 
     void redirectToEditInventoryItem(InventoryItemLocal item) async {
@@ -35,8 +40,13 @@ class ManageInventoryTab extends HookConsumerWidget {
 
     return Column(
       children: [
-        Container(height: 50, child: Text('Inventory items is ${inventory.length}')),
+        Container(
+          height: 30, 
+          child: Text(
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16), 
+          'Number of items: ${filteredInventory.length}')),
         SegmentedButton<InventoryFilter>(
+          style: ButtonStyle(elevation: WidgetStatePropertyAll(100)),
           multiSelectionEnabled: false,
           selected: selectedFilter.value,
           onSelectionChanged: (Set<InventoryFilter> filters) {
@@ -53,7 +63,9 @@ class ManageInventoryTab extends HookConsumerWidget {
               ),
             ButtonSegment<InventoryFilter>(
               value: InventoryFilter.backStock,
-              label: Text('Back Stock')
+              label: Text(
+                style: TextStyle(overflow: TextOverflow.ellipsis),
+                'Backstock')
               ),
             ButtonSegment<InventoryFilter>(
               value: InventoryFilter.sold,
@@ -63,8 +75,7 @@ class ManageInventoryTab extends HookConsumerWidget {
           ],
 
         ),
-    
-
+  
         Expanded(
           child: ListView.builder(
             itemExtent: 200,
@@ -72,12 +83,12 @@ class ManageInventoryTab extends HookConsumerWidget {
               return GestureDetector(
                 onTap: () {
                   print('Item index select on manage inventory: $index');
-                  redirectToEditInventoryItem(inventory[index]);
+                  redirectToEditInventoryItem(filteredInventory[index]);
                 },
-                child: ManageInventoryItemTile(model: inventory[index]),
+                child: ManageInventoryItemTile(model: filteredInventory[index]),
               );
             },
-            itemCount: inventory.length,
+            itemCount: filteredInventory.length,
           ),
         ),
       ],
