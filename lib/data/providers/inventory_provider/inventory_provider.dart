@@ -99,40 +99,10 @@ class InventoryLocal extends _$InventoryLocal {
 
     return numberOfDeletedItems;
   }
-
-  // void toggleInventoryStatus(num id) {
-  //   state = [
-  //     for (final item in state)
-  //       if (item.id == id) item.copyWith(id: _uuid.v4()) else item,
-  //   ];
-  // }
-
-  // void makeCurrentInventoryItem(String id) {
-
-  //   state = [
-  //     for (final item in state)
-  //       if (item.id == id)
-  //         state(id: 0)
-  //       // Assign a new ID to make it current
-  //       else
-  //         item,
-  //   ];
-  // }
-}
-
-enum InventoryFilter {
-  all,
-  myBooth,
-  notListed,
-  sold,
-  furniture,
-  archived,
-  deleted,
-  current,
 }
 
 // CREATE FILTER PROVIDER AND DEFAULT TO ALL
-final filteredInventoryProvider = StateProvider((_) => InventoryFilter.myBooth);
+final filteredInventoryProvider = NotifierProvider(ref);
 
 final inventoryFilter = Provider<List<InventoryItemLocal>>((ref) {
   final List<InventoryItemLocal> inventory = ref.watch(inventoryLocalProvider);
