@@ -2,12 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
-import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
-import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
-import 'package:vintage_1020/data/local_db/local_db.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/add_inventory_form_dialog.dart';
 import 'package:vintage_1020/ui/edit_inventory_item/edit_inventory_tab.dart';
-import 'package:vintage_1020/ui/image_testing.dart';
 import 'package:vintage_1020/ui/manage_inventory_tab/manage_inventory_tab.dart';
 import 'package:vintage_1020/ui/activity_chart_screen/activity_chart.dart';
 import 'package:vintage_1020/ui/my_booth_tab/my_booth_tab.dart';
@@ -21,12 +17,10 @@ class UiContainer extends StatefulHookConsumerWidget {
 }
 
 class _HomeScreenState extends ConsumerState<UiContainer> {
-  final FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
   void initState() {
     super.initState();
-    // TODO ADD DB CALL AND UPDATE PROVIDER
   }
 
   void openAddInventoryDialog() {
@@ -36,50 +30,28 @@ class _HomeScreenState extends ConsumerState<UiContainer> {
     );
   }
 
-  void deleteUserInventory() async {
-    int numberOfDeletedItems = await ref
-        .watch(inventoryLocalProvider.notifier)
-        .deleteUserInventoryByEmail();
+  // void deleteUserInventory() async {
+  //   int numberOfDeletedItems = await ref
+  //       .watch(inventoryLocalProvider.notifier)
+  //       .deleteUserInventoryByEmail();
 
-    String message = 'Deleted User Inventory of $numberOfDeletedItems items';
+  //   String message = 'Deleted User Inventory of $numberOfDeletedItems items';
 
-    showSnackBar(message);
-  }
+  //   showSnackBar(message);
+  // }
 
   void showSnackBar(String message) {
     var sb = SnackBar(content: Text(message));
     ScaffoldMessenger.of(context).showSnackBar(sb);
   }
 
-  void dropInventoryItemTable() {
-    LocalDb().dropInventoryItemTable();
-  }
+  // void dropInventoryItemTable() {
+  //   LocalDb().dropInventoryItemTable();
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 40.0,
-        backgroundColor: Colors.blue[700],
-        actions: [
-          TextButton(
-            child: Text('Drop Inventory'),
-            onPressed: () {
-              dropInventoryItemTable();
-            },
-          ),
-          TextButton(
-            onPressed: deleteUserInventory,
-            child: Text('Delete User Inventory'),
-          ),
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () {
-              auth.signOut();
-            },
-          ),
-        ],
-      ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -112,6 +84,8 @@ class TabViewsContent extends HookConsumerWidget {
     final double height = MediaQuery.sizeOf(context).height;
     final double width = MediaQuery.sizeOf(context).width;
 
+    final FirebaseAuth auth = FirebaseAuth.instance;
+
     return DefaultTabController(
       length: myTabs.length,
       child: ConstrainedBox(
@@ -121,10 +95,18 @@ class TabViewsContent extends HookConsumerWidget {
             title: Text('WELCOME VINTAGE 1020!!!'),
             titleTextStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
             centerTitle: true,
-            toolbarHeight: 30,
+            toolbarHeight: 40,
             elevation: 100,
             automaticallyImplyLeading: false,
             backgroundColor: Colors.blue[700],
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.logout),
+                onPressed: () {
+                  auth.signOut();
+                },
+              ),
+            ],
             bottom: TabBar(
               dividerColor: Colors.white,
               isScrollable: false,

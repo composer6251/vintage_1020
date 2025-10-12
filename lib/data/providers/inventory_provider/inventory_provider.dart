@@ -81,7 +81,7 @@ class InventoryLocal extends _$InventoryLocal {
   Future<int> deleteInventoryItem(String id) async {
     // Remove from state
     state = state.where((item) => item.id != id).toList();
-    // Hard delete
+   
     int numberOfDeletedItems = await LocalDb().softDeleteInventoryItem(id);
 
     return numberOfDeletedItems;

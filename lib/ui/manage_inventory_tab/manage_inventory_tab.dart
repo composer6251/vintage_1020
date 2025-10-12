@@ -59,7 +59,7 @@ class ManageInventoryTab extends HookConsumerWidget {
               ),
             ButtonSegment<InventoryFilter>(
               value: InventoryFilter.listed,
-              label: Text('Listed')
+              label: Text('Booth')
               ),
             ButtonSegment<InventoryFilter>(
               value: InventoryFilter.backStock,

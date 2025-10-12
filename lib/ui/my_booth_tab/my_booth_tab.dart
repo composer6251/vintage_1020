@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:vintage_1020/data/providers/current_inventory_item/current_inventory_item.dart';
+import 'package:vintage_1020/data/providers/inventory_filter_provider/inventory_filter_provider.dart';
+import 'package:vintage_1020/data/providers/inventory_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
 import 'package:vintage_1020/data/local_db/local_db.dart';
@@ -38,9 +40,7 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
   @override
   Widget build(BuildContext context) {
     // variable to store inventory once async call completes
-    final List<InventoryItemLocal> inventory = ref.watch(
-      inventoryLocalProvider,
-    );
+    final List<InventoryItemLocal> inventory = ref.watch(inventoryProvider);
     return Scaffold(
       body: FutureBuilder<List<InventoryItemLocal>>(
         /*FUTURE FUNCTION TO RETRIEVE DATA AND UPDATE PROVIDER*/
@@ -57,21 +57,6 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Positioned.fill(
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          Colors.transparent,
-                          Colors.black.withValues(alpha: 0.7),
-                        ],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        stops: const [0.6, 0.95],
-                      ),
-                    ),
-                  ),
-                ),
                 Card(
                   elevation: 3.0,
                   shadowColor: Colors.blueAccent,
@@ -85,7 +70,8 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
                     ],
                   ),
                 ),
-                Expanded(
+                Flexible(
+                  flex: 2,
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemExtent: 200,

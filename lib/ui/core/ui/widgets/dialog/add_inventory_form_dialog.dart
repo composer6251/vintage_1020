@@ -28,7 +28,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
 
     final purchaseDate = useState(DateTime.now());
     final listingDate = useState(DateTime.now());
-    final soldDate = useState(DateTime.now());
+    // final soldDate = useState(DateTime.now());
     final selectedImages = useState<List<XFile>>([]);
     final selectedImagesAsFiles = useState<List<File>>([]);
     final itemImageUrls = useState<List<String>>([]);
@@ -109,7 +109,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         double.tryParse(itemPurchasePriceController.text),
         purchaseDate.value,
         listingDate.value,
-        soldDate.value,
+        null,
         int.tryParse(itemHeightController.text),
         int.tryParse(itemWidthController.text),
         int.tryParse(itemDepthController.text),

@@ -104,7 +104,11 @@ void dropInventoryItemTable() async {
     final db = await _getDatabase();
     final data = await db.query(
       inventoryItemTable,
-      where: 'email = "$userEmail"',
+      where: 'email = ? AND itemDeleteDate IS NULL',
+      
+      whereArgs: [
+        userEmail,
+      ]
     );
 
     if(data.isEmpty) {

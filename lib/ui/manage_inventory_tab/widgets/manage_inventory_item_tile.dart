@@ -15,13 +15,6 @@ class ManageInventoryItemTile extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Future<void> launchWebApp() async {
-      // TODO:
-      Uri uri = Uri(scheme: 'web', host: 'localhost', port: 60219);
-      if (!await launchUrl(uri)) {
-        throw Exception('Could not launch $uri');
-      }
-    }
 
     final isListed =
         model.itemListingPrice != null && model.itemListingDate != null;
