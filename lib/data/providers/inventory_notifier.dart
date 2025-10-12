@@ -30,11 +30,11 @@ class InventoryNotifier extends _$InventoryNotifier{
       state = [...filteredInventory];
       return;
     }
-    if(currentFilter == InventoryFilter.listed) { 
-      filteredInventory = inventory.where((item) => item.itemListingDate != null && item.itemSoldDate == null).toList();
-      state = [...filteredInventory];
-      return;
-    }
+    // if(currentFilter == InventoryFilter.listed) { 
+    //   filteredInventory = inventory.where((item) => item.itemListingDate != null && item.itemSoldDate == null).toList();
+    //   state = [...filteredInventory];
+    //   return;
+    // }
     if(currentFilter == InventoryFilter.backStock) { 
       filteredInventory = inventory.where((item) => item.itemSoldDate != null).toList();
       state = [...filteredInventory];
