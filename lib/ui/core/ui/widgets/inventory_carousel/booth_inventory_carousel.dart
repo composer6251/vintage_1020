@@ -11,12 +11,10 @@ class BoothInventoryCarousel extends ConsumerStatefulWidget {
   BoothInventoryCarousel({
     super.key,
     required this.inventoryItems,
-    this.filter,
     required this.flexWeights,
   });
   final List<InventoryItemLocal> inventoryItems;
   final List<int> flexWeights;
-  final InventoryFilter? filter;
 
   @override
   ConsumerState<BoothInventoryCarousel> createState() => _InventoryCarouselState();

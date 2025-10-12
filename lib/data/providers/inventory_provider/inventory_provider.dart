@@ -27,19 +27,6 @@ class InventoryLocal extends _$InventoryLocal {
     List<InventoryItemLocal> inventoryWithArchives = await LocalDb()
         .getUserInventoryLocal();
     print('Fetch from DB return ${inventoryWithArchives.length} items');
-
-    List<InventoryItemLocal> inventory = [];
-    // try {
-    //   inventory = inventoryWithArchives
-    //       .where((item) => item.itemDeleteDate != null)
-    //       .toList();
-    // } catch (ex) {
-
-    //   print(
-    //     'Error caught deserializing DB fetchInitialInventoryLocal: ${ex.toString()}',
-    //   );
-    // }
-    // print('fetching initial inventory with ${inventory.length} items');
     state = [...inventoryWithArchives];
 
     return inventoryWithArchives;
@@ -101,47 +88,44 @@ class InventoryLocal extends _$InventoryLocal {
   }
 }
 
-// CREATE FILTER PROVIDER AND DEFAULT TO ALL
-final filteredInventoryProvider = NotifierProvider(ref);
+// final inventoryFilter = Provider<List<InventoryItemLocal>>((ref) {
+//   final List<InventoryItemLocal> inventory = ref.watch(inventoryLocalProvider);
+//   final filter = ref.watch(filteredInventoryProvider);
+//   // final id = ref.watch(currentInventoryItemProvider.notifier);
 
-final inventoryFilter = Provider<List<InventoryItemLocal>>((ref) {
-  final List<InventoryItemLocal> inventory = ref.watch(inventoryLocalProvider);
-  final filter = ref.watch(filteredInventoryProvider);
-  // final id = ref.watch(currentInventoryItemProvider.notifier);
-
-  switch (filter) {
-    case InventoryFilter.myBooth:
-      print('Filter BOOTH');
-      List<InventoryItemLocal> inventoryByFlag = inventory
-          .where((item) => item.isCurrentBoothItem == 1.0)
-          .toList();
-      print('inventory by flag $inventoryByFlag');
-      return inventory
-          .where(
-            (item) => item.itemListingDate != null && item.itemSoldDate == null,
-          )
-          .toList();
-    case InventoryFilter.notListed:
-      print('Filter NOT LISTED');
-      return inventory.where((item) => item.itemListingDate != null).toList();
-    case InventoryFilter.sold:
-      print('Filter SOLD');
-      return inventory.where((item) => item.itemSoldDate != null).toList();
-    case InventoryFilter.furniture:
-      print('Filter FURNITURE');
-      return inventory
-          .where((item) => item.itemCategory == 'Furniture')
-          .toList();
-    // TODO: IMPLEMENT
-    case InventoryFilter.archived:
-      return inventory;
-    // TODO: IMPLEMENT
-    case InventoryFilter.deleted:
-      print('Filter DELETED');
-      return inventory.where((item) => item.itemSoldDate != null).toList();
-    case InventoryFilter.current:
-      return inventory; //.where((item) => item.id == id).toList();
-    case InventoryFilter.all:
-      return inventory;
-  }
-});
+//   switch (filter) {
+//     case InventoryFilter.myBooth:
+//       print('Filter BOOTH');
+//       List<InventoryItemLocal> inventoryByFlag = inventory
+//           .where((item) => item.isCurrentBoothItem == 1.0)
+//           .toList();
+//       print('inventory by flag $inventoryByFlag');
+//       return inventory
+//           .where(
+//             (item) => item.itemListingDate != null && item.itemSoldDate == null,
+//           )
+//           .toList();
+//     case InventoryFilter.notListed:
+//       print('Filter NOT LISTED');
+//       return inventory.where((item) => item.itemListingDate != null).toList();
+//     case InventoryFilter.sold:
+//       print('Filter SOLD');
+//       return inventory.where((item) => item.itemSoldDate != null).toList();
+//     case InventoryFilter.furniture:
+//       print('Filter FURNITURE');
+//       return inventory
+//           .where((item) => item.itemCategory == 'Furniture')
+//           .toList();
+//     // TODO: IMPLEMENT
+//     case InventoryFilter.archived:
+//       return inventory;
+//     // TODO: IMPLEMENT
+//     case InventoryFilter.deleted:
+//       print('Filter DELETED');
+//       return inventory.where((item) => item.itemSoldDate != null).toList();
+//     case InventoryFilter.current:
+//       return inventory; //.where((item) => item.id == id).toList();
+//     case InventoryFilter.all:
+//       return inventory;
+//   }
+// });

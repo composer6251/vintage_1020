@@ -107,7 +107,6 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
                   fit: FlexFit.loose,
                   child: InventoryCarousel(
                     inventoryItems: inventory,
-                    filter: InventoryFilter.myBooth,
                     flexWeights: [4],
                   ),
                 ),

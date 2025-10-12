@@ -8,14 +8,11 @@ class InventoryCarousel extends ConsumerStatefulWidget {
   InventoryCarousel({
     super.key,
     required this.inventoryItems,
-    // Which inventory items to display
-    this.filter,
     // Display text
     required this.flexWeights,
   });
   final List<InventoryItemLocal> inventoryItems;
   final List<int> flexWeights;
-  final InventoryFilter? filter;
 
   @override
   ConsumerState<InventoryCarousel> createState() => _InventoryCarouselState();
