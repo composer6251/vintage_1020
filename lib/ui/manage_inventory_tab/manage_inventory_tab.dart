@@ -56,7 +56,7 @@ class ManageInventoryTab extends HookConsumerWidget {
               label: Text('All')
               ),
             ButtonSegment<InventoryFilter>(
-              value: InventoryFilter.listed,
+              value: InventoryFilter.myBooth,
               label: Text('Booth')
               ),
             ButtonSegment<InventoryFilter>(

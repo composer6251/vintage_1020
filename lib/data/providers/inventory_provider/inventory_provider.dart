@@ -25,7 +25,7 @@ class InventoryLocal extends _$InventoryLocal {
 
   Future<List<InventoryItemLocal>> fetchInitialUserInventory() async {
     List<InventoryItemLocal> inventoryWithArchives = await LocalDb()
-        .getUserInventoryLocal();
+        .fetchUserInventoryFromDb();
     print('Fetch from DB return ${inventoryWithArchives.length} items');
     state = [...inventoryWithArchives];
 
@@ -70,7 +70,7 @@ class InventoryLocal extends _$InventoryLocal {
   Future<int> deleteUserInventoryByEmail() async {
     int numberOfDeletedItems = await LocalDb().deleteUserInventory();
 
-    List<InventoryItemLocal> items = await LocalDb().getUserInventoryLocal();
+    List<InventoryItemLocal> items = await LocalDb().fetchUserInventoryFromDb();
     if (items.isEmpty) {
       state = [...items];
     }

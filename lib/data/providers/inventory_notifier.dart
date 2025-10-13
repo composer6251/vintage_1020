@@ -55,8 +55,7 @@ class InventoryNotifier extends _$InventoryNotifier{
       state = [...filteredInventory];
       return;
     }
-    if(currentFilter == InventoryFilter.all) { 
-      state = inventory;
-    }
+    // If no filters are applied, return all inventory
+    state = inventory;
   }
 }

@@ -37,7 +37,7 @@ class ProviderExample extends _$ProviderExample{
 /// GETTERS
   Future<List<InventoryItemLocal>> fetchInitialUserInventory() async {
     List<InventoryItemLocal> inventoryWithArchives = await LocalDb()
-        .getUserInventoryLocal();
+        .fetchUserInventoryFromDb();
     print('Fetch from DB return ${inventoryWithArchives.length} items');
 
     state = [...inventoryWithArchives];
@@ -85,7 +85,7 @@ class ProviderExample extends _$ProviderExample{
   Future<int> deleteUserInventoryByEmail() async {
     int numberOfDeletedItems = await LocalDb().deleteUserInventory();
 
-    List<InventoryItemLocal> items = await LocalDb().getUserInventoryLocal();
+    List<InventoryItemLocal> items = await LocalDb().fetchUserInventoryFromDb();
     if (items.isEmpty) {
       state = [...items];
     }

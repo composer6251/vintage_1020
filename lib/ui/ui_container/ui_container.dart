@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
+import 'package:vintage_1020/data/local_db/local_db.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/add_inventory_form_dialog.dart';
 import 'package:vintage_1020/ui/edit_inventory_item/edit_inventory_tab.dart';
 import 'package:vintage_1020/ui/manage_inventory_tab/manage_inventory_tab.dart';
@@ -45,14 +46,17 @@ class _HomeScreenState extends ConsumerState<UiContainer> {
     ScaffoldMessenger.of(context).showSnackBar(sb);
   }
 
-  // void dropInventoryItemTable() {
-  //   LocalDb().dropInventoryItemTable();
-  // }
+  void dropInventoryItemTable() {
+    LocalDb().dropInventoryItemTable();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+      // appBar: AppBar(actions: [
+      //   TextButton(onPressed: dropInventoryItemTable, child: Text('Drop Inv table'))
+      // ],),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -73,8 +77,8 @@ class TabViewsContent extends HookConsumerWidget {
   const TabViewsContent({super.key});
 
   static const List<Tab> myTabs = <Tab>[
-    Tab(text: 'My Booth', icon: Icon(Icons.storefront)),
     Tab(text: 'Manage', icon: Icon(Icons.chair_rounded)),
+    Tab(text: 'My Booth', icon: Icon(Icons.storefront)),
     Tab(text: 'Edit', icon: Icon(Icons.price_check)),
     Tab(text: 'Sales', icon: Icon(Icons.bar_chart)),
   ];

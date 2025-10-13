@@ -8,6 +8,7 @@ import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:sqflite/sqlite_api.dart';
 import 'package:uuid/uuid.dart';
+import 'package:vintage_1020/data/repositories/firestore/firestore_repository.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 
 import 'dart:developer' as dev;
@@ -23,9 +24,9 @@ final DateTime? test = FirebaseAuth.instance.currentUser?.metadata.lastSignInTim
 // CHECK IF USER DB instance has inventory table
 
 final String buildCreateUserTableSql =
-    'CREATE TABLE user(id TEXT PRIMARY KEY, email TEXT, inventory_id)';
+    'CREATE TABLE IF NOT EXISTS user(id TEXT PRIMARY KEY, email TEXT, boothName)';
 final String buildCreateInventoryTableSql =
-    'CREATE TABLE inventory_item(id TEXT PRIMARY KEY, email TEXT, primaryImageUrl TEXT, itemDescription TEXT, itemImageUrls TEXT, itemCategory TEXT, itemPurchasePrice REAL, itemListingPrice REAL, itemSoldPrice REAL, itemPurchaseDate TEXT, itemListingDate TEXT, itemSoldDate TEXT, itemHeight REAL, itemWidth REAL, itemDepth REAL, itemDeleteDate TEXT, isCurrentBoothItem REAL)';
+    'CREATE TABLE IF NOT EXISTS inventory_item(id TEXT PRIMARY KEY, email TEXT, primaryImageUrl TEXT, itemDescription TEXT, itemImageUrls TEXT, itemCategory TEXT, itemPurchasePrice REAL, itemListingPrice REAL, itemSoldPrice REAL, itemPurchaseDate TEXT, itemListingDate TEXT, itemSoldDate TEXT, itemHeight REAL, itemWidth REAL, itemDepth REAL, itemDeleteDate TEXT, isCurrentBoothItem REAL)';
 final String deleteDateColumnName = 'deleteDate TEXT';
 final String isCurrentBoothItem = 'isCurrentBoothItem REAL';
 
@@ -46,6 +47,7 @@ Future<Database> _getDatabase() async {
     path.join(dbPath, dbName),
     version: 1,
     onCreate: (db, version) {
+      print('Creating inventory table if it does not exist');
       db.execute(buildCreateInventoryTableSql);
     },
     onUpgrade: (db, oldVersion, newVersion) async {
@@ -100,23 +102,23 @@ void dropInventoryItemTable() async {
     db.insert(inventoryItemTable, item.toMapForLocalDB());
   }
 
-  Future<List<InventoryItemLocal>> getUserInventoryLocal() async {
+  Future<List<InventoryItemLocal>> fetchUserInventoryFromDb() async {
     final db = await _getDatabase();
-    final data = await db.query(
-      inventoryItemTable,
-      where: 'email = ? AND itemDeleteDate IS NULL',
-      
-      whereArgs: [
-        userEmail,
-      ]
-    );
 
-    if(data.isEmpty) {
-      dev.log('Data returned from getUserInventory is empty');
+    List<Set<InventoryItemLocal>> inventory = [];
+    try {
+      final data = await db.query(
+        inventoryItemTable,
+        where: 'email = ? AND itemDeleteDate IS NULL',
+        
+        whereArgs: [
+          userEmail,
+        ]
+      );
+      inventory = data.map((row) => {InventoryItemLocal.fromLocalDB(row)}).toList();
+    } catch(ex) {
+      print('Exception caught in fetchUserInventoryFromDb: $ex');
     }
-    List<Set<InventoryItemLocal>> inventory = data
-        .map((row) => {InventoryItemLocal.fromLocalDB(row)})
-        .toList();
 
     // Create List from the List<Set> returned
     List<InventoryItemLocal> flattenedInventory = [];

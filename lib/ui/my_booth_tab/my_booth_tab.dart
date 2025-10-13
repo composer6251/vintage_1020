@@ -58,7 +58,21 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
               child: Text('Error loading data: ${asyncSnapshot.error}'),
             );
           } else if (asyncSnapshot.hasData) {
-            return Column(
+            
+            return inventory.isEmpty ? Center(
+              child: 
+              Padding(
+                padding: const EdgeInsets.fromLTRB(32, 0, 32, 32),
+                child: Text(
+                  style: 
+                  TextStyle(
+                    fontSize: 32, 
+                    fontWeight: FontWeight.bold 
+                    ), 
+                    'You do not have any inventory items yet. Press the + to add an item!'),
+              ),) 
+                  : 
+              Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Flexible(
