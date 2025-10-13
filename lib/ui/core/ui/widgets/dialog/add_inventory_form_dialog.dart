@@ -27,7 +27,8 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     final initialDate = useState(DateTime.now());
 
     final purchaseDate = useState(DateTime.now());
-    final listingDate = useState(DateTime.now());
+    // final listingDate = useState<DateTime>(DateTime.now());
+    DateTime listingDate;
     // final soldDate = useState(DateTime.now());
     final selectedImages = useState<List<XFile>>([]);
     final selectedImagesAsFiles = useState<List<File>>([]);
@@ -64,13 +65,13 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     Future<void> selectDate(String type) async {
       final DateTime? pickedDate = await showDatePicker(
         context: context,
-        initialDate: initialDate.value,
+        // initialDate: initialDate.value,
         firstDate: DateTime.now().subtract(const Duration(days: 365)),
         lastDate: initialDate.value,
       );
       if (pickedDate == null) return; // User cancelled the date picker
       if (type == 'Listing') {
-        listingDate.value = pickedDate;
+        listingDate = pickedDate;
         return;
       }
       purchaseDate.value = pickedDate;
@@ -108,7 +109,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         double.tryParse(itemListingPriceController.text),
         double.tryParse(itemPurchasePriceController.text),
         purchaseDate.value,
-        listingDate.value,
+        null,
         null,
         int.tryParse(itemHeightController.text),
         int.tryParse(itemWidthController.text),
@@ -164,16 +165,16 @@ class AddInventoryFormDialog extends HookConsumerWidget {
               decoration: const InputDecoration(labelText: 'Listing Price'),
               keyboardType: TextInputType.numberWithOptions(decimal: true),
             ),
-            OutlinedButton(
-              style: ButtonStyle(
-                elevation: WidgetStatePropertyAll<double>(8.0),
-                backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
-              ),
-              onPressed: () => selectDate('Listing'),
-              child: Text(
-                'Listing Date: ${listingDate.value.toLocal().month}/${listingDate.value.toLocal().day}/${listingDate.value.toLocal().year}',
-              ),
-            ),
+            // OutlinedButton(
+            //   style: ButtonStyle(
+            //     elevation: WidgetStatePropertyAll<double>(8.0),
+            //     backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
+            //   ),
+            //   onPressed: () => selectDate('Listing'),
+            //   child: Text(
+            //     'Select Listing Date:'//${listingDate.toLocal().month}/${listingDate.value.toLocal().day}/${listingDate.value.toLocal().year}',
+            //   ),
+            // ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [

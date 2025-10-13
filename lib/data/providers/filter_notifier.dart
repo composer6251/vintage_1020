@@ -7,7 +7,6 @@ part 'filter_notifier.g.dart';
 
 enum InventoryFilter {
   all,
-  myBooth,
   listed,
   sold,
   furniture,
@@ -27,5 +26,17 @@ class FilterNotifier extends _$FilterNotifier{
 
   void setCurrentFilter(InventoryFilter filter) {
     state = filter;
+  }
+
+  void setCurrentTabInventoryFilter(int tabInd) {
+
+    switch (tabInd) {
+      case 1:
+        state = InventoryFilter.listed;
+      case 2:
+        state = InventoryFilter.current;
+      default:
+        state = InventoryFilter.all;
+    }
   }
 }

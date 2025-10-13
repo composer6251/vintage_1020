@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -28,7 +30,6 @@ class _ManageInventoryTabState extends ConsumerState<ManageInventoryTab> {
 
   @override
   Widget build(BuildContext context) {
-
     // NEW PROVIDER
     final List<InventoryItemLocal> filteredInventory = ref.watch(inventoryProvider);
 
@@ -41,17 +42,22 @@ class _ManageInventoryTabState extends ConsumerState<ManageInventoryTab> {
       ref.read(filterProvider.notifier).setCurrentFilter(newFilter.first);
 
       // UPDATE INVENTORY BY NEW FILTER VALUE
-      ref.read(inventoryProvider.notifier).setFilteredInventory(selectedFilter.value);
+      ref.read(inventoryProvider.notifier).setFilteredInventory();
     }
 
     void redirectToEditInventoryItem(InventoryItemLocal item) async {
       print('redirect to edit inventor with item ${item.id}');
-      ref
-          .read(currentInventoryItemProvider.notifier)
-          .updateCurrentInventoryItem(item);
+
+      // Update current inventory
+      ref.read(currentInventoryItemProvider.notifier).updateCurrentInventoryItem(item);
+      // Update filter to be current item
+      ref.read(filterProvider.notifier).setCurrentFilter(InventoryFilter.current);
+
+
       Navigator.pushNamed(context, '/edit-inventory-item');
     }
-    final List<InventoryItemLocal> inventory = ref.watch(inventoryProvider);
+
+    final String noInventoryMessage = 'You do not have any ${selectedFilter.value.name} items.';
 
     return Scaffold(
       body: FutureBuilder<List<InventoryItemLocal>>(
@@ -87,7 +93,7 @@ class _ManageInventoryTabState extends ConsumerState<ManageInventoryTab> {
                         label: Text('All')
                         ),
                       ButtonSegment<InventoryFilter>(
-                        value: InventoryFilter.myBooth,
+                        value: InventoryFilter.listed,
                         label: Text('Booth')
                         ),
                       ButtonSegment<InventoryFilter>(
@@ -103,7 +109,7 @@ class _ManageInventoryTabState extends ConsumerState<ManageInventoryTab> {
                     ],
                   ),
                 // DISPLAY NO INVENTORY MESSAGE IF INVENTORY IS EMPTY
-                inventory.isEmpty 
+                filteredInventory.isEmpty 
                 ? 
                 Center(
                   child: 
@@ -119,7 +125,7 @@ class _ManageInventoryTabState extends ConsumerState<ManageInventoryTab> {
                       ?
                         'You do not have any inventory items yet. Press the + to add an item!'
                       : 
-                        'You do not have booth items'
+                        noInventoryMessage
                       ) 
                   ),
                 ) 

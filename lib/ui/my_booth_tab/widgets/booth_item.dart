@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -10,6 +12,9 @@ class BoothItem extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
+  File? itemPrimaryImage = model.getPrimaryImage;
+
 
     return model == null
     ? Container()
@@ -30,7 +35,7 @@ class BoothItem extends HookConsumerWidget {
                   )
                 : ClipRRect(
                     borderRadius: BorderRadius.circular(10),
-                    child: Image.asset(model.primaryImageUrl!),
+                    child: Image.file(itemPrimaryImage),
                   ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,

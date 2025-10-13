@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -101,7 +103,7 @@ class ManageInventoryItemTile extends HookConsumerWidget {
                 ? Container(child: Text('No Primary Image set for Item'))
                 : ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
-                    child: Image.asset(model.primaryImageUrl!),
+                    child: Image.file(File(model.primaryImageUrl!)),
                   ),
                 getBanner()
               ],

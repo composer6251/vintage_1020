@@ -19,17 +19,6 @@ class MyBoothTab extends ConsumerStatefulWidget {
 }
 
 class _MyBoothTabState extends ConsumerState<MyBoothTab> {
-  // late Future<List<InventoryItemLocal>> inventoryFuture;
-  late List<InventoryItemLocal> inventory;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   print('my booth initState');
-  //   inventoryFuture = ref
-  //       .read(inventoryLocalProvider.notifier)
-  //       .fetchInitialUserInventory();
-  // }
 
   void redirectToEditInventoryItem(InventoryItemLocal item) {
     print('redirect from booth item: ${item.id}');
@@ -41,11 +30,11 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
 
   @override
   Widget build(BuildContext context) {
+    final List<InventoryItemLocal> inventory = ref.watch(inventoryProvider);
 
     double inventoryCost = ref.watch(inventoryPurchaseCostProvider);
     double boothValue = ref.watch(inventoryPurchaseCostProvider);
     // variable to store inventory once async call completes
-    final List<InventoryItemLocal> inventory = ref.watch(inventoryProvider);
 
     return inventory.isEmpty 
       ? 
@@ -56,7 +45,7 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
           child: Text(
             style: 
             TextStyle(
-              fontSize: 36, 
+              fontSize: 24, 
               fontWeight: FontWeight.bold 
               ), 
               'You do not have any Listed items. You can add a new item selecting the + button and add a listing date or add to booth!'),

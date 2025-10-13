@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:vintage_1020/data/local_db/local_db.dart';
+import 'package:vintage_1020/data/providers/filter_notifier.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/add_inventory_form_dialog.dart';
 import 'package:vintage_1020/ui/edit_inventory_item/edit_inventory_tab.dart';
 import 'package:vintage_1020/ui/manage_inventory_tab/manage_inventory_tab.dart';
@@ -120,6 +121,7 @@ class TabViewsContent extends HookConsumerWidget {
               indicatorColor: Colors.white,
               labelColor: Colors.white,
               tabs: [...myTabs],
+              onTap: (value) => ref.read(filterProvider.notifier).setCurrentTabInventoryFilter(value),
             ),
           ),
           body: TabBarView(

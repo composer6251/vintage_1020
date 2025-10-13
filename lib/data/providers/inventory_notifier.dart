@@ -18,39 +18,39 @@ class InventoryNotifier extends _$InventoryNotifier{
     return inventory;
   }
 
-  void setFilteredInventory(InventoryFilter currentFilter) {
+  void setFilteredInventory() {
 
+    final providerFilter = ref.watch(filterProvider);
     final currentItem = ref.watch(currentInventoryItemProvider);
     final inventory = ref.watch(inventoryLocalProvider);
-    final providerFilter = ref.watch(filterProvider);
 
     List<InventoryItemLocal> filteredInventory = [];
-    if(currentFilter == InventoryFilter.myBooth) { 
+    // Check listed inventory by flag and by listing date and sold date = null
+    if(providerFilter == InventoryFilter.listed) { 
       filteredInventory = inventory.where((item) => item.isCurrentBoothItem == 1.0).toList();
+      // if(filteredInventory.isEmpty){
+      //   filteredInventory = inventory.where((item) => item.itemListingDate != null && item.itemSoldDate == null).toList();
+      // }
+      
       state = [...filteredInventory];
       return;
     }
-    // if(currentFilter == InventoryFilter.listed) { 
-    //   filteredInventory = inventory.where((item) => item.itemListingDate != null && item.itemSoldDate == null).toList();
-    //   state = [...filteredInventory];
-    //   return;
-    // }
-    if(currentFilter == InventoryFilter.backStock) { 
+    if(providerFilter == InventoryFilter.backStock) { 
       filteredInventory = inventory.where((item) => item.itemListingDate == null && item.itemSoldDate == null).toList();
       state = [...filteredInventory];
       return;
     }
-    if(currentFilter == InventoryFilter.sold) { 
+    if(providerFilter == InventoryFilter.sold) { 
       filteredInventory = inventory.where((item) => item.itemDeleteDate != null).toList();
       state = [...filteredInventory];
       return;
     }
-    if(currentFilter == InventoryFilter.furniture) { 
+    if(providerFilter == InventoryFilter.furniture) { 
       filteredInventory = inventory.where((item) => item.itemCategory == 'Furniture').toList();
       state = [...filteredInventory];
       return;
     }
-    if(currentFilter == InventoryFilter.current) { 
+    if(providerFilter == InventoryFilter.current) { 
       filteredInventory = inventory.where((item) => item.id == currentItem.id).toList();
       state = [...filteredInventory];
       return;
