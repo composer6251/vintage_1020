@@ -25,19 +25,16 @@ class _InventoryCarouselState extends ConsumerState<InventoryCarousel> {
     final double width = MediaQuery.sizeOf(context).width;
     print('INVENTORY CAROUSEL WIDGET Inventory size ${widget.inventoryItems.length}');
 
-    return ConstrainedBox(
-      constraints: BoxConstraints(minHeight: height, maxHeight: height),
-      child: CarouselView.weighted(
-        itemSnapping: true,
-        flexWeights: widget.flexWeights,
-        children: widget.inventoryItems
-            .map(
-              (i) => HeroLayoutCard(
-                item: i,
-              ),
-            )
-            .toList(),
-      ),
+    return CarouselView.weighted(
+      itemSnapping: true,
+      flexWeights: widget.flexWeights,
+      children: widget.inventoryItems
+          .map(
+            (i) => HeroLayoutCard(
+              item: i,
+            ),
+          )
+          .toList(),
     );
   }
 }

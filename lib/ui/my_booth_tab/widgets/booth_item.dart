@@ -15,48 +15,56 @@ class BoothItem extends HookConsumerWidget {
 
   File? itemPrimaryImage = model.getPrimaryImage;
 
+  final width = MediaQuery.sizeOf(context).width;
+  final height = MediaQuery.sizeOf(context).height;
 
     return model == null
     ? Container()
     : Card(
+
         elevation: 3.0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
           side: BorderSide(color: Colors.black),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          // mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Stack(
-              children: [
-                model.primaryImageUrl == null
-                ? Container(
-                    child: Text('No Primary Image set for Item'),
-                  )
-                : ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.file(itemPrimaryImage),
+            Flexible(
+              flex: 3,
+              child: Stack(
+                children: [
+                  model.primaryImageUrl == null
+                  ? Container(
+                      child: Text('No Primary Image set for Item'),
+                    )
+                  : Flexible(
+                    fit: FlexFit.loose,
+                    child: Image.file(
+                      itemPrimaryImage
+                      )),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Text(
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.white
+                          ),
+                        'Listed: ${DateFormat.yMd().format(model.itemPurchaseDate!)}',
+                      ),
+                      Text(
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.white
+                          ),
+                        'Purchased: ${DateFormat.yMd().format(model.itemPurchaseDate!)}',
+                      ),
+                    ],
                   ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.white
-                        ),
-                      'Listed: ${DateFormat.yMd().format(model.itemPurchaseDate!)}',
-                    ),
-                    Text(
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.white
-                        ),
-                      'Purchased: ${DateFormat.yMd().format(model.itemPurchaseDate!)}',
-                    ),
-                  ],
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),

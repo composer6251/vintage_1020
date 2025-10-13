@@ -55,11 +55,11 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Flexible(
-          flex: 4,
+          flex: 2,
           fit: FlexFit.loose,
           child: InventoryCarousel(
             inventoryItems: inventory,
-            flexWeights: [3],
+            flexWeights: [8],
           ),
         ),
         Card(
@@ -76,7 +76,7 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
           ),
         ),
         Flexible(
-          flex: 2,
+          flex: 3,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemExtent: 200,
