@@ -125,8 +125,8 @@ class TabViewsContent extends HookConsumerWidget {
           body: TabBarView(
             physics: NeverScrollableScrollPhysics(),
             children: [
-              MyBoothTab(),
               ManageInventoryTab(),
+              MyBoothTab(),
               EditItemTab(),
               ActivityChart(isShowingMainData: true),
             ],

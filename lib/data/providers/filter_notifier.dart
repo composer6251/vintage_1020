@@ -22,10 +22,10 @@ class FilterNotifier extends _$FilterNotifier{
   @override
   InventoryFilter build() {
 
-    return InventoryFilter.myBooth;
+    return InventoryFilter.all;
   }
 
-  void setCurrentFilters(InventoryFilter filter) {
+  void setCurrentFilter(InventoryFilter filter) {
     state = filter;
   }
 }

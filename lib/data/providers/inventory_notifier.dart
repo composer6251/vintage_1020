@@ -22,7 +22,7 @@ class InventoryNotifier extends _$InventoryNotifier{
 
     final currentItem = ref.watch(currentInventoryItemProvider);
     final inventory = ref.watch(inventoryLocalProvider);
-    final currentFilter = ref.watch(filterProvider);
+    final providerFilter = ref.watch(filterProvider);
 
     List<InventoryItemLocal> filteredInventory = [];
     if(currentFilter == InventoryFilter.myBooth) { 
@@ -36,7 +36,7 @@ class InventoryNotifier extends _$InventoryNotifier{
     //   return;
     // }
     if(currentFilter == InventoryFilter.backStock) { 
-      filteredInventory = inventory.where((item) => item.itemSoldDate != null).toList();
+      filteredInventory = inventory.where((item) => item.itemListingDate == null && item.itemSoldDate == null).toList();
       state = [...filteredInventory];
       return;
     }
