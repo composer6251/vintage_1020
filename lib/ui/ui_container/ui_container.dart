@@ -32,23 +32,9 @@ class _HomeScreenState extends ConsumerState<UiContainer> {
     );
   }
 
-  // void deleteUserInventory() async {
-  //   int numberOfDeletedItems = await ref
-  //       .watch(inventoryLocalProvider.notifier)
-  //       .deleteUserInventoryByEmail();
-
-  //   String message = 'Deleted User Inventory of $numberOfDeletedItems items';
-
-  //   showSnackBar(message);
-  // }
-
   void showSnackBar(String message) {
     var sb = SnackBar(content: Text(message));
     ScaffoldMessenger.of(context).showSnackBar(sb);
-  }
-
-  void dropInventoryItemTable() {
-    LocalDb().dropInventoryItemTable();
   }
 
   @override

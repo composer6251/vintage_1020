@@ -8,6 +8,7 @@ import 'package:vintage_1020/data/providers/filter_notifier.dart';
 import 'package:vintage_1020/data/providers/inventory_notifier.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
+import 'package:vintage_1020/ui/core/ui/widgets/dialog/edit_inventory_item_dialog.dart';
 
 import 'package:vintage_1020/ui/manage_inventory_tab/widgets/manage_inventory_item_tile.dart';
 
@@ -45,17 +46,12 @@ class _ManageInventoryTabState extends ConsumerState<ManageInventoryTab> {
       ref.read(inventoryProvider.notifier).setFilteredInventory(newFilter.first);
     }
 
-    void redirectToEditInventoryItem(InventoryItemLocal item) async {
-      print('redirect to edit inventor with item ${item.id}');
-
-      // Update current inventory
-      ref.read(currentInventoryItemProvider.notifier).updateCurrentInventoryItem(item);
-      // Update filter to be current item
-      ref.read(filterProvider.notifier).setCurrentFilter(InventoryFilter.current);
-
-
-      Navigator.pushNamed(context, '/edit-inventory-item');
-    }
+    void openEditInventoryDialog() {
+      showDialog(
+        context: context,
+        builder: (context) => const EditInventoryItemDialog(),
+    );
+  }
 
     final String noInventoryMessage = 'You do not have any ${selectedFilter.value.name} items.';
 
@@ -137,8 +133,7 @@ class _ManageInventoryTabState extends ConsumerState<ManageInventoryTab> {
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () {
-                          print('Item index select on manage inventory: $index');
-                          redirectToEditInventoryItem(filteredInventory[index]);
+                          openEditInventoryDialog();
                         },
                         child: ManageInventoryItemTile(model: filteredInventory[index]),
                       );

@@ -19,7 +19,7 @@ class InventoryItemLocal {
   int? itemWidth;
   int? itemDepth;
   DateTime? itemDeleteDate;
-  double? isCurrentBoothItem;
+  double? isCurrentBoothItem = 0.0;
 
   InventoryItemLocal.empty();
 

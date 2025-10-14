@@ -15,9 +15,6 @@ class BoothItem extends HookConsumerWidget {
 
   File? itemPrimaryImage = model.getPrimaryImage;
 
-  final width = MediaQuery.sizeOf(context).width;
-  final height = MediaQuery.sizeOf(context).height;
-
     return model == null
     ? Container()
     : Card(
