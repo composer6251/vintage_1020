@@ -16,28 +16,28 @@ import 'dart:developer' as dev;
 final String dbName = 'vintage_1020.db';
 final Uuid uuid = Uuid();
 final String? userEmail = FirebaseAuth.instance.currentUser?.email;
-// CHECK IF USER HAS SIGNED IN BEFORE
-final DateTime? test = FirebaseAuth.instance.currentUser?.metadata.lastSignInTime;
 
-// CHECK IF USER PHONE HAS LOCAL vintage_1020.db INSTANCE
-
-// CHECK IF USER DB instance has inventory table
-
+// TABLE CREATION SQL
 final String buildCreateUserTableSql =
     'CREATE TABLE IF NOT EXISTS user(id TEXT PRIMARY KEY, email TEXT, boothName)';
 final String buildCreateInventoryTableSql =
     'CREATE TABLE IF NOT EXISTS inventory_item(id TEXT PRIMARY KEY, email TEXT, primaryImageUrl TEXT, itemDescription TEXT, itemImageUrls TEXT, itemCategory TEXT, itemPurchasePrice REAL, itemListingPrice REAL, itemSoldPrice REAL, itemPurchaseDate TEXT, itemListingDate TEXT, itemSoldDate TEXT, itemHeight REAL, itemWidth REAL, itemDepth REAL, itemDeleteDate TEXT, isCurrentBoothItem REAL)';
-final String deleteDateColumnName = 'deleteDate TEXT';
-final String isCurrentBoothItem = 'isCurrentBoothItem REAL';
+final String buildCreateBoothTableSql =
+    'CREATE TABLE IF NOT EXISTS my_booth(id TEXT PRIMARY KEY, email TEXT, boothName TEXT, boothImages TEXT, boothDeleteDate REAL)';
 
+// TABLE UPDATES
 final String addItemDeleteDateToItemInventorySql =
     'ALTER TABLE $inventoryItemTable ADD COLUMN $deleteDateColumnName';
 final String addIsCurrentBoothItemToItemInventorySql =
     'ALTER TABLE $inventoryItemTable ADD COLUMN $isCurrentBoothItem';
 
+// TABLE AND COLUMN NAMES
 final String userTable = 'user';
 final String inventoryItemTable = 'inventory_item';
+final String deleteDateColumnName = 'deleteDate TEXT';
+final String isCurrentBoothItem = 'isCurrentBoothItem REAL';
 
+// VERSIONS
 final int db_version_two = 2;
 
 Future<Database> _getDatabase() async {
@@ -49,6 +49,7 @@ Future<Database> _getDatabase() async {
     onCreate: (db, version) {
       print('Creating inventory table if it does not exist');
       db.execute(buildCreateInventoryTableSql);
+      db.execute(buildCreateBoothTableSql);
     },
     onUpgrade: (db, oldVersion, newVersion) async {
       await db.execute(addItemDeleteDateToItemInventorySql);
@@ -58,8 +59,6 @@ Future<Database> _getDatabase() async {
   return db;
 }
 
-// Check firebaseAuth to see if user has logged in before
-//If user created account, then local sqflite DB should be created
 
 class LocalDb {
   Future<void> _createUserAndInventoryTables(Database db) async {
@@ -90,13 +89,7 @@ class LocalDb {
     print('tables created or already existed ${tables.length}');
   }
 
-void dropInventoryItemTable() async {
-  final db = await _getDatabase();
-
-  db.execute('DROP TABLE $inventoryItemTable');
-}
-
-  void insertIntoInventoryItem(InventoryItemLocal item) async {
+    void insertIntoInventoryItem(InventoryItemLocal item) async {
     final db = await _getDatabase();
 
     db.insert(inventoryItemTable, item.toMapForLocalDB());
@@ -130,17 +123,7 @@ void dropInventoryItemTable() async {
     return flattenedInventory;
   }
 
-  Future<int> deleteUserInventory() async {
-    print('\n\n\n DELETING USER INVENTORY FOR EMAIL: $userEmail');
 
-    final db = await _getDatabase();
-    final int deletedId = await db.delete(
-      inventoryItemTable,
-      where: 'email = "$userEmail"',
-    );
-
-    return deletedId;
-  }
 
   Future<int> hardDeleteInventoryItem(String id) async {
     final db = await _getDatabase();
@@ -179,9 +162,27 @@ void dropInventoryItemTable() async {
     return updatedId;
   }
 
+  // UTIL AND TESTING QUERIES
   Future printAllRowsInTable() async {
     final db = await _getDatabase();
     // show the results: print all rows in the db
     print(await db.query(inventoryItemTable));
+  }
+
+  void dropInventoryItemTable() async {
+  final db = await _getDatabase();
+
+  db.execute('DROP TABLE $inventoryItemTable');
+}
+  Future<int> deleteUserInventory() async {
+    print('\n\n\n DELETING USER INVENTORY FOR EMAIL: $userEmail');
+
+    final db = await _getDatabase();
+    final int deletedId = await db.delete(
+      inventoryItemTable,
+      where: 'email = "$userEmail"',
+    );
+
+    return deletedId;
   }
 }

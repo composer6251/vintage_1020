@@ -1,36 +1,41 @@
+import 'dart:core';
 import 'dart:io';
 import 'dart:convert';
 
-import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
+import 'package:uuid/uuid.dart';
 
+final Uuid uuid = Uuid();
 
 /// DATA CLASS FOR MY_BOOTH_TAB
 class MyBooth {
-  final String id;
+  String id = '';
   String? userEmail;
   List<String>? currentBoothImageUrls;
-  /****IF LISTED and NOT SOLD AND NOT ARCHIVED */
-  // TODO: Use inventoryProviderToPopulate
-  List<InventoryItemLocal>? currentListedInventory;
+  DateTime? boothDeleteDate;
+
+  MyBooth.empty();
 
   MyBooth(
     this.id,
     this.userEmail,
     this.currentBoothImageUrls,
-    this.currentListedInventory,
+    this.boothDeleteDate,
   );
 
   MyBooth.fromLocalDB(Map<String, dynamic> data)
     : id = data['id'],
       userEmail = data?['email'],
       currentBoothImageUrls = data?['currentBoothImageUrls'] != null 
-          ? List<String>.from(jsonDecode(data['currentBoothImageUrls'])) : [];
+          ? List<String>.from(jsonDecode(data['currentBoothImageUrls'])) : [],
+      boothDeleteDate = data['boothDeleteDate'] != null 
+          ? DateTime.parse(data['boothDeleteDate']) as DateTime? : null;
+
 
   Map<String, dynamic> toMapForLocalDB() {
     return <String, dynamic>{
       "id": id,
       "email": userEmail,
-      "currentBoothImageUrls": currentBoothImageUrls,
+      "currentBoothImageUrls": jsonEncode(currentBoothImageUrls),
     };
   }
 

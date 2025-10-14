@@ -67,9 +67,6 @@ class InventoryItemLocal {
       itemHeight = data?['itemHeight'],
       itemWidth = data?['itemWidth'],
       itemDepth = data?['itemDepth'],
-      // itemDimensions = data?['itemDimensions'] is Iterable?
-      //     ? Map.from(data?['itemDimensions'])
-      //     : null,
       itemDeleteDate = data['itemDeleteDate'] != null
           ? DateTime.parse(data['itemDeleteDate']) as DateTime?
           : null,

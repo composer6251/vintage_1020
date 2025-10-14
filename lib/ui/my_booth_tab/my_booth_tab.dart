@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:vintage_1020/data/providers/current_inventory_item/current_inventory_item.dart';
 import 'package:vintage_1020/data/providers/filter_notifier.dart';
 import 'package:vintage_1020/data/providers/inventory_filter_provider/inventory_filter_provider.dart';
@@ -30,13 +31,13 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
 
   @override
   Widget build(BuildContext context) {
-    final List<InventoryItemLocal> inventory = ref.watch(inventoryProvider);
+    final List<InventoryItemLocal> boothItems = ref.watch(inventoryProvider);
 
     double inventoryCost = ref.watch(inventoryPurchaseCostProvider);
     double boothValue = ref.watch(inventoryPurchaseCostProvider);
-    // variable to store inventory once async call completes
+    InventoryFilter currentFilter = ref.watch(filterProvider);
 
-    return inventory.isEmpty 
+    return boothItems.isEmpty 
       ? 
       SizedBox(
         child: 
@@ -52,46 +53,65 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
         ),) 
       : 
       Column(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: MainAxisSize.max,
       children: [
         Flexible(
           flex: 2,
-          fit: FlexFit.loose,
+          child: Card(
+            elevation: 3.0,
+            shadowColor: Colors.blueAccent,
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  style: TextStyle(
+                    fontSize: 20, 
+                    fontStyle: FontStyle.italic), 
+                    'Items:${boothItems.length}'),
+                Text(
+                  style: 
+                  TextStyle(
+                    fontSize: 20, 
+                    fontStyle: FontStyle.italic), 
+                    'Cost: ${NumberFormat.currency(
+                          symbol: '\$',
+                        ).format(inventoryCost)}'),
+                Text(
+                  style: 
+                  TextStyle(
+                    fontSize: 20, 
+                    fontStyle: FontStyle.italic), 
+                    'Value: ${NumberFormat.currency(
+                          symbol: '\$',
+                        ).format(boothValue)}'),
+              ],
+            ),
+          ),
+        ),
+        // TODO boothItems is filtered inventory by isCurrentBoothItem. Need to make boothImages to be 
+        Expanded(
+          flex: 4,
           child: InventoryCarousel(
-            inventoryItems: inventory,
-            flexWeights: [8],
+            inventoryItems: boothItems,
+            flexWeights: [3],
           ),
         ),
-        Card(
-          elevation: 3.0,
-          shadowColor: Colors.blueAccent,
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Text('Total items: ${inventory.length}'),
-              Text('Total cost: \$$inventoryCost'),
-              Text('Total value: \$$boothValue'),
-            ],
-          ),
-        ),
+        
         Flexible(
-          flex: 3,
+          flex: 4,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemExtent: 200,
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  redirectToEditInventoryItem(inventory[index]);
+                  redirectToEditInventoryItem(boothItems[index]);
                 },
-                child: Card(
-                  elevation: 4,
-                  child: BoothItem(model: inventory[index]),
-                ),
+                child: BoothItem(model: boothItems[index]),
               );
             },
-            itemCount: inventory.length,
+            itemCount: boothItems.length,
           ),
         ),
       ],

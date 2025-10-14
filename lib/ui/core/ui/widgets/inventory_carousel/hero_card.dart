@@ -16,20 +16,32 @@ class HeroLayoutCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return item.primaryImageUrl == null
-        ? Container(child: Text('You have no inventory yet. Press the + in the bottom right corner to add an item!'),)
+        ? Text('You have no inventory yet. Press the + in the bottom right corner to add an item!')
         : Row(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: item.itemImageUrls!.map((url) =>
                Expanded(
-                 child: Align(
-                  alignment: Alignment.topCenter,
-                   child: AspectRatio(
-                    aspectRatio: 16 / 9,
-                     child: CarouselImage(
-                      url: url
-                      ),
-                   ),
+                 child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    image: DecorationImage(
+                      image: FileImage(File(url)),
+                      fit: BoxFit.cover
+                    ),
+                  )
+                  //  child: Padding(
+                  //    padding: const EdgeInsets.all(8.0),
+                  //    child: Align(
+                  //     alignment: Alignment.center,
+                  //      child: AspectRatio(
+                  //       aspectRatio: 16 / 9,
+                  //        child: CarouselImage(
+                  //         url: url
+                  //         ),
+                  //      ),
+                  //    ),
+                  //  ),
                  ),
                )).toList(),
           );

@@ -42,7 +42,7 @@ class _ManageInventoryTabState extends ConsumerState<ManageInventoryTab> {
       ref.read(filterProvider.notifier).setCurrentFilter(newFilter.first);
 
       // UPDATE INVENTORY BY NEW FILTER VALUE
-      ref.read(inventoryProvider.notifier).setFilteredInventory();
+      ref.read(inventoryProvider.notifier).setFilteredInventory(newFilter.first);
     }
 
     void redirectToEditInventoryItem(InventoryItemLocal item) async {
