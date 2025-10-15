@@ -40,6 +40,7 @@ dependencies:
   photo_manager: ^3.7.1
   photo_manager_image_provider: ^2.2.0
   font_awesome_flutter: ^10.10.0
+  wheel_picker: ^0.2.2
 
 dev_dependencies:
   flutter_test:

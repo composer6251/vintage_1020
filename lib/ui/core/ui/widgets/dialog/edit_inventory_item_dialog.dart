@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -84,6 +85,8 @@ class EditInventoryItemDialog extends HookConsumerWidget {
         closeDialog();
       }
     }
+  ///     List<int>.generate(3, (int index) => index * index, growable: false);
+    List<int> measurements = List<int>.generate(120, (index) => index + 1);
 
     return AlertDialog(
       title: Container(
@@ -153,29 +156,77 @@ class EditInventoryItemDialog extends HookConsumerWidget {
               ),
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Flexible(
-                  flex: 2,
-                  child: TextFormField(
-                    decoration: InputDecoration(hintText: 'Height'),
-                    controller: itemHeightController,
+                SizedBox(
+                  height: 100,
+                  width: 50,
+                  child: ListWheelScrollView.useDelegate(
+                    itemExtent: 50,
+                    diameterRatio: 1.5,
+                    squeeze: 2,
+                    controller: FixedExtentScrollController(),
+                    physics: const FixedExtentScrollPhysics(),
+                    onSelectedItemChanged: (value) {
+                      
+                    },
+                    childDelegate: ListWheelChildBuilderDelegate(
+                      childCount: measurements.length,
+                      builder: (context, index) => Text(measurements[index].toString()) 
+                      ),
                   ),
                 ),
-                Flexible(
-                  flex: 2,
-                  child: TextFormField(
-                    decoration: InputDecoration(hintText: 'Width'),
-                    controller: itemWidthController,
+                SizedBox(
+                  height: 100,
+                  width: 50,
+                  child: ListWheelScrollView.useDelegate(
+                    itemExtent: 50,
+                    diameterRatio: 1.5,
+                    squeeze: 2,
+                    controller: FixedExtentScrollController(),
+                    physics: const FixedExtentScrollPhysics(),
+                    onSelectedItemChanged: (value) {
+                      
+                    },
+                    childDelegate: ListWheelChildBuilderDelegate(
+                      childCount: measurements.length,
+                      builder: (context, index) => Text(measurements[index].toString()) 
+                      ),
                   ),
                 ),
-                Flexible(
-                  flex: 2,
-                  child: TextFormField(
-                    controller: itemDepthController,
-                    decoration: InputDecoration(hintText: 'Depth'),
-                  ),
-                ),
+                // SizedBox(
+                //   height: 100,
+                //   width: 100,
+                //   child: ListWheelScrollView.useDelegate(
+                //     itemExtent: 50,
+                //     diameterRatio: 1.5,
+                //     squeeze: 2,
+                //     controller: FixedExtentScrollController(),
+                //     physics: const FixedExtentScrollPhysics(),
+                //     onSelectedItemChanged: (value) {
+                      
+                //     },
+                //     childDelegate: ListWheelChildBuilderDelegate(
+                //       childCount: measurements.length,
+                //       builder: (context, index) => Text(measurements[index].toString()) 
+                //       ),
+                //   ),
+                // ),
+                // Flexible(
+                //   flex: 2,
+                //   child: TextFormField(
+                //     decoration: InputDecoration(hintText: 'Width'),
+                //     controller: itemWidthController,
+                //   ),
+                // ),
+                // Flexible(
+                //   flex: 2,
+                //   child: TextFormField(
+                //     controller: itemDepthController,
+                //     decoration: InputDecoration(hintText: 'Depth'),
+                //   ),
+                // ),
               ],
             ),
             Row(
