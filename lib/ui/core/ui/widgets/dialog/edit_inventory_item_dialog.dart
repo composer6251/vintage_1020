@@ -4,12 +4,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:vintage_1020/data/providers/inventory_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart' hide userEmail;
 import 'package:vintage_1020/data/local_db/local_db.dart';
-import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
+import 'package:vintage_1020/ui/core/ui/widgets/dialog/common/item_dimensions_dial.dart';
 
 /// **A HOOKCONSUMER WIDGET IS ESSENTIALLY A STATELESS WIDGET, BUT UTILIZES FLUTTER HOOKS TO MANAGE STATE ***
 class EditInventoryItemDialog extends HookConsumerWidget {
@@ -89,7 +88,9 @@ class EditInventoryItemDialog extends HookConsumerWidget {
 
     return AlertDialog(
       title: Container(
-        // decoration: BoxDecoration(gradient: LinearGradient(colors: [Colors.pink, Colors.black])),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.teal, Colors.tealAccent])),
         child: Center(
           child: const Text(
             selectionColor: Colors.blue,
@@ -154,93 +155,7 @@ class EditInventoryItemDialog extends HookConsumerWidget {
                 'Select Selling Date:'//${listingDate.toLocal().month}/${listingDate.value.toLocal().day}/${listingDate.value.toLocal().year}',
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Align(
-                  alignment: AlignmentGeometry.topLeft,
-                  child: Text(style: TextStyle(
-                    fontWeight: 
-                    FontWeight.bold, 
-                    fontSize: 14),
-                   'Height'),
-                ),
-                SizedBox(
-                  height: 100,
-                  width: 50,
-                  child: ListWheelScrollView.useDelegate(
-                    itemExtent: 50,
-                    diameterRatio: 1.5,
-                    squeeze: 2,
-                    controller: FixedExtentScrollController(),
-                    physics: const FixedExtentScrollPhysics(),
-                    onSelectedItemChanged: (value) {
-                      
-                    },
-                    childDelegate: ListWheelChildBuilderDelegate(
-                      childCount: measurements.length,
-                      builder: (context, index) => Text('- ${measurements[index].toString()} -') 
-                      ),
-                  ),
-                ),
-                Align(
-                  alignment: AlignmentGeometry.bottomLeft,
-                  child: Text(style: TextStyle(
-                    fontWeight: 
-                    FontWeight.bold, 
-                    fontSize: 14),
-                   'Width'),
-                ),
-                SizedBox(
-                  height: 100,
-                  width: 50,
-                  child: ListWheelScrollView.useDelegate(
-                    itemExtent: 50,
-                    diameterRatio: 1.5,
-                    squeeze: 2,
-                    controller: FixedExtentScrollController(),
-                    physics: const FixedExtentScrollPhysics(),
-                    onSelectedItemChanged: (value) {
-                      
-                    },
-                    childDelegate: ListWheelChildBuilderDelegate(
-                      childCount: measurements.length,
-                      builder: (context, index) => Text('- ${measurements[index].toString()} -') 
-                      ),
-                  ),
-                ),
-                Align(
-                  alignment: AlignmentGeometry.topCenter,
-                  child: Text(style: TextStyle(
-                    fontWeight: 
-                    FontWeight.bold, 
-                    fontSize: 14),
-                   'Depth'),
-                ),
-                SizedBox(
-                  height: 100,
-                  width: 50,
-                  child: ListWheelScrollView.useDelegate(
-                    changeReportingBehavior: ChangeReportingBehavior.onScrollEnd,
-                    itemExtent: 50,
-                    diameterRatio: 1.5,
-                    squeeze: 2,
-                    controller: FixedExtentScrollController(
-                      initialItem: 0,
-                    ),
-                    physics: const FixedExtentScrollPhysics(),
-                    onSelectedItemChanged: (value) {
-                      
-                    },
-                    childDelegate: ListWheelChildBuilderDelegate(
-                      childCount: measurements.length,
-                      builder: (context, index) => Text('- ${measurements[index].toString()} -') 
-                      ),
-                  ),
-                ),
-              ],
-            ),
+            ItemDimensionsDial(),
           ],
         ),
       ),

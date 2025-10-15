@@ -21,8 +21,6 @@ class InventoryCarousel extends ConsumerStatefulWidget {
 class _InventoryCarouselState extends ConsumerState<InventoryCarousel> {
   @override
   Widget build(BuildContext context) {
-    final double height = MediaQuery.sizeOf(context).height;
-    final double width = MediaQuery.sizeOf(context).width;
     print('INVENTORY CAROUSEL WIDGET Inventory size ${widget.inventoryItems.length}');
 
     return CarouselView.weighted(
