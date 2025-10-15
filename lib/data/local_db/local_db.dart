@@ -59,7 +59,6 @@ Future<Database> _getDatabase() async {
   return db;
 }
 
-
 class LocalDb {
   Future<void> _createUserAndInventoryTables(Database db) async {
     print('\nCreating user and inventory tables\n');
@@ -124,6 +123,25 @@ class LocalDb {
   }
 
 
+  Future<int> addInventoryItemToCurrentBooth(String id) async {
+    final db = await _getDatabase();
+
+    print('addInventoryItemToCurrentBooth: $id');
+
+    // final int deletedId = await db.update(
+    //   inventoryItemTable, {
+    //   'itemDeleteDate': DateTime.now().toIso8601String(),
+    //   'where ?': 'id = $id',
+    // });
+    final int updatedId = await db.update(inventoryItemTable, {
+      'itemListingDate': DateTime.now().toIso8601String(),
+      'isCurrentBoothItem': 1,
+    }, where: 'id = "$id"');
+
+    print('Added item to booth: $updatedId');
+    return updatedId;
+}
+
 
   Future<int> hardDeleteInventoryItem(String id) async {
     final db = await _getDatabase();
@@ -144,22 +162,6 @@ class LocalDb {
     }, where: 'id = "$id"');
 
     return deletedId;
-  }
-
-  Future<int> addInventoryItemToCurrentBooth(String id) async {
-    final db = await _getDatabase();
-
-    // final int deletedId = await db.update(
-    //   inventoryItemTable, {
-    //   'itemDeleteDate': DateTime.now().toIso8601String(),
-    //   'where ?': 'id = $id',
-    // });
-    final int updatedId = await db.update(inventoryItemTable, {
-      'itemListingDate': DateTime.now().toIso8601String(),
-      'isCurrentBoothItem': 1,
-    }, where: 'id = "$id"');
-
-    return updatedId;
   }
 
   // UTIL AND TESTING QUERIES

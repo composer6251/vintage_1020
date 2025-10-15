@@ -1,6 +1,7 @@
 
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:vintage_1020/data/local_db/local_db.dart';
 import 'package:vintage_1020/data/providers/current_inventory_item/current_inventory_item.dart';
 import 'package:vintage_1020/data/providers/filter_notifier.dart';
 import 'package:vintage_1020/data/providers/inventory_filter_provider/inventory_filter_provider.dart';
@@ -57,5 +58,17 @@ class InventoryNotifier extends _$InventoryNotifier{
     }
     // If no filters are applied, return all inventory
     return inventory;
+  }
+
+  void addItemToBooth(String itemId) {
+    List<InventoryItemLocal> currentState = state;
+    InventoryItemLocal itemToAddToBooth = state.firstWhere((item) => item.id == itemId);
+    itemToAddToBooth.isCurrentBoothItem = 1.0;
+
+    currentState.add(itemToAddToBooth);
+
+    state = [...currentState];
+
+    LocalDb().addInventoryItemToCurrentBooth(itemId);
   }
 }

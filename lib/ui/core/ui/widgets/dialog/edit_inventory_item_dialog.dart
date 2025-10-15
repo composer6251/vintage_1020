@@ -85,7 +85,6 @@ class EditInventoryItemDialog extends HookConsumerWidget {
         closeDialog();
       }
     }
-  ///     List<int>.generate(3, (int index) => index * index, growable: false);
     List<int> measurements = List<int>.generate(120, (index) => index + 1);
 
     return AlertDialog(
@@ -122,7 +121,7 @@ class EditInventoryItemDialog extends HookConsumerWidget {
               ),
               onPressed: () => selectDate('Purchase'),
               child: Text(
-                    'Purchase Date: ${purchaseDate.value.toLocal().month}/${purchaseDate.value.toLocal().day}/${purchaseDate.value.toLocal().year}',
+                'Purchase Date: ${purchaseDate.value.toLocal().month}/${purchaseDate.value.toLocal().day}/${purchaseDate.value.toLocal().year}',
               ),
             ),
             TextFormField(
@@ -159,23 +158,13 @@ class EditInventoryItemDialog extends HookConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(
-                  height: 100,
-                  width: 50,
-                  child: ListWheelScrollView.useDelegate(
-                    itemExtent: 50,
-                    diameterRatio: 1.5,
-                    squeeze: 2,
-                    controller: FixedExtentScrollController(),
-                    physics: const FixedExtentScrollPhysics(),
-                    onSelectedItemChanged: (value) {
-                      
-                    },
-                    childDelegate: ListWheelChildBuilderDelegate(
-                      childCount: measurements.length,
-                      builder: (context, index) => Text(measurements[index].toString()) 
-                      ),
-                  ),
+                Align(
+                  alignment: AlignmentGeometry.topLeft,
+                  child: Text(style: TextStyle(
+                    fontWeight: 
+                    FontWeight.bold, 
+                    fontSize: 14),
+                   'Height'),
                 ),
                 SizedBox(
                   height: 100,
@@ -191,62 +180,97 @@ class EditInventoryItemDialog extends HookConsumerWidget {
                     },
                     childDelegate: ListWheelChildBuilderDelegate(
                       childCount: measurements.length,
-                      builder: (context, index) => Text(measurements[index].toString()) 
+                      builder: (context, index) => Text('- ${measurements[index].toString()} -') 
                       ),
                   ),
                 ),
-                // SizedBox(
-                //   height: 100,
-                //   width: 100,
-                //   child: ListWheelScrollView.useDelegate(
-                //     itemExtent: 50,
-                //     diameterRatio: 1.5,
-                //     squeeze: 2,
-                //     controller: FixedExtentScrollController(),
-                //     physics: const FixedExtentScrollPhysics(),
-                //     onSelectedItemChanged: (value) {
+                Align(
+                  alignment: AlignmentGeometry.bottomLeft,
+                  child: Text(style: TextStyle(
+                    fontWeight: 
+                    FontWeight.bold, 
+                    fontSize: 14),
+                   'Width'),
+                ),
+                SizedBox(
+                  height: 100,
+                  width: 50,
+                  child: ListWheelScrollView.useDelegate(
+                    itemExtent: 50,
+                    diameterRatio: 1.5,
+                    squeeze: 2,
+                    controller: FixedExtentScrollController(),
+                    physics: const FixedExtentScrollPhysics(),
+                    onSelectedItemChanged: (value) {
                       
-                //     },
-                //     childDelegate: ListWheelChildBuilderDelegate(
-                //       childCount: measurements.length,
-                //       builder: (context, index) => Text(measurements[index].toString()) 
-                //       ),
-                //   ),
-                // ),
-                // Flexible(
-                //   flex: 2,
-                //   child: TextFormField(
-                //     decoration: InputDecoration(hintText: 'Width'),
-                //     controller: itemWidthController,
-                //   ),
-                // ),
-                // Flexible(
-                //   flex: 2,
-                //   child: TextFormField(
-                //     controller: itemDepthController,
-                //     decoration: InputDecoration(hintText: 'Depth'),
-                //   ),
-                // ),
+                    },
+                    childDelegate: ListWheelChildBuilderDelegate(
+                      childCount: measurements.length,
+                      builder: (context, index) => Text('- ${measurements[index].toString()} -') 
+                      ),
+                  ),
+                ),
+                Align(
+                  alignment: AlignmentGeometry.topCenter,
+                  child: Text(style: TextStyle(
+                    fontWeight: 
+                    FontWeight.bold, 
+                    fontSize: 14),
+                   'Depth'),
+                ),
+                SizedBox(
+                  height: 100,
+                  width: 50,
+                  child: ListWheelScrollView.useDelegate(
+                    changeReportingBehavior: ChangeReportingBehavior.onScrollEnd,
+                    itemExtent: 50,
+                    diameterRatio: 1.5,
+                    squeeze: 2,
+                    controller: FixedExtentScrollController(
+                      initialItem: 0,
+                    ),
+                    physics: const FixedExtentScrollPhysics(),
+                    onSelectedItemChanged: (value) {
+                      
+                    },
+                    childDelegate: ListWheelChildBuilderDelegate(
+                      childCount: measurements.length,
+                      builder: (context, index) => Text('- ${measurements[index].toString()} -') 
+                      ),
+                  ),
+                ),
               ],
             ),
-            Row(
-              children: [
-                Text(
-                  style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                  'Add to booth?'
-                  ),
-                Checkbox(value: addToBooth.value, onChanged: (value) => !addToBooth.value),
-              ],
-            )
           ],
         ),
       ),
       actions: [
-        Row(children: [
-          TextButton(
-            onPressed: () => Navigator.pushNamed(context, '/edit-inventory-item'), 
-            child: Text('Edit Item Images')),
-          Checkbox(value: addToBooth.value, onChanged: (value) => value == false ? false : true), // TODO: Put into constructor
+        Row(
+          children: [
+            Flexible(
+              flex: 6,
+              child: Align(
+                alignment: AlignmentGeometry.bottomLeft,
+                child: FilledButton(
+                  // style: ButtonStyle(backgroundColor: Color(Colors.blue)),
+                  onPressed: () => Navigator.pushNamed(context, '/edit-inventory-item'), 
+                  child: Text('Edit Pics')),
+              ),
+            ),
+            Flexible(
+              flex: 3,
+              child: Text(
+                style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+                'Add to booth'
+              ),
+            ),
+            Flexible(
+              flex: 4,
+              child: Switch(
+                activeThumbColor: Colors.blue,
+                inactiveThumbColor: Colors.grey,
+                value: false, onChanged: (value) => value = !value),
+            ),
         ],),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

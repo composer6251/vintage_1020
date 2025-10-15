@@ -115,7 +115,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         int.tryParse(itemWidthController.text),
         int.tryParse(itemDepthController.text),
         null,
-        addToBooth.value ? 1 : 0,
+        0,
 
       );
 
@@ -165,16 +165,16 @@ class AddInventoryFormDialog extends HookConsumerWidget {
               decoration: const InputDecoration(labelText: 'Listing Price'),
               keyboardType: TextInputType.numberWithOptions(decimal: true),
             ),
-            // OutlinedButton(
-            //   style: ButtonStyle(
-            //     elevation: WidgetStatePropertyAll<double>(8.0),
-            //     backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
-            //   ),
-            //   onPressed: () => selectDate('Listing'),
-            //   child: Text(
-            //     'Select Listing Date:'//${listingDate.toLocal().month}/${listingDate.value.toLocal().day}/${listingDate.value.toLocal().year}',
-            //   ),
-            // ),
+            OutlinedButton(
+              style: ButtonStyle(
+                elevation: WidgetStatePropertyAll<double>(8.0),
+                backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
+              ),
+              onPressed: () => selectDate('Listing'),
+              child: Text(
+                'Select Listing Date:'//${listingDate.toLocal().month}/${listingDate.value.toLocal().day}/${listingDate.value.toLocal().year}',
+              ),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [

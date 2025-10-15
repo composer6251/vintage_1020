@@ -1,4 +1,28 @@
 
+## BEST PRACTICES
+
+### BREAKING CODE INTO SMALLER UNITS
+
+#### RED FLAGS: Loops to build out widgets(Tiles, Lists...etc)
+*Option 1* *Preferred*
+Separate widget
+- Only rebuilds widget that changes. i.e. Favorite Icon from option 2
+- Makes testing easier
+
+*Option 2*
+Helper method
+- Causes entire widget to rebuild(setState). If a user clicks a favorite icon on a list item, image, or other, setState causes the entire widget(all listItems...etc) to rebuild
+- Testing must rebuild Favorite Icon AND dependencies
+
+#### CLASSES OVER FUNCTIONS
+- Classes are more efficient
+
+- Functions only benefit is that they require less code to be written. NO PERFORMANCE BENEFIT.
+
+#### USE CONST CONSTRUCTORS WHENEVER POSSIBLE SO THEY AREN'T REBUILT
+
+
+#### CONTEXT NAMING SHOULD BE UNIFORM THROUGHOUT THE APP TO AVOID STALE CONTEXTS
 
 # LAYOUT AND SIZING
 
@@ -8,9 +32,16 @@
 SizedOverflowBox - contraints come from grandparent(meaning likely overflows)
 OverflowBox - 
 
+
+Row:
+Column:
+ListView:
+
 Flexible - Wrap a child/children of multi-layout widget and give flex factor (2 = 1/2, 3 = 1/3)
-Expanded - Use when children overflow, but should NOT
+Expanded - Use when children overflow, but SHOULD NOT
 ClipRect - Use when children overflow, and SHOULD. 
+
+
 
 
 

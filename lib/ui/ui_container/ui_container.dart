@@ -66,7 +66,7 @@ class TabViewsContent extends HookConsumerWidget {
   static const List<Tab> myTabs = <Tab>[
     Tab(text: 'Manage', icon: Icon(Icons.chair_rounded)),
     Tab(text: 'My Booth', icon: Icon(Icons.storefront)),
-    Tab(text: 'Edit', icon: Icon(Icons.price_check)),
+    // Tab(text: 'Edit', icon: Icon(Icons.price_check)),
     Tab(text: 'Sales', icon: Icon(Icons.bar_chart)),
   ];
 
@@ -115,7 +115,7 @@ class TabViewsContent extends HookConsumerWidget {
             children: [
               ManageInventoryTab(),
               MyBoothTab(),
-              EditItemTab(),
+              // EditItemTab(),
               ActivityChart(isShowingMainData: true),
             ],
           ),

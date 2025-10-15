@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:vintage_1020/data/providers/inventory_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item/inventory_item.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
@@ -21,9 +22,6 @@ class ManageInventoryItemTile extends HookConsumerWidget {
     final isListed =
         model.itemListingPrice != null && model.itemListingDate != null;
     final isSold = model.itemSoldPrice != null && model.itemSoldDate != null;
-
-    final double height = MediaQuery.sizeOf(context).height;
-    final double width = MediaQuery.sizeOf(context).width;
 
     Widget getBanner() {
       if (isSold) {
@@ -80,6 +78,12 @@ class ManageInventoryItemTile extends HookConsumerWidget {
       );
 
       showSnackBar('Deleted 1 item with id $itemId', context);
+    }
+
+    void addItemToBooth(String itemId) {
+      ref.read(inventoryProvider.notifier).addItemToBooth(itemId);
+
+      showSnackBar('Item added to booth!', context);
     }
 
     return model == null ? 
@@ -150,7 +154,7 @@ class ManageInventoryItemTile extends HookConsumerWidget {
                 iconSize: 30,
                 padding: EdgeInsets.all(0),
                 tooltip: 'Add to current booth',
-                onPressed: () {},
+                onPressed: () => addItemToBooth(model.id),
                 icon: FaIcon(FontAwesomeIcons.tentArrowDownToLine),
               ),
             ],
