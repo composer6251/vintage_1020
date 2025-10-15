@@ -1,5 +1,3 @@
-
-
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vintage_1020/data/local_db/local_db.dart';
 import 'package:vintage_1020/data/providers/current_inventory_item/current_inventory_item.dart';
@@ -7,68 +5,100 @@ import 'package:vintage_1020/data/providers/filter_notifier.dart';
 import 'package:vintage_1020/data/providers/inventory_filter_provider/inventory_filter_provider.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
+import 'package:vintage_1020/utils/snack_bar.dart';
 
 part 'inventory_notifier.g.dart';
 
-@riverpod 
-class InventoryNotifier extends _$InventoryNotifier{
-
-  @override 
+@riverpod
+class InventoryNotifier extends _$InventoryNotifier {
+  @override
   List<InventoryItemLocal> build() {
     // Watch inventory
     // List<InventoryItemLocal> inventory = ref.watch(inventoryLocalProvider);
     // Watch current inventory filter
     final providerFilter = ref.watch(filterProvider);
 
-    return setFilteredInventory(providerFilter);
+    List<InventoryItemLocal> filteredInventory = getFilteredInventory(
+      providerFilter,
+    );
+
+    return filteredInventory;
   }
 
-  List<InventoryItemLocal> setFilteredInventory(InventoryFilter currentFilter) {
-
+  List<InventoryItemLocal> getFilteredInventory(InventoryFilter currentFilter) {
     final providerFilter = ref.watch(filterProvider);
     final currentItem = ref.watch(currentInventoryItemProvider);
     final inventory = ref.watch(inventoryLocalProvider);
 
     List<InventoryItemLocal> filteredInventory = [];
     // Check listed inventory by flag and by listing date and sold date = null
-    if(providerFilter == InventoryFilter.listed) { 
-      filteredInventory = inventory.where((item) => item.isCurrentBoothItem == 1.0).toList();
+    if (providerFilter == InventoryFilter.listed) {
+      print('Returning listed booth inventory in inventory notifier');
+      filteredInventory = inventory
+          .where((item) => item.isCurrentBoothItem == 1.0)
+          .toList();
       // state = [...filteredInventory];
       return [...filteredInventory];
     }
-    if(providerFilter == InventoryFilter.backStock) { 
-      filteredInventory = inventory.where((item) => item.itemListingDate == null && item.itemSoldDate == null).toList();
+    if (providerFilter == InventoryFilter.backStock) {
+      filteredInventory = inventory
+          .where(
+            (item) => item.itemListingDate == null && item.itemSoldDate == null,
+          )
+          .toList();
       // state = [...filteredInventory];
       return [...filteredInventory];
     }
-    if(providerFilter == InventoryFilter.sold) { 
-      filteredInventory = inventory.where((item) => item.itemDeleteDate != null).toList();
+    if (providerFilter == InventoryFilter.sold) {
+      filteredInventory = inventory
+          .where((item) => item.itemDeleteDate != null)
+          .toList();
       // state = [...filteredInventory];
       return [...filteredInventory];
     }
-    if(providerFilter == InventoryFilter.furniture) { 
-      filteredInventory = inventory.where((item) => item.itemCategory == 'Furniture').toList();
+    if (providerFilter == InventoryFilter.furniture) {
+      filteredInventory = inventory
+          .where((item) => item.itemCategory == 'Furniture')
+          .toList();
       // state = [...filteredInventory];
       return [...filteredInventory];
     }
-    if(providerFilter == InventoryFilter.current) { 
-      filteredInventory = inventory.where((item) => item.id == currentItem.id).toList();
+    if (providerFilter == InventoryFilter.current) {
+      filteredInventory = inventory
+          .where((item) => item.id == currentItem.id)
+          .toList();
       // state = [...filteredInventory];
       return [...filteredInventory];
     }
     // If no filters are applied, return all inventory
+    print('Returning ALL in inventory notifier');
     return inventory;
   }
 
   void addItemToBooth(String itemId) {
+    // Store current state before updating
     List<InventoryItemLocal> currentState = state;
-    InventoryItemLocal itemToAddToBooth = state.firstWhere((item) => item.id == itemId);
-    itemToAddToBooth.isCurrentBoothItem = 1.0;
+    // Get item to update as booth item
+    InventoryItemLocal itemToAddToBooth = state.firstWhere(
+      (item) => item.id == itemId,
+    );
 
+    // If the item to add isn't found, show snack bar.
+    if (itemToAddToBooth.id.isEmpty) {
+      print('Error in addItemToBooth. Item id not found in state');
+      // TODO: SHOW SNACK BAR TO USER IN EVENT OF ERROR
+      return;
+    }
+    // Update item as booth item
+    itemToAddToBooth.isCurrentBoothItem = 1.0;
+    // Update inventory
     currentState.add(itemToAddToBooth);
 
+    // Remove existing item
+    state.removeWhere((item) => item.id == itemId);
+    // Update state so user sees reflected change
     state = [...currentState];
-
+    // Persist change
     LocalDb().addInventoryItemToCurrentBooth(itemId);
   }
 }
