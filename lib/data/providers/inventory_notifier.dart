@@ -2,7 +2,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vintage_1020/data/local_db/local_db.dart';
 import 'package:vintage_1020/data/providers/current_inventory_item/current_inventory_item.dart';
 import 'package:vintage_1020/data/providers/filter_notifier.dart';
-import 'package:vintage_1020/data/providers/inventory_filter_provider/inventory_filter_provider.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/utils/snack_bar.dart';
@@ -13,9 +12,7 @@ part 'inventory_notifier.g.dart';
 class InventoryNotifier extends _$InventoryNotifier {
   @override
   List<InventoryItemLocal> build() {
-    // Watch inventory
-    // List<InventoryItemLocal> inventory = ref.watch(inventoryLocalProvider);
-    // Watch current inventory filter
+    // Watch current inventory filter. getFilteredInventory watches the inventory, 
     final providerFilter = ref.watch(filterProvider);
 
     List<InventoryItemLocal> filteredInventory = getFilteredInventory(
@@ -32,7 +29,11 @@ class InventoryNotifier extends _$InventoryNotifier {
 
     List<InventoryItemLocal> filteredInventory = [];
     // Check listed inventory by flag and by listing date and sold date = null
-    if (providerFilter == InventoryFilter.listed) {
+        // If no filters are applied, return all inventory
+    if(currentFilter == InventoryFilter.all){
+      return inventory;
+    }
+    if (currentFilter == InventoryFilter.listed) {
       print('Returning listed booth inventory in inventory notifier');
       filteredInventory = inventory
           .where((item) => item.isCurrentBoothItem == 1.0)
@@ -40,7 +41,7 @@ class InventoryNotifier extends _$InventoryNotifier {
       // state = [...filteredInventory];
       return [...filteredInventory];
     }
-    if (providerFilter == InventoryFilter.backStock) {
+    if (currentFilter == InventoryFilter.backStock) {
       filteredInventory = inventory
           .where(
             (item) => item.itemListingDate == null && item.itemSoldDate == null,
@@ -49,29 +50,27 @@ class InventoryNotifier extends _$InventoryNotifier {
       // state = [...filteredInventory];
       return [...filteredInventory];
     }
-    if (providerFilter == InventoryFilter.sold) {
+    if (currentFilter == InventoryFilter.sold) {
       filteredInventory = inventory
           .where((item) => item.itemDeleteDate != null)
           .toList();
       // state = [...filteredInventory];
       return [...filteredInventory];
     }
-    if (providerFilter == InventoryFilter.furniture) {
+    if (currentFilter == InventoryFilter.furniture) {
       filteredInventory = inventory
           .where((item) => item.itemCategory == 'Furniture')
           .toList();
       // state = [...filteredInventory];
       return [...filteredInventory];
     }
-    if (providerFilter == InventoryFilter.current) {
+    if (currentFilter == InventoryFilter.current) {
       filteredInventory = inventory
           .where((item) => item.id == currentItem.id)
           .toList();
       // state = [...filteredInventory];
       return [...filteredInventory];
     }
-    // If no filters are applied, return all inventory
-    print('Returning ALL in inventory notifier');
     return inventory;
   }
 
@@ -89,13 +88,15 @@ class InventoryNotifier extends _$InventoryNotifier {
       // TODO: SHOW SNACK BAR TO USER IN EVENT OF ERROR
       return;
     }
+
+
+    // Remove existing item
+    state.removeWhere((item) => item.id == itemId);
+
     // Update item as booth item
     itemToAddToBooth.isCurrentBoothItem = 1.0;
     // Update inventory
     currentState.add(itemToAddToBooth);
-
-    // Remove existing item
-    state.removeWhere((item) => item.id == itemId);
     // Update state so user sees reflected change
     state = [...currentState];
     // Persist change

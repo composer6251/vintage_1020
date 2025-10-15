@@ -105,25 +105,35 @@ class EditInventoryItemDialog extends HookConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextFormField(
-              controller: itemPurchasePriceController,
-              decoration: const InputDecoration(
-                fillColor: Colors.blue,
-                labelText: 'Purchase Price(required)',
-              ),
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              validator: (value) =>
-                  value?.isEmpty ?? true ? 'Purchase Price is required' : null,
-            ),
-            OutlinedButton(
-              style: ButtonStyle(
-                elevation: WidgetStatePropertyAll<double>(8.0),
-                backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
-              ),
-              onPressed: () => selectDate('Purchase'),
-              child: Text(
-                'Purchase Date: ${purchaseDate.value.toLocal().month}/${purchaseDate.value.toLocal().day}/${purchaseDate.value.toLocal().year}',
-              ),
+            Row(
+              children: [
+                Flexible(
+                  flex: 4,
+                  child: TextFormField(
+                    controller: itemPurchasePriceController,
+                    decoration: const InputDecoration(
+                      fillColor: Colors.blue,
+                      labelText: 'Purchase Price(required)',
+                    ),
+                    keyboardType: TextInputType.numberWithOptions(decimal: true),
+                    validator: (value) =>
+                        value?.isEmpty ?? true ? 'Purchase Price is required' : null,
+                  ),
+                ),
+                Flexible(
+                  flex: 3,
+                  child: OutlinedButton(
+                    style: ButtonStyle(
+                      elevation: WidgetStatePropertyAll<double>(8.0),
+                      backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
+                    ),
+                    onPressed: () => selectDate('Purchase'),
+                    child: Text(
+                      '${purchaseDate.value.toLocal().month}/${purchaseDate.value.toLocal().day}/${purchaseDate.value.toLocal().year}',
+                    ),
+                  ),
+                ),
+              ],
             ),
             TextFormField(
               controller: itemListingPriceController,
