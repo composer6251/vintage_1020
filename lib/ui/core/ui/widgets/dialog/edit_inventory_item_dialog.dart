@@ -7,6 +7,7 @@ import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.da
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart' hide userEmail;
 import 'package:vintage_1020/data/local_db/local_db.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/common/item_dimensions_dial.dart';
+import 'package:vintage_1020/ui/core/ui/widgets/dialog/common/item_dimensions_input_widget.dart';
 
 /// **A HOOKCONSUMER WIDGET IS ESSENTIALLY A STATELESS WIDGET, BUT UTILIZES FLUTTER HOOKS TO MANAGE STATE ***
 class EditInventoryItemDialog extends HookConsumerWidget {
@@ -17,7 +18,9 @@ class EditInventoryItemDialog extends HookConsumerWidget {
     // useMemoized to prevent new instances of formKey
     final formKey = useMemoized(() => GlobalKey<FormState>());
 
-    final InventoryItemLocal itemEditing = ref.read(inventoryProvider).first;
+    final items = ref.watch(inventoryProvider);
+
+    final itemEditing = items.first;
 
     // Form Field Controllers
     final itemPurchasePriceController = useTextEditingController(text: itemEditing.itemPurchasePrice.toString());
@@ -196,8 +199,8 @@ class EditInventoryItemDialog extends HookConsumerWidget {
                 ),
               ],
             ),
-            Container(height: 50,),
-            ItemDimensionsDial(),
+            
+            ItemDimensionsInputWidget(),
           ],
         ),
       ),

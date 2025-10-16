@@ -54,13 +54,14 @@ class _ManageInventoryTabState extends ConsumerState<ManageInventoryTab> {
           .getFilteredInventory(newFilter.first);
     }
 
-    void openEditInventoryDialog() {
+    void openEditInventoryDialog(InventoryItemLocal item) {
       ref
           .read(filterProvider.notifier)
           .setCurrentFilter(InventoryFilter.current);
+      ref.read(currentInventoryItemProvider.notifier).updateCurrentInventoryItem(item);
       showDialog(
         context: context,
-        builder: (context) => const TestDialog(),
+        builder: (context) => const EditInventoryItemDialog(),
       );
     }
 
@@ -142,7 +143,7 @@ class _ManageInventoryTabState extends ConsumerState<ManageInventoryTab> {
                           itemBuilder: (context, index) {
                             return GestureDetector(
                               onTap: () {
-                                openEditInventoryDialog();
+                                openEditInventoryDialog(filteredInventory[index]);
                               },
                               child: ManageInventoryItemTile(
                                 model: filteredInventory[index],

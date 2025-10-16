@@ -8,6 +8,7 @@ import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.da
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart' hide userEmail;
 import 'package:vintage_1020/data/local_db/local_db.dart';
 import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
+import 'package:vintage_1020/ui/core/ui/widgets/dialog/common/item_dimensions_input_widget.dart';
 
 /// **A HOOKCONSUMER WIDGET IS ESSENTIALLY A STATELESS WIDGET, BUT UTILIZES FLUTTER HOOKS TO MANAGE STATE ***
 class AddInventoryFormDialog extends HookConsumerWidget {
@@ -175,31 +176,53 @@ class AddInventoryFormDialog extends HookConsumerWidget {
                 'Select Listing Date:'//${listingDate.toLocal().month}/${listingDate.value.toLocal().day}/${listingDate.value.toLocal().year}',
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Flexible(
-                  flex: 2,
-                  child: TextFormField(
-                    decoration: InputDecoration(hintText: 'Height'),
-                    controller: itemHeightController,
-                  ),
-                ),
-                Flexible(
-                  flex: 2,
-                  child: TextFormField(
-                    decoration: InputDecoration(hintText: 'Width'),
-                    controller: itemWidthController,
-                  ),
-                ),
-                Flexible(
-                  flex: 2,
-                  child: TextFormField(
-                    decoration: InputDecoration(hintText: 'Depth'),
-                    controller: itemDepthController,
-                  ),
-                ),
-              ],
+      Flex(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        direction: Axis.horizontal,
+        children: [
+          SizedBox(
+            width: 80,
+            child: TextFormField(
+              controller: itemHeightController,
+              decoration: const InputDecoration(
+                fillColor: Colors.blue,
+                floatingLabelAlignment: FloatingLabelAlignment.start,
+                labelText: 'Height',
+                labelStyle: TextStyle(fontSize: 16)
+              ),
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              validator: (value) =>
+                  value?.isEmpty ?? true ? 'Purchase Price is required' : null,
+            ),
+          ),
+          SizedBox(
+            width: 80,
+            child: TextFormField(
+              controller: itemWidthController,
+              decoration: const InputDecoration(
+                fillColor: Colors.blue,
+                labelText: 'Width',
+                floatingLabelAlignment: FloatingLabelAlignment.start,
+                labelStyle: TextStyle(fontSize: 16)
+              ),
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+            ),
+          ),
+          SizedBox(
+            width: 80,
+            child: TextFormField(
+              controller: itemDepthController,
+              decoration: const InputDecoration(
+                fillColor: Colors.blue,
+                labelText: 'Depth',
+                floatingLabelAlignment: FloatingLabelAlignment.start,
+                labelStyle: TextStyle(fontSize: 16)
+              ),
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              ),
+            ),
+            ],
             ),
             Row(
               children: [
@@ -210,9 +233,9 @@ class AddInventoryFormDialog extends HookConsumerWidget {
                 Checkbox(value: addToBooth.value, onChanged: (value) => !addToBooth.value),
               ],
             )
-          ],
+            ],
+          ),
         ),
-      ),
       actions: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

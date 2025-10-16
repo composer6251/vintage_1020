@@ -5,6 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:vintage_1020/data/providers/current_inventory_item/current_inventory_item.dart';
 import 'package:vintage_1020/data/providers/inventory_notifier.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/common/item_dates_picker_widget.dart';
+import 'package:vintage_1020/ui/core/ui/widgets/dialog/common/item_dimensions_input_widget.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/common/item_prices_form_widget.dart';
 
 class TestDialog extends ConsumerStatefulWidget {
@@ -48,6 +49,7 @@ class _TestDialogState extends ConsumerState<TestDialog> {
                 Flexible(child: ItemDatesPickerWidget()),
               ],
             ),
+            ItemDimensionsInputWidget(),
           ],
         ),
       ),

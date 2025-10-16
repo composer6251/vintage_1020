@@ -42,11 +42,19 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Vintage 1020',
       theme: ThemeData(
+        dividerTheme: DividerThemeData(
+          space: 50,
+          thickness: 2,
+          color: Colors.lightBlueAccent,
+          indent: 20,
+          endIndent: 20,
+          radius: BorderRadius.circular(8.0)
+        ),
         colorScheme: const ColorScheme.light(
-          // primary: Colors.white, // Date pickersubmit, tab bar selected button color
+          primary: Colors.blue, // Date pickersubmit, tab bar selected button color
           secondary: Colors.black,
-          primaryContainer: Colors.red,
-          secondaryContainer: Colors.redAccent,
+          primaryContainer: Color.fromARGB(149, 82, 1, 1),
+          secondaryContainer: Color.fromARGB(1, 167, 34, 34),
           surface: Colors.white, // Background color
           onSurface: Colors.black, // Search bar text color
           onPrimary: Colors.black,
