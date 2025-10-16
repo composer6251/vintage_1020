@@ -15,9 +15,9 @@ class InventoryItemLocal {
   DateTime? itemPurchaseDate;
   DateTime? itemListingDate;
   DateTime? itemSoldDate;
-  int? itemHeight;
-  int? itemWidth;
-  int? itemDepth;
+  double? itemHeight;
+  double? itemWidth;
+  double? itemDepth;
   DateTime? itemDeleteDate;
   double? isCurrentBoothItem = 0.0;
 

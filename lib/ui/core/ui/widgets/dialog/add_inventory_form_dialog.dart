@@ -112,9 +112,9 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         purchaseDate.value,
         null,
         null,
-        int.tryParse(itemHeightController.text),
-        int.tryParse(itemWidthController.text),
-        int.tryParse(itemDepthController.text),
+        double.tryParse(itemHeightController.text),
+        double.tryParse(itemWidthController.text),
+        double.tryParse(itemDepthController.text),
         null,
         0,
 
