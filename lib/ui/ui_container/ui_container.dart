@@ -5,6 +5,7 @@ import 'package:logger/logger.dart';
 import 'package:vintage_1020/data/local_db/local_db.dart';
 import 'package:vintage_1020/data/providers/filter_notifier.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/add_inventory_form_dialog.dart';
+import 'package:vintage_1020/ui/core/ui/widgets/dialog/test_dialog.dart';
 import 'package:vintage_1020/ui/edit_inventory_item/edit_inventory_tab.dart';
 import 'package:vintage_1020/ui/manage_inventory_tab/manage_inventory_tab.dart';
 import 'package:vintage_1020/ui/activity_chart_screen/activity_chart.dart';
@@ -19,7 +20,6 @@ class UiContainer extends StatefulHookConsumerWidget {
 }
 
 class _HomeScreenState extends ConsumerState<UiContainer> {
-
   @override
   void initState() {
     super.initState();
@@ -41,9 +41,9 @@ class _HomeScreenState extends ConsumerState<UiContainer> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-      // appBar: AppBar(actions: [
-      //   TextButton(onPressed: dropInventoryItemTable, child: Text('Drop Inv table'))
-      // ],),
+        // appBar: AppBar(actions: [
+        //   TextButton(onPressed: dropInventoryItemTable, child: Text('Drop Inv table'))
+        // ],),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -66,7 +66,7 @@ class TabViewsContent extends HookConsumerWidget {
   static const List<Tab> myTabs = <Tab>[
     Tab(text: 'Manage', icon: Icon(Icons.chair_rounded)),
     Tab(text: 'My Booth', icon: Icon(Icons.storefront)),
-    // Tab(text: 'Edit', icon: Icon(Icons.price_check)),
+    Tab(text: 'Edit', icon: Icon(Icons.price_check)),
     Tab(text: 'Sales', icon: Icon(Icons.bar_chart)),
   ];
 
@@ -84,7 +84,11 @@ class TabViewsContent extends HookConsumerWidget {
         child: Scaffold(
           appBar: AppBar(
             title: Text('WELCOME VINTAGE 1020!!!'),
-            titleTextStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),
+            titleTextStyle: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              fontStyle: FontStyle.italic,
+            ),
             centerTitle: true,
             toolbarHeight: 40,
             elevation: 100,
@@ -107,7 +111,9 @@ class TabViewsContent extends HookConsumerWidget {
               indicatorColor: Colors.white,
               labelColor: Colors.white,
               tabs: [...myTabs],
-              onTap: (value) => ref.read(filterProvider.notifier).setCurrentTabInventoryFilter(value),
+              onTap: (value) => ref
+                  .read(filterProvider.notifier)
+                  .setCurrentTabInventoryFilter(value),
             ),
           ),
           body: TabBarView(
@@ -115,7 +121,7 @@ class TabViewsContent extends HookConsumerWidget {
             children: [
               ManageInventoryTab(),
               MyBoothTab(),
-              // EditItemTab(),
+              TestDialog(),
               ActivityChart(isShowingMainData: true),
             ],
           ),

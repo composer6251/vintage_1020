@@ -1,5 +1,3 @@
-import 'dart:ffi';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -108,20 +106,22 @@ class EditInventoryItemDialog extends HookConsumerWidget {
             Row(
               children: [
                 Flexible(
-                  flex: 4,
+                  flex: 5,
                   child: TextFormField(
                     controller: itemPurchasePriceController,
                     decoration: const InputDecoration(
                       fillColor: Colors.blue,
-                      labelText: 'Purchase Price(required)',
+                      labelStyle: TextStyle(fontSize: 20),
+                      labelText: 'Purchase Price*',
                     ),
                     keyboardType: TextInputType.numberWithOptions(decimal: true),
                     validator: (value) =>
                         value?.isEmpty ?? true ? 'Purchase Price is required' : null,
                   ),
                 ),
+                Spacer(),
                 Flexible(
-                  flex: 3,
+                  flex: 5,
                   child: OutlinedButton(
                     style: ButtonStyle(
                       elevation: WidgetStatePropertyAll<double>(8.0),
@@ -135,36 +135,68 @@ class EditInventoryItemDialog extends HookConsumerWidget {
                 ),
               ],
             ),
-            TextFormField(
-              controller: itemListingPriceController,
-              decoration: const InputDecoration(labelText: 'Listing Price'),
-              keyboardType: TextInputType.numberWithOptions(decimal: false),
+            Row(
+              children: [
+                Flexible(
+                  flex: 5,
+                  child: TextFormField(
+                    controller: itemListingPriceController,
+                    decoration: const InputDecoration(
+                      labelStyle: TextStyle(fontSize: 20),
+                      fillColor: Colors.blue,
+                      labelText: 'Listing Price',
+                    ),
+                    keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  ),
+                ),
+                Spacer(),
+                Flexible(
+                  flex: 5,
+                  child: OutlinedButton(
+                    style: ButtonStyle(
+                      elevation: WidgetStatePropertyAll<double>(8.0),
+                      backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
+                    ),
+                    onPressed: () => selectDate('Listing'),
+                    child: Text(
+                      'Listed Date'
+                    ),
+                  ),
+                ),
+              ],
             ),
-            OutlinedButton(
-              style: ButtonStyle(
-                elevation: WidgetStatePropertyAll<double>(8.0),
-                backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
-              ),
-              onPressed: () => selectDate('Listing'),
-              child: Text(
-                'New Listing Date:'//${listingDate.toLocal().month}/${listingDate.value.toLocal().day}/${listingDate.value.toLocal().year}',
-              ),
+            Row(
+              children: [
+                Flexible(
+                  flex: 5,
+                  child: TextFormField(
+                    controller: itemListingPriceController,
+                    decoration: const InputDecoration(
+                      labelStyle: TextStyle(fontSize: 20),
+                      fillColor: Colors.blue,
+                      labelText: 'Selling Price',
+                    ),
+                    keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  ),
+                ),
+                Spacer(),
+                Flexible(
+                  flex: 5,
+                  child: OutlinedButton(
+                    style: ButtonStyle(
+                      elevation: WidgetStatePropertyAll<double>(8.0),
+                      backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
+                    ),
+                    onPressed: () => selectDate('Sold'),
+                    child: Text(
+                      style: TextStyle(fontSize: 16),
+                      'Sold Date'
+                    ),
+                  ),
+                ),
+              ],
             ),
-            TextFormField(
-              controller: itemListingPriceController,
-              decoration: const InputDecoration(labelText: 'Selling Price'),
-              keyboardType: TextInputType.numberWithOptions(decimal: false),
-            ),
-            OutlinedButton(
-              style: ButtonStyle(
-                elevation: WidgetStatePropertyAll<double>(8.0),
-                backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
-              ),
-              onPressed: () => selectDate('Listing'),
-              child: Text(
-                'Select Selling Date:'//${listingDate.toLocal().month}/${listingDate.value.toLocal().day}/${listingDate.value.toLocal().year}',
-              ),
-            ),
+            Container(height: 50,),
             ItemDimensionsDial(),
           ],
         ),
