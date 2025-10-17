@@ -23,8 +23,9 @@ class EditInventoryItemDialog extends HookConsumerWidget {
     final itemEditing = items.first;
 
     // Form Field Controllers
-    final itemPurchasePriceController = useTextEditingController(text: itemEditing.itemPurchasePrice.toString());
-    final itemListingPriceController = useTextEditingController(text: itemEditing.itemListingPrice.toString());
+    final itemPurchasePriceController = useTextEditingController(text: itemEditing.itemPurchasePrice?.toString());
+    final itemListingPriceController = useTextEditingController(text: itemEditing.itemListingPrice?.toString());
+    final itemSellingPriceController = useTextEditingController(text: itemEditing.itemSoldPrice?.toString());
     final itemHeightController = useTextEditingController(text: itemEditing.itemHeight == null ? '0' : itemEditing.itemHeight.toString());
     final itemWidthController = useTextEditingController(text: itemEditing.itemWidth == null ? '0' : itemEditing.itemWidth.toString());
     final itemDepthController = useTextEditingController(text: itemEditing.itemDepth == null ? '0' : itemEditing.itemDepth.toString());
@@ -90,13 +91,14 @@ class EditInventoryItemDialog extends HookConsumerWidget {
     return AlertDialog(
       title: Container(
         decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
           gradient: LinearGradient(
-            colors: [Colors.teal, Colors.tealAccent])),
+            colors: [Colors.white, const Color.fromARGB(255, 4, 46, 109)])),
         child: Center(
           child: const Text(
             selectionColor: Colors.blue,
             'Edit Item',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -128,10 +130,14 @@ class EditInventoryItemDialog extends HookConsumerWidget {
                   child: OutlinedButton(
                     style: ButtonStyle(
                       elevation: WidgetStatePropertyAll<double>(8.0),
-                      backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
+                      backgroundColor: WidgetStatePropertyAll<Color>(Colors.white),
                     ),
                     onPressed: () => selectDate('Purchase'),
                     child: Text(
+                      purchaseDate.value == null 
+                      ?
+                      'Select Date'
+                      :
                       '${purchaseDate.value.toLocal().month}/${purchaseDate.value.toLocal().day}/${purchaseDate.value.toLocal().year}',
                     ),
                   ),
@@ -145,6 +151,7 @@ class EditInventoryItemDialog extends HookConsumerWidget {
                   child: TextFormField(
                     controller: itemListingPriceController,
                     decoration: const InputDecoration(
+                      floatingLabelAlignment: FloatingLabelAlignment.start,
                       labelStyle: TextStyle(fontSize: 20),
                       fillColor: Colors.blue,
                       labelText: 'Listing Price',
@@ -158,11 +165,15 @@ class EditInventoryItemDialog extends HookConsumerWidget {
                   child: OutlinedButton(
                     style: ButtonStyle(
                       elevation: WidgetStatePropertyAll<double>(8.0),
-                      backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
+                      backgroundColor: WidgetStatePropertyAll<Color>(Colors.white),
                     ),
                     onPressed: () => selectDate('Listing'),
                     child: Text(
-                      'Listed Date'
+                      itemEditing.itemListingDate == null
+                      ?
+                      'Select Date'
+                      :
+                      '${purchaseDate.value.toLocal().month}/${purchaseDate.value.toLocal().day}/${purchaseDate.value.toLocal().year}',
                     ),
                   ),
                 ),
@@ -173,7 +184,7 @@ class EditInventoryItemDialog extends HookConsumerWidget {
                 Flexible(
                   flex: 5,
                   child: TextFormField(
-                    controller: itemListingPriceController,
+                    controller: itemSellingPriceController,
                     decoration: const InputDecoration(
                       labelStyle: TextStyle(fontSize: 20),
                       fillColor: Colors.blue,
@@ -188,7 +199,7 @@ class EditInventoryItemDialog extends HookConsumerWidget {
                   child: OutlinedButton(
                     style: ButtonStyle(
                       elevation: WidgetStatePropertyAll<double>(8.0),
-                      backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
+                      backgroundColor: WidgetStatePropertyAll<Color>(Colors.white),
                     ),
                     onPressed: () => selectDate('Sold'),
                     child: Text(
@@ -199,7 +210,7 @@ class EditInventoryItemDialog extends HookConsumerWidget {
                 ),
               ],
             ),
-            
+            Divider(),
             ItemDimensionsInputWidget(),
           ],
         ),
@@ -212,7 +223,6 @@ class EditInventoryItemDialog extends HookConsumerWidget {
               child: Align(
                 alignment: AlignmentGeometry.bottomLeft,
                 child: FilledButton(
-                  // style: ButtonStyle(backgroundColor: Color(Colors.blue)),
                   onPressed: () => Navigator.pushNamed(context, '/edit-inventory-item'), 
                   child: Text('Edit Pics')),
               ),
@@ -248,7 +258,7 @@ class EditInventoryItemDialog extends HookConsumerWidget {
               icon: const Icon(Icons.check),
               style: ButtonStyle(
                 elevation: WidgetStatePropertyAll<double>(8.0),
-                backgroundColor: WidgetStatePropertyAll<Color>(Colors.green),
+                backgroundColor: WidgetStatePropertyAll<Color>(const Color.fromARGB(255, 21, 106, 27)),
               ),
               onPressed: submit,
             ),

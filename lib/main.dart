@@ -45,19 +45,19 @@ class MyApp extends StatelessWidget {
         dividerTheme: DividerThemeData(
           space: 50,
           thickness: 2,
-          color: Colors.lightBlueAccent,
+          color: Colors.blue,
           indent: 20,
           endIndent: 20,
           radius: BorderRadius.circular(8.0)
         ),
         colorScheme: const ColorScheme.light(
-          primary: Colors.blue, // Date pickersubmit, tab bar selected button color
-          secondary: Colors.black,
+          primary: Colors.blue, // Date pickersubmit, tab bar selected button color, label text
+          secondary: Colors.black, 
           primaryContainer: Color.fromARGB(149, 82, 1, 1),
           secondaryContainer: Color.fromARGB(1, 167, 34, 34),
-          surface: Colors.white, // Background color
+          // surface: Colors.red, // Background color
           onSurface: Colors.black, // Search bar text color
-          onPrimary: Colors.black,
+          onPrimary: Colors.orange,
         ),
       ),
       routes: <String, WidgetBuilder>{

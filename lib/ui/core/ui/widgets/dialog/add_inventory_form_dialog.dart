@@ -132,13 +132,13 @@ class AddInventoryFormDialog extends HookConsumerWidget {
       title: Center(
         child: const Text(
           'Add to Inventory',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
       ),
       content: Form(
         key: formKey,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisSize: MainAxisSize.min,
           children: [
             TextFormField(
@@ -192,8 +192,6 @@ class AddInventoryFormDialog extends HookConsumerWidget {
                 labelStyle: TextStyle(fontSize: 16)
               ),
               keyboardType: TextInputType.numberWithOptions(decimal: true),
-              validator: (value) =>
-                  value?.isEmpty ?? true ? 'Purchase Price is required' : null,
             ),
           ),
           SizedBox(
