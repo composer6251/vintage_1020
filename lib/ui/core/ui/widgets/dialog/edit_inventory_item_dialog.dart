@@ -115,6 +115,7 @@ class EditInventoryItemDialog extends HookConsumerWidget {
                   child: TextFormField(
                     controller: itemPurchasePriceController,
                     decoration: const InputDecoration(
+                      prefixText: '\$',
                       fillColor: Colors.blue,
                       labelStyle: TextStyle(fontSize: 20),
                       labelText: 'Purchase Price*',
@@ -151,6 +152,7 @@ class EditInventoryItemDialog extends HookConsumerWidget {
                   child: TextFormField(
                     controller: itemListingPriceController,
                     decoration: const InputDecoration(
+                      prefixText: '\$',
                       floatingLabelAlignment: FloatingLabelAlignment.start,
                       labelStyle: TextStyle(fontSize: 20),
                       fillColor: Colors.blue,
@@ -186,6 +188,7 @@ class EditInventoryItemDialog extends HookConsumerWidget {
                   child: TextFormField(
                     controller: itemSellingPriceController,
                     decoration: const InputDecoration(
+                      prefixText: '\$',
                       labelStyle: TextStyle(fontSize: 20),
                       fillColor: Colors.blue,
                       labelText: 'Selling Price',
@@ -199,7 +202,6 @@ class EditInventoryItemDialog extends HookConsumerWidget {
                   child: OutlinedButton(
                     style: ButtonStyle(
                       elevation: WidgetStatePropertyAll<double>(8.0),
-                      backgroundColor: WidgetStatePropertyAll<Color>(Colors.white),
                     ),
                     onPressed: () => selectDate('Sold'),
                     child: Text(

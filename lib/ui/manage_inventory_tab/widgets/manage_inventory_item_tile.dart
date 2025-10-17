@@ -19,9 +19,8 @@ class ManageInventoryItemTile extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    final isListed =
-        model.itemListingPrice != null && model.itemListingDate != null;
-    final isSold = model.itemSoldPrice != null && model.itemSoldDate != null;
+    final isListed = model.isCurrentBoothItem == 1.0;
+    final isSold = model.itemSoldPrice != null || model.itemSoldDate != null;
 
     Widget getBanner() {
       if (isSold) {

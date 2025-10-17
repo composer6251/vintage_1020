@@ -19,10 +19,8 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     // useMemoized to prevent new instances of formKey
     final formKey = useMemoized(() => GlobalKey<FormState>());
 
-    final String dollarSign = '\$';
-
-    final itemPurchasePriceController = useTextEditingController(text: dollarSign);
-    final itemListingPriceController = useTextEditingController(text: dollarSign);
+    final itemPurchasePriceController = useTextEditingController();
+    final itemListingPriceController = useTextEditingController();
     final itemHeightController = useTextEditingController();
     final itemWidthController = useTextEditingController();
     final itemDepthController = useTextEditingController();
@@ -99,7 +97,10 @@ class AddInventoryFormDialog extends HookConsumerWidget {
       if (itemImageUrls.value.length == 1) {
         defaultItemImageUrl.value = itemImageUrls.value.first;
       }
-      
+      // If user selected add to booth but did NOT select a listing date, default listing date to DateTime.now
+      if(listingDate.value == null && addToBooth.value) {
+        listingDate.value = DateTime.now();
+      }
       final InventoryItemLocal itemToDB = InventoryItemLocal.toLocalDb(
         uuid.v6(),
         userEmail,
@@ -109,7 +110,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         '',
         double.tryParse(itemPurchasePriceController.text),
         double.tryParse(itemListingPriceController.text),
-        double.tryParse(itemPurchasePriceController.text),
+        null,
         purchaseDate.value,
         listingDate.value,
         null,
@@ -146,6 +147,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
             TextFormField(
               controller: itemPurchasePriceController,
               decoration: const InputDecoration(
+                prefixText: '\$',
                 fillColor: Colors.blue,
                 labelText: 'Purchase Price(required)',
               ),
@@ -164,7 +166,9 @@ class AddInventoryFormDialog extends HookConsumerWidget {
             ),
             TextFormField(
               controller: itemListingPriceController,
-              decoration: const InputDecoration(labelText: 'Listing Price'),
+              decoration: const InputDecoration(
+                prefixText: '\$',
+                labelText: 'Listing Price'),
               keyboardType: TextInputType.numberWithOptions(decimal: true),
             ),
             OutlinedButton(

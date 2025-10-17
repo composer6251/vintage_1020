@@ -40,6 +40,7 @@ ListView:
 Flexible - Wrap a child/children of multi-layout widget and give flex factor (2 = 1/2, 3 = 1/3)
 Expanded - Use when children overflow, but SHOULD NOT
 ClipRect - Use when children overflow, and SHOULD. 
+Wrap - children in row, divided by space, and wrap if row overflows
 
 
 
