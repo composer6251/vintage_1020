@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:vintage_1020/data/providers/current_inventory_item/current_inventory_item.dart';
 import 'package:vintage_1020/data/providers/inventory_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart'
@@ -11,19 +12,28 @@ import 'package:vintage_1020/ui/core/ui/widgets/dialog/common/item_dimensions_di
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/common/item_dimensions_input_widget.dart';
 import 'package:vintage_1020/utils/snack_bar.dart';
 
-/// **A HOOKCONSUMER WIDGET IS ESSENTIALLY A STATELESS WIDGET, BUT UTILIZES FLUTTER HOOKS TO MANAGE STATE ***
-class EditInventoryItemDialog extends HookConsumerWidget {
+class EditInventoryItemDialog extends StatefulHookConsumerWidget {
   const EditInventoryItemDialog({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _EditInventoryItemDialogState();
+}
+
+class _EditInventoryItemDialogState
+    extends ConsumerState<EditInventoryItemDialog> {
+  @override
+  Widget build(BuildContext context) {
     // useMemoized to prevent new instances of formKey
     final formKey = useMemoized(() => GlobalKey<FormState>());
 
-    final items = ref.watch(inventoryProvider);
+    // GET INVENTORY ITEM
+    // final items = ref.watch(inventoryProvider);
 
-    final itemEditing = items.first;
-
+    // final itemEditing = items.first;
+    final itemEditing = ref.watch(currentInventoryItemProvider);
+    
+    
     // Form Field Controllers
     final itemPurchasePriceController = useTextEditingController(
       text: itemEditing.itemPurchasePrice?.toString(),
@@ -50,7 +60,7 @@ class EditInventoryItemDialog extends HookConsumerWidget {
           : itemEditing.itemDepth.toString(),
     );
 
-    // Hooks for holding data
+    // 
     final initialDate = useState(DateTime.now());
     DateTime? purchaseDateTemp;
     final purchaseDate = useState(
@@ -88,7 +98,6 @@ class EditInventoryItemDialog extends HookConsumerWidget {
       Navigator.of(context).pop();
     }
 
-
     void addItemToBooth(String itemId) {
       ref.read(inventoryProvider.notifier).addItemToBooth(itemId);
 
@@ -105,7 +114,9 @@ class EditInventoryItemDialog extends HookConsumerWidget {
         '',
         double.tryParse(itemPurchasePriceController.text),
         double.tryParse(itemListingPriceController.text),
-        double.tryParse(itemSellingPriceController.text), // Todo: Update selling date
+        double.tryParse(
+          itemSellingPriceController.text,
+        ), // Todo: Update selling date
         purchaseDate.value,
         listingDate.value,
         soldDate.value,
@@ -115,7 +126,7 @@ class EditInventoryItemDialog extends HookConsumerWidget {
         null,
         addToBooth.value ? 1 : 0,
       );
-      
+
       if (formKey.currentState?.validate() ?? false) {
         ref
             .watch(inventoryLocalProvider.notifier)
@@ -292,12 +303,12 @@ class EditInventoryItemDialog extends HookConsumerWidget {
               onPressed: () => Navigator.of(context).pop(),
             ),
             IconButton(
-                iconSize: 30,
-                padding: EdgeInsets.all(0),
-                tooltip: 'Add to current booth',
-                onPressed: () => addItemToBooth(itemEditing.id),
-                icon: FaIcon(FontAwesomeIcons.tentArrowDownToLine),
-              ),
+              iconSize: 30,
+              padding: EdgeInsets.all(0),
+              tooltip: 'Add to current booth',
+              onPressed: () => addItemToBooth(itemEditing.id),
+              icon: FaIcon(FontAwesomeIcons.tentArrowDownToLine),
+            ),
             IconButton(
               icon: const Icon(Icons.check),
               style: ButtonStyle(
