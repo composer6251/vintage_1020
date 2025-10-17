@@ -155,3 +155,10 @@ Use this method for any cleanup or pausing ongoing operations.
 
 dispose(): This method is called when the State object is permanently removed from the widget tree. Use this method for cleaning up resources, 
 such as data listeners or closing connections.
+
+
+
+### LAYOUT AND STYLING TWEEKS:
+Use CrossAxisAlignment.stretch to make children of row/column/flex even on the cross axis
+<img src="resources/how-to/Column Children Uneven.png">
+<img src="resources/how-to/Column Children stretch cross axis.png">

@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
           secondaryContainer: Color.fromARGB(1, 167, 34, 34),
           // surface: Colors.red, // Background color
           onSurface: Colors.black, // Search bar text color
-          onPrimary: Colors.orange,
+          onPrimary: Colors.white,
         ),
       ),
       routes: <String, WidgetBuilder>{

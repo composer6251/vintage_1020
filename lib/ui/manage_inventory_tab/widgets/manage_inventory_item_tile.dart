@@ -104,7 +104,7 @@ class ManageInventoryItemTile extends HookConsumerWidget {
             child: Stack(
               children: [
                 model.primaryImageUrl == null
-                ? Container(child: Text('No Primary Image set for Item'))
+                ? Text('No Primary Image set for Item')
                 : ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
                     child: Image.file(File(model.primaryImageUrl!)),

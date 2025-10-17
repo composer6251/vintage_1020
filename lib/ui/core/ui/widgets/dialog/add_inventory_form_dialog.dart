@@ -19,18 +19,19 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     // useMemoized to prevent new instances of formKey
     final formKey = useMemoized(() => GlobalKey<FormState>());
 
-    final itemPurchasePriceController = useTextEditingController();
-    final itemListingPriceController = useTextEditingController();
+    final String dollarSign = '\$';
+
+    final itemPurchasePriceController = useTextEditingController(text: dollarSign);
+    final itemListingPriceController = useTextEditingController(text: dollarSign);
     final itemHeightController = useTextEditingController();
     final itemWidthController = useTextEditingController();
     final itemDepthController = useTextEditingController();
 
     final initialDate = useState(DateTime.now());
 
-    final purchaseDate = useState(DateTime.now());
-    // final listingDate = useState<DateTime>(DateTime.now());
-    DateTime listingDate;
-    // final soldDate = useState(DateTime.now());
+    final purchaseDate = useState<DateTime>(DateTime.now());
+    DateTime? listingDateTemp;
+    final listingDate = useState(listingDateTemp);
     final selectedImages = useState<List<XFile>>([]);
     final selectedImagesAsFiles = useState<List<File>>([]);
     final itemImageUrls = useState<List<String>>([]);
@@ -72,7 +73,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
       );
       if (pickedDate == null) return; // User cancelled the date picker
       if (type == 'Listing') {
-        listingDate = pickedDate;
+        listingDate.value = pickedDate;
         return;
       }
       purchaseDate.value = pickedDate;
@@ -110,13 +111,13 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         double.tryParse(itemListingPriceController.text),
         double.tryParse(itemPurchasePriceController.text),
         purchaseDate.value,
-        null,
+        listingDate.value,
         null,
         double.tryParse(itemHeightController.text),
         double.tryParse(itemWidthController.text),
         double.tryParse(itemDepthController.text),
         null,
-        0,
+        addToBooth.value ? 1.0 : 0.0,
 
       );
 
@@ -140,6 +141,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextFormField(
               controller: itemPurchasePriceController,
@@ -154,11 +156,10 @@ class AddInventoryFormDialog extends HookConsumerWidget {
             OutlinedButton(
               style: ButtonStyle(
                 elevation: WidgetStatePropertyAll<double>(8.0),
-                backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
               ),
               onPressed: () => selectDate('Purchase'),
               child: Text(
-                    'Purchase Date: ${purchaseDate.value.toLocal().month}/${purchaseDate.value.toLocal().day}/${purchaseDate.value.toLocal().year}',
+                    '${purchaseDate.value.toLocal().month}/${purchaseDate.value.toLocal().day}/${purchaseDate.value.toLocal().year}',
               ),
             ),
             TextFormField(
@@ -169,11 +170,14 @@ class AddInventoryFormDialog extends HookConsumerWidget {
             OutlinedButton(
               style: ButtonStyle(
                 elevation: WidgetStatePropertyAll<double>(8.0),
-                backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
               ),
               onPressed: () => selectDate('Listing'),
               child: Text(
-                'Select Listing Date:'//${listingDate.toLocal().month}/${listingDate.value.toLocal().day}/${listingDate.value.toLocal().year}',
+              listingDate.value == null 
+              ?
+              'Select Listing Date'
+              :
+              '${listingDate.value?.toLocal().month}/${listingDate.value?.toLocal().day}/${listingDate.value?.toLocal().year}',
               ),
             ),
       Flex(
@@ -182,40 +186,40 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         direction: Axis.horizontal,
         children: [
           SizedBox(
-            width: 80,
+            width: 60,
             child: TextFormField(
               controller: itemHeightController,
               decoration: const InputDecoration(
                 fillColor: Colors.blue,
                 floatingLabelAlignment: FloatingLabelAlignment.start,
                 labelText: 'Height',
-                labelStyle: TextStyle(fontSize: 16)
+                labelStyle: TextStyle(fontSize: 12)
               ),
               keyboardType: TextInputType.numberWithOptions(decimal: true),
             ),
           ),
           SizedBox(
-            width: 80,
+            width: 60,
             child: TextFormField(
               controller: itemWidthController,
               decoration: const InputDecoration(
                 fillColor: Colors.blue,
                 labelText: 'Width',
                 floatingLabelAlignment: FloatingLabelAlignment.start,
-                labelStyle: TextStyle(fontSize: 16)
+                labelStyle: TextStyle(fontSize: 12)
               ),
               keyboardType: TextInputType.numberWithOptions(decimal: true),
             ),
           ),
           SizedBox(
-            width: 80,
+            width: 60,
             child: TextFormField(
               controller: itemDepthController,
               decoration: const InputDecoration(
                 fillColor: Colors.blue,
                 labelText: 'Depth',
                 floatingLabelAlignment: FloatingLabelAlignment.start,
-                labelStyle: TextStyle(fontSize: 16)
+                labelStyle: TextStyle(fontSize: 12)
               ),
               keyboardType: TextInputType.numberWithOptions(decimal: true),
               ),
