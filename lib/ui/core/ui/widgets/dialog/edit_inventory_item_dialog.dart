@@ -27,12 +27,10 @@ class _EditInventoryItemDialogState
     // useMemoized to prevent new instances of formKey
     final formKey = useMemoized(() => GlobalKey<FormState>());
 
-    // GET INVENTORY ITEM
-    // final items = ref.watch(inventoryProvider);
-
-    // final itemEditing = items.first;
     final itemEditing = ref.watch(currentInventoryItemProvider);
     
+    // TODO: Update state upon value change. Update state & DB upon submit
+    // THAT WAY THE UI is updated
     
     // Form Field Controllers
     final itemPurchasePriceController = useTextEditingController(
@@ -45,22 +43,15 @@ class _EditInventoryItemDialogState
       text: itemEditing.itemSoldPrice?.toString(),
     );
     final itemHeightController = useTextEditingController(
-      text: itemEditing.itemHeight == null
-          ? '0'
-          : itemEditing.itemHeight.toString(),
+      text: itemEditing.itemHeight?.toString(),
     );
     final itemWidthController = useTextEditingController(
-      text: itemEditing.itemWidth == null
-          ? '0'
-          : itemEditing.itemWidth.toString(),
+      text: itemEditing.itemWidth?.toString(),
     );
     final itemDepthController = useTextEditingController(
-      text: itemEditing.itemDepth == null
-          ? '0'
-          : itemEditing.itemDepth.toString(),
+      text: itemEditing.itemDepth?.toString(),
     );
 
-    // 
     final initialDate = useState(DateTime.now());
     DateTime? purchaseDateTemp;
     final purchaseDate = useState(
@@ -84,10 +75,12 @@ class _EditInventoryItemDialogState
       );
       if (pickedDate == null) return; // User cancelled the date picker
       if (type == 'Listing') {
+        listingDateTemp = pickedDate;
         listingDate.value = pickedDate;
         return;
       }
       if (type == 'Sold') {
+        soldDateTemp = pickedDate;
         soldDate.value = pickedDate;
         return;
       }
@@ -104,7 +97,7 @@ class _EditInventoryItemDialogState
       showSnackBar('Item added to booth!', context);
     }
 
-    void submit() async {
+    void updateStateChange() {
       final InventoryItemLocal itemToDB = InventoryItemLocal.toLocalDb(
         uuid.v6(),
         userEmail,
@@ -131,8 +124,13 @@ class _EditInventoryItemDialogState
         ref
             .watch(inventoryLocalProvider.notifier)
             .updateCurrentInventoryItemById(itemToDB);
-        closeDialog();
       }
+    }
+
+    void submit() async {
+      updateStateChange();
+
+      closeDialog();
     }
 
     return AlertDialog(

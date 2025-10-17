@@ -141,6 +141,18 @@ class LocalDb {
     print('Added item to booth: $updatedId');
     return updatedId;
 }
+// TODO: CREATE METHOD TO UPDATE BY ID.
+  Future<int> updateInventoryItem(InventoryItemLocal itemToUpdate) async {
+    final db = await _getDatabase();
+
+    final int updatedId = await db.update(inventoryItemTable, {
+      'itemListingDate': DateTime.now().toIso8601String(),
+      'isCurrentBoothItem': 1,
+    }, where: 'id = "${itemToUpdate.id}"',);
+
+    print('Added item to booth: $updatedId');
+    return updatedId;
+}
 
 
   Future<int> hardDeleteInventoryItem(String id) async {

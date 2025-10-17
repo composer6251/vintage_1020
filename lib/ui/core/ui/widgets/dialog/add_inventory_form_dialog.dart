@@ -184,52 +184,55 @@ class AddInventoryFormDialog extends HookConsumerWidget {
               '${listingDate.value?.toLocal().month}/${listingDate.value?.toLocal().day}/${listingDate.value?.toLocal().year}',
               ),
             ),
-      Flex(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        direction: Axis.horizontal,
-        children: [
-          SizedBox(
-            width: 60,
-            child: TextFormField(
-              controller: itemHeightController,
-              decoration: const InputDecoration(
-                fillColor: Colors.blue,
-                floatingLabelAlignment: FloatingLabelAlignment.start,
-                labelText: 'Height',
-                labelStyle: TextStyle(fontSize: 12)
-              ),
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-            ),
-          ),
-          SizedBox(
-            width: 60,
-            child: TextFormField(
-              controller: itemWidthController,
-              decoration: const InputDecoration(
-                fillColor: Colors.blue,
-                labelText: 'Width',
-                floatingLabelAlignment: FloatingLabelAlignment.start,
-                labelStyle: TextStyle(fontSize: 12)
-              ),
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-            ),
-          ),
-          SizedBox(
-            width: 60,
-            child: TextFormField(
-              controller: itemDepthController,
-              decoration: const InputDecoration(
-                fillColor: Colors.blue,
-                labelText: 'Depth',
-                floatingLabelAlignment: FloatingLabelAlignment.start,
-                labelStyle: TextStyle(fontSize: 12)
-              ),
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
+      Container(
+        decoration: BoxDecoration(border: BoxBorder.all(width: 1, style: BorderStyle.solid), borderRadius: BorderRadius.circular(2)),
+        child: Flex(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          direction: Axis.horizontal,
+          children: [
+            SizedBox(
+              width: 60,
+              child: TextFormField(
+                controller: itemHeightController,
+                decoration: const InputDecoration(
+                  fillColor: Colors.blue,
+                  floatingLabelAlignment: FloatingLabelAlignment.start,
+                  labelText: 'Height',
+                  labelStyle: TextStyle(fontSize: 12)
+                ),
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
               ),
             ),
-            ],
+            SizedBox(
+              width: 60,
+              child: TextFormField(
+                controller: itemWidthController,
+                decoration: const InputDecoration(
+                  fillColor: Colors.blue,
+                  labelText: 'Width',
+                  floatingLabelAlignment: FloatingLabelAlignment.start,
+                  labelStyle: TextStyle(fontSize: 12)
+                ),
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+              ),
             ),
+            SizedBox(
+              width: 60,
+              child: TextFormField(
+                controller: itemDepthController,
+                decoration: const InputDecoration(
+                  fillColor: Colors.blue,
+                  labelText: 'Depth',
+                  floatingLabelAlignment: FloatingLabelAlignment.start,
+                  labelStyle: TextStyle(fontSize: 12)
+                ),
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                ),
+              ),
+              ],
+              ),
+      ),
             Row(
               children: [
                 Text(
