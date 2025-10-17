@@ -10,11 +10,10 @@ part 'item_purchase_cost.g.dart';
 @riverpod
 class InventoryPurchaseCost extends _$InventoryPurchaseCost{
 
+  // TODO: Create map of values to return or separate provider for returning booth value/cost
   @override
   double build() {
     
-    List<InventoryItemLocal> inventory = ref.watch(inventoryProvider);
-
     return setInventoryPurchaseCost();
   }
 
@@ -26,7 +25,7 @@ class InventoryPurchaseCost extends _$InventoryPurchaseCost{
 
     for (InventoryItemLocal item in inventory) {
 
-      cost += item.itemPurchasePrice as double;
+      cost += item.itemPurchasePrice ?? 0.0;
     }
     return cost;
   }

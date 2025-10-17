@@ -232,7 +232,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
                   style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
                   'Add to booth?'
                   ),
-                Checkbox(value: addToBooth.value, onChanged: (value) => !addToBooth.value),
+                Checkbox(value: addToBooth.value, onChanged: (value) => addToBooth.value = value ?? false),
               ],
             )
             ],

@@ -52,7 +52,7 @@ class InventoryLocal extends _$InventoryLocal {
         item.itemWidth,
         item.itemDepth,
         item.itemDeleteDate,
-        item.isCurrentBoothItem ?? 1,
+        item.isCurrentBoothItem,
       ),
     ];
 
