@@ -55,9 +55,6 @@ class _ManageInventoryTabState extends ConsumerState<ManageInventoryTab> {
     }
 
     void openEditInventoryDialog(InventoryItemLocal item) {
-      ref
-          .read(filterProvider.notifier)
-          .setCurrentFilter(InventoryFilter.current);
       ref.read(currentInventoryItemProvider.notifier).updateCurrentInventoryItem(item);
       showDialog(
         context: context,

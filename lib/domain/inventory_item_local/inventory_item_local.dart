@@ -23,6 +23,62 @@ class InventoryItemLocal {
 
   InventoryItemLocal.empty();
 
+  InventoryItemLocal copyWith({
+    String? primaryImageUrl,
+    String? itemDescription,
+    List<File>? itemImages,
+    List<String>? itemImageUrls,
+    String? itemCategory,
+    double? itemPurchasePrice,
+    double? itemListingPrice,
+    double? itemSoldPrice,
+    DateTime? itemPurchaseDate,
+    DateTime? itemListingDate,
+    DateTime? itemSoldDate,
+    double? itemHeight,
+    double? itemWidth,
+    double? itemDepth,
+    DateTime? itemDeleteDate,
+    double? isCurrentBoothItem,
+  }){
+    return InventoryItemLocal.updateItem(
+    this.primaryImageUrl = primaryImageUrl ?? this.primaryImageUrl,
+    this.itemDescription = itemDescription ?? this.itemDescription,
+    this.itemImageUrls = itemImageUrls ?? this.itemImageUrls,
+    this.itemCategory = itemCategory ?? this.itemCategory, 
+    this.itemPurchasePrice = itemPurchasePrice ?? this.itemPurchasePrice,
+    this.itemListingPrice = itemListingPrice ?? this.itemListingPrice,
+    this.itemSoldPrice = itemSoldPrice ?? this.itemSoldPrice,
+    this.itemPurchaseDate = itemPurchaseDate ?? this.itemPurchaseDate,
+    this.itemListingDate = itemListingDate ?? this.itemListingDate,
+    this.itemSoldDate = itemSoldDate ?? this.itemSoldDate,
+    this.itemHeight = itemHeight ?? this.itemHeight,
+    this.itemWidth = itemWidth ?? this.itemWidth,
+    this.itemDepth = itemDepth ?? this.itemDepth,
+    this.itemDeleteDate = itemDeleteDate ?? this.itemDeleteDate,
+    this.isCurrentBoothItem = isCurrentBoothItem ?? this.isCurrentBoothItem,
+    );
+  }
+
+  InventoryItemLocal.updateItem(
+    this.primaryImageUrl,
+    this.itemDescription,
+    this.itemImageUrls,
+    this.itemCategory,
+    this.itemPurchasePrice,
+    this.itemListingPrice,
+    this.itemSoldPrice,
+    this.itemPurchaseDate,
+    this.itemListingDate,
+    this.itemSoldDate,
+    this.itemHeight,
+    this.itemWidth,
+    this.itemDepth,
+    this.itemDeleteDate,
+    this.isCurrentBoothItem,
+
+  );
+
   InventoryItemLocal.toLocalDb(
     this.id,
     this.userEmail,
@@ -93,6 +149,9 @@ class InventoryItemLocal {
       "isCurrentBoothItem": isCurrentBoothItem,
     };
   }
+  // TODO: ADD GETTERS FOR DETERMINING IF LISTED/SOLD...etc
+
+
 
   List<File>? get getItemImages {
     return itemImageUrls?.map((url) => File(url)).toList();
@@ -100,6 +159,18 @@ class InventoryItemLocal {
 
   File get getPrimaryImage {
     return File(primaryImageUrl!);
+  }
+
+  bool get isListed {
+    return (itemListingDate != null || itemListingPrice != null || isCurrentBoothItem == 1.0);
+  }
+
+  bool get isSold {
+    return (itemSoldDate != null || itemSoldPrice != null);
+  }
+
+  bool get isDeleted {
+    return (itemDeleteDate != null);
   }
 
   InventoryItemLocal.fromJson(Map<String, dynamic> json)

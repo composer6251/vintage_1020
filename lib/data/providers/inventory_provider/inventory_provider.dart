@@ -67,6 +67,16 @@ class InventoryLocal extends _$InventoryLocal {
     return state.where((item) => item.id == id).single;
   }
 
+  void updateCurrentInventoryItemById(InventoryItemLocal newItem) {
+
+    state = [
+      ...state,
+      for (final itemToUpdate in state) 
+        if(itemToUpdate.id == newItem.id) 
+          newItem
+    ];
+  }
+
   Future<int> deleteUserInventoryByEmail() async {
     int numberOfDeletedItems = await LocalDb().deleteUserInventory();
 

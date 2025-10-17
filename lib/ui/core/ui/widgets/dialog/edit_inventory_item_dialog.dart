@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:vintage_1020/data/providers/inventory_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
@@ -8,6 +9,7 @@ import 'package:vintage_1020/data/providers/inventory_provider/inventory_provide
 import 'package:vintage_1020/data/local_db/local_db.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/common/item_dimensions_dial.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/common/item_dimensions_input_widget.dart';
+import 'package:vintage_1020/utils/snack_bar.dart';
 
 /// **A HOOKCONSUMER WIDGET IS ESSENTIALLY A STATELESS WIDGET, BUT UTILIZES FLUTTER HOOKS TO MANAGE STATE ***
 class EditInventoryItemDialog extends HookConsumerWidget {
@@ -86,6 +88,13 @@ class EditInventoryItemDialog extends HookConsumerWidget {
       Navigator.of(context).pop();
     }
 
+
+    void addItemToBooth(String itemId) {
+      ref.read(inventoryProvider.notifier).addItemToBooth(itemId);
+
+      showSnackBar('Item added to booth!', context);
+    }
+
     void submit() async {
       final InventoryItemLocal itemToDB = InventoryItemLocal.toLocalDb(
         uuid.v6(),
@@ -106,11 +115,11 @@ class EditInventoryItemDialog extends HookConsumerWidget {
         null,
         addToBooth.value ? 1 : 0,
       );
-      // TODO: Need to validate Purchase price???
+      
       if (formKey.currentState?.validate() ?? false) {
         ref
             .watch(inventoryLocalProvider.notifier)
-            .addUserInventoryItemLocal(itemToDB);
+            .updateCurrentInventoryItemById(itemToDB);
         closeDialog();
       }
     }
@@ -268,26 +277,6 @@ class EditInventoryItemDialog extends HookConsumerWidget {
                 ),
               ),
             ),
-            Flexible(
-              flex: 3,
-              child: Text(
-                style: TextStyle(
-                  fontSize: 16,
-                  fontStyle: FontStyle.italic,
-                  fontWeight: FontWeight.bold,
-                ),
-                'Add to booth',
-              ),
-            ),
-            Flexible(
-              flex: 4,
-              child: Switch(
-                activeThumbColor: Colors.blue,
-                inactiveThumbColor: Colors.grey,
-                value: false,
-                onChanged: (value) => addToBooth.value = value,
-              ),
-            ),
           ],
         ),
         Row(
@@ -302,6 +291,13 @@ class EditInventoryItemDialog extends HookConsumerWidget {
               ),
               onPressed: () => Navigator.of(context).pop(),
             ),
+            IconButton(
+                iconSize: 30,
+                padding: EdgeInsets.all(0),
+                tooltip: 'Add to current booth',
+                onPressed: () => addItemToBooth(itemEditing.id),
+                icon: FaIcon(FontAwesomeIcons.tentArrowDownToLine),
+              ),
             IconButton(
               icon: const Icon(Icons.check),
               style: ButtonStyle(

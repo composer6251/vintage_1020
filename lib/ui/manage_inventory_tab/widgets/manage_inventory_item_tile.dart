@@ -19,32 +19,26 @@ class ManageInventoryItemTile extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-    final isListed = model.isCurrentBoothItem == 1.0;
-    final isSold = model.itemSoldPrice != null || model.itemSoldDate != null;
-
     Widget getBanner() {
-      if (isSold) {
+      if (model.isSold) {
         return Banner(
           location: BannerLocation.topStart,
           color: const Color.fromARGB(255, 13, 94, 16),
           message: 'SOLD',
         );
       }
-      if (isListed && !isSold) {
+      if (model.isListed) {
         return Banner(
           location: BannerLocation.topStart,
           color: const Color.fromARGB(255, 243, 228, 95),
           message: 'Listed',
         );
       }
-      if (!isListed && !isSold) {
-        return Banner(
+     return Banner(
           location: BannerLocation.topStart,
           color: const Color.fromARGB(255, 220, 15, 66),
-          message: 'Not Listed',
+          message: 'Backstock',
         );
-      }
-      return Container();
     }
 
     void deleteInventoryItem(String itemId) async {
