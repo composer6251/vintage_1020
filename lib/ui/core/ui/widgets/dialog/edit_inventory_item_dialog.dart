@@ -1,10 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:vintage_1020/data/providers/inventory_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
-import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart' hide userEmail;
+import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart'
+    hide userEmail;
 import 'package:vintage_1020/data/local_db/local_db.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/common/item_dimensions_dial.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/common/item_dimensions_input_widget.dart';
@@ -23,20 +23,46 @@ class EditInventoryItemDialog extends HookConsumerWidget {
     final itemEditing = items.first;
 
     // Form Field Controllers
-    final itemPurchasePriceController = useTextEditingController(text: itemEditing.itemPurchasePrice?.toString());
-    final itemListingPriceController = useTextEditingController(text: itemEditing.itemListingPrice?.toString());
-    final itemSellingPriceController = useTextEditingController(text: itemEditing.itemSoldPrice?.toString());
-    final itemHeightController = useTextEditingController(text: itemEditing.itemHeight == null ? '0' : itemEditing.itemHeight.toString());
-    final itemWidthController = useTextEditingController(text: itemEditing.itemWidth == null ? '0' : itemEditing.itemWidth.toString());
-    final itemDepthController = useTextEditingController(text: itemEditing.itemDepth == null ? '0' : itemEditing.itemDepth.toString());
+    final itemPurchasePriceController = useTextEditingController(
+      text: itemEditing.itemPurchasePrice?.toString(),
+    );
+    final itemListingPriceController = useTextEditingController(
+      text: itemEditing.itemListingPrice?.toString(),
+    );
+    final itemSellingPriceController = useTextEditingController(
+      text: itemEditing.itemSoldPrice?.toString(),
+    );
+    final itemHeightController = useTextEditingController(
+      text: itemEditing.itemHeight == null
+          ? '0'
+          : itemEditing.itemHeight.toString(),
+    );
+    final itemWidthController = useTextEditingController(
+      text: itemEditing.itemWidth == null
+          ? '0'
+          : itemEditing.itemWidth.toString(),
+    );
+    final itemDepthController = useTextEditingController(
+      text: itemEditing.itemDepth == null
+          ? '0'
+          : itemEditing.itemDepth.toString(),
+    );
 
     // Hooks for holding data
     final initialDate = useState(DateTime.now());
-    final purchaseDate = useState(DateTime.now());
-    // final listingDate = useState<DateTime>(DateTime.now());
-    DateTime listingDate;
-    // final soldDate = useState(DateTime.now());
-    final addToBooth = useState<bool>(itemEditing.isCurrentBoothItem == 0.0 ? false : true);
+    DateTime? purchaseDateTemp;
+    final purchaseDate = useState(
+      itemEditing.itemPurchaseDate ?? purchaseDateTemp,
+    );
+    DateTime? listingDateTemp;
+    final listingDate = useState(
+      itemEditing.itemListingDate ?? listingDateTemp,
+    );
+    DateTime? soldDateTemp;
+    final soldDate = useState(itemEditing.itemSoldDate ?? soldDateTemp);
+    final addToBooth = useState<bool>(
+      itemEditing.isCurrentBoothItem == 0.0 ? false : true,
+    );
 
     Future<void> selectDate(String type) async {
       final DateTime? pickedDate = await showDatePicker(
@@ -46,18 +72,21 @@ class EditInventoryItemDialog extends HookConsumerWidget {
       );
       if (pickedDate == null) return; // User cancelled the date picker
       if (type == 'Listing') {
-        listingDate = pickedDate;
+        listingDate.value = pickedDate;
+        return;
+      }
+      if (type == 'Sold') {
+        soldDate.value = pickedDate;
         return;
       }
       purchaseDate.value = pickedDate;
     }
 
-    void closeDialog(){
-        Navigator.of(context).pop();
+    void closeDialog() {
+      Navigator.of(context).pop();
     }
 
     void submit() async {
-      
       final InventoryItemLocal itemToDB = InventoryItemLocal.toLocalDb(
         uuid.v6(),
         userEmail,
@@ -67,16 +96,15 @@ class EditInventoryItemDialog extends HookConsumerWidget {
         '',
         double.tryParse(itemPurchasePriceController.text),
         double.tryParse(itemListingPriceController.text),
-        null, // Todo: Update selling date
+        double.tryParse(itemSellingPriceController.text), // Todo: Update selling date
         purchaseDate.value,
-        null,
-        null,
+        listingDate.value,
+        soldDate.value,
         double.tryParse(itemHeightController.text),
         double.tryParse(itemWidthController.text),
         double.tryParse(itemDepthController.text),
         null,
         addToBooth.value ? 1 : 0,
-
       );
       // TODO: Need to validate Purchase price???
       if (formKey.currentState?.validate() ?? false) {
@@ -86,14 +114,15 @@ class EditInventoryItemDialog extends HookConsumerWidget {
         closeDialog();
       }
     }
-    List<int> measurements = List<int>.generate(120, (index) => index + 1);
 
     return AlertDialog(
       title: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           gradient: LinearGradient(
-            colors: [Colors.white, const Color.fromARGB(255, 4, 46, 109)])),
+            colors: [Colors.white, const Color.fromARGB(255, 4, 46, 109)],
+          ),
+        ),
         child: Center(
           child: const Text(
             selectionColor: Colors.blue,
@@ -120,9 +149,12 @@ class EditInventoryItemDialog extends HookConsumerWidget {
                       labelStyle: TextStyle(fontSize: 20),
                       labelText: 'Purchase Price*',
                     ),
-                    keyboardType: TextInputType.numberWithOptions(decimal: true),
-                    validator: (value) =>
-                        value?.isEmpty ?? true ? 'Purchase Price is required' : null,
+                    keyboardType: TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                    validator: (value) => value?.isEmpty ?? true
+                        ? 'Purchase Price is required'
+                        : null,
                   ),
                 ),
                 Spacer(),
@@ -131,15 +163,15 @@ class EditInventoryItemDialog extends HookConsumerWidget {
                   child: OutlinedButton(
                     style: ButtonStyle(
                       elevation: WidgetStatePropertyAll<double>(8.0),
-                      backgroundColor: WidgetStatePropertyAll<Color>(Colors.white),
+                      backgroundColor: WidgetStatePropertyAll<Color>(
+                        Colors.white,
+                      ),
                     ),
                     onPressed: () => selectDate('Purchase'),
                     child: Text(
-                      purchaseDate.value == null 
-                      ?
-                      'Select Date'
-                      :
-                      '${purchaseDate.value.toLocal().month}/${purchaseDate.value.toLocal().day}/${purchaseDate.value.toLocal().year}',
+                      purchaseDate.value == null
+                          ? 'Select Date'
+                          : '${purchaseDate.value?.toLocal().month}/${purchaseDate.value?.toLocal().day}/${purchaseDate.value?.toLocal().year}',
                     ),
                   ),
                 ),
@@ -158,7 +190,9 @@ class EditInventoryItemDialog extends HookConsumerWidget {
                       fillColor: Colors.blue,
                       labelText: 'Listing Price',
                     ),
-                    keyboardType: TextInputType.numberWithOptions(decimal: true),
+                    keyboardType: TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
                   ),
                 ),
                 Spacer(),
@@ -167,15 +201,15 @@ class EditInventoryItemDialog extends HookConsumerWidget {
                   child: OutlinedButton(
                     style: ButtonStyle(
                       elevation: WidgetStatePropertyAll<double>(8.0),
-                      backgroundColor: WidgetStatePropertyAll<Color>(Colors.white),
+                      backgroundColor: WidgetStatePropertyAll<Color>(
+                        Colors.white,
+                      ),
                     ),
                     onPressed: () => selectDate('Listing'),
                     child: Text(
                       itemEditing.itemListingDate == null
-                      ?
-                      'Select Date'
-                      :
-                      '${purchaseDate.value.toLocal().month}/${purchaseDate.value.toLocal().day}/${purchaseDate.value.toLocal().year}',
+                          ? 'Select Date'
+                          : '${listingDate.value?.toLocal().month}/${listingDate.value?.toLocal().day}/${listingDate.value?.toLocal().year}',
                     ),
                   ),
                 ),
@@ -193,7 +227,9 @@ class EditInventoryItemDialog extends HookConsumerWidget {
                       fillColor: Colors.blue,
                       labelText: 'Selling Price',
                     ),
-                    keyboardType: TextInputType.numberWithOptions(decimal: true),
+                    keyboardType: TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
                   ),
                 ),
                 Spacer(),
@@ -205,8 +241,9 @@ class EditInventoryItemDialog extends HookConsumerWidget {
                     ),
                     onPressed: () => selectDate('Sold'),
                     child: Text(
-                      style: TextStyle(fontSize: 16),
-                      'Sold Date'
+                      itemEditing.itemSoldDate == null
+                          ? 'Select Date'
+                          : '${soldDate.value?.toLocal().month}/${soldDate.value?.toLocal().day}/${soldDate.value?.toLocal().year}',
                     ),
                   ),
                 ),
@@ -225,15 +262,21 @@ class EditInventoryItemDialog extends HookConsumerWidget {
               child: Align(
                 alignment: AlignmentGeometry.bottomLeft,
                 child: FilledButton(
-                  onPressed: () => Navigator.pushNamed(context, '/edit-inventory-item'), 
-                  child: Text('Edit Pics')),
+                  onPressed: () =>
+                      Navigator.pushNamed(context, '/edit-inventory-item'),
+                  child: Text('Edit Pics'),
+                ),
               ),
             ),
             Flexible(
               flex: 3,
               child: Text(
-                style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                'Add to booth'
+                style: TextStyle(
+                  fontSize: 16,
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.bold,
+                ),
+                'Add to booth',
               ),
             ),
             Flexible(
@@ -241,9 +284,12 @@ class EditInventoryItemDialog extends HookConsumerWidget {
               child: Switch(
                 activeThumbColor: Colors.blue,
                 inactiveThumbColor: Colors.grey,
-                value: false, onChanged: (value) => value = !value),
+                value: false,
+                onChanged: (value) => addToBooth.value = value,
+              ),
             ),
-        ],),
+          ],
+        ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -260,7 +306,9 @@ class EditInventoryItemDialog extends HookConsumerWidget {
               icon: const Icon(Icons.check),
               style: ButtonStyle(
                 elevation: WidgetStatePropertyAll<double>(8.0),
-                backgroundColor: WidgetStatePropertyAll<Color>(const Color.fromARGB(255, 21, 106, 27)),
+                backgroundColor: WidgetStatePropertyAll<Color>(
+                  const Color.fromARGB(255, 21, 106, 27),
+                ),
               ),
               onPressed: submit,
             ),

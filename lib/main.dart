@@ -1,10 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:vintage_1020/domain/inventory_item/inventory_item.dart';
-import 'package:vintage_1020/data/services/api/inventory_repository.dart';
-import 'package:vintage_1020/data/services/api/inventory_repository_impl.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:vintage_1020/ui/auth_gate/user_auth_gate.dart';
@@ -24,8 +20,6 @@ Future<void> main() async {
     FirebaseFirestore.instance.settings = Settings(persistenceEnabled: true);
   } else {
     await Firebase.initializeApp();
-    // @Riverpod(keepAlive: true)
-    // InventoryRepository inventoryRepository(Ref ref) => InventoryRepositoryImpl();
   }
   // Wrap entire app in ProviderScope to use RiverPod
   runApp(ProviderScope(child: MyApp()));

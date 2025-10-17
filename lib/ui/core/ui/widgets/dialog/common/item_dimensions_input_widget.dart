@@ -46,8 +46,6 @@ class _ItemDimensionsInputWidget extends ConsumerState<ItemDimensionsInputWidget
               labelStyle: TextStyle(fontSize: 16)
             ),
             keyboardType: TextInputType.numberWithOptions(decimal: true),
-            validator: (value) =>
-                value?.isEmpty ?? true ? 'Purchase Price is required' : null,
           ),
         ),
         SizedBox(
