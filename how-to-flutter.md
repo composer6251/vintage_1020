@@ -1,7 +1,5 @@
 
-## BEST PRACTICES
-
-### BREAKING CODE INTO SMALLER UNITS
+### ***************BEST PRACTICES****************
 
 #### RED FLAGS: Loops to build out widgets(Tiles, Lists...etc)
 *Option 1* *Preferred*
@@ -14,47 +12,62 @@ Helper method
 - Causes entire widget to rebuild(setState). If a user clicks a favorite icon on a list item, image, or other, setState causes the entire widget(all listItems...etc) to rebuild
 - Testing must rebuild Favorite Icon AND dependencies
 
-#### CLASSES OVER FUNCTIONS
+- CLASSES OVER FUNCTIONS
 - Classes are more efficient
 
 - Functions only benefit is that they require less code to be written. NO PERFORMANCE BENEFIT.
 
-#### USE CONST CONSTRUCTORS WHENEVER POSSIBLE SO THEY AREN'T REBUILT
+- USE CONST CONSTRUCTORS WHENEVER POSSIBLE SO THEY AREN'T REBUILT
 
+- CONTEXT NAMING SHOULD BE UNIFORM THROUGHOUT THE APP TO AVOID STALE CONTEXTS
 
-#### CONTEXT NAMING SHOULD BE UNIFORM THROUGHOUT THE APP TO AVOID STALE CONTEXTS
+### **************LAYOUT AND SIZING*****************
 
-# LAYOUT AND SIZING
+- ALLOWED SIZING COMES FROM PARENT BY DEFAULT
 
-## ALLOWED SIZING COMES FROM PARENT BY DEFAULT
-
-### OVERRIDING PARENT SIZING WIDGETS
+#### OVERRIDING PARENT SIZING WIDGETS
 SizedOverflowBox - contraints come from grandparent(meaning likely overflows)
 OverflowBox - 
 
-
+#### MULTI CHILD LAYOUTS
 Row:
 Column:
 ListView:
 
+##### MULTI CHILD LAYOUT CHILDREN WRAPPERS
 Flexible - Wrap a child/children of multi-layout widget and give flex factor (2 = 1/2, 3 = 1/3)
 Expanded - Use when children overflow, but SHOULD NOT
 ClipRect - Use when children overflow, and SHOULD. 
 Wrap - children in row, divided by space, and wrap if row overflows
 
-
-### State management
-#### WHEN TO USE WIDGET TYPES
-##### 
-StatelessWidget: When widget data WILL NOT CHANGE. Simplest case. USE CASE: 
-StatefulWidget: 
-
-Using controller?(TextEditingController...etc) : NO PROVIDERS, USE HOOKS OR STATEFUL WIDGET
+#### SINGLE CHILD LAYOUT WIDGETS
 
 
-StatefulHookWidget:
-StatefulHookConsumerWidget: 
 
+
+### ************STATE MANAGEMENT***************
+
+#### WIDGET TYPE CHEAT SHEET
+*StatelessWidget:* When widget data WILL NOT CHANGE and UI DOES NOT UPDATE. Simplest case.
+
+*StatefulWidget:* State updates need to be reflected to the user, but does NOT NEED TO BE SAVED PRIOR. 
+- Basic Forms without animations
+
+*HookWidget:* REPLACEMENT FOR STATEFUL WIDGET
+- Most cases can replace stateful widget
+
+*ConsumerWidget:* Data can change, but it is App state, NOT EPHEMERAL
+- Reads data/Updates UI; doesn't change data
+
+*StatefulHookWidget:* Ephemeral State but NEED WIDGET LIFECYCLE METHODS
+
+*ConsumerStatefulWidget:* Both Ephemeral and App state
+- Reads data/Updates UI and can change it's own data AND NEEDS LIFECYCLE METHODS
+
+*StatefulHookConsumerWidget:* Very complex widgets, specifically if Async calls are used in widget lifecycle methods.
+
+
+#### BASIC FLUTTER STATE MANAGEMENT CONCEPTS
 Flutter is declarative.
 UI = f(application state)
 Two types of state:
