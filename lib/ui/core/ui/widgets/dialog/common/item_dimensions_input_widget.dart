@@ -1,34 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:vintage_1020/data/providers/current_inventory_item/current_inventory_item.dart';
-import 'package:vintage_1020/data/providers/inventory_notifier.dart';
-import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 
-class ItemDimensionsInputWidget extends ConsumerWidget {
+class ItemDimensionsInputWidget extends StatefulWidget {
+  const ItemDimensionsInputWidget({super.key, this.heightController, this.widthController, this.depthController});
 
-  // @override
-  // ConsumerState<ConsumerStatefulWidget> createState() =>
-  //     _ItemDimensionsInputWidget();
-// }
+  final TextEditingController? heightController;
+  final TextEditingController? widthController;
+  final TextEditingController? depthController;
+  @override
+  State<ItemDimensionsInputWidget> createState() =>
+      _ItemDimensionsInputWidgetState();
+}
 
-// class _ItemDimensionsInputWidget extends ConsumerState<ItemDimensionsInputWidget> {
+class _ItemDimensionsInputWidgetState extends State<ItemDimensionsInputWidget> {
+
+  TextEditingController? hController;
+  TextEditingController? wController;
+  TextEditingController? dController;
+
+  @override 
+  void initState() {
+    super.initState();
+    hController = widget.heightController;
+    wController = widget.widthController;
+    dController = widget.depthController;
+  }
+
+  @override  
+  void dispose() {
+    hController?.dispose();
+    wController?.dispose();
+    dController?.dispose();
+
+    super.dispose();
+  }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    
-    final items = ref.watch(inventoryProvider);
-    final currentItem = items.first;
-
-    final itemHeightController = TextEditingController(
-      text: currentItem.itemHeight?.toString(),
-    );
-    final itemWidthController = TextEditingController(
-      text: currentItem.itemWidth?.toString(),
-    );
-    final itemDepthController = TextEditingController(
-      text: currentItem.itemDepth?.toString(),
-    );
+  Widget build(BuildContext context) {
 
     return Flex(
       mainAxisSize: MainAxisSize.max,
@@ -38,12 +45,12 @@ class ItemDimensionsInputWidget extends ConsumerWidget {
         SizedBox(
           width: 80,
           child: TextFormField(
-            controller: itemHeightController,
+            controller: widget.heightController,
             decoration: const InputDecoration(
               fillColor: Colors.blue,
               floatingLabelAlignment: FloatingLabelAlignment.start,
               labelText: 'Height',
-              labelStyle: TextStyle(fontSize: 16)
+              labelStyle: TextStyle(fontSize: 12)
             ),
             keyboardType: TextInputType.numberWithOptions(decimal: true),
           ),
@@ -51,12 +58,12 @@ class ItemDimensionsInputWidget extends ConsumerWidget {
         SizedBox(
           width: 80,
           child: TextFormField(
-            controller: itemWidthController,
+            controller: widget.widthController,
             decoration: const InputDecoration(
               fillColor: Colors.blue,
               labelText: 'Width',
               floatingLabelAlignment: FloatingLabelAlignment.start,
-              labelStyle: TextStyle(fontSize: 16)
+              labelStyle: TextStyle(fontSize: 12)
             ),
             keyboardType: TextInputType.numberWithOptions(decimal: true),
           ),
@@ -64,12 +71,12 @@ class ItemDimensionsInputWidget extends ConsumerWidget {
         SizedBox(
           width: 80,
           child: TextFormField(
-            controller: itemDepthController,
+            controller: widget.depthController,
             decoration: const InputDecoration(
               fillColor: Colors.blue,
               labelText: 'Depth',
               floatingLabelAlignment: FloatingLabelAlignment.start,
-              labelStyle: TextStyle(fontSize: 16)
+              labelStyle: TextStyle(fontSize: 12)
             ),
             keyboardType: TextInputType.numberWithOptions(decimal: true),
           ),

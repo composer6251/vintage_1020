@@ -24,65 +24,43 @@ class _EditInventoryItemDialogState
     extends ConsumerState<EditInventoryItemDialog> {
 
   late InventoryItemLocal itemEditing = widget.itemEditing;
+  // VARIABLES TO HOLD DATE STATES
+  DateTime? purchaseDate;
+  DateTime? listingDate;
+  DateTime? soldDate;
+
+  // VARIABLES TO HOLD PRICE STATES
+  double? purchasePrice;
+  double? listingPrice;
+  double? soldPrice;
+
+  // VARIABLES TO HOLD DIMENSIONS STATES
+  double? height;
+  double? width;
+  double? depth;
+
+  // VARIABLE TO HOLD BOOTH STATE
+  bool isBoothItem = false;
 
   @override
   void initState() {
     super.initState();
-  }
-
-
-  @override
-  Widget build(BuildContext context) {
-    // useMemoized to prevent new instances of formKey
-    // final formKey = useMemoized(() => GlobalKey<FormState>());
-
-      // VARIABLES TO HOLD INITIAL VALUES FOR DATE PICKER AND ADD TO BOOTH CHECKBOX
-      DateTime initialDate = DateTime.now();
-      bool addToBooth = false;
-      
-      // VARIABLES TO HOLD DATE STATES
-      double? purchasePrice;
-      double? listingPrice;
-      double? soldPrice;
-
-        // VARIABLES TO HOLD DATE STATES
-      double? height;
-      double? width;
-      double? depth;
-
-      // VARIABLES TO HOLD DATE STATES
-      DateTime? purchaseDate;
-      DateTime? listingDate;
-      DateTime? soldDate;
-
-
-    // GET SELECTED ITEM TO EDIT
-    // final itemEditing = ref.watch(currentInventoryItemProvider);
     purchaseDate = itemEditing.itemPurchaseDate;
     listingDate = itemEditing.itemListingDate;
     soldDate = itemEditing.itemSoldDate;
+    purchasePrice = itemEditing.itemPurchasePrice;
+    listingPrice = itemEditing.itemListingPrice;
+    soldPrice = itemEditing.itemSoldPrice;
+    height = itemEditing.itemHeight;
+    width = itemEditing.itemWidth;
+    depth = itemEditing.itemDepth;
+    isBoothItem = itemEditing.isCurrentBoothItem == 1.0;
+  }
 
-    // PRICE STATE CONTROLLERS
-    // final itemPurchasePriceController = useTextEditingController(
-    //   text: itemEditing.itemPurchasePrice?.toString(),
-    // );
-    // final itemListingPriceController = useTextEditingController(
-    //   text: itemEditing.itemListingPrice?.toString(),
-    // );
-    // final itemSellingPriceController = useTextEditingController(
-    //   text: itemEditing.itemSoldPrice?.toString(),
-    // );
+  @override
+  Widget build(BuildContext context) {
 
-    // // DIMENSIONS STATE CONTROLLERS
-    // final itemHeightController = useTextEditingController(
-    //   text: itemEditing.itemHeight?.toString(),
-    // );
-    // final itemWidthController = useTextEditingController(
-    //   text: itemEditing.itemWidth?.toString(),
-    // );
-    // final itemDepthController = useTextEditingController(
-    //   text: itemEditing.itemDepth?.toString(),
-    // );
+    final DateTime initialDate = DateTime.now();
 
     Future<void> selectDate(String type) async {
       final DateTime? pickedDate = await showDatePicker(
@@ -129,25 +107,20 @@ class _EditInventoryItemDialogState
         width,
         depth,
         null,
-        addToBooth,
+        isBoothItem = (soldPrice != null || soldDate != null) ? false : isBoothItem,
       );
       return currentItemState;
     }
 
-    // void updateStateChange() {
-    //   final currentItemState = buildItemFromCurrentState();
-    // }
-
     void submit() async {
       final itemToSave = buildItemFromCurrentState();
-      // updateStateChange();
       ref
-          .watch(inventoryLocalProvider.notifier)
-          .updateCurrentInventoryItemById(itemToSave);
+        .watch(inventoryLocalProvider.notifier)
+        .updateCurrentInventoryItemById(itemToSave);
 
       closeDialog();
 
-      LocalDb().updateInventoryItemById(itemToSave);
+      LocalDb().updateInventoryItem(itemToSave);
     }
 
     return AlertDialog(
@@ -177,13 +150,14 @@ class _EditInventoryItemDialogState
                 Flexible(
                   flex: 5,
                   child: TextFormField(
+                    initialValue: purchasePrice?.toString(),
                     onChanged: (value) => setState(() {
                       purchasePrice = double.tryParse(value);
                     }),
                     decoration: const InputDecoration(
                       prefixText: '\$',
                       fillColor: Colors.blue,
-                      labelStyle: TextStyle(fontSize: 20),
+                      labelStyle: TextStyle(fontSize: 12),
                       labelText: 'Purchase Price*',
                     ),
                     keyboardType: TextInputType.numberWithOptions(
@@ -217,13 +191,14 @@ class _EditInventoryItemDialogState
                 Flexible(
                   flex: 5,
                   child: TextFormField(
+                    initialValue: listingPrice?.toString(),
                     onChanged: (value) => setState(() {
                       listingPrice = double.tryParse(value);
                     }),
                     decoration: const InputDecoration(
                       prefixText: '\$',
                       floatingLabelAlignment: FloatingLabelAlignment.start,
-                      labelStyle: TextStyle(fontSize: 20),
+                      labelStyle: TextStyle(fontSize: 12),
                       fillColor: Colors.blue,
                       labelText: 'Listing Price',
                     ),
@@ -255,12 +230,13 @@ class _EditInventoryItemDialogState
                 Flexible(
                   flex: 5,
                   child: TextFormField(
+                    initialValue: soldPrice?.toString(),
                     onChanged: (value) => setState(() {
                       soldPrice = double.tryParse(value);
                     }),
                     decoration: const InputDecoration(
                       prefixText: '\$',
-                      labelStyle: TextStyle(fontSize: 20),
+                      labelStyle: TextStyle(fontSize: 12),
                       fillColor: Colors.blue,
                       labelText: 'Selling Price',
                     ),
@@ -285,7 +261,62 @@ class _EditInventoryItemDialogState
               ],
             ),
             Divider(),
-            ItemDimensionsInputWidget(),
+            Flex(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              direction: Axis.horizontal,
+              children: [
+                SizedBox(
+                  width: 80,
+                  child: TextFormField(
+                    initialValue: height?.toString(),
+                    decoration: const InputDecoration(
+                      fillColor: Colors.blue,
+                      floatingLabelAlignment: FloatingLabelAlignment.start,
+                      labelText: 'Height',
+                      labelStyle: TextStyle(fontSize: 12)
+                    ),
+                    onChanged: (value) => setState(() {
+                      height = double.tryParse(value);
+                    }),
+                    keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  ),
+                ),
+                SizedBox(
+                  width: 80,
+                  child: TextFormField(
+                    initialValue: width?.toString(),
+                    decoration: const InputDecoration(
+                      fillColor: Colors.blue,
+                      labelText: 'Width',
+                      floatingLabelAlignment: FloatingLabelAlignment.start,
+                      labelStyle: TextStyle(fontSize: 12)
+                    ),
+                    onChanged: (value) => setState(() {
+                      width = double.tryParse(value);
+                    }),
+                    keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  ),
+                ),
+                SizedBox(
+                  width: 80,
+                  child: TextFormField(
+                    initialValue: depth?.toString(),
+                    decoration: const InputDecoration(
+                      fillColor: Colors.blue,
+                      labelText: 'Depth',
+                      floatingLabelAlignment: FloatingLabelAlignment.start,
+                      labelStyle: TextStyle(fontSize: 12)
+                    ),
+                    onChanged: (value) => setState(() {
+                      depth = double.tryParse(value);
+                    }),
+                    keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  ),
+                ),
+              ],
+            ),
+            // ItemDimensionsInputWidget(heightController: itemHeightController, widthController: itemWidthController, depthController: itemDepthController),
           ],
         ),
       ),

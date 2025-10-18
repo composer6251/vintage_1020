@@ -209,6 +209,10 @@ class InventoryItemLocal {
     return (itemDeleteDate != null);
   }
 
+  bool get isBoothItem {
+    return (isCurrentBoothItem == 0.0 && itemSoldDate == null && itemSoldPrice == null);
+  }
+
   InventoryItemLocal.fromJson(Map<String, dynamic> json)
     : id = json['id'],
       primaryImageUrl = json['primaryImageUrl'],

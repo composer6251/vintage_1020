@@ -128,11 +128,6 @@ class LocalDb {
 
     print('addInventoryItemToCurrentBooth: $id');
 
-    // final int deletedId = await db.update(
-    //   inventoryItemTable, {
-    //   'itemDeleteDate': DateTime.now().toIso8601String(),
-    //   'where ?': 'id = $id',
-    // });
     final int updatedId = await db.update(inventoryItemTable, {
       'itemListingDate': DateTime.now().toIso8601String(),
       'isCurrentBoothItem': 1,
@@ -142,9 +137,9 @@ class LocalDb {
     return updatedId;
 }
 // TODO: CREATE METHOD TO UPDATE BY ID.
-  Future<int> updateInventoryItemById(InventoryItemLocal itemToUpdate) async {
+  Future<int> updateInventoryItem(InventoryItemLocal itemToUpdate) async {
     final db = await _getDatabase();
-
+    itemToUpdate.userEmail = userEmail;
     final int updatedId = await db.update(
       inventoryItemTable, 
       itemToUpdate.toMapForLocalDB(), 

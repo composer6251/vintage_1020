@@ -34,7 +34,7 @@ class InventoryNotifier extends _$InventoryNotifier {
       return inventory;
     }
     if (currentFilter == InventoryFilter.listed) {
-      return inventory.where((item) => item.isListed).toList();
+      return inventory.where((item) => item.isBoothItem).toList();
     }
     if (currentFilter == InventoryFilter.sold) {
       return inventory.where((item) => item.isSold).toList();
