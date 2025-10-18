@@ -11,7 +11,7 @@ import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.da
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
 import 'package:vintage_1020/utils/snack_bar.dart';
 
-class ManageInventoryItemTile extends HookConsumerWidget {
+class ManageInventoryItemTile extends ConsumerWidget {
   const ManageInventoryItemTile({super.key, required this.model});
 
   final InventoryItemLocal model;

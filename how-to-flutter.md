@@ -45,7 +45,15 @@ Wrap - children in row, divided by space, and wrap if row overflows
 
 ### State management
 #### WHEN TO USE WIDGET TYPES
-##### Using controller?(TextEditingController...etc) : NO PROVIDERS, USE HOOKS OR STATEFUL WIDGET
+##### 
+StatelessWidget: When widget data WILL NOT CHANGE. Simplest case. USE CASE: 
+StatefulWidget: 
+
+Using controller?(TextEditingController...etc) : NO PROVIDERS, USE HOOKS OR STATEFUL WIDGET
+
+
+StatefulHookWidget:
+StatefulHookConsumerWidget: 
 
 Flutter is declarative.
 UI = f(application state)

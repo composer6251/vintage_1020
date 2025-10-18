@@ -2,16 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
-import 'package:vintage_1020/data/local_db/local_db.dart';
 import 'package:vintage_1020/data/providers/filter_notifier.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/add_inventory_form_dialog.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/test_dialog.dart';
-import 'package:vintage_1020/ui/edit_inventory_item/edit_inventory_tab.dart';
 import 'package:vintage_1020/ui/manage_inventory_tab/manage_inventory_tab.dart';
 import 'package:vintage_1020/ui/activity_chart_screen/activity_chart.dart';
 import 'package:vintage_1020/ui/my_booth_tab/my_booth_tab.dart';
 
-class UiContainer extends StatefulHookConsumerWidget {
+class UiContainer extends ConsumerStatefulWidget {
   UiContainer({super.key});
   final logger = Logger(printer: PrettyPrinter());
 
@@ -20,10 +18,6 @@ class UiContainer extends StatefulHookConsumerWidget {
 }
 
 class _HomeScreenState extends ConsumerState<UiContainer> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   void openAddInventoryDialog() {
     showDialog(
@@ -60,7 +54,7 @@ class _HomeScreenState extends ConsumerState<UiContainer> {
   }
 }
 
-class TabViewsContent extends HookConsumerWidget {
+class TabViewsContent extends ConsumerWidget {
   const TabViewsContent({super.key});
 
   static const List<Tab> myTabs = <Tab>[

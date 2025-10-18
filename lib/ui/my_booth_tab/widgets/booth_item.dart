@@ -2,10 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 
-class BoothItem extends HookConsumerWidget {
+class BoothItem extends ConsumerWidget {
   const BoothItem({super.key, required this.model});
 
   final InventoryItemLocal model;

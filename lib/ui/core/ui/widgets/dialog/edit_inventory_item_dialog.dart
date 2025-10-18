@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:vintage_1020/data/providers/current_inventory_item/current_inventory_item.dart';
-import 'package:vintage_1020/data/providers/inventory_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart'
     hide userEmail;
 import 'package:vintage_1020/data/local_db/local_db.dart';
-import 'package:vintage_1020/ui/core/ui/widgets/dialog/common/item_dimensions_dial.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/common/item_dimensions_input_widget.dart';
 import 'package:vintage_1020/utils/date_util.dart';
-import 'package:vintage_1020/utils/snack_bar.dart';
 
-class EditInventoryItemDialog extends StatefulHookConsumerWidget {
+class EditInventoryItemDialog extends ConsumerStatefulWidget {
   const EditInventoryItemDialog({super.key});
 
   @override
@@ -24,7 +20,11 @@ class EditInventoryItemDialog extends StatefulHookConsumerWidget {
 class _EditInventoryItemDialogState
     extends ConsumerState<EditInventoryItemDialog> {
 
-  // DATE STATES
+  // VARIABLES TO HOLD INITIAL VALUES FOR DATES
+  DateTime initialDate = DateTime.now();
+  bool addToBooth = false;
+  
+  // VARIABLES TO HOLD DATE STATES
   DateTime? statePurchaseDate;
   DateTime? stateListingDate;
   DateTime? stateSoldDate;
@@ -64,27 +64,11 @@ class _EditInventoryItemDialogState
       text: itemEditing.itemDepth?.toString(),
     );
 
-    final initialDate = useState(DateTime.now());
-
-    // final purchaseDate = useState(
-    //   getMonthDayYearStringFromDateTime(itemEditing.itemPurchaseDate),
-    // );
-    // final listingDate = useState(
-    //   getMonthDayYearStringFromDateTime(itemEditing.itemListingDate),
-    // );
-    // final soldDate = useState(
-    //   getMonthDayYearStringFromDateTime(itemEditing.itemSoldDate),
-    // );
-
-    final addToBooth = useState<bool>(
-      itemEditing.isCurrentBoothItem == 0.0 ? false : true,
-    );
-
     Future<void> selectDate(String type) async {
       final DateTime? pickedDate = await showDatePicker(
         context: context,
         firstDate: DateTime.now().subtract(const Duration(days: 365)),
-        lastDate: initialDate.value,
+        lastDate: initialDate,
       );
       if (pickedDate == null) return; // User cancelled the date picker
       if (type == 'Listing') {
@@ -126,22 +110,18 @@ class _EditInventoryItemDialogState
         double.tryParse(itemWidthController.text),
         double.tryParse(itemDepthController.text),
         null,
-        addToBooth.value ? 1 : 0,
+        addToBooth ? 1 : 0,
       );
-      // TODO: Dates aren't parsing correctly. Need to find an alternative way.
-      //Probably just use setState instead
-      print(currentItemState.itemListingDate);
-      print(currentItemState.itemListingPrice);
       return currentItemState;
     }
 
-    void updateStateChange() {
-      final currentItemState = buildItemFromCurrentState();
-    }
+    // void updateStateChange() {
+    //   final currentItemState = buildItemFromCurrentState();
+    // }
 
     void submit() async {
       final itemToSave = buildItemFromCurrentState();
-      updateStateChange();
+      // updateStateChange();
       if (formKey.currentState?.validate() ?? false) {
         ref
             .watch(inventoryLocalProvider.notifier)

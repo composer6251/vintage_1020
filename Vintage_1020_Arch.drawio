@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36" version="28.1.0">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36" version="28.2.5">
   <diagram name="Page-1" id="yre59FWqFF6-JoR8nMFE">
-    <mxGraphModel dx="2467" dy="648" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="#ffffff" math="0" shadow="1">
+    <mxGraphModel dx="2677" dy="748" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" background="#ffffff" math="0" shadow="1">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -34,7 +34,7 @@
           <mxGeometry x="330" y="260" width="160" height="100" as="geometry" />
         </mxCell>
         <mxCell id="7i4eZhQgf2fpV0Ovh3T5-6" value="&lt;div&gt;MyBoothTab&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="-265" y="420" width="130" height="110" as="geometry" />
+          <mxGeometry x="-35" y="420" width="130" height="110" as="geometry" />
         </mxCell>
         <mxCell id="7i4eZhQgf2fpV0Ovh3T5-8" value="&lt;div&gt;AnalyticsTab&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Listener&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=light-dark(#FFFFFF,#006600);" parent="1" vertex="1">
           <mxGeometry x="880" y="420" width="140" height="100" as="geometry" />
@@ -54,40 +54,40 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="7i4eZhQgf2fpV0Ovh3T5-13" value="&lt;div&gt;ManageInventoryTab&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=light-dark(#FFFFFF,#000000);" parent="1" vertex="1">
-          <mxGeometry x="130" y="420" width="130" height="100" as="geometry" />
+          <mxGeometry x="-480" y="370" width="130" height="100" as="geometry" />
         </mxCell>
         <mxCell id="wee8iFHExE6Ph9CSwYik-2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="7i4eZhQgf2fpV0Ovh3T5-20" target="wee8iFHExE6Ph9CSwYik-1" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="7i4eZhQgf2fpV0Ovh3T5-20" value="&lt;div&gt;InventoryItemCarousel&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;SingleInventoryItem&lt;/div&gt;&lt;div&gt;(PrimaryImageUrl)&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=light-dark(#FFFFFF,#006600);" parent="1" vertex="1">
-          <mxGeometry x="-410" y="760" width="140" height="100" as="geometry" />
+          <mxGeometry x="-180" y="760" width="140" height="100" as="geometry" />
         </mxCell>
         <mxCell id="7i4eZhQgf2fpV0Ovh3T5-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="7i4eZhQgf2fpV0Ovh3T5-24" target="wee8iFHExE6Ph9CSwYik-6" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="-15" y="520" as="targetPoint" />
+            <mxPoint x="215" y="520" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="-15" y="720" />
-              <mxPoint x="-200" y="720" />
+              <mxPoint x="215" y="720" />
+              <mxPoint x="30" y="720" />
             </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="7i4eZhQgf2fpV0Ovh3T5-24" value="&lt;div&gt;InventoryCarousel&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;InventoryItems&lt;/div&gt;&lt;div&gt;(PrimaryImageUrl)&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=light-dark(#FFFFFF,#006600);" parent="1" vertex="1">
-          <mxGeometry x="-110" y="760" width="140" height="100" as="geometry" />
+          <mxGeometry x="-490" y="710" width="140" height="100" as="geometry" />
         </mxCell>
         <mxCell id="wee8iFHExE6Ph9CSwYik-1" value="&lt;div&gt;HeroCard&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=light-dark(#FFFFFF,#00CC00);" parent="1" vertex="1">
-          <mxGeometry x="-410" y="1000" width="140" height="100" as="geometry" />
+          <mxGeometry x="-180" y="1000" width="140" height="100" as="geometry" />
         </mxCell>
         <mxCell id="wee8iFHExE6Ph9CSwYik-7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="wee8iFHExE6Ph9CSwYik-6" target="7i4eZhQgf2fpV0Ovh3T5-6" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="wee8iFHExE6Ph9CSwYik-6" value="CarouselWidget" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="-270" y="580" width="140" height="100" as="geometry" />
+          <mxGeometry x="-40" y="580" width="140" height="100" as="geometry" />
         </mxCell>
         <mxCell id="wee8iFHExE6Ph9CSwYik-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="7i4eZhQgf2fpV0Ovh3T5-20" target="wee8iFHExE6Ph9CSwYik-6" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="wee8iFHExE6Ph9CSwYik-9" value="&lt;div&gt;ListView&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=light-dark(#FFFFFF,#006600);" parent="1" vertex="1">
-          <mxGeometry x="130" y="600" width="130" height="100" as="geometry" />
+          <mxGeometry x="-480" y="550" width="130" height="100" as="geometry" />
         </mxCell>
         <mxCell id="wee8iFHExE6Ph9CSwYik-11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="wee8iFHExE6Ph9CSwYik-12" target="wee8iFHExE6Ph9CSwYik-15" edge="1">
           <mxGeometry relative="1" as="geometry" />
@@ -126,14 +126,16 @@
         <mxCell id="wee8iFHExE6Ph9CSwYik-19" value="CarouselWidget&lt;div&gt;HookConsumerWidget&lt;/div&gt;&lt;div&gt;Listener, updater&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="630" y="600" width="140" height="100" as="geometry" />
         </mxCell>
-        <mxCell id="wee8iFHExE6Ph9CSwYik-23" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="wee8iFHExE6Ph9CSwYik-21" target="wee8iFHExE6Ph9CSwYik-22" edge="1">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="wee8iFHExE6Ph9CSwYik-23" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="wee8iFHExE6Ph9CSwYik-21" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="250" y="1420" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
         <mxCell id="wee8iFHExE6Ph9CSwYik-45" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" parent="1" source="wee8iFHExE6Ph9CSwYik-21" target="7i4eZhQgf2fpV0Ovh3T5-24" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="20" y="980" />
-              <mxPoint x="-40" y="980" />
+              <mxPoint x="250" y="980" />
+              <mxPoint x="190" y="980" />
             </Array>
           </mxGeometry>
         </mxCell>
@@ -154,7 +156,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="wee8iFHExE6Ph9CSwYik-21" value="&lt;div&gt;InventoryProvider&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=light-dark(#FFFFFF,#006600);" parent="1" vertex="1">
-          <mxGeometry x="-50" y="1260" width="140" height="100" as="geometry" />
+          <mxGeometry x="180" y="1260" width="140" height="100" as="geometry" />
         </mxCell>
         <mxCell id="wee8iFHExE6Ph9CSwYik-22" value="&lt;div&gt;InventoryRepository&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=light-dark(#FFFFFF,#990000);" parent="1" vertex="1">
           <mxGeometry x="-50" y="1420" width="140" height="100" as="geometry" />
@@ -197,7 +199,7 @@
         <mxCell id="wee8iFHExE6Ph9CSwYik-31" value="&lt;div&gt;AddItemDialog&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Updater&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="1090" y="420" width="140" height="100" as="geometry" />
         </mxCell>
-        <mxCell id="fnmsByrpBkYeRCK3ZdHk-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.002;entryY=0.42;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="7i4eZhQgf2fpV0Ovh3T5-2" target="wee8iFHExE6Ph9CSwYik-25">
+        <mxCell id="fnmsByrpBkYeRCK3ZdHk-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.002;entryY=0.42;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="7i4eZhQgf2fpV0Ovh3T5-2" target="wee8iFHExE6Ph9CSwYik-25" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="1310" y="130" />

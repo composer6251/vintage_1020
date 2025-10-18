@@ -9,11 +9,10 @@ import 'package:vintage_1020/data/providers/inventory_notifier.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/edit_inventory_item_dialog.dart';
-import 'package:vintage_1020/ui/core/ui/widgets/dialog/test_dialog.dart';
 
 import 'package:vintage_1020/ui/manage_inventory_tab/widgets/manage_inventory_item_tile.dart';
 
-class ManageInventoryTab extends StatefulHookConsumerWidget {
+class ManageInventoryTab extends ConsumerStatefulWidget {
   const ManageInventoryTab({super.key});
 
   @override
