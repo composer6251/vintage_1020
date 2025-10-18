@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:vintage_1020/ui/ui_container/ui_container.dart';
 
-class AuthGate extends HookConsumerWidget {
+class AuthGate extends ConsumerWidget {
   const AuthGate({super.key});
 
   @override

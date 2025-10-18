@@ -45,7 +45,7 @@ Wrap - children in row, divided by space, and wrap if row overflows
 
 ### State management
 #### WHEN TO USE WIDGET TYPES
-##### STATEFUL - Dialogs
+##### Using controller?(TextEditingController...etc) : NO PROVIDERS, USE HOOKS OR STATEFUL WIDGET
 
 Flutter is declarative.
 UI = f(application state)

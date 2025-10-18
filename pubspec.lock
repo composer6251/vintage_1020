@@ -566,6 +566,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.21.3+1"
+  flutter_hooks_lint:
+    dependency: "direct dev"
+    description:
+      name: flutter_hooks_lint
+      sha256: "8178fbc6270cc69722d84c1743517d6f3031786fa9c8daefd2ecdccd0b6e0bed"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.0"
   flutter_image_gallery_saver:
     dependency: "direct main"
     description:

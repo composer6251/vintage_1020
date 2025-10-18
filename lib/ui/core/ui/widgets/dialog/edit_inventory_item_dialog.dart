@@ -23,6 +23,12 @@ class EditInventoryItemDialog extends StatefulHookConsumerWidget {
 
 class _EditInventoryItemDialogState
     extends ConsumerState<EditInventoryItemDialog> {
+
+  // DATE STATES
+  DateTime? statePurchaseDate;
+  DateTime? stateListingDate;
+  DateTime? stateSoldDate;
+
   @override
   Widget build(BuildContext context) {
     // useMemoized to prevent new instances of formKey
@@ -30,7 +36,9 @@ class _EditInventoryItemDialogState
 
     // GET SELECTED ITEM TO EDIT
     final itemEditing = ref.watch(currentInventoryItemProvider);
-
+    statePurchaseDate = itemEditing.itemPurchaseDate;
+    stateListingDate = itemEditing.itemListingDate;
+    stateSoldDate = itemEditing.itemSoldDate;
     // TODO: Update state upon value change. Update state & DB upon submit
     // THAT WAY THE UI is updated
 
@@ -57,11 +65,6 @@ class _EditInventoryItemDialogState
     );
 
     final initialDate = useState(DateTime.now());
-
-    // DATE STATES
-    DateTime? statePurchaseDate = itemEditing.itemPurchaseDate;
-    DateTime? stateListingDate = itemEditing.itemListingDate;
-    DateTime? stateSoldDate = itemEditing.itemSoldDate;
 
     // final purchaseDate = useState(
     //   getMonthDayYearStringFromDateTime(itemEditing.itemPurchaseDate),
