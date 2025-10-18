@@ -67,14 +67,24 @@ class InventoryLocal extends _$InventoryLocal {
     return state.where((item) => item.id == id).single;
   }
 
-  void updateCurrentInventoryItemById(InventoryItemLocal newItem) {
+  void updateCurrentInventoryItemById(
+    InventoryItemLocal newItem,
+    InventoryItemLocal oldItem,
+  ) {
+    int indexOfItemToUpdate = state.indexOf(oldItem);
+    if (indexOfItemToUpdate == -1) {
+      print('Failed to find item to update in current state');
+    }
 
-    state = [
-      ...state,
-      for (final itemToUpdate in state) 
-        if(itemToUpdate.id == newItem.id) 
-          newItem
-    ];
+    state.removeAt(indexOfItemToUpdate);
+    state.insert(indexOfItemToUpdate, newItem);
+
+    LocalDb().updateInventoryItem(newItem);
+    // state = [
+    //   ...state,
+    //   for (final itemToUpdate in state)
+    //     if (itemToUpdate.id == newItem.id) newItem,
+    // ];
   }
 
   Future<int> deleteUserInventoryByEmail() async {
@@ -91,7 +101,7 @@ class InventoryLocal extends _$InventoryLocal {
   Future<int> deleteInventoryItem(String id) async {
     // Remove from state
     state = state.where((item) => item.id != id).toList();
-   
+
     int numberOfDeletedItems = await LocalDb().softDeleteInventoryItem(id);
 
     return numberOfDeletedItems;

@@ -116,11 +116,9 @@ class _EditInventoryItemDialogState
       final itemToSave = buildItemFromCurrentState();
       ref
         .watch(inventoryLocalProvider.notifier)
-        .updateCurrentInventoryItemById(itemToSave);
+        .updateCurrentInventoryItemById(itemToSave, itemEditing);
 
       closeDialog();
-
-      LocalDb().updateInventoryItem(itemToSave);
     }
 
     return AlertDialog(
