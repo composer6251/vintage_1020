@@ -43,14 +43,10 @@ ClipRect - Use when children overflow, and SHOULD.
 Wrap - children in row, divided by space, and wrap if row overflows
 
 
-
-
-
-
-
-## *****************************************FLUTTER*****************************************
-
 ### State management
+#### WHEN TO USE WIDGET TYPES
+##### STATEFUL - Dialogs
+
 Flutter is declarative.
 UI = f(application state)
 Two types of state:

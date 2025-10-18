@@ -12,7 +12,7 @@ part 'inventory_notifier.g.dart';
 class InventoryNotifier extends _$InventoryNotifier {
   @override
   List<InventoryItemLocal> build() {
-    // Watch current inventory filter. getFilteredInventory watches the inventory, 
+    // Watch current inventory filter. getFilteredInventory watches the inventory,
     final providerFilter = ref.watch(filterProvider);
 
     List<InventoryItemLocal> filteredInventory = getFilteredInventory(
@@ -29,34 +29,20 @@ class InventoryNotifier extends _$InventoryNotifier {
 
     List<InventoryItemLocal> filteredInventory = [];
     // Check listed inventory by flag and by listing date and sold date = null
-        // If no filters are applied, return all inventory
-    if(currentFilter == InventoryFilter.all){
+    // If no filters are applied, return all inventory
+    if (currentFilter == InventoryFilter.all) {
       return inventory;
     }
     if (currentFilter == InventoryFilter.listed) {
-      print('Returning listed booth inventory in inventory notifier');
-      filteredInventory = inventory
-          .where((item) => item.isCurrentBoothItem == 1.0)
-          .toList();
-      // state = [...filteredInventory];
-      return [...filteredInventory];
-    }
-    if (currentFilter == InventoryFilter.backStock) {
-      filteredInventory = inventory
-          .where(
-            (item) => item.itemListingDate == null && item.itemSoldDate == null,
-          )
-          .toList();
-      // state = [...filteredInventory];
-      return [...filteredInventory];
+      return inventory.where((item) => item.isListed).toList();
     }
     if (currentFilter == InventoryFilter.sold) {
-      filteredInventory = inventory
-          .where((item) => item.itemDeleteDate != null)
-          .toList();
-      // state = [...filteredInventory];
-      return [...filteredInventory];
+      return inventory.where((item) => item.isSold).toList();
     }
+    if (currentFilter == InventoryFilter.backStock) {
+       return inventory.where((item) => !item.isListed && !item.isSold && !item.isDeleted).toList();
+    }
+    // TODO: CREATE LABEL FOR FURNITURE/TIMEPERIOD/STYLE/SEASON....etc
     if (currentFilter == InventoryFilter.furniture) {
       filteredInventory = inventory
           .where((item) => item.itemCategory == 'Furniture')
@@ -88,7 +74,6 @@ class InventoryNotifier extends _$InventoryNotifier {
       // TODO: SHOW SNACK BAR TO USER IN EVENT OF ERROR
       return;
     }
-
 
     // Remove existing item
     state.removeWhere((item) => item.id == itemId);

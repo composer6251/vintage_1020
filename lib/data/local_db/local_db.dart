@@ -88,10 +88,10 @@ class LocalDb {
     print('tables created or already existed ${tables.length}');
   }
 
-    void insertIntoInventoryItem(InventoryItemLocal item) async {
+  void insertIntoInventoryItem(InventoryItemLocal item) async {
     final db = await _getDatabase();
 
-    db.insert(inventoryItemTable, item.toMapForLocalDB());
+    db.insert(inventoryItemTable, item.toMapForLocalDB(), conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   Future<List<InventoryItemLocal>> fetchUserInventoryFromDb() async {
@@ -142,13 +142,14 @@ class LocalDb {
     return updatedId;
 }
 // TODO: CREATE METHOD TO UPDATE BY ID.
-  Future<int> updateInventoryItem(InventoryItemLocal itemToUpdate) async {
+  Future<int> updateInventoryItemById(InventoryItemLocal itemToUpdate) async {
     final db = await _getDatabase();
 
-    final int updatedId = await db.update(inventoryItemTable, {
-      'itemListingDate': DateTime.now().toIso8601String(),
-      'isCurrentBoothItem': 1,
-    }, where: 'id = "${itemToUpdate.id}"',);
+    final int updatedId = await db.update(
+      inventoryItemTable, 
+      itemToUpdate.toMapForLocalDB(), 
+      conflictAlgorithm: ConflictAlgorithm.replace, 
+      where: 'id = "${itemToUpdate.id}"');
 
     print('Added item to booth: $updatedId');
     return updatedId;
