@@ -1,44 +1,44 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
-import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
-import 'package:vintage_1020/data/providers/async_inventory_notifier/async_inventory_notifier_provider.dart';
-import 'package:vintage_1020/ui/manage_inventory_tab/widgets/manage_inventory_item_tile.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_riverpod/flutter_riverpod.dart';
+// import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
+// import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
+// import 'package:vintage_1020/data/providers/async_inventory_notifier/async_inventory_notifier_provider.dart';
+// import 'package:vintage_1020/ui/manage_inventory_tab/widgets/manage_inventory_item_tile.dart';
 
-class ManageInventoryViewModel extends ConsumerWidget {
-  const ManageInventoryViewModel({super.key});
+// class ManageInventoryViewModel extends ConsumerWidget {
+//   const ManageInventoryViewModel({super.key});
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
+//   @override
+//   Widget build(BuildContext context, WidgetRef ref) {
 
-    final List<InventoryItemLocal> inventory = ref.watch(inventoryLocalProvider);
+//     final List<InventoryItemLocal> inventory = ref.watch(inventoryLocalProvider);
 
-    void redirectToEditInventoryItem(InventoryItemLocal item) {
-      ref.read(asyncInventoryNotifierProviderProvider.notifier).makeCurrentInventoryItem(item.id!);
-      Navigator.pushNamed(context, '/edit-inventory-item', arguments: item);
-    }
+//     void redirectToEditInventoryItem(InventoryItemLocal item) {
+//       ref.read(asyncInventoryNotifierProviderProvider.notifier).makeCurrentInventoryItem(item.id!);
+//       Navigator.pushNamed(context, '/edit-inventory-item', arguments: item);
+//     }
 
-    return Column(
-      children: [
-        Container(child: Text('Inventory items is ${inventory.length}'),),
-        Expanded(
-          // flex: 4,
-          child: ListView.builder(
-            itemExtent: 200,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () {
-                  redirectToEditInventoryItem(inventory[index]);
-                },
-                child: ManageInventoryItemTile(
-                  model: inventory[index],
-                ),
-              );
-            },
-            itemCount: inventory.length,
-          ),
-        ),
-      ],
-    );
-  }
-}
+//     return Column(
+//       children: [
+//         Container(child: Text('Inventory items is ${inventory.length}'),),
+//         Expanded(
+//           // flex: 4,
+//           child: ListView.builder(
+//             itemExtent: 200,
+//             itemBuilder: (context, index) {
+//               return GestureDetector(
+//                 onTap: () {
+//                   redirectToEditInventoryItem(inventory[index]);
+//                 },
+//                 child: ManageInventoryItemTile(
+//                   model: inventory[index],
+//                 ),
+//               );
+//             },
+//             itemCount: inventory.length,
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }

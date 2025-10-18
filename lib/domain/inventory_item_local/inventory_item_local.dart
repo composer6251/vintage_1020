@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'dart:convert';
 
+import 'package:vintage_1020/domain/my_booth/my_booth.dart';
+
 class InventoryItemLocal {
-  String id = '';
+  String id; // default id on creation
   String? userEmail;
   String? primaryImageUrl;
   String? itemDescription;
@@ -21,12 +23,12 @@ class InventoryItemLocal {
   DateTime? itemDeleteDate;
   double? isCurrentBoothItem = 0.0;
 
-  InventoryItemLocal.empty();
+  InventoryItemLocal.empty(this.id);
 
-  InventoryItemLocal copyWith({
+  InventoryItemLocal(
+    this.id,
     String? primaryImageUrl,
     String? itemDescription,
-    List<File>? itemImages,
     List<String>? itemImageUrls,
     String? itemCategory,
     double? itemPurchasePrice,
@@ -39,28 +41,63 @@ class InventoryItemLocal {
     double? itemWidth,
     double? itemDepth,
     DateTime? itemDeleteDate,
-    double? isCurrentBoothItem,
-  }){
-    return InventoryItemLocal.updateItem(
-    this.primaryImageUrl = primaryImageUrl ?? this.primaryImageUrl,
-    this.itemDescription = itemDescription ?? this.itemDescription,
-    this.itemImageUrls = itemImageUrls ?? this.itemImageUrls,
-    this.itemCategory = itemCategory ?? this.itemCategory, 
-    this.itemPurchasePrice = itemPurchasePrice ?? this.itemPurchasePrice,
-    this.itemListingPrice = itemListingPrice ?? this.itemListingPrice,
-    this.itemSoldPrice = itemSoldPrice ?? this.itemSoldPrice,
-    this.itemPurchaseDate = itemPurchaseDate ?? this.itemPurchaseDate,
-    this.itemListingDate = itemListingDate ?? this.itemListingDate,
-    this.itemSoldDate = itemSoldDate ?? this.itemSoldDate,
-    this.itemHeight = itemHeight ?? this.itemHeight,
-    this.itemWidth = itemWidth ?? this.itemWidth,
-    this.itemDepth = itemDepth ?? this.itemDepth,
-    this.itemDeleteDate = itemDeleteDate ?? this.itemDeleteDate,
-    this.isCurrentBoothItem = isCurrentBoothItem ?? this.isCurrentBoothItem,
-    );
-  }
+    bool isCurrentBoothItem,
+  ) :
+    primaryImageUrl = primaryImageUrl ?? primaryImageUrl,
+    itemDescription = itemDescription ?? itemDescription,
+    itemImageUrls = itemImageUrls ?? itemImageUrls,
+    itemCategory = itemCategory ?? itemCategory,
+    itemPurchasePrice = itemPurchasePrice ?? itemPurchasePrice,
+    itemListingPrice = itemListingPrice ?? itemListingPrice,
+    itemSoldPrice = itemSoldPrice ?? itemSoldPrice,
+    itemPurchaseDate = itemPurchaseDate ?? itemPurchaseDate,
+    itemListingDate = itemListingDate ?? itemListingDate,
+    itemSoldDate = itemSoldDate ?? itemSoldDate,
+    itemHeight = itemHeight ?? itemHeight,
+    itemWidth = itemWidth ?? itemWidth,
+    itemDepth = itemDepth ?? itemDepth,
+    itemDeleteDate = itemDeleteDate ?? itemDeleteDate,
+    isCurrentBoothItem = isCurrentBoothItem ? 1.0 : 0.0;
+
+  // InventoryItemLocal.copyWith({
+  //   String id,
+  //   String? primaryImageUrl,
+  //   String? itemDescription,
+  //   List<File>? itemImages,
+  //   List<String>? itemImageUrls,
+  //   String? itemCategory,
+  //   double? itemPurchasePrice,
+  //   double? itemListingPrice,
+  //   double? itemSoldPrice,
+  //   DateTime? itemPurchaseDate,
+  //   DateTime? itemListingDate,
+  //   DateTime? itemSoldDate,
+  //   double? itemHeight,
+  //   double? itemWidth,
+  //   double? itemDepth,
+  //   DateTime? itemDeleteDate,
+  //   bool isCurrentBoothItem = false,
+  // }) {
+  //   this.id,
+  //   this.primaryImageUrl = primaryImageUrl ?? this.primaryImageUrl;
+  //   this.itemDescription = itemDescription ?? this.itemDescription;
+  //   this.itemImageUrls = itemImageUrls ?? this.itemImageUrls;
+  //   this.itemCategory = itemCategory ?? this.itemCategory;
+  //   this.itemPurchasePrice = itemPurchasePrice ?? this.itemPurchasePrice;
+  //   this.itemListingPrice = itemListingPrice ?? this.itemListingPrice;
+  //   this.itemSoldPrice = itemSoldPrice ?? this.itemSoldPrice;
+  //   this.itemPurchaseDate = itemPurchaseDate ?? this.itemPurchaseDate;
+  //   this.itemListingDate = itemListingDate ?? this.itemListingDate;
+  //   this.itemSoldDate = itemSoldDate ?? this.itemSoldDate;
+  //   this.itemHeight = itemHeight ?? this.itemHeight;
+  //   this.itemWidth = itemWidth ?? this.itemWidth;
+  //   this.itemDepth = itemDepth ?? this.itemDepth;
+  //   this.itemDeleteDate = itemDeleteDate ?? this.itemDeleteDate;
+  //   this.isCurrentBoothItem = isCurrentBoothItem ? 1.0 : 0.0;
+  // }
 
   InventoryItemLocal.updateItem(
+    this.id,
     this.primaryImageUrl,
     this.itemDescription,
     this.itemImageUrls,
@@ -76,7 +113,6 @@ class InventoryItemLocal {
     this.itemDepth,
     this.itemDeleteDate,
     this.isCurrentBoothItem,
-
   );
 
   InventoryItemLocal.toLocalDb(

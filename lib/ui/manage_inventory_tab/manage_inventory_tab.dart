@@ -32,17 +32,19 @@ class _ManageInventoryTabState extends ConsumerState<ManageInventoryTab> {
         .fetchInitialUserInventory();
   }
 
+  InventoryFilter selectedFilter = InventoryFilter.all;
+
   @override
   Widget build(BuildContext context) {
     // NEW PROVIDER
     final List<InventoryItemLocal> filteredInventory = ref.watch(
       inventoryProvider,
     );
-
-    final selectedFilter = useState<InventoryFilter>(InventoryFilter.all);
-
     void updateSelectedFilter(Set<InventoryFilter> newFilter) {
-      selectedFilter.value = newFilter.first;
+
+      setState(() {
+        selectedFilter = newFilter.first;
+      });
 
       // UPDATE PROVIDER WITH FILTER
       ref.read(filterProvider.notifier).setCurrentFilter(newFilter.first);
@@ -54,15 +56,14 @@ class _ManageInventoryTabState extends ConsumerState<ManageInventoryTab> {
     }
 
     void openEditInventoryDialog(InventoryItemLocal item) {
-      ref.read(currentInventoryItemProvider.notifier).updateCurrentInventoryItem(item);
       showDialog(
         context: context,
-        builder: (context) => const EditInventoryItemDialog(),
+        builder: (context) => EditInventoryItemDialog(itemEditing: item),
       );
     }
 
     final String noInventoryMessage =
-        'You do not have any ${selectedFilter.value.name} items.';
+        'You do not have any ${selectedFilter.name} items.';
 
     return Scaffold(
       body: FutureBuilder<List<InventoryItemLocal>>(
@@ -90,7 +91,7 @@ class _ManageInventoryTabState extends ConsumerState<ManageInventoryTab> {
                 SegmentedButton<InventoryFilter>(
                   style: ButtonStyle(elevation: WidgetStatePropertyAll(100)),
                   multiSelectionEnabled: false,
-                  selected: {selectedFilter.value},
+                  selected: {selectedFilter},
                   onSelectionChanged: (Set<InventoryFilter> filters) {
                     updateSelectedFilter(filters);
                   },
@@ -126,7 +127,7 @@ class _ManageInventoryTabState extends ConsumerState<ManageInventoryTab> {
                               fontSize: 32,
                               fontWeight: FontWeight.bold,
                             ),
-                            selectedFilter.value == InventoryFilter.all
+                            selectedFilter == InventoryFilter.all
                                 ? 'You do not have any inventory items yet. Press the + to add an item!'
                                 : noInventoryMessage,
                           ),

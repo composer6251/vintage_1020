@@ -10,7 +10,10 @@ import 'package:vintage_1020/ui/core/ui/widgets/dialog/common/item_dimensions_in
 import 'package:vintage_1020/utils/date_util.dart';
 
 class EditInventoryItemDialog extends ConsumerStatefulWidget {
-  const EditInventoryItemDialog({super.key});
+
+  const EditInventoryItemDialog({super.key, required this.itemEditing});
+
+  final InventoryItemLocal itemEditing;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -20,49 +23,66 @@ class EditInventoryItemDialog extends ConsumerStatefulWidget {
 class _EditInventoryItemDialogState
     extends ConsumerState<EditInventoryItemDialog> {
 
-  // VARIABLES TO HOLD INITIAL VALUES FOR DATES
-  DateTime initialDate = DateTime.now();
-  bool addToBooth = false;
-  
-  // VARIABLES TO HOLD DATE STATES
-  DateTime? statePurchaseDate;
-  DateTime? stateListingDate;
-  DateTime? stateSoldDate;
+  late InventoryItemLocal itemEditing = widget.itemEditing;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
     // useMemoized to prevent new instances of formKey
-    final formKey = useMemoized(() => GlobalKey<FormState>());
+    // final formKey = useMemoized(() => GlobalKey<FormState>());
+
+      // VARIABLES TO HOLD INITIAL VALUES FOR DATE PICKER AND ADD TO BOOTH CHECKBOX
+      DateTime initialDate = DateTime.now();
+      bool addToBooth = false;
+      
+      // VARIABLES TO HOLD DATE STATES
+      double? purchasePrice;
+      double? listingPrice;
+      double? soldPrice;
+
+        // VARIABLES TO HOLD DATE STATES
+      double? height;
+      double? width;
+      double? depth;
+
+      // VARIABLES TO HOLD DATE STATES
+      DateTime? purchaseDate;
+      DateTime? listingDate;
+      DateTime? soldDate;
+
 
     // GET SELECTED ITEM TO EDIT
-    final itemEditing = ref.watch(currentInventoryItemProvider);
-    statePurchaseDate = itemEditing.itemPurchaseDate;
-    stateListingDate = itemEditing.itemListingDate;
-    stateSoldDate = itemEditing.itemSoldDate;
-    // TODO: Update state upon value change. Update state & DB upon submit
-    // THAT WAY THE UI is updated
+    // final itemEditing = ref.watch(currentInventoryItemProvider);
+    purchaseDate = itemEditing.itemPurchaseDate;
+    listingDate = itemEditing.itemListingDate;
+    soldDate = itemEditing.itemSoldDate;
 
     // PRICE STATE CONTROLLERS
-    final itemPurchasePriceController = useTextEditingController(
-      text: itemEditing.itemPurchasePrice?.toString(),
-    );
-    final itemListingPriceController = useTextEditingController(
-      text: itemEditing.itemListingPrice?.toString(),
-    );
-    final itemSellingPriceController = useTextEditingController(
-      text: itemEditing.itemSoldPrice?.toString(),
-    );
+    // final itemPurchasePriceController = useTextEditingController(
+    //   text: itemEditing.itemPurchasePrice?.toString(),
+    // );
+    // final itemListingPriceController = useTextEditingController(
+    //   text: itemEditing.itemListingPrice?.toString(),
+    // );
+    // final itemSellingPriceController = useTextEditingController(
+    //   text: itemEditing.itemSoldPrice?.toString(),
+    // );
 
-    // DIMENSIONS STATE CONTROLLERS
-    final itemHeightController = useTextEditingController(
-      text: itemEditing.itemHeight?.toString(),
-    );
-    final itemWidthController = useTextEditingController(
-      text: itemEditing.itemWidth?.toString(),
-    );
-    final itemDepthController = useTextEditingController(
-      text: itemEditing.itemDepth?.toString(),
-    );
+    // // DIMENSIONS STATE CONTROLLERS
+    // final itemHeightController = useTextEditingController(
+    //   text: itemEditing.itemHeight?.toString(),
+    // );
+    // final itemWidthController = useTextEditingController(
+    //   text: itemEditing.itemWidth?.toString(),
+    // );
+    // final itemDepthController = useTextEditingController(
+    //   text: itemEditing.itemDepth?.toString(),
+    // );
 
     Future<void> selectDate(String type) async {
       final DateTime? pickedDate = await showDatePicker(
@@ -73,18 +93,18 @@ class _EditInventoryItemDialogState
       if (pickedDate == null) return; // User cancelled the date picker
       if (type == 'Listing') {
         setState(() {
-          stateListingDate = pickedDate;
+          listingDate = pickedDate;
         });
         return;
       }
       if (type == 'Sold') {
         setState(() {
-          stateSoldDate = pickedDate;
+          soldDate = pickedDate;
         });
         return;
       }
       setState(() {
-        statePurchaseDate = pickedDate;
+        soldDate = pickedDate;
       });
     }
 
@@ -93,24 +113,23 @@ class _EditInventoryItemDialogState
     }
 
     InventoryItemLocal buildItemFromCurrentState() {
-      final InventoryItemLocal currentItemState = InventoryItemLocal.toLocalDb(
-        uuid.v6(),
-        userEmail,
+      final InventoryItemLocal currentItemState = InventoryItemLocal(
+        itemEditing.id,
         itemEditing.primaryImageUrl,
         '',
         itemEditing.itemImageUrls,
         '',
-        double.tryParse(itemPurchasePriceController.text),
-        double.tryParse(itemListingPriceController.text),
-        double.tryParse(itemSellingPriceController.text),
-        statePurchaseDate,
-        stateListingDate,
-        stateSoldDate,
-        double.tryParse(itemHeightController.text),
-        double.tryParse(itemWidthController.text),
-        double.tryParse(itemDepthController.text),
+        purchasePrice,
+        listingPrice,
+        soldPrice,
+        soldDate,
+        listingDate,
+        soldDate,
+        height,
+        width,
+        depth,
         null,
-        addToBooth ? 1 : 0,
+        addToBooth,
       );
       return currentItemState;
     }
@@ -122,11 +141,9 @@ class _EditInventoryItemDialogState
     void submit() async {
       final itemToSave = buildItemFromCurrentState();
       // updateStateChange();
-      if (formKey.currentState?.validate() ?? false) {
-        ref
-            .watch(inventoryLocalProvider.notifier)
-            .updateCurrentInventoryItemById(itemToSave);
-      }
+      ref
+          .watch(inventoryLocalProvider.notifier)
+          .updateCurrentInventoryItemById(itemToSave);
 
       closeDialog();
 
@@ -150,7 +167,7 @@ class _EditInventoryItemDialogState
         ),
       ),
       content: Form(
-        key: formKey,
+        // key: formKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           mainAxisSize: MainAxisSize.min,
@@ -160,7 +177,9 @@ class _EditInventoryItemDialogState
                 Flexible(
                   flex: 5,
                   child: TextFormField(
-                    controller: itemPurchasePriceController,
+                    onChanged: (value) => setState(() {
+                      purchasePrice = double.tryParse(value);
+                    }),
                     decoration: const InputDecoration(
                       prefixText: '\$',
                       fillColor: Colors.blue,
@@ -187,7 +206,7 @@ class _EditInventoryItemDialogState
                     ),
                     onPressed: () => selectDate('Purchase'),
                     child: Text(
-                      getMonthDayYearStringFromDateTime(statePurchaseDate),
+                      getMonthDayYearStringFromDateTime(purchaseDate),
                     ),
                   ),
                 ),
@@ -198,7 +217,9 @@ class _EditInventoryItemDialogState
                 Flexible(
                   flex: 5,
                   child: TextFormField(
-                    controller: itemListingPriceController,
+                    onChanged: (value) => setState(() {
+                      listingPrice = double.tryParse(value);
+                    }),
                     decoration: const InputDecoration(
                       prefixText: '\$',
                       floatingLabelAlignment: FloatingLabelAlignment.start,
@@ -223,7 +244,7 @@ class _EditInventoryItemDialogState
                     ),
                     onPressed: () => selectDate('Listing'),
                     child: Text(
-                      getMonthDayYearStringFromDateTime(stateListingDate),
+                      getMonthDayYearStringFromDateTime(listingDate),
                     ),
                   ),
                 ),
@@ -234,7 +255,9 @@ class _EditInventoryItemDialogState
                 Flexible(
                   flex: 5,
                   child: TextFormField(
-                    controller: itemSellingPriceController,
+                    onChanged: (value) => setState(() {
+                      soldPrice = double.tryParse(value);
+                    }),
                     decoration: const InputDecoration(
                       prefixText: '\$',
                       labelStyle: TextStyle(fontSize: 20),
@@ -255,7 +278,7 @@ class _EditInventoryItemDialogState
                     ),
                     onPressed: () => selectDate('Sold'),
                     child: Text(
-                      getMonthDayYearStringFromDateTime(stateSoldDate),
+                      getMonthDayYearStringFromDateTime(soldDate),
                     ),
                   ),
                 ),

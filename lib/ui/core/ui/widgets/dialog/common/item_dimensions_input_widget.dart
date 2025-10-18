@@ -5,17 +5,17 @@ import 'package:vintage_1020/data/providers/current_inventory_item/current_inven
 import 'package:vintage_1020/data/providers/inventory_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 
-class ItemDimensionsInputWidget extends ConsumerStatefulWidget {
+class ItemDimensionsInputWidget extends ConsumerWidget {
+
+  // @override
+  // ConsumerState<ConsumerStatefulWidget> createState() =>
+  //     _ItemDimensionsInputWidget();
+// }
+
+// class _ItemDimensionsInputWidget extends ConsumerState<ItemDimensionsInputWidget> {
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _ItemDimensionsInputWidget();
-}
-
-class _ItemDimensionsInputWidget extends ConsumerState<ItemDimensionsInputWidget> {
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     
     final items = ref.watch(inventoryProvider);
     final currentItem = items.first;
