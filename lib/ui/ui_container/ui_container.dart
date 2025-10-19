@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:vintage_1020/data/providers/filter_notifier.dart';
+import 'package:vintage_1020/data/providers/firestore_provider/firestore_provider.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/add_inventory_form_dialog.dart';
 import 'package:vintage_1020/ui/manage_inventory_tab/manage_inventory_tab.dart';
 import 'package:vintage_1020/ui/activity_chart_screen/activity_chart.dart';
@@ -10,6 +11,7 @@ import 'package:vintage_1020/ui/my_booth_tab/my_booth_tab.dart';
 
 class UiContainer extends ConsumerStatefulWidget {
   UiContainer({super.key});
+
   final logger = Logger(printer: PrettyPrinter());
 
   @override

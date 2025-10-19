@@ -1,17 +1,12 @@
-import 'dart:convert';
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:path/path.dart';
 import 'dart:async';
-import 'package:path_provider/path_provider.dart' as sys_path;
 import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:sqflite/sqlite_api.dart';
 import 'package:uuid/uuid.dart';
-import 'package:vintage_1020/data/repositories/firestore/firestore_repository.dart';
+import 'package:vintage_1020/data/local_db/my_booth_db.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
-
-import 'dart:developer' as dev;
+import 'package:vintage_1020/domain/my_booth/my_booth.dart';
 
 final String dbName = 'vintage_1020.db';
 final Uuid uuid = Uuid();
@@ -19,7 +14,7 @@ final String? userEmail = FirebaseAuth.instance.currentUser?.email;
 
 // TABLE CREATION SQL
 final String buildCreateUserTableSql =
-    'CREATE TABLE IF NOT EXISTS user(id TEXT PRIMARY KEY, email TEXT, boothName)';
+    'CREATE TABLE IF NOT EXISTS user(id TEXT PRIMARY KEY,  boothName TEXT, email TEXT, currentBoothImageUrls TEXT, boothDeleteDate TEXT)';
 final String buildCreateInventoryTableSql =
     'CREATE TABLE IF NOT EXISTS inventory_item(id TEXT PRIMARY KEY, email TEXT, primaryImageUrl TEXT, itemDescription TEXT, itemImageUrls TEXT, itemCategory TEXT, itemPurchasePrice REAL, itemListingPrice REAL, itemSoldPrice REAL, itemPurchaseDate TEXT, itemListingDate TEXT, itemSoldDate TEXT, itemHeight REAL, itemWidth REAL, itemDepth REAL, itemDeleteDate TEXT, isCurrentBoothItem REAL)';
 final String buildCreateBoothTableSql =
@@ -91,24 +86,30 @@ class LocalDb {
   void insertIntoInventoryItem(InventoryItemLocal item) async {
     final db = await _getDatabase();
 
-    db.insert(inventoryItemTable, item.toMapForLocalDB(), conflictAlgorithm: ConflictAlgorithm.replace);
+    db.insert(
+      inventoryItemTable,
+      item.toMapForLocalDB(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 
   Future<List<InventoryItemLocal>> fetchUserInventoryFromDb() async {
     final db = await _getDatabase();
+
+    printAllRowsInTable();
 
     List<Set<InventoryItemLocal>> inventory = [];
     try {
       final data = await db.query(
         inventoryItemTable,
         where: 'email = ? AND itemDeleteDate IS NULL',
-        
-        whereArgs: [
-          userEmail,
-        ]
+
+        whereArgs: [userEmail],
       );
-      inventory = data.map((row) => {InventoryItemLocal.fromLocalDB(row)}).toList();
-    } catch(ex) {
+      inventory = data
+          .map((row) => {InventoryItemLocal.fromLocalDB(row)})
+          .toList();
+    } catch (ex) {
       print('Exception caught in fetchUserInventoryFromDb: $ex');
     }
 
@@ -122,7 +123,6 @@ class LocalDb {
     return flattenedInventory;
   }
 
-
   Future<int> addInventoryItemToCurrentBooth(String id) async {
     final db = await _getDatabase();
 
@@ -135,21 +135,22 @@ class LocalDb {
 
     print('Added item to booth: $updatedId');
     return updatedId;
-}
-// TODO: CREATE METHOD TO UPDATE BY ID.
+  }
+
+  // TODO: CREATE METHOD TO UPDATE BY ID.
   Future<int> updateInventoryItem(InventoryItemLocal itemToUpdate) async {
     final db = await _getDatabase();
     itemToUpdate.userEmail = userEmail;
     final int updatedId = await db.update(
-      inventoryItemTable, 
-      itemToUpdate.toMapForLocalDB(), 
-      conflictAlgorithm: ConflictAlgorithm.replace, 
-      where: 'id = "${itemToUpdate.id}"');
+      inventoryItemTable,
+      itemToUpdate.toMapForLocalDB(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+      where: 'id = "${itemToUpdate.id}"',
+    );
 
     print('Added item to booth: $updatedId');
     return updatedId;
-}
-
+  }
 
   Future<int> hardDeleteInventoryItem(String id) async {
     final db = await _getDatabase();
@@ -176,14 +177,15 @@ class LocalDb {
   Future printAllRowsInTable() async {
     final db = await _getDatabase();
     // show the results: print all rows in the db
-    print(await db.query(inventoryItemTable));
+    print(await db.query(myBoothTable));
   }
 
   void dropInventoryItemTable() async {
-  final db = await _getDatabase();
+    final db = await _getDatabase();
 
-  db.execute('DROP TABLE $inventoryItemTable');
-}
+    db.execute('DROP TABLE $inventoryItemTable');
+  }
+
   Future<int> deleteUserInventory() async {
     print('\n\n\n DELETING USER INVENTORY FOR EMAIL: $userEmail');
 
@@ -194,5 +196,48 @@ class LocalDb {
     );
 
     return deletedId;
+  }
+
+  /*************BOOTH TABLE UPDATES***********/
+  Future<void> addBoothToMyBoothTable(MyBooth booth) async {
+    final db = await _getDatabase();
+    booth.userEmail = userEmail;
+    booth.boothName ?? 'My Booth';
+    print('addBoothToMyBoothTable: ${booth.id}');
+
+    db.insert(
+      myBoothTable,
+      booth.toMapForLocalDB(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<MyBooth> fetchCurrentBoothByEmail() async {
+    final db = await _getDatabase();
+
+    print('fetchingBoothByEmail: $userEmail');
+
+    MyBooth currentBooth = MyBooth.empty();
+
+    try {
+      final data = await db.query(
+        myBoothTable,
+        where: 'email = ? AND boothDeleteDate IS NULL',
+        whereArgs: [userEmail],
+      );
+      if (data.isEmpty) {
+        currentBooth = data
+            .map((booth) => MyBooth.fromLocalDB(booth))
+            .toList()
+            .first;
+      } else {
+        await addBoothToMyBoothTable(currentBooth);
+        currentBooth = await fetchCurrentBoothByEmail();
+      }
+    } catch (ex) {
+      print('Exception caught in fetchUserInventoryFromDb: $ex');
+    }
+
+    return currentBooth;
   }
 }

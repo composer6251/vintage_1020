@@ -15,6 +15,7 @@ class AuthGate extends ConsumerWidget {
         // If the user is NOT logged in (snapshot.hasData is false or snapshot.data is null)
         if (!snapshot.hasData) {
           return SignInScreen(
+            showPasswordVisibilityToggle: true,
             showAuthActionSwitch: true,
             providers: [
               EmailAuthProvider(),

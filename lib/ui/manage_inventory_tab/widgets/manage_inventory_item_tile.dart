@@ -5,8 +5,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:vintage_1020/data/providers/inventory_notifier.dart';
-import 'package:vintage_1020/domain/inventory_item/inventory_item.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
 import 'package:vintage_1020/utils/snack_bar.dart';

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -85,18 +83,26 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
             flexWeights: [3],
           ),
         ),
-        
-        Flexible(
+                // TODO boothItems is filtered inventory by isCurrentBoothItem. Need to make boothImages to be 
+        Expanded(
           flex: 4,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemExtent: 200,
-            itemBuilder: (context, index) {
-              BoothItem(model: boothItems[index]);
-            },
-            itemCount: boothItems.length,
+          child: InventoryCarousel(
+            inventoryItems: boothItems,
+            flexWeights: [3],
           ),
         ),
+        
+        // Flexible(
+        //   flex: 4,
+        //   child: ListView.builder(
+        //     scrollDirection: Axis.horizontal,
+        //     itemExtent: 200,
+        //     itemBuilder: (context, index) {
+        //       BoothItem(model: boothItems[index]);
+        //     },
+        //     itemCount: boothItems.length,
+        //   ),
+        // ),
       ],
     );
   }

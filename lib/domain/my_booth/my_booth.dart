@@ -8,7 +8,8 @@ final Uuid uuid = Uuid();
 
 /// DATA CLASS FOR MY_BOOTH_TAB
 class MyBooth {
-  String id = '';
+  String id = uuid.v6();
+  String? boothName;
   String? userEmail;
   List<String>? currentBoothImageUrls;
   DateTime? boothDeleteDate;
@@ -17,6 +18,7 @@ class MyBooth {
 
   MyBooth(
     this.id,
+    this.boothName,
     this.userEmail,
     this.currentBoothImageUrls,
     this.boothDeleteDate,
@@ -24,30 +26,37 @@ class MyBooth {
 
   MyBooth.fromLocalDB(Map<String, dynamic> data)
     : id = data['id'],
+      boothName = data?['boothName'],
       userEmail = data?['email'],
-      currentBoothImageUrls = data?['currentBoothImageUrls'] != null 
-          ? List<String>.from(jsonDecode(data['currentBoothImageUrls'])) : [],
-      boothDeleteDate = data['boothDeleteDate'] != null 
-          ? DateTime.parse(data['boothDeleteDate']) as DateTime? : null;
-
+      currentBoothImageUrls = data?['currentBoothImageUrls'] != null
+          ? List<String>.from(jsonDecode(data['currentBoothImageUrls']))
+          : [],
+      boothDeleteDate = data['boothDeleteDate'] != null
+          ? DateTime.parse(data['boothDeleteDate']) as DateTime?
+          : null;
 
   Map<String, dynamic> toMapForLocalDB() {
     return <String, dynamic>{
       "id": id,
+      "boothName": boothName,
       "email": userEmail,
       "currentBoothImageUrls": jsonEncode(currentBoothImageUrls),
+      "boothDeleteDate": boothDeleteDate,
     };
   }
 
-
   MyBooth.fromJson(Map<String, dynamic> json)
     : id = json['id'],
+      boothName = json['boothName'],
+      userEmail = json['email'],
       currentBoothImageUrls = json['currentBoothImageUrls'],
-      userEmail = json['email'];
+      boothDeleteDate = json['boothDeleteDate'];
 
   Map<String, dynamic> toJson() => {
     'id': id,
+    'boothName': boothName,
     'email': userEmail,
     'currentBoothImageUrls': currentBoothImageUrls,
+    'boothDeleteDate': boothDeleteDate,
   };
 }

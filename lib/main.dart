@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
         ),
         colorScheme: const ColorScheme.light(
           primary: Colors.blue, // Date pickersubmit, tab bar selected button color, label text
-          secondary: Colors.black, 
+          secondary: Colors.black,
           primaryContainer: Color.fromARGB(149, 82, 1, 1),
           secondaryContainer: Color.fromARGB(1, 167, 34, 34),
           onSurface: Colors.black, // Search bar text color

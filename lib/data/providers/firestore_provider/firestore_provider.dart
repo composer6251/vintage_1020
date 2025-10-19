@@ -55,26 +55,7 @@ class FirestoreProvider extends _$FirestoreProvider {
 }
 
   Future<void> addUserInventoryItem(InventoryItem item) async {
-    state = [
-      ...state,
-      InventoryItem(
-        itemImageUrls: item.itemImageUrls,
-        itemDescription: item.itemDescription,
-        itemPurchaseDate: item.itemPurchaseDate,
-        itemPurchasePrice: item.itemPurchasePrice,
-        itemCategory: item.itemCategory,
-        itemListingDate: item.itemListingDate,
-        itemListingPrice: item.itemListingPrice,
-        itemSoldPrice: item.itemSoldPrice,
-        primaryImageUrl: item.primaryImageUrl,
-        itemSoldDate: item.itemSoldDate,
-      ),
-    ];
 
     updateInventory();
-  }
-
-  List<InventoryItem> getInventoryState() {
-    return state;
   }
 }

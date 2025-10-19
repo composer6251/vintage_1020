@@ -40,22 +40,21 @@ class InventoryItemLocal {
     double? itemDepth,
     DateTime? itemDeleteDate,
     bool isCurrentBoothItem,
-  ) :
-    primaryImageUrl = primaryImageUrl ?? primaryImageUrl,
-    itemDescription = itemDescription ?? itemDescription,
-    itemImageUrls = itemImageUrls ?? itemImageUrls,
-    itemCategory = itemCategory ?? itemCategory,
-    itemPurchasePrice = itemPurchasePrice ?? itemPurchasePrice,
-    itemListingPrice = itemListingPrice ?? itemListingPrice,
-    itemSoldPrice = itemSoldPrice ?? itemSoldPrice,
-    itemPurchaseDate = itemPurchaseDate ?? itemPurchaseDate,
-    itemListingDate = itemListingDate ?? itemListingDate,
-    itemSoldDate = itemSoldDate ?? itemSoldDate,
-    itemHeight = itemHeight ?? itemHeight,
-    itemWidth = itemWidth ?? itemWidth,
-    itemDepth = itemDepth ?? itemDepth,
-    itemDeleteDate = itemDeleteDate ?? itemDeleteDate,
-    isCurrentBoothItem = isCurrentBoothItem ? 1.0 : 0.0;
+  ) : primaryImageUrl = primaryImageUrl ?? primaryImageUrl,
+      itemDescription = itemDescription ?? itemDescription,
+      itemImageUrls = itemImageUrls ?? itemImageUrls,
+      itemCategory = itemCategory ?? itemCategory,
+      itemPurchasePrice = itemPurchasePrice ?? itemPurchasePrice,
+      itemListingPrice = itemListingPrice ?? itemListingPrice,
+      itemSoldPrice = itemSoldPrice ?? itemSoldPrice,
+      itemPurchaseDate = itemPurchaseDate ?? itemPurchaseDate,
+      itemListingDate = itemListingDate ?? itemListingDate,
+      itemSoldDate = itemSoldDate ?? itemSoldDate,
+      itemHeight = itemHeight ?? itemHeight,
+      itemWidth = itemWidth ?? itemWidth,
+      itemDepth = itemDepth ?? itemDepth,
+      itemDeleteDate = itemDeleteDate ?? itemDeleteDate,
+      isCurrentBoothItem = isCurrentBoothItem ? 1.0 : 0.0;
 
   // InventoryItemLocal.copyWith({
   //   String id,
@@ -193,7 +192,9 @@ class InventoryItemLocal {
   }
 
   bool get isListed {
-    return (itemListingDate != null || itemListingPrice != null || isCurrentBoothItem == 1.0);
+    return (itemListingDate != null ||
+        itemListingPrice != null ||
+        isCurrentBoothItem == 1.0);
   }
 
   bool get isSold {
@@ -205,7 +206,10 @@ class InventoryItemLocal {
   }
 
   bool get isBoothItem {
-    return (isCurrentBoothItem == 0.0 && itemSoldDate == null && itemSoldPrice == null);
+    print('isBoothItem: $isCurrentBoothItem $itemSoldDate $itemSoldDate');
+    return (isCurrentBoothItem == 1.0 &&
+        itemSoldDate == null &&
+        itemSoldPrice == null);
   }
 
   InventoryItemLocal.fromJson(Map<String, dynamic> json)

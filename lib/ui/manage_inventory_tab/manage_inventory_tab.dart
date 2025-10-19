@@ -32,7 +32,6 @@ class _ManageInventoryTabState extends ConsumerState<ManageInventoryTab> {
 
   @override
   Widget build(BuildContext context) {
-    // NEW PROVIDER
     final List<InventoryItemLocal> filteredInventory = ref.watch(
       inventoryProvider,
     );
@@ -73,9 +72,7 @@ class _ManageInventoryTabState extends ConsumerState<ManageInventoryTab> {
               child: Text('Error loading data: ${asyncSnapshot.error}'),
             );
           } else if (asyncSnapshot.hasData) {
-            return
-            // ADD FILTER BAR AND DISPLAY INVENTORY COUNT REGARDLESS OF WHETHER OR NOT THERE'S INVENTORY ITEMS
-            Column(
+            return Column(
               children: [
                 SizedBox(
                   height: 30,
@@ -85,7 +82,8 @@ class _ManageInventoryTabState extends ConsumerState<ManageInventoryTab> {
                   ),
                 ),
                 SegmentedButton<InventoryFilter>(
-                  style: ButtonStyle(elevation: WidgetStatePropertyAll(100)),
+                  style: ButtonStyle(
+                    elevation: WidgetStatePropertyAll(100)),
                   multiSelectionEnabled: false,
                   selected: {selectedFilter},
                   onSelectionChanged: (Set<InventoryFilter> filters) {
