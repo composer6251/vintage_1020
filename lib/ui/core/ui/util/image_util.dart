@@ -49,7 +49,7 @@ Future<List<XFile>> pickMultipleImagesFromGallery() async {
 //**************** IMAGE SAVING ************
 
 // SAVING WITH FILE.copy
-Future<List<File>> saveXFileListAndReturnSavedPaths(List<XFile> xFiles) async {
+Future<List<File>> saveXFileListAndReturnSavedFiles(List<XFile> xFiles) async {
   // GET FILES FROM XFILES
   List<File> files = xFiles.map((xFile) => getFileFromXFile(xFile)).toList();
 

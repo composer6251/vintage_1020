@@ -17,16 +17,20 @@ class MyBooth {
   MyBooth.empty();
 
   MyBooth(
-    this.id,
     this.boothName,
     this.userEmail,
     this.currentBoothImageUrls,
     this.boothDeleteDate,
   );
 
+    MyBooth.initial(
+    this.boothName,
+    this.currentBoothImageUrls,
+  );
+
   MyBooth.fromLocalDB(Map<String, dynamic> data)
     : id = data['id'],
-      boothName = data?['boothName'],
+      boothName = data['boothName'] ?? 'My Booth',
       userEmail = data?['email'],
       currentBoothImageUrls = data?['currentBoothImageUrls'] != null
           ? List<String>.from(jsonDecode(data['currentBoothImageUrls']))

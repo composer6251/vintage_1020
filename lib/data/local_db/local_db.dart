@@ -13,12 +13,12 @@ final Uuid uuid = Uuid();
 final String? userEmail = FirebaseAuth.instance.currentUser?.email;
 
 // TABLE CREATION SQL
-final String buildCreateUserTableSql =
-    'CREATE TABLE IF NOT EXISTS user(id TEXT PRIMARY KEY,  boothName TEXT, email TEXT, currentBoothImageUrls TEXT, boothDeleteDate TEXT)';
+final String buildCreateBoothTableSql =
+    'CREATE TABLE IF NOT EXISTS my_booth(id TEXT PRIMARY KEY, boothName TEXT, email TEXT, currentBoothImageUrls TEXT, boothDeleteDate TEXT)';
 final String buildCreateInventoryTableSql =
     'CREATE TABLE IF NOT EXISTS inventory_item(id TEXT PRIMARY KEY, email TEXT, primaryImageUrl TEXT, itemDescription TEXT, itemImageUrls TEXT, itemCategory TEXT, itemPurchasePrice REAL, itemListingPrice REAL, itemSoldPrice REAL, itemPurchaseDate TEXT, itemListingDate TEXT, itemSoldDate TEXT, itemHeight REAL, itemWidth REAL, itemDepth REAL, itemDeleteDate TEXT, isCurrentBoothItem REAL)';
-final String buildCreateBoothTableSql =
-    'CREATE TABLE IF NOT EXISTS my_booth(id TEXT PRIMARY KEY, email TEXT, boothName TEXT, boothImages TEXT, boothDeleteDate REAL)';
+// final String buildCreateBoothTableSql =
+//     'CREATE TABLE IF NOT EXISTS my_booth(id TEXT PRIMARY KEY, email TEXT, boothName TEXT, boothImages TEXT, boothDeleteDate REAL)';
 
 // TABLE UPDATES
 final String addItemDeleteDateToItemInventorySql =
@@ -70,7 +70,7 @@ class LocalDb {
     );
 
     if (userTbl.isEmpty) {
-      await db.execute(buildCreateUserTableSql);
+      await db.execute(buildCreateBoothTableSql);
     }
     if (invTbl.isEmpty) {
       await db.execute(buildCreateInventoryTableSql);
@@ -202,7 +202,7 @@ class LocalDb {
   Future<void> addBoothToMyBoothTable(MyBooth booth) async {
     final db = await _getDatabase();
     booth.userEmail = userEmail;
-    booth.boothName ?? 'My Booth';
+    if(booth.boothName == null) 'My Booth';
     print('addBoothToMyBoothTable: ${booth.id}');
 
     db.insert(
@@ -225,15 +225,15 @@ class LocalDb {
         where: 'email = ? AND boothDeleteDate IS NULL',
         whereArgs: [userEmail],
       );
-      if (data.isEmpty) {
+      if (data.isNotEmpty) {
         currentBooth = data
             .map((booth) => MyBooth.fromLocalDB(booth))
             .toList()
             .first;
-      } else {
-        await addBoothToMyBoothTable(currentBooth);
-        currentBooth = await fetchCurrentBoothByEmail();
-      }
+       } //else {
+      //   await addBoothToMyBoothTable(currentBooth);
+      //   currentBooth = await fetchCurrentBoothByEmail();
+      // }
     } catch (ex) {
       print('Exception caught in fetchUserInventoryFromDb: $ex');
     }

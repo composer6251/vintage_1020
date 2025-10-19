@@ -34,9 +34,6 @@ class _AuthGateState extends ConsumerState<UserAuthGate> {
       } else if (user == null) {
         print('User signed out. Clearing API data in Riverpod.');
         _apiCallTriggeredForCurrentUser = false; // Reset flag for next login
-
-        // Clear any user-specific data from your providers when the user logs out
-        // ref.read(inventoryNotifierProvider.notifier).clearUserInventory();
       }
     });
   }

@@ -80,7 +80,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
 
     void submit() async {
       // save files
-      List<File> savedImages = await saveXFileListAndReturnSavedPaths(
+      List<File> savedImages = await saveXFileListAndReturnSavedFiles(
         selectedImages.value,
       );
       // get savedImages paths
