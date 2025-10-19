@@ -32,6 +32,13 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
   Widget build(BuildContext context) {
     final List<InventoryItemLocal> boothItems = ref.watch(inventoryProvider);
 
+    void showAddBoothDialog() {
+     showDialog(
+        context: context,
+        builder: (context) => CreateBoothWidget(),
+      );
+    }
+
     double inventoryCost = ref.watch(inventoryPurchaseCostProvider);
     double boothValue = ref.watch(inventoryPurchaseCostProvider);
 
@@ -101,22 +108,10 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
                     flexWeights: [3],
                   ),
                 ),
-                
-                // Flexible(
-                //   flex: 4,
-                //   child: ListView.builder(
-                //     scrollDirection: Axis.horizontal,
-                //     itemExtent: 200,
-                //     itemBuilder: (context, index) {
-                //       BoothItem(model: boothItems[index]);
-                //     },
-                //     itemCount: boothItems.length,
-                //   ),
-                // ),
               ],
               );
                 }
-                return Center(child: CreateBoothWidget());
+                return Center(child: ElevatedButton(onPressed: showAddBoothDialog, child: Text('Create Booth!')),);// Center(child: CreateBoothWidget());
             }
             ),
         );
