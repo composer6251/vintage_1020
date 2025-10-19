@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
-import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/carousel_image.dart';
 
 class HeroLayoutCard extends ConsumerWidget {
   HeroLayoutCard({

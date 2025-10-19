@@ -1,7 +1,5 @@
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-// import 'dart:io'; // Might not be strictly needed with XFile for basic display
 
 class ImageSelector extends StatefulWidget {
   const ImageSelector({super.key});
@@ -22,15 +20,11 @@ class _ImageSelectorState extends State<ImageSelector> {
     final List<XFile> pickedFiles = await picker.pickMultiImage();
 
     if (pickedFiles.isNotEmpty) {
-      // TODO: verify images and save to Firestore
-      // Images were successfully picked
       setState(() {
         _selectedImages = pickedFiles;
         print('${pickedFiles.length} images picked.');
-        // You can now display these images or prepare them for upload
       });
     } else {
-      // User canceled the picker or selected nothing
       print('No images selected.');
     }
   }

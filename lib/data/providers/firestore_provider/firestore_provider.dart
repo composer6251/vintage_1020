@@ -18,7 +18,6 @@ UserCollection? userCollectionId;
 class FirestoreProvider extends _$FirestoreProvider {
   @override
   List<InventoryItem> build() {
-    print('Getting user inventory async provider');
     return [];
   }
 

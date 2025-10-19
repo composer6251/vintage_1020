@@ -1,14 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:hooks_riverpod/legacy.dart';
-import 'package:path/path.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/data/local_db/local_db.dart';
-import 'package:vintage_1020/utils/globals.dart' as globals;
-import 'dart:developer' as dev;
 
 part 'inventory_provider.g.dart';
 
@@ -80,11 +73,6 @@ class InventoryLocal extends _$InventoryLocal {
     state.insert(indexOfItemToUpdate, newItem);
 
     LocalDb().updateInventoryItem(newItem);
-    // state = [
-    //   ...state,
-    //   for (final itemToUpdate in state)
-    //     if (itemToUpdate.id == newItem.id) newItem,
-    // ];
   }
 
   Future<int> deleteUserInventoryByEmail() async {

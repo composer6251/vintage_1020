@@ -1,8 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
 
-import 'package:vintage_1020/domain/my_booth/my_booth.dart';
-
 class InventoryItemLocal {
   String id; // default id on creation
   String? userEmail;
@@ -185,9 +183,6 @@ class InventoryItemLocal {
       "isCurrentBoothItem": isCurrentBoothItem,
     };
   }
-  // TODO: ADD GETTERS FOR DETERMINING IF LISTED/SOLD...etc
-
-
 
   List<File>? get getItemImages {
     return itemImageUrls?.map((url) => File(url)).toList();

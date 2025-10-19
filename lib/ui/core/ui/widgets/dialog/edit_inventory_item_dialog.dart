@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:vintage_1020/data/providers/current_inventory_item/current_inventory_item.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart'
     hide userEmail;
-import 'package:vintage_1020/data/local_db/local_db.dart';
-import 'package:vintage_1020/ui/core/ui/widgets/dialog/common/item_dimensions_input_widget.dart';
 import 'package:vintage_1020/utils/date_util.dart';
 
 class EditInventoryItemDialog extends ConsumerStatefulWidget {

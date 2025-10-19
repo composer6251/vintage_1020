@@ -4,7 +4,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:vintage_1020/data/providers/filter_notifier.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/add_inventory_form_dialog.dart';
-import 'package:vintage_1020/ui/core/ui/widgets/dialog/test_dialog.dart';
 import 'package:vintage_1020/ui/manage_inventory_tab/manage_inventory_tab.dart';
 import 'package:vintage_1020/ui/activity_chart_screen/activity_chart.dart';
 import 'package:vintage_1020/ui/my_booth_tab/my_booth_tab.dart';
@@ -35,9 +34,6 @@ class _HomeScreenState extends ConsumerState<UiContainer> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        // appBar: AppBar(actions: [
-        //   TextButton(onPressed: dropInventoryItemTable, child: Text('Drop Inv table'))
-        // ],),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -60,7 +56,6 @@ class TabViewsContent extends ConsumerWidget {
   static const List<Tab> myTabs = <Tab>[
     Tab(text: 'Manage', icon: Icon(Icons.chair_rounded)),
     Tab(text: 'My Booth', icon: Icon(Icons.storefront)),
-    Tab(text: 'Edit', icon: Icon(Icons.price_check)),
     Tab(text: 'Sales', icon: Icon(Icons.bar_chart)),
   ];
 
@@ -115,7 +110,6 @@ class TabViewsContent extends ConsumerWidget {
             children: [
               ManageInventoryTab(),
               MyBoothTab(),
-              TestDialog(),
               ActivityChart(isShowingMainData: true),
             ],
           ),
