@@ -203,7 +203,7 @@ class LocalDb {
     final db = await _getDatabase();
     booth.userEmail = userEmail;
     if(booth.boothName == null) 'My Booth';
-    print('addBoothToMyBoothTable: ${booth.id}');
+    print('addBoothToMyBoothTable: ${booth.id} with urls ${booth.currentBoothImageUrls?.first}');
 
     db.insert(
       myBoothTable,
@@ -235,7 +235,7 @@ class LocalDb {
       //   currentBooth = await fetchCurrentBoothByEmail();
       // }
     } catch (ex) {
-      print('Exception caught in fetchUserInventoryFromDb: $ex');
+      print('Exception caught in fetchCurrentBoothByEmail: $ex');
     }
 
     return currentBooth;

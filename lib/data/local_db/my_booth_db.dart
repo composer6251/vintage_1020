@@ -73,7 +73,7 @@ class LocalDb {
       );
       booths = data.map((row) => {MyBooth.fromLocalDB(row)}).toList();
     } catch(ex) {
-      print('Exception caught in fetchUserInventoryFromDb: $ex');
+      print('Exception caught in fetchCurrentBoothFromDb: $ex');
     }
 
     // Create List from the List<Set> returned

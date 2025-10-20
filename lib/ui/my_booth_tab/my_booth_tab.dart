@@ -18,8 +18,8 @@ class MyBoothTab extends ConsumerStatefulWidget {
 }
 
 class _MyBoothTabState extends ConsumerState<MyBoothTab> {
-
   late final Future<MyBooth> myBoothFuture;
+  late MyBooth booth;
 
   @override
   void initState() {
@@ -33,10 +33,9 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
     final List<InventoryItemLocal> boothItems = ref.watch(inventoryProvider);
 
     void showAddBoothDialog() {
-     showDialog(
-        context: context,
-        builder: (context) => CreateBoothWidget(),
-      );
+      showDialog(context: context, builder: (context) => CreateBoothWidget());
+
+      booth = ref.watch(myBoothProvider);
     }
 
     double inventoryCost = ref.watch(inventoryPurchaseCostProvider);
@@ -44,80 +43,77 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
 
     return Scaffold(
       body: FutureBuilder<MyBooth>(
-        future: myBoothFuture, 
+        future: myBoothFuture,
         builder: (context, snapshot) {
-          if(snapshot.connectionState == ConnectionState.waiting) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
-          } else if(snapshot.hasError) {
+          } else if (snapshot.hasError) {
             Center(child: CreateBoothWidget());
-          } else if(snapshot.hasData) {
-            return
-              boothItems.isEmpty 
-              ? 
-              Center(child: CreateBoothWidget())
-              : 
-              Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Flexible(
-                  flex: 2,
-                  child: Card(
-                    elevation: 3.0,
-                    shadowColor: Colors.blueAccent,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(
-                          style: TextStyle(
-                            fontSize: 20, 
-                            fontStyle: FontStyle.italic), 
-                            'Items:${boothItems.length}'),
-                        Text(
-                          style: 
-                          TextStyle(
-                            fontSize: 20, 
-                            fontStyle: FontStyle.italic), 
-                            'Cost: ${NumberFormat.currency(
-                                  symbol: '\$',
-                                ).format(inventoryCost)}'),
-                        Text(
-                          style: 
-                          TextStyle(
-                            fontSize: 20, 
-                            fontStyle: FontStyle.italic), 
-                            'Value: ${NumberFormat.currency(
-                                  symbol: '\$',
-                                ).format(boothValue)}'),
-                      ],
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 4,
-                  child: InventoryCarousel(
-                    inventoryItems: boothItems,
-                    flexWeights: [3],
-                  ),
-                ),
-                        // TODO boothItems is filtered inventory by isCurrentBoothItem. Need to make boothImages to be 
-                Expanded(
-                  flex: 4,
-                  child: InventoryCarousel(
-                    inventoryItems: boothItems,
-                    flexWeights: [3],
-                  ),
-                ),
-              ],
-              );
-                }
-                return Center(child: ElevatedButton(onPressed: showAddBoothDialog, child: Text('Create Booth!')),);// Center(child: CreateBoothWidget());
-            }
+          } else if (snapshot.hasData) {
+            return boothItems.isEmpty
+                ? Center(child: CreateBoothWidget())
+                : Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Flexible(
+                        flex: 2,
+                        child: Card(
+                          elevation: 3.0,
+                          shadowColor: Colors.blueAccent,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Text(
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                                'Items:${boothItems.length}',
+                              ),
+                              Text(
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                                'Cost: ${NumberFormat.currency(symbol: '\$').format(inventoryCost)}',
+                              ),
+                              Text(
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                                'Value: ${NumberFormat.currency(symbol: '\$').format(boothValue)}',
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 4,
+                        child: InventoryCarousel(
+                          inventoryItems: boothItems,
+                          flexWeights: [3],
+                        ),
+                      ),
+                      Expanded(
+                        flex: 4,
+                        child: InventoryCarousel(
+                          inventoryItems: boothItems,
+                          flexWeights: [3],
+                        ),
+                      ),
+                    ],
+                  );
+          }
+          return Center(
+            child: ElevatedButton(
+              onPressed: showAddBoothDialog,
+              child: Text('Create Booth!'),
             ),
-        );
-      }
+          ); // Center(child: CreateBoothWidget());
+        },
+      ),
+    );
   }
-
-
-  
-
+}

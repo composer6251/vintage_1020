@@ -32,9 +32,9 @@ class MyBooth {
     : id = data['id'],
       boothName = data['boothName'] ?? 'My Booth',
       userEmail = data?['email'],
-      currentBoothImageUrls = data?['currentBoothImageUrls'] != null
+      currentBoothImageUrls = data['currentBoothImageUrls'] != null
           ? List<String>.from(jsonDecode(data['currentBoothImageUrls']))
-          : [],
+          : null,
       boothDeleteDate = data['boothDeleteDate'] != null
           ? DateTime.parse(data['boothDeleteDate']) as DateTime?
           : null;
