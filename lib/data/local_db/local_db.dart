@@ -227,29 +227,31 @@ class LocalDb {
     return currentBooth;
   }
 
-    Future<MyBooth> fetchCurrentBoothWithInventoryByEmail() async {
-    final db = await _getDatabase();
+  //   Future<MyBooth> fetchCurrentBoothWithInventoryByEmail() async {
+  //   final db = await _getDatabase();
 
-    print('fetchingBoothByEmail: $userEmail');
+  //   print('fetchingBoothByEmail: $userEmail');
 
-    MyBooth currentBooth = MyBooth.empty();
+  //   MyBooth currentBooth = MyBooth.empty();
 
-    try {
-      final data = await db.query(
-        myBoothTable,
-        where: 'email = ? AND boothDeleteDate IS NULL',
-        whereArgs: [userEmail],
-      );
-      if (data.isNotEmpty) {
-        currentBooth = data
-            .map((booth) => MyBooth.fromLocalDB(booth))
-            .toList()
-            .first;
-        } 
-    } catch (ex) {
-      print('Exception caught in fetchCurrentBoothByEmail: $ex');
-    }
-  }
+  //   try {
+  //     final data = await db.query(
+  //       myBoothTable,
+  //       where: 'email = ? AND boothDeleteDate IS NULL',
+  //       whereArgs: [userEmail],
+  //     );
+  //     if (data.isNotEmpty) {
+  //       currentBooth = data
+  //           .map((booth) => MyBooth.fromLocalDB(booth))
+  //           .toList()
+  //           .first;
+  //       } 
+  //   } catch (ex) {
+  //     print('Exception caught in fetchCurrentBoothByEmail: $ex');
+  //   }
+  // }
+
+  // Future<List<InventoryItemLocal>> getInventoryForBooth();
 
   Future<void> addBoothToMyBoothTable(MyBooth booth) async {
     final db = await _getDatabase();

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -33,7 +35,7 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
 
     // final List<InventoryItemLocal> boothItems = ref.watch(inventoryProvider);
     final MyBooth? currentBooth = ref.watch(myBoothProvider);
-    List<InventoryItemLocal>? inventory = currentBooth?.boothInventory;
+    List<InventoryItemLocal>? inventory = ref.watch(inventoryProvider);
 
     void showAddBoothDialog() {
       showDialog(context: context, builder: (context) => CreateBoothWidget());
@@ -43,8 +45,7 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
     double boothValue = ref.watch(inventoryPurchaseCostProvider);
 
     return Scaffold(
-      
-      body: FutureBuilder<MyBooth>(
+        body: FutureBuilder<MyBooth>(
         future: myBoothFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -53,7 +54,6 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
             Center(child: Text('Error Fetching booth: ${snapshot.error.toString()}'));
           } 
             return
-
                 Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
@@ -104,6 +104,15 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
                         child: InventoryCarousel(
                           inventoryItems: inventory ?? [],
                           flexWeights: [3],
+                        ),
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          itemExtent: 200,
+                          itemBuilder: (context, index) {
+                            inventory.map((item) => item.getPrimaryImage((item) => Image.file(item.))
+                          },
+                          itemCount: inventory?.length,
                         ),
                       ),
                     ],
