@@ -3,14 +3,16 @@ import 'dart:io';
 import 'dart:convert';
 
 import 'package:uuid/uuid.dart';
+import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 
 final Uuid uuid = Uuid();
 
 /// DATA CLASS FOR MY_BOOTH_TAB
 class MyBooth {
-  String id = uuid.v6();
+  String? id;
   String? boothName;
   String? userEmail;
+  List<InventoryItemLocal>? boothInventory;
   List<String>? currentBoothImageUrls;
   DateTime? boothDeleteDate;
 

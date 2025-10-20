@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:vintage_1020/data/providers/filter_notifier.dart';
 import 'package:vintage_1020/data/providers/inventory_notifier.dart';
 import 'package:vintage_1020/data/providers/item_metadata/item_purchase_cost.dart';
+import 'package:vintage_1020/data/providers/my_booth_provider/my_booth_initial_notifier.dart';
 import 'package:vintage_1020/data/providers/my_booth_provider/my_booth_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/domain/my_booth/my_booth.dart';
@@ -18,8 +19,7 @@ class MyBoothTab extends ConsumerStatefulWidget {
 }
 
 class _MyBoothTabState extends ConsumerState<MyBoothTab> {
-  late final Future<MyBooth> myBoothFuture;
-  late MyBooth booth;
+  late Future<MyBooth> myBoothFuture;
 
   @override
   void initState() {
@@ -30,31 +30,34 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
 
   @override
   Widget build(BuildContext context) {
-    final List<InventoryItemLocal> boothItems = ref.watch(inventoryProvider);
+
+    // final List<InventoryItemLocal> boothItems = ref.watch(inventoryProvider);
+    final MyBooth? currentBooth = ref.watch(myBoothProvider);
+    List<InventoryItemLocal>? inventory = currentBooth?.boothInventory;
 
     void showAddBoothDialog() {
       showDialog(context: context, builder: (context) => CreateBoothWidget());
-
-      booth = ref.watch(myBoothProvider);
     }
 
     double inventoryCost = ref.watch(inventoryPurchaseCostProvider);
     double boothValue = ref.watch(inventoryPurchaseCostProvider);
 
     return Scaffold(
+      
       body: FutureBuilder<MyBooth>(
         future: myBoothFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            Center(child: CreateBoothWidget());
-          } else if (snapshot.hasData) {
-            return boothItems.isEmpty
-                ? Center(child: CreateBoothWidget())
-                : Column(
+            Center(child: Text('Error Fetching booth: ${snapshot.error.toString()}'));
+          } 
+            return
+
+                Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
+                      Text(style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28), currentBooth?.boothName ?? 'waiting'),
                       Flexible(
                         flex: 2,
                         child: Card(
@@ -66,21 +69,21 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
                             children: [
                               Text(
                                 style: TextStyle(
-                                  fontSize: 20,
+                                  fontSize: 12,
                                   fontStyle: FontStyle.italic,
                                 ),
-                                'Items:${boothItems.length}',
+                                'Items:${currentBooth?.boothName}',
                               ),
                               Text(
                                 style: TextStyle(
-                                  fontSize: 20,
+                                  fontSize: 12,
                                   fontStyle: FontStyle.italic,
                                 ),
                                 'Cost: ${NumberFormat.currency(symbol: '\$').format(inventoryCost)}',
                               ),
                               Text(
                                 style: TextStyle(
-                                  fontSize: 20,
+                                  fontSize: 12,
                                   fontStyle: FontStyle.italic,
                                 ),
                                 'Value: ${NumberFormat.currency(symbol: '\$').format(boothValue)}',
@@ -89,29 +92,23 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
                           ),
                         ),
                       ),
+                      // Expanded(
+                      //   flex: 4,
+                      //   child: InventoryCarousel(
+                      //     inventoryItems: currentBooth,
+                      //     flexWeights: [3],
+                      //   ),
+                      // ),
                       Expanded(
                         flex: 4,
                         child: InventoryCarousel(
-                          inventoryItems: boothItems,
-                          flexWeights: [3],
-                        ),
-                      ),
-                      Expanded(
-                        flex: 4,
-                        child: InventoryCarousel(
-                          inventoryItems: boothItems,
+                          inventoryItems: inventory ?? [],
                           flexWeights: [3],
                         ),
                       ),
                     ],
                   );
-          }
-          return Center(
-            child: ElevatedButton(
-              onPressed: showAddBoothDialog,
-              child: Text('Create Booth!'),
-            ),
-          ); // Center(child: CreateBoothWidget());
+        
         },
       ),
     );

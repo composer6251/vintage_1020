@@ -25,9 +25,9 @@ class _CreateBoothWidgetState extends ConsumerState<CreateBoothWidget> {
       );
       List<String> savedFilesPaths = getPathsForSavedFiles(savedFiles);
 
-      MyBooth.initial(stateBoothName, savedFilesPaths);
+      MyBooth boothToInsert = MyBooth.initial(stateBoothName, savedFilesPaths);
 
-      ref.read(myBoothProvider.notifier).insertInitalUserBooth();
+      ref.read(myBoothProvider.notifier).createBoothForUser(boothToInsert);
     }
 
     void addBooth() {

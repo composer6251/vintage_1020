@@ -96,8 +96,6 @@ class LocalDb {
   Future<List<InventoryItemLocal>> fetchUserInventoryFromDb() async {
     final db = await _getDatabase();
 
-    printAllRowsInTable();
-
     List<Set<InventoryItemLocal>> inventory = [];
     try {
       final data = await db.query(
@@ -199,18 +197,6 @@ class LocalDb {
   }
 
   /*************BOOTH TABLE UPDATES***********/
-  Future<void> addBoothToMyBoothTable(MyBooth booth) async {
-    final db = await _getDatabase();
-    booth.userEmail = userEmail;
-    if(booth.boothName == null) 'My Booth';
-    print('addBoothToMyBoothTable: ${booth.id} with urls ${booth.currentBoothImageUrls?.first}');
-
-    db.insert(
-      myBoothTable,
-      booth.toMapForLocalDB(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-  }
 
   Future<MyBooth> fetchCurrentBoothByEmail() async {
     final db = await _getDatabase();
@@ -239,5 +225,66 @@ class LocalDb {
     }
 
     return currentBooth;
+  }
+
+    Future<MyBooth> fetchCurrentBoothWithInventoryByEmail() async {
+    final db = await _getDatabase();
+
+    print('fetchingBoothByEmail: $userEmail');
+
+    MyBooth currentBooth = MyBooth.empty();
+
+    try {
+      final data = await db.query(
+        myBoothTable,
+        where: 'email = ? AND boothDeleteDate IS NULL',
+        whereArgs: [userEmail],
+      );
+      if (data.isNotEmpty) {
+        currentBooth = data
+            .map((booth) => MyBooth.fromLocalDB(booth))
+            .toList()
+            .first;
+        } 
+    } catch (ex) {
+      print('Exception caught in fetchCurrentBoothByEmail: $ex');
+    }
+  }
+
+  Future<void> addBoothToMyBoothTable(MyBooth booth) async {
+    final db = await _getDatabase();
+    booth.userEmail = userEmail;
+    if(booth.boothName == null) 'My Booth';
+    print('addBoothToMyBoothTable: ${booth.id} with urls ${booth.currentBoothImageUrls?.first}');
+
+    db.insert(
+      myBoothTable,
+      booth.toMapForLocalDB(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<void> createBoothForUser(MyBooth booth) async {
+    final db = await _getDatabase();
+    booth.userEmail = userEmail;
+    if(booth.boothName == null) 'My Booth';
+
+    await softDeleteBoothsByUserEmail();
+
+    db.insert(
+      myBoothTable,
+      booth.toMapForLocalDB(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<void> softDeleteBoothsByUserEmail() async {
+    final db = await _getDatabase();
+
+    final int deletedId = await db.update(myBoothTable, {
+      'boothDeleteDate': DateTime.now().toIso8601String(),
+    }, where: 'email = "$userEmail"');
+
+    print('$deletedId Booths deleted for $userEmail');
   }
 }
