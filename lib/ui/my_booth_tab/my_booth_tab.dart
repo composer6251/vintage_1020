@@ -63,7 +63,9 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
           } else if (snapshot.hasError) {
             Center(child: Text('Error Fetching booth: ${snapshot.error.toString()}'));
           } 
-            return
+            return currentBooth == null ?
+                TextButton(onPressed: showAddBoothDialog, child: Text('Create a Booth'))
+                :
                 Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [

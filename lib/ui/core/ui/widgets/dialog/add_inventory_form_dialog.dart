@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:vintage_1020/data/providers/my_booth_provider/my_booth_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart' hide userEmail;
 import 'package:vintage_1020/data/local_db/local_db.dart';
+import 'package:vintage_1020/domain/my_booth/my_booth.dart';
 import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
 class AddInventoryFormDialog extends HookConsumerWidget {
   const AddInventoryFormDialog({super.key});
@@ -79,6 +81,11 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     }
 
     void submit() async {
+      
+      MyBooth? currentBooth = ref.read(myBoothProvider.notifier).build();
+
+      showAdaptiveDialog(context: context, builder: builder)
+       
       // save files
       List<File> savedImages = await saveXFileListAndReturnSavedFiles(
         selectedImages.value,
