@@ -14,6 +14,19 @@ final String appNameForImages = 'Vintage_1020';
 
 /// ************** IMAGE SELECTING *********
 
+Future<String> takePhotoAndReturnUrl() async {
+    // Take photo
+    XFile? photo = await takeCameraPhoto();
+    if(photo == null) return '';
+    // Save photo
+    File file = await saveSingleImageFile(File(photo.path));
+
+    String savedFilePath = file.path;
+    print('Saved boothImage with path: $savedFilePath');
+
+    return savedFilePath;
+}
+
 /// OPEN CAMERA AND RETURN PHOTO TAKEN
 Future<XFile?> takeCameraPhoto() async {
   // INSTANTIATE IMAGE PICKER
@@ -59,6 +72,17 @@ Future<List<File>> saveXFileListAndReturnSavedFiles(List<XFile> xFiles) async {
   return pathsOfSavedFiles;
 }
 
+// SAVING WITH FILE.copy
+Future<File> saveSingleXFile(XFile xFile) async {
+  // GET FILES FROM XFILES
+  File file = getFileFromXFile(xFile);
+
+  // COPY FILES
+  File pathOfSavedFile = await saveSingleImageFile(file);
+
+  return pathOfSavedFile;
+}
+
 List<String> getPathsForSavedFiles(List<File> savedFiles) {
   List<String> paths = [];
   for (File savedFile in savedFiles) {
@@ -72,7 +96,7 @@ Future<List<File>> saveFiles(List<File> imageFiles) async {
   List<File> copiedFiles = [];
 
   for (File imageFile in imageFiles) {
-    final File copiedFile = await copySingleImageFile(imageFile);
+    final File copiedFile = await saveSingleImageFile(imageFile);
 
     copiedFiles.add(copiedFile);
   }
@@ -86,7 +110,7 @@ Future<List<File>> saveFiles(List<File> imageFiles) async {
 }
 
 /// COPIES A FILE TO LOCAL STORAGE AND RETURNS IT
-Future<File> copySingleImageFile(File image) async {
+Future<File> saveSingleImageFile(File image) async {
   // GET DIRECTORY TO SAVE TO
   final Directory appDir = await sys_path.getApplicationDocumentsDirectory();
   // GET FILE NAME

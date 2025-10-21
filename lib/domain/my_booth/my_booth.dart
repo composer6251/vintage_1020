@@ -13,7 +13,7 @@ class MyBooth {
   String? boothName;
   String? userEmail;
   List<InventoryItemLocal>? boothInventory;
-  List<String>? currentBoothImageUrls;
+  List<String>? currentBoothImageUrls = [];
   DateTime? boothDeleteDate;
 
   MyBooth.empty();
