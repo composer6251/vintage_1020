@@ -12,6 +12,7 @@ import 'package:vintage_1020/data/providers/inventory_provider/inventory_provide
 import 'package:vintage_1020/data/local_db/local_db.dart';
 import 'package:vintage_1020/domain/my_booth/my_booth.dart';
 import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
+import 'package:vintage_1020/ui/core/ui/widgets/dialog/common/dropdown_menu_item_widget.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/common/text_dialog.dart';
 
 class AddInventoryFormDialog extends HookConsumerWidget {
@@ -22,6 +23,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     // useMemoized to prevent new instances of formKey
     final formKey = useMemoized(() => GlobalKey<FormState>());
 
+    final boothNameController = useTextEditingController();
     final itemPurchasePriceController = useTextEditingController();
     final itemListingPriceController = useTextEditingController();
     final itemHeightController = useTextEditingController();
@@ -80,29 +82,12 @@ class AddInventoryFormDialog extends HookConsumerWidget {
       purchaseDate.value = pickedDate;
     }
 
-    void openTextDialog(
-      TextEditingController controller,
-      BuildContext context,
-    ) {
-      showDialog(
-        context: context,
-        builder: (context) => TextDialog(textController: controller),
-      );
-    }
-
     void closeDialog() {
       Navigator.of(context).pop();
     }
-
     void submit() async {
-      MyBooth? currentBooth = ref.read(myBoothProvider.notifier).build();
+      
 
-      if (currentBooth == null) {
-        TextEditingController boothNameController = TextEditingController();
-        print('boothName value: ${boothNameController.text}');
-
-        openTextDialog(boothNameController, context);
-      }
 
       // save files
       List<File> savedImages = await saveXFileListAndReturnSavedFiles(
@@ -186,6 +171,11 @@ class AddInventoryFormDialog extends HookConsumerWidget {
               ),
             ),
             TextFormField(
+              onEditingComplete: () {
+                if(itemListingPriceController.text.isNotEmpty){
+                  addToBooth.value = true;
+                }
+              },
               controller: itemListingPriceController,
               decoration: const InputDecoration(
                 prefixText: '\$',
@@ -272,6 +262,8 @@ class AddInventoryFormDialog extends HookConsumerWidget {
                 ),
               ],
             ),
+            // If purchase price
+            DropdownMenuItemWidget(),
           ],
         ),
       ),

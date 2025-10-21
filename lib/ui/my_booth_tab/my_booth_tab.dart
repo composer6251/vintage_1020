@@ -7,6 +7,7 @@ import 'package:vintage_1020/data/providers/filter_notifier.dart';
 import 'package:vintage_1020/data/providers/inventory_notifier.dart';
 import 'package:vintage_1020/data/providers/item_metadata/item_purchase_cost.dart';
 import 'package:vintage_1020/data/providers/my_booth_provider/my_booth_notifier.dart';
+import 'package:vintage_1020/data/providers/my_booth_provider/my_booths_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/domain/my_booth/my_booth.dart';
 import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
@@ -21,13 +22,13 @@ class MyBoothTab extends ConsumerStatefulWidget {
 }
 
 class _MyBoothTabState extends ConsumerState<MyBoothTab> {
-  late Future<MyBooth> myBoothFuture;
+  late Future<List<MyBooth>> myBoothFuture;
 
   @override
   void initState() {
     super.initState();
 
-    myBoothFuture = ref.read(myBoothProvider.notifier).fetchUserBooth();
+    myBoothFuture = ref.read(myBoothsProvider.notifier).fetchUserBooths();
   }
 
   @override
@@ -35,14 +36,16 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
 
 
     // final List<InventoryItemLocal> boothItems = ref.watch(inventoryProvider);
-    final MyBooth? currentBooth = ref.watch(myBoothProvider);
+    final List<MyBooth>? currentBooths = ref.watch(myBoothsProvider).toList();
+    final List<InventoryItemLocal>? allInventory = ref.watch(inventoryProvider);
+    final MyBooth currentBooth = currentBooths!.first;
     List<String>? boothImageUrls = currentBooth?.currentBoothImageUrls ?? [];
 
     List<InventoryItemLocal>? inventory = ref.watch(inventoryProvider);
 
-    void showAddBoothDialog() {
-      showDialog(context: context, builder: (context) => CreateBoothWidget());
-    }
+    // void showAddBoothDialog() {
+    //   showDialog(context: context, builder: (context) => CreateBoothWidget());
+    // }
 
     double inventoryCost = ref.watch(inventoryPurchaseCostProvider);
     double boothValue = ref.watch(inventoryPurchaseCostProvider);
@@ -55,7 +58,7 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
     }
 
     return Scaffold(
-        body: FutureBuilder<MyBooth>(
+        body: FutureBuilder<List<MyBooth>>(
         future: myBoothFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -63,9 +66,10 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
           } else if (snapshot.hasError) {
             Center(child: Text('Error Fetching booth: ${snapshot.error.toString()}'));
           } 
-            return currentBooth == null ?
-                TextButton(onPressed: showAddBoothDialog, child: Text('Create a Booth'))
-                :
+            return 
+            // currentBooth == null ?
+            //     TextButton(onPressed: showAddBoothDialog, child: Text('Create a Booth'))
+            //     :
                 Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [

@@ -9,14 +9,15 @@ final Uuid uuid = Uuid();
 
 /// DATA CLASS FOR MY_BOOTH_TAB
 class MyBooth {
-  String? id;
-  String? boothName;
+  late String id;
+  String boothName;
   String? userEmail;
-  List<InventoryItemLocal>? boothInventory;
+  List<String>? boothInventoryIds = [];
+  List<InventoryItemLocal>? boothInventory = [];
   List<String>? currentBoothImageUrls = [];
   DateTime? boothDeleteDate;
 
-  MyBooth.empty();
+  // MyBooth.empty();
 
   MyBooth(
     this.boothName,
