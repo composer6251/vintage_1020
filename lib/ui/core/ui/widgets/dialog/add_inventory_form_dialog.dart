@@ -4,12 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 import 'package:vintage_1020/data/providers/my_booth_provider/my_booth_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
-import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart' hide userEmail;
+import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart'
+    hide userEmail;
 import 'package:vintage_1020/data/local_db/local_db.dart';
 import 'package:vintage_1020/domain/my_booth/my_booth.dart';
 import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
+import 'package:vintage_1020/ui/core/ui/widgets/dialog/common/text_dialog.dart';
+
 class AddInventoryFormDialog extends HookConsumerWidget {
   const AddInventoryFormDialog({super.key});
 
@@ -45,8 +49,8 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     /// TAKE PHOTO ON PHOTO AND USE FOR ITEM
     Future<void> takePhoto() async {
       final XFile? photoTaken = await takeCameraPhoto();
-      
-      if(photoTaken == null) return;
+
+      if (photoTaken == null) return;
 
       // UPDATE STATE. PASS IN IMAGES AS LIST
       updateSelectedImagesState([photoTaken]);
@@ -55,8 +59,8 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     Future<void> selectImages() async {
       List<XFile> selectedImagesFromGallery =
           await pickMultipleImagesFromGallery();
-      
-      if(selectedImagesFromGallery.isEmpty) return;
+
+      if (selectedImagesFromGallery.isEmpty) return;
 
       updateSelectedImagesState(selectedImagesFromGallery);
     }
@@ -76,16 +80,30 @@ class AddInventoryFormDialog extends HookConsumerWidget {
       purchaseDate.value = pickedDate;
     }
 
-    void closeDialog(){
-        Navigator.of(context).pop();
+    void openTextDialog(
+      TextEditingController controller,
+      BuildContext context,
+    ) {
+      showDialog(
+        context: context,
+        builder: (context) => TextDialog(textController: controller),
+      );
+    }
+
+    void closeDialog() {
+      Navigator.of(context).pop();
     }
 
     void submit() async {
-      
       MyBooth? currentBooth = ref.read(myBoothProvider.notifier).build();
 
-      showAdaptiveDialog(context: context, builder: builder)
-       
+      if (currentBooth == null) {
+        TextEditingController boothNameController = TextEditingController();
+        print('boothName value: ${boothNameController.text}');
+
+        openTextDialog(boothNameController, context);
+      }
+
       // save files
       List<File> savedImages = await saveXFileListAndReturnSavedFiles(
         selectedImages.value,
@@ -102,11 +120,11 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         defaultItemImageUrl.value = itemImageUrls.value.first;
       }
       // If user selected add to booth but did NOT select a listing date, default listing date to DateTime.now
-      if(listingDate.value == null && addToBooth.value) {
+      if (listingDate.value == null && addToBooth.value) {
         listingDate.value = DateTime.now();
       }
       final InventoryItemLocal itemToDB = InventoryItemLocal.toLocalDb(
-        uuid.v6(),
+        Uuid().v6(),
         userEmail,
         defaultItemImageUrl.value,
         '',
@@ -123,7 +141,6 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         double.tryParse(itemDepthController.text),
         null,
         addToBooth.value ? 1.0 : 0.0,
-
       );
 
       if (formKey.currentState?.validate() ?? false) {
@@ -165,14 +182,15 @@ class AddInventoryFormDialog extends HookConsumerWidget {
               ),
               onPressed: () => selectDate('Purchase'),
               child: Text(
-                    '${purchaseDate.value.toLocal().month}/${purchaseDate.value.toLocal().day}/${purchaseDate.value.toLocal().year}',
+                '${purchaseDate.value.toLocal().month}/${purchaseDate.value.toLocal().day}/${purchaseDate.value.toLocal().year}',
               ),
             ),
             TextFormField(
               controller: itemListingPriceController,
               decoration: const InputDecoration(
                 prefixText: '\$',
-                labelText: 'Listing Price'),
+                labelText: 'Listing Price',
+              ),
               keyboardType: TextInputType.numberWithOptions(decimal: true),
             ),
             OutlinedButton(
@@ -181,71 +199,82 @@ class AddInventoryFormDialog extends HookConsumerWidget {
               ),
               onPressed: () => selectDate('Listing'),
               child: Text(
-              listingDate.value == null 
-              ?
-              'Select Listing Date'
-              :
-              '${listingDate.value?.toLocal().month}/${listingDate.value?.toLocal().day}/${listingDate.value?.toLocal().year}',
+                listingDate.value == null
+                    ? 'Select Listing Date'
+                    : '${listingDate.value?.toLocal().month}/${listingDate.value?.toLocal().day}/${listingDate.value?.toLocal().year}',
               ),
             ),
-      Flex(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        direction: Axis.horizontal,
-        children: [
-          SizedBox(
-            width: 60,
-            child: TextFormField(
-              controller: itemHeightController,
-              decoration: const InputDecoration(
-                fillColor: Colors.blue,
-                floatingLabelAlignment: FloatingLabelAlignment.start,
-                labelText: 'Height',
-                labelStyle: TextStyle(fontSize: 12)
-              ),
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-            ),
-          ),
-          SizedBox(
-            width: 60,
-            child: TextFormField(
-              controller: itemWidthController,
-              decoration: const InputDecoration(
-                fillColor: Colors.blue,
-                labelText: 'Width',
-                floatingLabelAlignment: FloatingLabelAlignment.start,
-                labelStyle: TextStyle(fontSize: 12)
-              ),
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-            ),
-          ),
-          SizedBox(
-            width: 60,
-            child: TextFormField(
-              controller: itemDepthController,
-              decoration: const InputDecoration(
-                fillColor: Colors.blue,
-                labelText: 'Depth',
-                floatingLabelAlignment: FloatingLabelAlignment.start,
-                labelStyle: TextStyle(fontSize: 12)
-              ),
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              ),
-            ),
-            ],
+            Flex(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              direction: Axis.horizontal,
+              children: [
+                SizedBox(
+                  width: 60,
+                  child: TextFormField(
+                    controller: itemHeightController,
+                    decoration: const InputDecoration(
+                      fillColor: Colors.blue,
+                      floatingLabelAlignment: FloatingLabelAlignment.start,
+                      labelText: 'Height',
+                      labelStyle: TextStyle(fontSize: 12),
+                    ),
+                    keyboardType: TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 60,
+                  child: TextFormField(
+                    controller: itemWidthController,
+                    decoration: const InputDecoration(
+                      fillColor: Colors.blue,
+                      labelText: 'Width',
+                      floatingLabelAlignment: FloatingLabelAlignment.start,
+                      labelStyle: TextStyle(fontSize: 12),
+                    ),
+                    keyboardType: TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 60,
+                  child: TextFormField(
+                    controller: itemDepthController,
+                    decoration: const InputDecoration(
+                      fillColor: Colors.blue,
+                      labelText: 'Depth',
+                      floatingLabelAlignment: FloatingLabelAlignment.start,
+                      labelStyle: TextStyle(fontSize: 12),
+                    ),
+                    keyboardType: TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
+                  ),
+                ),
+              ],
             ),
             Row(
               children: [
                 Text(
-                  style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-                  'Add to booth?'
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.bold,
                   ),
-                Checkbox(value: addToBooth.value, onChanged: (value) => addToBooth.value = value ?? false),
+                  'Add to booth?',
+                ),
+                Checkbox(
+                  value: addToBooth.value,
+                  onChanged: (value) => addToBooth.value = value ?? false,
+                ),
               ],
-            )
-            ],
-          ),
+            ),
+          ],
         ),
+      ),
       actions: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

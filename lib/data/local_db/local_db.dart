@@ -216,7 +216,7 @@ class LocalDb {
             .map((booth) => MyBooth.fromLocalDB(booth))
             .toList()
             .first;
-       } //else {
+      } //else {
       //   await addBoothToMyBoothTable(currentBooth);
       //   currentBooth = await fetchCurrentBoothByEmail();
       // }
@@ -245,7 +245,7 @@ class LocalDb {
   //           .map((booth) => MyBooth.fromLocalDB(booth))
   //           .toList()
   //           .first;
-  //       } 
+  //       }
   //   } catch (ex) {
   //     print('Exception caught in fetchCurrentBoothByEmail: $ex');
   //   }
@@ -256,8 +256,10 @@ class LocalDb {
   Future<void> addBoothToMyBoothTable(MyBooth booth) async {
     final db = await _getDatabase();
     booth.userEmail = userEmail;
-    if(booth.boothName == null) 'My Booth';
-    print('addBoothToMyBoothTable: ${booth.id} with urls ${booth.currentBoothImageUrls?.first}');
+    if (booth.boothName == null) 'My Booth';
+    print(
+      'addBoothToMyBoothTable: ${booth.id} with urls ${booth.currentBoothImageUrls?.first}',
+    );
 
     db.insert(
       myBoothTable,
@@ -269,7 +271,7 @@ class LocalDb {
   Future<void> createBoothForUser(MyBooth booth) async {
     final db = await _getDatabase();
     booth.userEmail = userEmail;
-    if(booth.boothName == null) 'My Booth';
+    if (booth.boothName == null) 'My Booth';
 
     await softDeleteBoothsByUserEmail();
 

@@ -1,42 +1,36 @@
+import 'package:flutter/material.dart';
 
+class TextDialog extends StatefulWidget {
+  const TextDialog({super.key, required this.textController});
 
+  final TextEditingController textController;
 
-    import 'package:flutter/material.dart';
+  @override
+  State<TextDialog> createState() => _TextDialogState();
+}
 
-void showTextDialog(String title, String message, BuildContext context) {
-      showAdaptiveDialog(
-        context: context,
-        builder: (_) => Column(children: [
-          Text('Create a booth'),
-          TextField(onChanged: ,),
-          IconButton(onPressed: onPressed, icon: icon)
-        ],)
+class _TextDialogState extends State<TextDialog> {
+  @override
+  void dispose() {
+    widget.textController.dispose();
+    super.dispose();
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text('Create a booth'),
+        TextField(controller: widget.textController),
+        IconButton(
+          icon: const Icon(Icons.check),
+          style: ButtonStyle(
+            elevation: WidgetStatePropertyAll<double>(8.0),
+            backgroundColor: WidgetStatePropertyAll<Color>(Colors.green),
+          ),
+          onPressed: Navigator.of(context).pop,
         ),
-      );
-    }
-// import 'package:flutter/material.dart';
-
-// class TextDialog extends StatefulWidget{
-//   @override
-//   State<StatefulWidget> createState() => _TextDialogState();
-
-
-
-
-
-
-// }
-
-// class _TextDialogState extends State<TextDialog> {
-
-
-//   @override
-//   Widget build(BuildContext context) {
-    
-//     return showAdaptiveDialog(context: context, builder: builder)
-//   }
-
-
-  
+      ],
+    );
+  }
 }
