@@ -69,7 +69,7 @@ class _ManageInventoryTabState extends ConsumerState<ManageInventoryTab> {
       builder: (context) => const AddInventoryFormDialog(),
     );
 
-    setUserBooths();
+    // setUserBooths();
   }
 
     final String noInventoryMessage =

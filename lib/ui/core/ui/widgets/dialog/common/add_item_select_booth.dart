@@ -1,48 +1,52 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:vintage_1020/data/providers/my_booth_provider/my_booth_notifier.dart';
-import 'package:vintage_1020/data/providers/my_booth_provider/my_booths_notifier.dart';
-import 'package:vintage_1020/domain/my_booth/my_booth.dart';
 
-class AddItemSelectBooth extends HookConsumerWidget{
+
+class AddItemSelectBooth extends StatefulWidget{
   
+  AddItemSelectBooth({required this.boothNames});
+
+  final List<String> boothNames;
   
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final List<MyBooth> userBooths =  ref.watch(myBoothsProvider);
+  State<StatefulWidget> createState() => _AddItemSelectBoothState();
 
-    userBooths.sort((a, b) => a.boothName.toLowerCase().compareTo(b.boothName.toLowerCase()));
+}
 
-    final boothsState = useState(userBooths);
+class _AddItemSelectBoothState extends State<AddItemSelectBooth> { 
 
-    final selectedBooth = useState(userBooths.first);
+
+  @override
+  Widget build(BuildContext context) {
+
+    widget.boothNames.sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
 
     return 
       Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          TextFormField(
-            decoration: const InputDecoration(
-              prefixText: '\$',
-              fillColor: Colors.blue,
-              labelText: 'Booth Name(required)',
+          Flexible(
+            child: TextFormField(
+              decoration: const InputDecoration(
+                prefixText: '\$',
+                fillColor: Colors.blue,
+                labelText: 'Booth Name(required)',
+              ),
+              validator: (value) =>
+                  value?.isEmpty ?? true ? 'Booth Name is required' : null,
             ),
-            validator: (value) =>
-                value?.isEmpty ?? true ? 'Booth Name is required' : null,
           ),
 
-          DropdownMenu(
-            onSelected: (value) => selectedBooth.value.boothName,
-            dropdownMenuEntries: userBooths.map<DropdownMenuEntry<String>>((MyBooth booth) => 
-              DropdownMenuEntry<String>(
-                value: booth.boothName,
-                label: booth.boothName,
-              )
-            ).toList(),
+          Flexible(
+            child: DropdownMenu(
+              // onSelected: (value) => selectedBooth.value?.boothName,
+              dropdownMenuEntries: widget.boothNames.map<DropdownMenuEntry<String>>((String boothName) => 
+                DropdownMenuEntry<String>(
+                  value: boothName,
+                  label: boothName,
+                )
+              ).toList(),
+            ),
           ),
       ],
     );

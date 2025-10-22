@@ -13,7 +13,7 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
   
   @override
   List<MyBooth> build() {
-    
+    print('MyBoothNotifier build ${state?.length}');
     return [];
   }
 
@@ -28,7 +28,7 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
 
     List<MyBooth> userBooths = await MyBoothsDb().fetchUserBoothsByEmail();
 
-    state = userBooths;
+    // state = userBooths;
 
     return userBooths;
   }
@@ -44,16 +44,14 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
       MyBooth currentBooth;
   }
 
+}
 
-  // void setBoothInventory() {
-  //   List<InventoryItemLocal> allInventory = ref.watch(inventoryProvider);
+@riverpod
+List<String> getNamesOfBooths(Ref ref) {
 
-  //   List<InventoryItemLocal> boothInventory = allInventory.where((item) => item.isBoothItem).toList();
+  List<MyBooth> currentBooths = ref.watch(myBoothsProvider);
 
-  //   MyBooth currentBooth = state;
-
-  //   currentBooth.boothInventory = boothInventory;
-
-  //   state = currentBooth;
-  // }
+  List<String> boothNames = currentBooths.map((booth) => booth.boothName).toList();
+  
+  return boothNames;
 }

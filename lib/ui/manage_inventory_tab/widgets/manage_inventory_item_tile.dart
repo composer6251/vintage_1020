@@ -5,8 +5,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:vintage_1020/data/providers/inventory_notifier.dart';
+import 'package:vintage_1020/data/providers/my_booth_provider/my_booths_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
+import 'package:vintage_1020/domain/my_booth/my_booth.dart';
 import 'package:vintage_1020/utils/snack_bar.dart';
 
 class ManageInventoryItemTile extends ConsumerWidget {
@@ -71,10 +73,24 @@ class ManageInventoryItemTile extends ConsumerWidget {
       showSnackBar('Deleted 1 item with id $itemId', context);
     }
 
-    void addItemToBooth(String itemId) {
-      ref.read(inventoryProvider.notifier).addItemToBooth(itemId);
+    void getBooths() async {
+      List<MyBooth> userBooths = await ref.read(myBoothsProvider);
 
-      showSnackBar('Item added to booth!', context);
+      if(userBooths.isEmpty) {
+        // Open create booth dialog
+      }
+      if(userBooths.length == 1) {
+        // Open select booth dialog
+        return;
+      }
+      else {
+
+      }
+
+    }
+
+    void addItemToBooth(String itemId) {
+      
     }
 
     return model == null ? 

@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vintage_1020/data/providers/my_booth_provider/my_booth_notifier.dart';
+import 'package:vintage_1020/data/providers/my_booth_provider/my_booths_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart'
     hide userEmail;
@@ -23,7 +24,6 @@ class AddInventoryFormDialog extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // useMemoized to prevent new instances of formKey
     final formKey = useMemoized(() => GlobalKey<FormState>());
-
     final boothNameController = useTextEditingController();
     final itemPurchasePriceController = useTextEditingController();
     final itemListingPriceController = useTextEditingController();
@@ -41,6 +41,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     final itemImageUrls = useState<List<String>>([]);
     final defaultItemImageUrl = useState<String>('');
     final addToBooth = useState<bool>(false);
+    final boothNames = useState<List<String>>([]);
 
     /// AFTER USER SELECTS PHOTOS OR TAKES A PHOTO, UPDATE THE EPHEMERAL STATE
     void updateSelectedImagesState(List<XFile> imagesToAdd) {
@@ -86,6 +87,32 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     void closeDialog() {
       Navigator.of(context).pop();
     }
+
+    void getBooths(bool? value) async {
+      if(value == false) {
+        addToBooth.value = false;
+        return;
+      }
+
+      List<MyBooth> userBooths = await ref.read(myBoothsProvider.notifier).fetchUserBoothsReturn();
+
+      boothNames.value = userBooths.map((e) => e.boothName).toList();
+
+      if(userBooths.isEmpty) {
+        // Open create booth dialog
+      }
+      if(userBooths.length == 1) {
+        // Open select booth dialog
+        
+      }
+      else {
+
+      }
+
+      addToBooth.value = true;
+
+    }
+
     void submit() async {
       
       // save files
@@ -257,12 +284,13 @@ class AddInventoryFormDialog extends HookConsumerWidget {
                 ),
                 Checkbox(
                   value: addToBooth.value,
-                  onChanged: (value) => addToBooth.value = value ?? false,
+                  onChanged: (value) => getBooths(value),
                 ),
               ],
             ),
-            // If purchase price
-            AddItemSelectBooth(),
+            Visibility(
+              visible: addToBooth.value,
+              child: AddItemSelectBooth(boothNames: boothNames.value)),
           ],
         ),
       ),
