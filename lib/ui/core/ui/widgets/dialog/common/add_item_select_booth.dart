@@ -39,7 +39,8 @@ class _AddItemSelectBoothState extends State<AddItemSelectBooth> {
 
           Flexible(
             child: DropdownMenu(
-              // onSelected: (value) => selectedBooth.value?.boothName,
+              initialSelection: widget.boothNames.first,
+              // onSelected: (value) => ,
               dropdownMenuEntries: widget.boothNames.map<DropdownMenuEntry<String>>((String boothName) => 
                 DropdownMenuEntry<String>(
                   value: boothName,

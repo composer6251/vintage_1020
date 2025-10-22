@@ -42,6 +42,9 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     final defaultItemImageUrl = useState<String>('');
     final addToBooth = useState<bool>(false);
     final boothNames = useState<List<String>>([]);
+    final selectedBooth = useState<String>('');
+    
+
 
     /// AFTER USER SELECTS PHOTOS OR TAKES A PHOTO, UPDATE THE EPHEMERAL STATE
     void updateSelectedImagesState(List<XFile> imagesToAdd) {
@@ -289,8 +292,8 @@ class AddInventoryFormDialog extends HookConsumerWidget {
               ],
             ),
             Visibility(
-              visible: addToBooth.value,
-              child: AddItemSelectBooth(boothNames: boothNames.value)),
+              visible: false,
+              child: AddItemSelectBooth(boothNames: boothNames.value, )),
           ],
         ),
       ),
