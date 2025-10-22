@@ -4,7 +4,9 @@ import 'package:vintage_1020/data/providers/filter_notifier.dart';
 import 'package:vintage_1020/data/providers/inventory_notifier.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
 import 'package:vintage_1020/data/providers/my_booth_provider/my_booth_notifier.dart';
+import 'package:vintage_1020/data/providers/my_booth_provider/my_booths_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
+import 'package:vintage_1020/ui/core/ui/widgets/dialog/add_inventory_form_dialog.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/edit_inventory_item_dialog.dart';
 
 import 'package:vintage_1020/ui/manage_inventory_tab/widgets/manage_inventory_item_tile.dart';
@@ -37,7 +39,6 @@ class _ManageInventoryTabState extends ConsumerState<ManageInventoryTab> {
       inventoryProvider,
     );
     void updateSelectedFilter(Set<InventoryFilter> newFilter) {
-
       setState(() {
         selectedFilter = newFilter.first;
       });
@@ -51,12 +52,25 @@ class _ManageInventoryTabState extends ConsumerState<ManageInventoryTab> {
           .getFilteredInventory(newFilter.first);
     }
 
+    void setUserBooths() async {
+      await ref.read(myBoothsProvider.notifier).fetchUserBooths();
+    }
+
     void openEditInventoryDialog(InventoryItemLocal item) {
       showDialog(
         context: context,
         builder: (context) => EditInventoryItemDialog(itemEditing: item),
       );
     }
+
+    void openAddInventoryDialog() {
+      showDialog(
+      context: context,
+      builder: (context) => const AddInventoryFormDialog(),
+    );
+
+    setUserBooths();
+  }
 
     final String noInventoryMessage =
         'You do not have any ${selectedFilter.name} items.';
@@ -83,8 +97,7 @@ class _ManageInventoryTabState extends ConsumerState<ManageInventoryTab> {
                   ),
                 ),
                 SegmentedButton<InventoryFilter>(
-                  style: ButtonStyle(
-                    elevation: WidgetStatePropertyAll(100)),
+                  style: ButtonStyle(elevation: WidgetStatePropertyAll(100)),
                   multiSelectionEnabled: false,
                   selected: {selectedFilter},
                   onSelectionChanged: (Set<InventoryFilter> filters) {
@@ -135,7 +148,9 @@ class _ManageInventoryTabState extends ConsumerState<ManageInventoryTab> {
                           itemBuilder: (context, index) {
                             return GestureDetector(
                               onTap: () {
-                                openEditInventoryDialog(filteredInventory[index]);
+                                openEditInventoryDialog(
+                                  filteredInventory[index],
+                                );
                               },
                               child: ManageInventoryItemTile(
                                 model: filteredInventory[index],
@@ -152,6 +167,13 @@ class _ManageInventoryTabState extends ConsumerState<ManageInventoryTab> {
             child: Text('No inventory Items. Click the PLUS sign to add'),
           );
         },
+        // TODO
+      ),
+      floatingActionButton: FloatingActionButton(
+        shape: CircleBorder(side: BorderSide(color: Colors.blue, width: 2.0)),
+        onPressed: openAddInventoryDialog,
+        backgroundColor: Colors.blue,
+        child: Icon(size: 40.0, Icons.add),
       ),
     );
   }

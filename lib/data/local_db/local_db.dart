@@ -14,7 +14,7 @@ final String? userEmail = FirebaseAuth.instance.currentUser?.email;
 
 // TABLE CREATION SQL
 final String buildCreateBoothTableSql =
-    'CREATE TABLE IF NOT EXISTS my_booth(id TEXT PRIMARY KEY, boothName TEXT, email TEXT, currentBoothImageUrls TEXT, boothDeleteDate TEXT)';
+    'CREATE TABLE IF NOT EXISTS my_booth(id TEXT PRIMARY KEY, boothName TEXT, email TEXT, boothInventoryItemIds currentBoothImageUrls TEXT, boothDeleteDate TEXT)';
 final String buildCreateInventoryTableSql =
     'CREATE TABLE IF NOT EXISTS inventory_item(id TEXT PRIMARY KEY, email TEXT, primaryImageUrl TEXT, itemDescription TEXT, itemImageUrls TEXT, itemCategory TEXT, itemPurchasePrice REAL, itemListingPrice REAL, itemSoldPrice REAL, itemPurchaseDate TEXT, itemListingDate TEXT, itemSoldDate TEXT, itemHeight REAL, itemWidth REAL, itemDepth REAL, itemDeleteDate TEXT, isCurrentBoothItem REAL)';
 // final String buildCreateBoothTableSql =

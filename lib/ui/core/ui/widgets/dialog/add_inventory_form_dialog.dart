@@ -12,6 +12,7 @@ import 'package:vintage_1020/data/providers/inventory_provider/inventory_provide
 import 'package:vintage_1020/data/local_db/local_db.dart';
 import 'package:vintage_1020/domain/my_booth/my_booth.dart';
 import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
+import 'package:vintage_1020/ui/core/ui/widgets/dialog/common/add_item_select_booth.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/common/dropdown_menu_item_widget.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/common/text_dialog.dart';
 
@@ -87,8 +88,6 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     }
     void submit() async {
       
-
-
       // save files
       List<File> savedImages = await saveXFileListAndReturnSavedFiles(
         selectedImages.value,
@@ -263,7 +262,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
               ],
             ),
             // If purchase price
-            DropdownMenuItemWidget(),
+            AddItemSelectBooth(),
           ],
         ),
       ),

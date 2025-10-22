@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:vintage_1020/data/providers/filter_notifier.dart';
 import 'package:vintage_1020/data/providers/firestore_provider/firestore_provider.dart';
+import 'package:vintage_1020/data/providers/my_booth_provider/my_booths_notifier.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/add_inventory_form_dialog.dart';
 import 'package:vintage_1020/ui/manage_inventory_tab/manage_inventory_tab.dart';
 import 'package:vintage_1020/ui/activity_chart_screen/activity_chart.dart';
@@ -20,13 +21,6 @@ class UiContainer extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<UiContainer> {
 
-  void openAddInventoryDialog() {
-    showDialog(
-      context: context,
-      builder: (context) => const AddInventoryFormDialog(),
-    );
-  }
-
   void showSnackBar(String message) {
     var sb = SnackBar(content: Text(message));
     ScaffoldMessenger.of(context).showSnackBar(sb);
@@ -41,12 +35,6 @@ class _HomeScreenState extends ConsumerState<UiContainer> {
           mainAxisSize: MainAxisSize.min,
           children: [TabViewsContent()],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        shape: CircleBorder(side: BorderSide(color: Colors.blue, width: 2.0)),
-        onPressed: openAddInventoryDialog,
-        backgroundColor: Colors.blue,
-        child: Icon(size: 40.0, Icons.add),
       ),
     );
   }

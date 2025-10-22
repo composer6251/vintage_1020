@@ -17,7 +17,14 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
     return [];
   }
 
-  Future<List<MyBooth>> fetchUserBooths() async {
+  Future<void> fetchUserBooths() async {
+
+    List<MyBooth> userBooths = await MyBoothsDb().fetchUserBoothsByEmail();
+
+    state = userBooths;
+  }
+
+    Future<List<MyBooth>> fetchUserBoothsReturn() async {
 
     List<MyBooth> userBooths = await MyBoothsDb().fetchUserBoothsByEmail();
 

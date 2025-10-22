@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -14,16 +12,18 @@ class AddItemSelectBooth extends HookConsumerWidget{
   
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final List<MyBooth> userBooths = ref.read(myBoothsProvider).toList();
+    final List<MyBooth> userBooths =  ref.watch(myBoothsProvider);
 
-    final List<MyBooth> alphabeticalUserBooths = userBooths.sort((a, b) => a.boothName.toLowerCase().compareTo(b.boothName.toLowerCase())) as List<MyBooth>;
+    userBooths.sort((a, b) => a.boothName.toLowerCase().compareTo(b.boothName.toLowerCase()));
 
-    final boothsState = useState(alphabeticalUserBooths);
+    final boothsState = useState(userBooths);
 
-    final selectedBooth = useState(alphabeticalUserBooths.first);
+    final selectedBooth = useState(userBooths.first);
 
     return 
       Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           TextFormField(
             decoration: const InputDecoration(

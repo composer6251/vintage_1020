@@ -5,7 +5,6 @@ import 'package:sqflite/sqflite.dart' as sql;
 import 'package:sqflite/sqlite_api.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vintage_1020/data/local_db/my_booth_db.dart';
-import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/domain/my_booth/my_booth.dart';
 
 final String dbName = 'vintage_1020.db';
@@ -14,7 +13,7 @@ final String? userEmail = FirebaseAuth.instance.currentUser?.email;
 
 // TABLE CREATION SQL
 final String buildCreateBoothTableSql =
-    'CREATE TABLE IF NOT EXISTS my_booth(id TEXT PRIMARY KEY, boothName TEXT, email TEXT, boothItems TEXT, currentBoothImageUrls TEXT, boothDeleteDate TEXT)';
+    'CREATE TABLE IF NOT EXISTS my_booth(id TEXT PRIMARY KEY, boothName TEXT, email TEXT, boothInventoryIds TEXT, currentBoothImageUrls TEXT, boothDeleteDate TEXT)';
 final String buildCreateInventoryTableSql =
     'CREATE TABLE IF NOT EXISTS inventory_item(id TEXT PRIMARY KEY, email TEXT, primaryImageUrl TEXT, itemDescription TEXT, itemImageUrls TEXT, itemCategory TEXT, itemPurchasePrice REAL, itemListingPrice REAL, itemSoldPrice REAL, itemPurchaseDate TEXT, itemListingDate TEXT, itemSoldDate TEXT, itemHeight REAL, itemWidth REAL, itemDepth REAL, itemDeleteDate TEXT, isCurrentBoothItem REAL)';
 
@@ -41,9 +40,7 @@ Future<Database> _getDatabase() async {
 }
 
 class MyBoothsDb {
-
-  /*************BOOTH TABLE UPDATES***********/
-
+  
   Future<List<MyBooth>> fetchUserBoothsByEmail() async {
     final db = await _getDatabase();
 
@@ -59,7 +56,7 @@ class MyBoothsDb {
       booths = data.map((booth) => {MyBooth.fromLocalDB(booth)}).toList();
     
     } catch (ex) {
-      print('Exception caught in fetchCurrentBoothByEmail: $ex');
+      print('Exception caught in fetchingBoothsByEmail: $ex');
     }
 
     List<MyBooth> flattenedBooths = [];

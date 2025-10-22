@@ -28,14 +28,12 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
   void initState() {
     super.initState();
 
-    myBoothFuture = ref.read(myBoothsProvider.notifier).fetchUserBooths();
+    myBoothFuture = ref.read(myBoothsProvider.notifier).fetchUserBoothsReturn();
   }
 
   @override
   Widget build(BuildContext context) {
 
-
-    // final List<InventoryItemLocal> boothItems = ref.watch(inventoryProvider);
     final List<MyBooth>? currentBooths = ref.watch(myBoothsProvider).toList();
     final List<InventoryItemLocal>? allInventory = ref.watch(inventoryProvider);
     final MyBooth currentBooth = currentBooths!.first;

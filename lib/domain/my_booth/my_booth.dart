@@ -35,6 +35,9 @@ class MyBooth {
     : id = data['id'],
       boothName = data['boothName'] ?? 'My Booth',
       userEmail = data?['email'],
+      boothInventoryIds = data['boothInventoryIds'] != null
+          ? List<String>.from(jsonDecode(data['boothInventoryIds']))
+          : null,
       currentBoothImageUrls = data['currentBoothImageUrls'] != null
           ? List<String>.from(jsonDecode(data['currentBoothImageUrls']))
           : null,
@@ -47,6 +50,7 @@ class MyBooth {
       "id": id,
       "boothName": boothName,
       "email": userEmail,
+      "boothInventoryIds": jsonEncode(boothInventoryIds),
       "currentBoothImageUrls": jsonEncode(currentBoothImageUrls),
       "boothDeleteDate": boothDeleteDate,
     };
