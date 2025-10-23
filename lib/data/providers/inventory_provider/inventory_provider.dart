@@ -17,12 +17,21 @@ class InventoryLocal extends _$InventoryLocal {
     return [];
   }
 
+  Future<void> setInitialInventory() async {
+    try {
+      List<InventoryItemLocal> inventory = await fetchInitialUserInventory();
+      state = inventory;
+    } on Exception catch (e) {
+      throw e;
+    }
+  }
+
   Future<List<InventoryItemLocal>> fetchInitialUserInventory() async {
     List<InventoryItemLocal> inventoryWithArchives = await LocalDb()
         .fetchUserInventoryFromDb();
     print('Fetch from DB return ${inventoryWithArchives.length} items');
     state = [...inventoryWithArchives];
-    
+
     return inventoryWithArchives;
   }
 

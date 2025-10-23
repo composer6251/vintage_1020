@@ -24,7 +24,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // useMemoized to prevent new instances of formKey
     final formKey = useMemoized(() => GlobalKey<FormState>());
-    final boothNameController = useTextEditingController();
+    
     final itemPurchasePriceController = useTextEditingController();
     final itemListingPriceController = useTextEditingController();
     final itemHeightController = useTextEditingController();
@@ -42,7 +42,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     final defaultItemImageUrl = useState<String>('');
     final addToBooth = useState<bool>(false);
     final boothNames = useState<List<String>>([]);
-    final selectedBooth = useState<String>('');
+    final selectedBoothName = useState<String>('');
     
 
 
@@ -293,7 +293,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
             ),
             Visibility(
               visible: false,
-              child: AddItemSelectBooth(boothNames: boothNames.value, )),
+              child: AddItemSelectBooth(boothNames: boothNames.value, onValueUpdated: (value) => selectedBoothName.value = value)),
           ],
         ),
       ),

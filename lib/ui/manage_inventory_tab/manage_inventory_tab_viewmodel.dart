@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ManageInventoryTabViewModel extends HookConsumerWidget {
+class ManageInventoryTabViewModel extends HookWidget {
   const ManageInventoryTabViewModel({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     // Example hook usage
     final counter = useState(0);
 
