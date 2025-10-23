@@ -6,3 +6,9 @@ enum InventoryCategory {
   pictures,
   miscellaneous,
 }
+
+enum ItemDimension {
+  height,
+  width,
+  depth
+}

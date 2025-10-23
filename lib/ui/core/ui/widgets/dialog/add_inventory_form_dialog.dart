@@ -5,7 +5,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
-import 'package:vintage_1020/data/providers/my_booth_provider/my_booth_notifier.dart';
+import 'package:vintage_1020/constants/inventory_categories.dart';
 import 'package:vintage_1020/data/providers/my_booth_provider/my_booths_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart'
@@ -14,8 +14,18 @@ import 'package:vintage_1020/data/local_db/local_db.dart';
 import 'package:vintage_1020/domain/my_booth/my_booth.dart';
 import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
 import 'package:vintage_1020/ui/core/ui/widgets/dialog/common/add_item_select_booth.dart';
-import 'package:vintage_1020/ui/core/ui/widgets/dialog/common/dropdown_menu_item_widget.dart';
-import 'package:vintage_1020/ui/core/ui/widgets/dialog/common/text_dialog.dart';
+import 'package:vintage_1020/ui/core/ui/widgets/dialog/common/widgets/item_dimension_widget.dart';
+import 'package:vintage_1020/ui/core/ui/widgets/dialog/common/widgets/price_date_input_widget.dart';
+
+/// TODO:
+/// 1. Use hooks to create state
+/// 2. Use hooks to pass into children widgets as call back to update values in parents
+/// 3. Pull children widgets out into widgets subfolder
+/// 4. Pull business logic in view-model
+/// 5. useEffect to initialze controllers
+/// 
+/// 
+/// 
 
 class AddInventoryFormDialog extends HookConsumerWidget {
   const AddInventoryFormDialog({super.key});
@@ -25,27 +35,25 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     // useMemoized to prevent new instances of formKey
     final formKey = useMemoized(() => GlobalKey<FormState>());
     
-    final itemPurchasePriceController = useTextEditingController();
-    final itemListingPriceController = useTextEditingController();
-    final itemHeightController = useTextEditingController();
-    final itemWidthController = useTextEditingController();
-    final itemDepthController = useTextEditingController();
-
-    final initialDate = useState(DateTime.now());
+    final itemPurchasePriceController = useTextEditingController(text: '');
+    final itemListingPriceController = useTextEditingController(text: '');
+    final itemHeightController = useTextEditingController(text: '');
+    final itemWidthController = useTextEditingController(text: '');
+    final itemDepthController = useTextEditingController(text: '');
 
     final purchaseDate = useState<DateTime>(DateTime.now());
     DateTime? listingDateTemp;
     final listingDate = useState(listingDateTemp);
+
     final selectedImages = useState<List<XFile>>([]);
     final selectedImagesAsFiles = useState<List<File>>([]);
     final itemImageUrls = useState<List<String>>([]);
     final defaultItemImageUrl = useState<String>('');
+
     final addToBooth = useState<bool>(false);
     final boothNames = useState<List<String>>([]);
     final selectedBoothName = useState<String>('');
     
-
-
     /// AFTER USER SELECTS PHOTOS OR TAKES A PHOTO, UPDATE THE EPHEMERAL STATE
     void updateSelectedImagesState(List<XFile> imagesToAdd) {
       final List<XFile> newImagesState = List.from(selectedImagesAsFiles.value)
@@ -72,20 +80,20 @@ class AddInventoryFormDialog extends HookConsumerWidget {
       updateSelectedImagesState(selectedImagesFromGallery);
     }
 
-    Future<void> selectDate(String type) async {
-      final DateTime? pickedDate = await showDatePicker(
-        context: context,
-        // initialDate: initialDate.value,
-        firstDate: DateTime.now().subtract(const Duration(days: 365)),
-        lastDate: initialDate.value,
-      );
-      if (pickedDate == null) return; // User cancelled the date picker
-      if (type == 'Listing') {
-        listingDate.value = pickedDate;
-        return;
-      }
-      purchaseDate.value = pickedDate;
-    }
+    // Future<void> selectDate(String type) async {
+    //   final DateTime? pickedDate = await showDatePicker(
+    //     context: context,
+    //     // initialDate: initialDate.value,
+    //     firstDate: DateTime.now().subtract(const Duration(days: 365)),
+    //     lastDate: initialDate.value,
+    //   );
+    //   if (pickedDate == null) return; // User cancelled the date picker
+    //   if (type == 'Listing') {
+    //     listingDate.value = pickedDate;
+    //     return;
+    //   }
+    //   purchaseDate.value = pickedDate;
+    // }
 
     void closeDialog() {
       Navigator.of(context).pop();
@@ -179,55 +187,14 @@ class AddInventoryFormDialog extends HookConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TextFormField(
-              controller: itemPurchasePriceController,
-              decoration: const InputDecoration(
-                prefixText: '\$',
-                fillColor: Colors.blue,
-                labelText: 'Purchase Price(required)',
-              ),
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              validator: (value) =>
-                  value?.isEmpty ?? true ? 'Purchase Price is required' : null,
-            ),
-            OutlinedButton(
-              style: ButtonStyle(
-                elevation: WidgetStatePropertyAll<double>(8.0),
-              ),
-              onPressed: () => selectDate('Purchase'),
-              child: Text(
-                '${purchaseDate.value.toLocal().month}/${purchaseDate.value.toLocal().day}/${purchaseDate.value.toLocal().year}',
-              ),
-            ),
-            TextFormField(
-              onEditingComplete: () {
-                if(itemListingPriceController.text.isNotEmpty){
-                  addToBooth.value = true;
-                }
-              },
-              controller: itemListingPriceController,
-              decoration: const InputDecoration(
-                prefixText: '\$',
-                labelText: 'Listing Price',
-              ),
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-            ),
-            OutlinedButton(
-              style: ButtonStyle(
-                elevation: WidgetStatePropertyAll<double>(8.0),
-              ),
-              onPressed: () => selectDate('Listing'),
-              child: Text(
-                listingDate.value == null
-                    ? 'Select Listing Date'
-                    : '${listingDate.value?.toLocal().month}/${listingDate.value?.toLocal().day}/${listingDate.value?.toLocal().year}',
-              ),
-            ),
+            PriceDateInputWidget(price: itemPurchasePriceController.text, date: purchaseDate.value, onPriceChanged: (value) => itemPurchasePriceController.value, onDateChanged: (value) => purchaseDate.value = value),
+            PriceDateInputWidget(price: itemListingPriceController.text, date: listingDate.value, onPriceChanged: (value) => itemPurchasePriceController.value, onDateChanged: (value) => purchaseDate.value = value),
             Flex(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               direction: Axis.horizontal,
               children: [
+                ItemDimensionWidget(label: ItemDimension.height.name, value: itemHeightController.text, onValueChanged: (value) => itemHeightController.value),
                 SizedBox(
                   width: 60,
                   child: TextFormField(
@@ -258,21 +225,21 @@ class AddInventoryFormDialog extends HookConsumerWidget {
                     ),
                   ),
                 ),
-                SizedBox(
-                  width: 60,
-                  child: TextFormField(
-                    controller: itemDepthController,
-                    decoration: const InputDecoration(
-                      fillColor: Colors.blue,
-                      labelText: 'Depth',
-                      floatingLabelAlignment: FloatingLabelAlignment.start,
-                      labelStyle: TextStyle(fontSize: 12),
-                    ),
-                    keyboardType: TextInputType.numberWithOptions(
-                      decimal: true,
-                    ),
-                  ),
-                ),
+                // SizedBox(
+                //   width: 60,
+                //   child: TextFormField(
+                //     controller: itemDepthController,
+                //     decoration: const InputDecoration(
+                //       fillColor: Colors.blue,
+                //       labelText: 'Depth',
+                //       floatingLabelAlignment: FloatingLabelAlignment.start,
+                //       labelStyle: TextStyle(fontSize: 12),
+                //     ),
+                //     keyboardType: TextInputType.numberWithOptions(
+                //       decimal: true,
+                //     ),
+                //   ),
+                // ),
               ],
             ),
             Row(

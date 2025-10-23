@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class AddItemSelectBooth extends HookWidget {
-  AddItemSelectBooth({required this.boothNames, required this.onValueUpdated});
+class AddItemSelectBooth extends StatelessWidget {
+  const AddItemSelectBooth({required this.boothNames, required this.onValueUpdated});
 
   final List<String> boothNames;
   final Function onValueUpdated;
@@ -30,7 +30,7 @@ class AddItemSelectBooth extends HookWidget {
         Flexible(
           child: DropdownMenu(
             initialSelection: boothNames.first,
-            // onSelected: (value) => ,
+            onSelected: (value) => onValueUpdated,
             dropdownMenuEntries: boothNames
                 .map<DropdownMenuEntry<String>>(
                   (String boothName) => DropdownMenuEntry<String>(
