@@ -1,0 +1,26 @@
+class AddItemDialogViewModel {
+
+  /// TAKE PHOTO ON PHOTO AND USE FOR ITEM
+  Future<void> takePhoto() async {
+    final XFile? photoTaken = await takeCameraPhoto();
+
+    if (photoTaken == null) return;
+
+    // UPDATE STATE. PASS IN IMAGES AS LIST
+    updateSelectedImagesState([photoTaken]);
+  }
+
+  Future<void> selectImages() async {
+    List<XFile> selectedImagesFromGallery =
+        await pickMultipleImagesFromGallery();
+
+    if (selectedImagesFromGallery.isEmpty) return;
+
+    updateSelectedImagesState(selectedImagesFromGallery);
+  }
+
+  List<String> fetchUserBooths() {
+    
+  }
+
+}

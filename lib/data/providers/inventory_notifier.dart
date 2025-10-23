@@ -1,4 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:vintage_1020/constants/enums.dart';
 import 'package:vintage_1020/data/local_db/local_db.dart';
 import 'package:vintage_1020/data/providers/filter_notifier.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';

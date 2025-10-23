@@ -41,16 +41,12 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
 
     List<InventoryItemLocal>? inventory = ref.watch(inventoryProvider);
 
-    // void showAddBoothDialog() {
-    //   showDialog(context: context, builder: (context) => CreateBoothWidget());
-    // }
-
     double inventoryCost = ref.watch(inventoryPurchaseCostProvider);
     double boothValue = ref.watch(inventoryPurchaseCostProvider);
 
 
     void takeBoothPhoto() async {
-      String boothPhotoPath = await takePhotoAndReturnUrl();
+      String boothPhotoPath = await PhotoUtil.takePhotoAndReturnUrl();
 
       boothImageUrls.add(boothPhotoPath);
     }
@@ -65,9 +61,6 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
             Center(child: Text('Error Fetching booth: ${snapshot.error.toString()}'));
           } 
             return 
-            // currentBooth == null ?
-            //     TextButton(onPressed: showAddBoothDialog, child: Text('Create a Booth'))
-            //     :
                 Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [

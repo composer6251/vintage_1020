@@ -2,18 +2,9 @@
 
 // Create class with annotation
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:vintage_1020/constants/enums.dart';
 
 part 'filter_notifier.g.dart';
-
-enum InventoryFilter {
-  all,
-  listed,
-  sold,
-  furniture,
-  backStock,
-  deleted,
-  current,
-}
 
 @riverpod
 class FilterNotifier extends _$FilterNotifier{

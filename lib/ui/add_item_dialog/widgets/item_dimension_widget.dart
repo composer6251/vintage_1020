@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vintage_1020/constants/inventory_categories.dart';
+import 'package:vintage_1020/constants/enums.dart';
 
 class ItemDimensionWidget extends StatelessWidget {
 
