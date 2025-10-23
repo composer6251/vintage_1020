@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:vintage_1020/constants/label_input_initial_values.dart';
+import 'package:vintage_1020/data/providers/my_booth_provider/my_booths_notifier.dart';
 
-class AddToBoothCheckboxWidget extends StatelessWidget {
+class AddToBoothCheckboxWidget extends HookConsumerWidget {
   const AddToBoothCheckboxWidget({
     super.key,
     required this.value,
@@ -14,7 +16,14 @@ class AddToBoothCheckboxWidget extends StatelessWidget {
   final List<String> userBooths;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    void setMyBoothsProviders() async {
+
+      if (ref.read(myBoothsProvider).isEmpty) {
+        // await ref.read(myBoothsProvider.notifier).fetchUserBooths();
+      }
+    }
+
     return Row(
       children: [
         Text(
@@ -28,7 +37,9 @@ class AddToBoothCheckboxWidget extends StatelessWidget {
         Checkbox(
           value: value,
           onChanged: (value) {
+            print('checkbox $value');
             onValueChanged();
+            print('checkbox on call $value');// Update add_item_dialog state
           },
         ),
       ],

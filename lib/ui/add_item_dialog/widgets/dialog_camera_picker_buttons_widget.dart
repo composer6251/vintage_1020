@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:vintage_1020/ui/core/util/photo_util.dart';
+import 'package:vintage_1020/util/photo_util.dart';
 
 
 class DialogCameraPickerButtonsWidget extends StatelessWidget {

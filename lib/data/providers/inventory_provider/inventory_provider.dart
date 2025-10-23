@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:vintage_1020/data/providers/my_booth_provider/my_booth_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/data/local_db/local_db.dart';
 
@@ -8,7 +7,7 @@ part 'inventory_provider.g.dart';
 
 final userEmail = FirebaseAuth.instance.currentUser?.email;
 
-@Riverpod(keepAlive: true)
+@Riverpod(keepAlive: false)
 class InventoryLocal extends _$InventoryLocal {
   @override
   List<InventoryItemLocal> build() {

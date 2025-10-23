@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vintage_1020/constants/label_input_initial_values.dart';
-import 'package:vintage_1020/ui/core/util/date_picker_util.dart';
+import 'package:vintage_1020/util/date_picker_util.dart';
 
 class PriceDateInputWidget extends StatelessWidget {
   const PriceDateInputWidget({

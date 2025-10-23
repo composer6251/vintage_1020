@@ -14,22 +14,13 @@ import 'package:vintage_1020/data/providers/inventory_provider/inventory_provide
 import 'package:vintage_1020/data/local_db/local_db.dart';
 import 'package:vintage_1020/domain/my_booth/my_booth.dart';
 import 'package:vintage_1020/ui/add_item_dialog/widgets/add_to_booth_checkbox_widget.dart';
-import 'package:vintage_1020/ui/add_item_dialog/widgets/dialog_camera_picker_buttons_widget.dart';
-import 'package:vintage_1020/ui/core/util/photo_util.dart';
+import 'package:vintage_1020/util/photo_util.dart';
 import 'package:vintage_1020/ui/add_item_dialog/widgets/add_item_select_booth.dart';
 import 'package:vintage_1020/ui/add_item_dialog/widgets/item_dimension_widget.dart';
 import 'package:vintage_1020/ui/add_item_dialog/widgets/price_date_input_widget.dart';
 
 /// TODO:
-/// 1. Use hooks to create state
-/// 2. Use hooks to pass into children widgets as call back to update values in parents
-/// 3. Pull children widgets out into widgets subfolder
-/// 4. Pull business logic in view-model
 /// 5. useEffect to initialze controllers
-///
-///
-///
-
 class AddInventoryFormDialog extends HookConsumerWidget {
   const AddInventoryFormDialog({super.key});
 
@@ -89,11 +80,9 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         return;
       }
 
-      List<MyBooth> userBooths = await ref
+      await ref
           .read(myBoothsProvider.notifier)
-          .fetchUserBoothsReturn();
-
-      boothNames.value = userBooths.map((e) => e.boothName).toList();
+          .fetchUserBooths();
 
       isChecked.value = true;
     }
@@ -191,7 +180,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
             ),
             AddToBoothCheckboxWidget(
               value: isChecked.value,
-              onValueChanged: getBooths,
+              onValueChanged: (value) => isChecked.value = value,
               userBooths: boothNames.value,
             ),
             Visibility(
@@ -205,12 +194,6 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         ),
       ),
       actions: [
-        // DialogCameraPickerButtonsWidget(
-        //   cameraLabel: takePhotoToolTip,
-        //   photosLabel: selectPhotosToolTip,
-        //   value: [],
-        //   onValueChanged: (value) => selectedImages.value = value,
-        // ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

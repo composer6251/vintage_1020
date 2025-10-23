@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
+import 'package:vintage_1020/data/local_db/local_db.dart';
 import 'package:vintage_1020/data/providers/filter_notifier.dart';
+import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
 import 'package:vintage_1020/ui/manage_inventory_tab/widgets/manage_inventory_tab.dart';
 import 'package:vintage_1020/ui/activity_chart_screen/activity_chart.dart';
 import 'package:vintage_1020/ui/my_booth_tab/my_booth_tab.dart';
@@ -17,7 +20,6 @@ class UiContainer extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<UiContainer> {
-
   void showSnackBar(String message) {
     var sb = SnackBar(content: Text(message));
     ScaffoldMessenger.of(context).showSnackBar(sb);
@@ -25,6 +27,9 @@ class _HomeScreenState extends ConsumerState<UiContainer> {
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(inventoryLocalProvider);
+    print('UI container');
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -38,7 +43,7 @@ class _HomeScreenState extends ConsumerState<UiContainer> {
 }
 
 class TabViewsContent extends ConsumerWidget {
-   TabViewsContent({super.key});
+  TabViewsContent({super.key});
 
   static List<Tab> myTabs = <Tab>[
     Tab(text: 'Manage', icon: Icon(Icons.chair_rounded)),

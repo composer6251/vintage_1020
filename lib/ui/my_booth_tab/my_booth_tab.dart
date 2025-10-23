@@ -3,18 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:vintage_1020/data/providers/filter_notifier.dart';
 import 'package:vintage_1020/data/providers/inventory_notifier.dart';
 import 'package:vintage_1020/data/providers/item_metadata/item_purchase_cost.dart';
-import 'package:vintage_1020/data/providers/my_booth_provider/my_booth_notifier.dart';
 import 'package:vintage_1020/data/providers/my_booth_provider/my_booths_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/domain/my_booth/my_booth.dart';
-import 'package:vintage_1020/ui/core/util/photo_util.dart';
-import 'package:vintage_1020/ui/core/widgets/inventory_carousel/edit_item_inventory_carousel.dart';
-import 'package:vintage_1020/ui/my_booth_tab/widgets/booth_item.dart';
-import 'package:vintage_1020/ui/my_booth_tab/widgets/create_booth_widget.dart';
-import 'package:vintage_1020/utils/picture_util.dart';
+import 'package:vintage_1020/util/photo_util.dart';
+import 'package:vintage_1020/ui/common/widgets/inventory_carousel/edit_item_inventory_carousel.dart';
 
 class MyBoothTab extends ConsumerStatefulWidget {
   @override

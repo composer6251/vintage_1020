@@ -13,7 +13,7 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
   
   @override
   List<MyBooth> build() {
-    print('MyBoothNotifier build ${state?.length}');
+    print('MyBoothNotifier build');
     return [];
   }
 
