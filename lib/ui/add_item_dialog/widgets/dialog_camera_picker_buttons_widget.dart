@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:vintage_1020/ui/add_item_dialog/view_model/add_item_dialog_view_model';
-import 'package:vintage_1020/utils/picture_util.dart' as photo_util;
+import 'package:image_picker/image_picker.dart';
+import 'package:vintage_1020/ui/core/util/photo_util.dart';
+
 
 class DialogCameraPickerButtonsWidget extends StatelessWidget {
   const DialogCameraPickerButtonsWidget({
@@ -22,12 +23,12 @@ class DialogCameraPickerButtonsWidget extends StatelessWidget {
       children: [
         IconButton(
           icon: const Icon(Icons.photo_camera),
-          tooltip: ,
+          tooltip: cameraLabel,
           style: ButtonStyle(
             elevation: WidgetStatePropertyAll<double>(8.0),
             backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
           ),
-          onPressed: photo_util.takePhoto,
+          onPressed: () async { await PhotoUtil.takeCameraPhoto();},
         ),
         IconButton(
           icon: const Icon(Icons.photo_library),
@@ -36,7 +37,9 @@ class DialogCameraPickerButtonsWidget extends StatelessWidget {
             elevation: WidgetStatePropertyAll<double>(8.0),
             backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
           ),
-          onPressed: selectImages,
+          onPressed: () async { 
+            await PhotoUtil.pickMultipleImagesFromGallery();
+          },
         ),
       ],
     );

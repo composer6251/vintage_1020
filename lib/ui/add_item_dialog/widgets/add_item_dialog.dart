@@ -15,7 +15,7 @@ import 'package:vintage_1020/data/local_db/local_db.dart';
 import 'package:vintage_1020/domain/my_booth/my_booth.dart';
 import 'package:vintage_1020/ui/add_item_dialog/widgets/add_to_booth_checkbox_widget.dart';
 import 'package:vintage_1020/ui/add_item_dialog/widgets/dialog_camera_picker_buttons_widget.dart';
-import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
+import 'package:vintage_1020/ui/core/util/photo_util.dart';
 import 'package:vintage_1020/ui/add_item_dialog/widgets/add_item_select_booth.dart';
 import 'package:vintage_1020/ui/add_item_dialog/widgets/item_dimension_widget.dart';
 import 'package:vintage_1020/ui/add_item_dialog/widgets/price_date_input_widget.dart';
@@ -49,7 +49,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     final purchaseDate = useState<DateTime?>(null);
     final listingDate = useState<DateTime?>(null);
 
-    final selectedImages = useState<List<XFile>>([]);
+    final selectedXFiles = useState<List<XFile>>([]);
     final selectedImagesAsFiles = useState<List<File>>([]);
     final itemImageUrls = useState<List<String>>([]);
     final defaultItemImageUrl = useState<String>('');
@@ -59,10 +59,24 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     final selectedBoothName = useState<String>('');
 
     /// AFTER USER SELECTS PHOTOS OR TAKES A PHOTO, UPDATE THE EPHEMERAL STATE
-    void updateSelectedImagesState(List<XFile> imagesToAdd) {
-      final List<XFile> newImagesState = List.from(selectedImagesAsFiles.value)
-        ..addAll(imagesToAdd);
-      selectedImages.value = newImagesState;
+    void addPhotos(String photoSource) async {
+
+      List<XFile?> photosToAdd = [];
+
+      if(photoSource == 'Camera') {
+        photosToAdd.first = await PhotoUtil.takeCameraPhoto();
+      }
+      else {
+        photosToAdd == await PhotoUtil.pickMultipleImagesFromGallery();
+      }
+      
+       List<XFile?> updatedSelectedXFiles = [...selectedXFiles.value, ...photosToAdd];
+
+      //  selectedXFiles.value = updatedSelectedXFiles;
+
+      final List<XFile> newImagesState = List.from(selectedXFiles.value);
+        (photosToAdd);
+      selectedXFiles.value = newImagesState;
     }
 
     void closeDialog() {
@@ -87,14 +101,14 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     void submit() async {
       // save files
       List<File> savedImages = await PhotoUtil.saveXFileListAndReturnSavedFiles(
-        selectedImages.value,
+        selectedXFiles.value,
       );
       // get savedImages paths
       List<String> savedImagesPaths = savedImages.map((i) => i.path).toList();
-
       // update itemImageUrls with savedImages paths
       List<String> updatedItemImageUrls = List.from(itemImageUrls.value)
         ..addAll(savedImagesPaths);
+
       itemImageUrls.value = updatedItemImageUrls;
 
       final InventoryItemLocal itemToDB = InventoryItemLocal.toLocalDb(
@@ -177,7 +191,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
             ),
             AddToBoothCheckboxWidget(
               value: isChecked.value,
-              onValueChanged: onValueChanged,
+              onValueChanged: getBooths,
               userBooths: boothNames.value,
             ),
             Visibility(
@@ -191,52 +205,52 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         ),
       ),
       actions: [
-        DialogCameraPickerButtonsWidget(
-          cameraLabel: takePhotoToolTip,
-          photosLabel: selectPhotosToolTip,
-          value: selectedImages,
-          onValueChanged: onValueChanged,
-        ),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //   children: [
-        //     IconButton(
-        //       icon: const Icon(Icons.cancel),
-        //       tooltip: 'Cancel',
-        //       style: ButtonStyle(
-        //         elevation: WidgetStatePropertyAll<double>(8.0),
-        //         backgroundColor: WidgetStatePropertyAll<Color>(Colors.red),
-        //       ),
-        //       onPressed: () => Navigator.of(context).pop(),
-        //     ),
-        //     IconButton(
-        //       icon: const Icon(Icons.photo_camera),
-        //       tooltip: 'Take Photo',
-        //       style: ButtonStyle(
-        //         elevation: WidgetStatePropertyAll<double>(8.0),
-        //         backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
-        //       ),
-        //       onPressed: takePhoto,
-        //     ),
-        //     IconButton(
-        //       icon: const Icon(Icons.photo_library),
-        //       tooltip: 'Pick Images from Gallery',
-        //       style: ButtonStyle(
-        //         elevation: WidgetStatePropertyAll<double>(8.0),
-        //         backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
-        //       ),
-        //       onPressed: selectImages,
-        //     ),
-        //     IconButton(
-        //       icon: const Icon(Icons.check),
-        //       style: ButtonStyle(
-        //         elevation: WidgetStatePropertyAll<double>(8.0),
-        //         backgroundColor: WidgetStatePropertyAll<Color>(Colors.green),
-        //       ),
-        //       onPressed: submit,
-        //     ),
-        //   ],
+        // DialogCameraPickerButtonsWidget(
+        //   cameraLabel: takePhotoToolTip,
+        //   photosLabel: selectPhotosToolTip,
+        //   value: [],
+        //   onValueChanged: (value) => selectedImages.value = value,
         // ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.cancel),
+              tooltip: 'Cancel',
+              style: ButtonStyle(
+                elevation: WidgetStatePropertyAll<double>(8.0),
+                backgroundColor: WidgetStatePropertyAll<Color>(Colors.red),
+              ),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            IconButton(
+              icon: const Icon(Icons.photo_camera),
+              tooltip: 'Take Photo',
+              style: ButtonStyle(
+                elevation: WidgetStatePropertyAll<double>(8.0),
+                backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
+              ),
+              onPressed: PhotoUtil.takeCameraPhoto,
+            ),
+            IconButton(
+              icon: const Icon(Icons.photo_library),
+              tooltip: 'Pick Images from Gallery',
+              style: ButtonStyle(
+                elevation: WidgetStatePropertyAll<double>(8.0),
+                backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
+              ),
+              onPressed: () => addPhotos(''),
+            ),
+            IconButton(
+              icon: const Icon(Icons.check),
+              style: ButtonStyle(
+                elevation: WidgetStatePropertyAll<double>(8.0),
+                backgroundColor: WidgetStatePropertyAll<Color>(Colors.green),
+              ),
+              onPressed: submit,
+            ),
+          ],
+        ),
       ],
     );
   }

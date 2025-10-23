@@ -10,8 +10,8 @@ import 'package:vintage_1020/data/providers/my_booth_provider/my_booth_notifier.
 import 'package:vintage_1020/data/providers/my_booth_provider/my_booths_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/domain/my_booth/my_booth.dart';
-import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
-import 'package:vintage_1020/ui/core/ui/widgets/inventory_carousel/edit_item_inventory_carousel.dart';
+import 'package:vintage_1020/ui/core/util/photo_util.dart';
+import 'package:vintage_1020/ui/core/widgets/inventory_carousel/edit_item_inventory_carousel.dart';
 import 'package:vintage_1020/ui/my_booth_tab/widgets/booth_item.dart';
 import 'package:vintage_1020/ui/my_booth_tab/widgets/create_booth_widget.dart';
 import 'package:vintage_1020/utils/picture_util.dart';

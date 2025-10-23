@@ -7,7 +7,7 @@ import 'package:vintage_1020/data/local_db/local_db.dart';
 import 'package:vintage_1020/data/providers/inventory_notifier.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
-import 'package:vintage_1020/ui/add_item_dialog/widgets/add_inventory_form_dialog.dart';
+import 'package:vintage_1020/ui/add_item_dialog/widgets/add_item_dialog.dart';
 import 'package:vintage_1020/ui/edit_item_dialog/edit_inventory_item_dialog.dart';
 
 import 'package:vintage_1020/ui/manage_inventory_tab/widgets/manage_inventory_item_tile.dart';

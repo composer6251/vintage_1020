@@ -1,7 +1,7 @@
 
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
-import 'package:vintage_1020/ui/core/ui/util/image_util.dart';
+import 'package:vintage_1020/ui/core/util/photo_util.dart';
   // Variable to hold the list of selected image files
   List<XFile> _selectedImages = [];
   List<XFile> _photo = [];
