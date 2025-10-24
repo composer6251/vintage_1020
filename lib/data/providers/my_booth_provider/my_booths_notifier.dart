@@ -21,7 +21,9 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
 
     List<MyBooth> userBooths = await MyBoothsDb().fetchUserBoothsByEmail();
 
-    state = userBooths;
+    if(ref.mounted) {
+      state = userBooths;
+    }
   }
 
     Future<List<MyBooth>> fetchUserBoothsReturn() async {

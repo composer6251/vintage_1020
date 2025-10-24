@@ -17,11 +17,15 @@ class InventoryLocal extends _$InventoryLocal {
   }
 
   Future<void> setInitialInventory() async {
+    List<InventoryItemLocal> inventory;
     try {
-      List<InventoryItemLocal> inventory = await fetchInitialUserInventory();
-      state = inventory;
+      inventory = await fetchInitialUserInventory();
     } on Exception catch (e) {
       throw e;
+    }
+
+    if(ref.mounted) {
+      state = inventory;
     }
   }
 

@@ -29,8 +29,14 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     // useMemoized to prevent new instances of formKey
     final formKey = useMemoized(() => GlobalKey<FormState>());
 
+    List<MyBooth> userBooths = ref.watch(myBoothsProvider);
+    // async call initiated.
+    // widgets build
+    // async call finishes
+    // then ref.watch is notified of state update
+    // widgets rebuild
     useEffect(() {
-      ref.read(myBoothsProvider.notifier).fetchUserBooths();
+       ref.read(myBoothsProvider.notifier).fetchUserBooths();
     }, []);
 
     // Controllers for TextFields/TextFormFields states
@@ -50,8 +56,12 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     final defaultItemImageUrl = useState<String>('');
 
     final isChecked = useState<bool>(false);
+    final currentBooths = useState<List<MyBooth>>(userBooths);
     final boothNames = useState<List<String>>([]);
     final selectedBoothName = useState<String>('');
+
+      
+    // boothNames.sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
 
     /// AFTER USER SELECTS PHOTOS OR TAKES A PHOTO, UPDATE THE EPHEMERAL STATE
     void addPhotos(String photoSource) async {
@@ -181,15 +191,30 @@ class AddInventoryFormDialog extends HookConsumerWidget {
                 ),
               ],
             ),
-            AddToBoothCheckboxWidget(
-              value: isChecked.value,
-              onValueChanged: (value) => isChecked.value = value,
-              userBooths: boothNames.value,
-            ),
+            Row(
+            children: [
+              Text(
+                style: TextStyle(
+                  fontSize: 16,
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.bold,
+                ),
+                addToBoothLabel,
+              ),
+              Checkbox(
+                value: isChecked.value,
+                onChanged: (value) => {
+                  isChecked.value = (value == null || value == false) ? false : true,
+                }),
+              ],
+            ),      // AddToBoothCheckboxWidget(
+            //   value: isChecked.value,
+            //   onValueChanged: (value) => isChecked.value,
+            // ),
             Visibility(
-              visible: false,
+              visible: isChecked.value,
               child: AddItemSelectBooth(
-                boothNames: boothNames.value,
+                userBooths: userBooths,
                 onValueUpdated: (value) => selectedBoothName.value = value,
               ),
             ),

@@ -12,6 +12,7 @@ class InventoryNotifier extends _$InventoryNotifier {
   @override
   List<InventoryItemLocal> build() {
     // Watch current inventory filter. getFilteredInventory watches the inventory,
+    
     final providerFilter = ref.watch(filterProvider);
 
     List<InventoryItemLocal> filteredInventory = getFilteredInventory(

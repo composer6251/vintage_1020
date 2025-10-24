@@ -2,27 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:vintage_1020/constants/label_input_initial_values.dart';
 import 'package:vintage_1020/data/providers/my_booth_provider/my_booths_notifier.dart';
+import 'package:vintage_1020/domain/my_booth/my_booth.dart';
 
 class AddToBoothCheckboxWidget extends HookConsumerWidget {
   const AddToBoothCheckboxWidget({
     super.key,
     required this.value,
     required this.onValueChanged,
-    required this.userBooths,
+    // required this.userBooths,
   });
 
   final bool value;
   final Function onValueChanged;
-  final List<String> userBooths;
+  // final List<String> userBooths;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    void setMyBoothsProviders() async {
 
-      if (ref.read(myBoothsProvider).isEmpty) {
-        // await ref.read(myBoothsProvider.notifier).fetchUserBooths();
-      }
-    }
+    // List<MyBooth> userBooths = ref.watch(myBoothsProvider);
+    // void setMyBoothsProviders() async {
+
+    //   if (ref.read(myBoothsProvider).isEmpty) {
+    //     // await ref.read(myBoothsProvider.notifier).fetchUserBooths();
+    //   }
+    // }
 
     return Row(
       children: [
@@ -35,12 +38,10 @@ class AddToBoothCheckboxWidget extends HookConsumerWidget {
           addToBoothLabel,
         ),
         Checkbox(
+          
           value: value,
-          onChanged: (value) {
-            print('checkbox $value');
-            onValueChanged();
-            print('checkbox on call $value');// Update add_item_dialog state
-          },
+          onChanged: (value) =>
+            onValueChanged,
         ),
       ],
     );
