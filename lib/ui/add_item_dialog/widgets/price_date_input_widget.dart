@@ -30,8 +30,8 @@ class PriceDateInputWidget extends StatelessWidget {
             labelText: label,
           ),
           keyboardType: TextInputType.numberWithOptions(decimal: true),
-          validator: (value) =>
-              value?.isEmpty ?? true ? 'Purchase Price is required' : null,
+          // validator: (value) =>
+          //     value?.isEmpty ?? true ? 'Purchase Price is required' : null,
         ),
         OutlinedButton(
           style: ButtonStyle(elevation: WidgetStatePropertyAll<double>(8.0)),

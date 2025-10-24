@@ -43,6 +43,16 @@ class PhotoUtil {
     return image;
   }
 
+  static Future<List<XFile>> selectPhotosFromGallery() async {
+
+    // INSTANTIATE IMAGE PICKER
+    final picker = ImagePicker();
+        // OPEN CAMERA APP TO TAKE PICTURE
+    List<XFile>? images = await picker.pickMultiImage();
+
+    return images;
+  }
+
   /// CONVERT XFILE FROM SELECTED PHOTO/TAKEN PHOTO TO FILE TYPE
   /// SO THAT IT CAN BE RENDERED
   static File getFileFromXFile(XFile xFile) {

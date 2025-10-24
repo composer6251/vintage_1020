@@ -21,8 +21,8 @@ import 'package:vintage_1020/ui/add_item_dialog/widgets/price_date_input_widget.
 
 /// TODO:
 /// 5. useEffect to initialze controllers
-class AddInventoryFormDialog extends HookConsumerWidget {
-  const AddInventoryFormDialog({super.key});
+class AddItemDialog extends HookConsumerWidget {
+  const AddItemDialog({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -64,43 +64,35 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     // boothNames.sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
 
     /// AFTER USER SELECTS PHOTOS OR TAKES A PHOTO, UPDATE THE EPHEMERAL STATE
-    void addPhotos(String photoSource) async {
-      List<XFile?> photosToAdd = [];
+    void selectPhotos() async {
 
-      if (photoSource == 'Camera') {
-        photosToAdd.first = await PhotoUtil.takeCameraPhoto();
-      } else {
-        photosToAdd == await PhotoUtil.pickMultipleImagesFromGallery();
-      }
-
-      List<XFile?> updatedSelectedXFiles = [
+      List<XFile> photosToAdd = await PhotoUtil.selectPhotosFromGallery();
+      
+      if(photosToAdd.isEmpty) return;
+      
+      // Update state of selected photos
+      List<XFile> updatedSelectedXFiles = [
         ...selectedXFiles.value,
         ...photosToAdd,
       ];
 
-      //  selectedXFiles.value = updatedSelectedXFiles;
+       selectedXFiles.value = updatedSelectedXFiles;
+    }
 
-      final List<XFile> newImagesState = List.from(selectedXFiles.value);
-      (photosToAdd);
-      selectedXFiles.value = newImagesState;
+    void takePhoto() async {
+
+      XFile? photoTaken = await PhotoUtil.takeCameraPhoto();
+
+      if(photoTaken == null) return;
+
+      selectedXFiles.value = [...selectedXFiles.value, photoTaken];
     }
 
     void closeDialog() {
       Navigator.of(context).pop();
     }
 
-    void getBooths(bool? value) async {
-      if (value == false) {
-        isChecked.value = false;
-        return;
-      }
-
-      await ref.read(myBoothsProvider.notifier).fetchUserBooths();
-
-      isChecked.value = true;
-    }
-
-    void submit() async {
+    Future<List<String>> savePhotosAndGetUrls() async {
       // save files
       List<File> savedImages = await PhotoUtil.saveXFileListAndReturnSavedFiles(
         selectedXFiles.value,
@@ -113,12 +105,19 @@ class AddInventoryFormDialog extends HookConsumerWidget {
 
       itemImageUrls.value = updatedItemImageUrls;
 
+      return updatedItemImageUrls;
+    }
+
+    void submit() async {
+      // Save the photos taken/selected and update the state with the urls to save
+      List<String> imageUrlsToSave = await savePhotosAndGetUrls();
+
       final InventoryItemLocal itemToDB = InventoryItemLocal.toLocalDb(
         Uuid().v6(),
         userEmail,
-        defaultItemImageUrl.value,
+        imageUrlsToSave.first,
         '',
-        itemImageUrls.value,
+        imageUrlsToSave,
         '',
         double.tryParse(itemPurchasePriceController.text),
         double.tryParse(itemListingPriceController.text),
@@ -241,7 +240,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
                 elevation: WidgetStatePropertyAll<double>(8.0),
                 backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
               ),
-              onPressed: PhotoUtil.takeCameraPhoto,
+              onPressed: takePhoto,
             ),
             IconButton(
               icon: const Icon(Icons.photo_library),
@@ -250,7 +249,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
                 elevation: WidgetStatePropertyAll<double>(8.0),
                 backgroundColor: WidgetStatePropertyAll<Color>(Colors.blue),
               ),
-              onPressed: () => addPhotos(''),
+              onPressed: selectPhotos,
             ),
             IconButton(
               icon: const Icon(Icons.check),

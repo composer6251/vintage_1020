@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:vintage_1020/constants/enums.dart';
 import 'package:vintage_1020/data/local_db/local_db.dart';
+import 'package:vintage_1020/data/providers/filter_notifier.dart';
 
 import 'package:vintage_1020/data/providers/inventory_notifier.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
@@ -29,21 +30,26 @@ class ManageInventoryTab extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // final future = useMemoized(
-    //   () => LocalDb().fetchUserInventoryFromDb());
-    // final snapshot = useFuture(future);
 
+    // Initiate fetch for inventory
     useEffect(() {
        ref.read(inventoryLocalProvider.notifier).fetchInitialUserInventory();
     }, []);
 
+    // Widget rebuilds when notified of inventoryLocalProvider state change
     ref.watch(inventoryLocalProvider);
 
-    final filterController = useState<InventoryFilter>(InventoryFilter.all);
+    final currentFilter = useState<InventoryFilter>(InventoryFilter.all);
 
+    // Watch the inventory provider which filters the inventory based on current filter
     final List<InventoryItemLocal> filteredInventory = ref.watch(
       inventoryProvider,
     );
+
+    void setNewInventoryFilter(InventoryFilter newFilter) {
+      currentFilter.value = newFilter;
+      ref.read(filterProvider.notifier).setCurrentFilter(newFilter);
+    }
 
     void openEditInventoryDialog(InventoryItemLocal item) {
       showDialog(
@@ -55,12 +61,12 @@ class ManageInventoryTab extends HookConsumerWidget {
     void openAddInventoryDialog() {
       showDialog(
         context: context,
-        builder: (context) => const AddInventoryFormDialog(),
+        builder: (context) => const AddItemDialog(),
       );
     }
 
     final String noInventoryMessage =
-        'You do not have any ${filterController.value.name} items.';
+        'You do not have any ${currentFilter.value.name} items.';
 
     return Scaffold(
       body: Column(
@@ -75,9 +81,9 @@ class ManageInventoryTab extends HookConsumerWidget {
                 SegmentedButton<InventoryFilter>(
                   style: ButtonStyle(elevation: WidgetStatePropertyAll(100)),
                   multiSelectionEnabled: false,
-                  selected: {filterController.value},
+                  selected: {currentFilter.value},
                   onSelectionChanged: (Set<InventoryFilter> filters) {
-                    filterController.value = filters.first;
+                    setNewInventoryFilter(filters.first);
                   },
                   segments: <ButtonSegment<InventoryFilter>>[
                     ButtonSegment<InventoryFilter>(
@@ -111,7 +117,7 @@ class ManageInventoryTab extends HookConsumerWidget {
                               fontSize: 32,
                               fontWeight: FontWeight.bold,
                             ),
-                            filterController.value == InventoryFilter.all
+                            currentFilter.value == InventoryFilter.all
                                 ? 'You do not have any inventory items yet. Press the + to add an item!'
                                 : noInventoryMessage,
                           ),

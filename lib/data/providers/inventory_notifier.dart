@@ -11,12 +11,12 @@ part 'inventory_notifier.g.dart';
 class InventoryNotifier extends _$InventoryNotifier {
   @override
   List<InventoryItemLocal> build() {
-    // Watch current inventory filter. getFilteredInventory watches the inventory,
     
-    final providerFilter = ref.watch(filterProvider);
+    final currentFilter = ref.watch(filterProvider);
+    ref.watch(inventoryLocalProvider);
 
     List<InventoryItemLocal> filteredInventory = getFilteredInventory(
-      providerFilter,
+      currentFilter,
     );
 
     return filteredInventory;

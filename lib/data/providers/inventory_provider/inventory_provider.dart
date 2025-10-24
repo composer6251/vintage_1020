@@ -11,7 +11,6 @@ final userEmail = FirebaseAuth.instance.currentUser?.email;
 class InventoryLocal extends _$InventoryLocal {
   @override
   List<InventoryItemLocal> build() {
-    print('provider build');
 
     return [];
   }

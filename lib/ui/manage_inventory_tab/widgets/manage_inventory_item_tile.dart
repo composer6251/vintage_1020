@@ -89,6 +89,30 @@ class ManageInventoryItemTile extends ConsumerWidget {
 
     }
 
+    Widget getItemImage(String? imageUrl) {
+
+      String errorText = '';
+
+      if(imageUrl == null) {
+        return Text(
+        style: TextStyle(fontSize: 20),
+        'No primary image for item');
+      }
+
+      File file = File(imageUrl);
+
+      if(!file.existsSync()) {
+        return Text(
+        style: TextStyle(fontSize: 20),
+        'No file found at primary image path');
+      }
+
+      if(errorText.isNotEmpty) return Text(errorText);
+
+      return Image.file(file);
+
+    }
+
     void addItemToBooth(String itemId) {
       
     }
@@ -114,7 +138,7 @@ class ManageInventoryItemTile extends ConsumerWidget {
                 ? Text('No Primary Image set for Item')
                 : ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
-                    child: Image.file(File(model.primaryImageUrl!)),
+                    child: getItemImage(model.primaryImageUrl),
                   ),
                 getBanner()
               ],
