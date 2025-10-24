@@ -8,3 +8,7 @@ const String addToBoothLabel = 'Add to booth?';
 // ADD ITEM TOOL TIPS
 const String selectPhotosToolTip = 'Select Photos';
 const String takePhotoToolTip = 'Take Photo';
+
+// CREATE BOOTH INPUT TEXT
+const String createBoothInputLabel = 'Create Booth';
+const String selectBoothInitialSelection = 'Select Booth';

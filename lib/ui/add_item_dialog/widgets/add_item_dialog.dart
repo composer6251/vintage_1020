@@ -29,6 +29,10 @@ class AddInventoryFormDialog extends HookConsumerWidget {
     // useMemoized to prevent new instances of formKey
     final formKey = useMemoized(() => GlobalKey<FormState>());
 
+    useEffect(() {
+      ref.read(myBoothsProvider.notifier).fetchUserBooths();
+    }, []);
+
     // Controllers for TextFields/TextFormFields states
     final itemPurchasePriceController = useTextEditingController(text: '');
     final itemListingPriceController = useTextEditingController(text: '');
@@ -51,22 +55,23 @@ class AddInventoryFormDialog extends HookConsumerWidget {
 
     /// AFTER USER SELECTS PHOTOS OR TAKES A PHOTO, UPDATE THE EPHEMERAL STATE
     void addPhotos(String photoSource) async {
-
       List<XFile?> photosToAdd = [];
 
-      if(photoSource == 'Camera') {
+      if (photoSource == 'Camera') {
         photosToAdd.first = await PhotoUtil.takeCameraPhoto();
-      }
-      else {
+      } else {
         photosToAdd == await PhotoUtil.pickMultipleImagesFromGallery();
       }
-      
-       List<XFile?> updatedSelectedXFiles = [...selectedXFiles.value, ...photosToAdd];
+
+      List<XFile?> updatedSelectedXFiles = [
+        ...selectedXFiles.value,
+        ...photosToAdd,
+      ];
 
       //  selectedXFiles.value = updatedSelectedXFiles;
 
       final List<XFile> newImagesState = List.from(selectedXFiles.value);
-        (photosToAdd);
+      (photosToAdd);
       selectedXFiles.value = newImagesState;
     }
 
@@ -80,9 +85,7 @@ class AddInventoryFormDialog extends HookConsumerWidget {
         return;
       }
 
-      await ref
-          .read(myBoothsProvider.notifier)
-          .fetchUserBooths();
+      await ref.read(myBoothsProvider.notifier).fetchUserBooths();
 
       isChecked.value = true;
     }
