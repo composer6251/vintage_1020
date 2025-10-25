@@ -1,7 +1,5 @@
 import 'dart:io';
-import 'dart:developer' as developer;
 
-import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:path_provider/path_provider.dart' as sys_path;

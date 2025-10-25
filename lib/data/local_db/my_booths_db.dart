@@ -29,11 +29,6 @@ Future<Database> _getDatabase() async {
   final db = await sql.openDatabase(
     path.join(dbPath, dbName),
     version: 1,
-    onCreate: (db, version) {
-      print('Creating inventory table if it does not exist');
-      db.execute(buildCreateInventoryTableSql);
-      db.execute(buildCreateBoothTableSql);
-    },
   );
   
   return db;
@@ -85,10 +80,8 @@ class MyBoothsDb {
 
   Future<void> createBoothForUser(MyBooth booth) async {
     final db = await _getDatabase();
-    booth.userEmail = userEmail;
-    if (booth.boothName == null) 'My Booth';
-
-    await softDeleteBoothsByUserEmail();
+    // Set Booth Id
+    booth.id = uuid.v6();
 
     db.insert(
       myBoothTable,

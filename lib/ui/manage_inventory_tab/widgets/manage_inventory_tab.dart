@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:vintage_1020/constants/enums.dart';
@@ -54,12 +55,14 @@ class ManageInventoryTab extends HookConsumerWidget {
     }
 
     void quickAddItemWithPhoto() async {
-      XFile? photoTaken = await PhotoUtil.takeCameraPhoto();
-      if (photoTaken == null) return;
+      String photoTaken = await PhotoUtil.takePhotoAndReturnUrl();
+      if (photoTaken == "") return;
 
       // Save xfile as file
       // Get file path
       // save file with provider
+
+      ref.read(inventoryLocalProvider.notifier).quickAddInventoryItem(photoTaken);
     }
 
     void openEditInventoryDialog(InventoryItemLocal item) {
@@ -72,9 +75,6 @@ class ManageInventoryTab extends HookConsumerWidget {
     void openAddInventoryDialog() {
       showDialog(context: context, builder: (context) => const AddItemDialog());
     }
-
-    final String noInventoryMessage =
-        'You do not have any ${currentFilter.value.name} items.';
 
     return Scaffold(
       body: Column(
@@ -115,149 +115,60 @@ class ManageInventoryTab extends HookConsumerWidget {
               ),
             ],
           ),
-          // DISPLAY NO INVENTORY MESSAGE IF INVENTORY IS EMPTY
-          filteredInventory.isEmpty
-              ? WelcomeTutorialMessage()
-              // ? Center(
-              //     child: Padding(
-              //       padding: const EdgeInsets.fromLTRB(32, 0, 32, 32),
-              //       child: Text(
-              //         style: TextStyle(
-              //           fontSize: 32,
-              //           fontWeight: FontWeight.bold,
-              //         ),
-              //         currentFilter.value == InventoryFilter.all
-              //             ? 'You do not have any inventory items yet. Press the + to add an item!'
-              //             : noInventoryMessage,
-              //       ),
-              //     ),
-              //   )
-              // OTHERWISE DISPLAY INVENTORY TILES
-              : Expanded(
-                  child: ListView.builder(
-                    itemExtent: 200,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          openEditInventoryDialog(filteredInventory[index]);
-                        },
-                        child: ManageInventoryItemTile(
-                          model: filteredInventory[index],
-                        ),
-                      );
-                    },
-                    itemCount: filteredInventory.length,
-                  ),
+          SizedBox(
+            width: MediaQuery.widthOf(context) * .90,
+            child: Card.filled(
+              surfaceTintColor: Colors.red,
+              // elevation: 20,
+              child: OutlinedButton(
+                style: ButtonStyle(
+                  // backgroundColor: WidgetStatePropertyAll<Color>(Color.fromARGB(6, 6, 94, 63)),
                 ),
+                onPressed: openAddInventoryDialog, 
+                child: Center(
+                  child: 
+                  Text(style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    ), 
+                    'Add New Item')
+                  )
+                ),
+            ),
+          ),
+          // DISPLAY NO INVENTORY MESSAGE IF INVENTORY IS EMPTY
+          filteredInventory.isEmpty && currentFilter.value == InventoryFilter.all
+          ? WelcomeTutorialMessage()
+          // OTHERWISE DISPLAY INVENTORY TILES
+          : Expanded(
+              child: ListView.builder(
+                itemExtent: 125,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      openEditInventoryDialog(filteredInventory[index]);
+                    },
+                    child: ManageInventoryItemTile(
+                      model: filteredInventory[index],
+                    ),
+                  );
+                },
+                itemCount: filteredInventory.length,
+              ),
+            ),
         ],
       ),
-
-      floatingActionButton: FloatingActionButton(
-        shape: CircleBorder(side: BorderSide(color: Colors.blue, width: 2.0)),
-        onPressed: openAddInventoryDialog,
+      resizeToAvoidBottomInset: true,
+      floatingActionButton: FloatingActionButton.extended(
+        extendedIconLabelSpacing: 10,
+        label: Text('Quick'),
+        icon: FaIcon(FontAwesomeIcons.plus),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadiusGeometry.all(Radius.circular(16))
+            ),
+        onPressed: quickAddItemWithPhoto,
         backgroundColor: Colors.blue,
-        child: Icon(size: 40.0, Icons.add),
       ),
-
-      // FutureBuilder<List<InventoryItemLocal>>(
-      //   future: future,
-      //   builder: (context, asyncSnapshot) {
-      //     // AFTER THE ASYNC CALL FINISHES, HANDLE THE RETURN
-      //     if (asyncSnapshot.connectionState == ConnectionState.waiting) {
-      //       return Center(child: CircularProgressIndicator());
-      //     } else if (asyncSnapshot.hasError) {
-      //       return Center(
-      //         child: Text('Error loading data: ${asyncSnapshot.error}'),
-      //       );
-      //     } else if (asyncSnapshot.hasData) {
-      // return Column(
-      //   children: [
-      //     SizedBox(
-      //       height: 30,
-      //       child: Text(
-      //         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-      //         'Number of items: ${filteredInventory.length}',
-      //       ),
-      //     ),
-      //     SegmentedButton<InventoryFilter>(
-      //       style: ButtonStyle(elevation: WidgetStatePropertyAll(100)),
-      //       multiSelectionEnabled: false,
-      //       selected: {filterController.value},
-      //       onSelectionChanged: (Set<InventoryFilter> filters) {
-      //         filterController.value = filters.first;
-      //       },
-      //       segments: <ButtonSegment<InventoryFilter>>[
-      //         ButtonSegment<InventoryFilter>(
-      //           value: InventoryFilter.all,
-      //           label: Text('All'),
-      //         ),
-      //         ButtonSegment<InventoryFilter>(
-      //           value: InventoryFilter.listed,
-      //           label: Text('Booth'),
-      //         ),
-      //         ButtonSegment<InventoryFilter>(
-      //           value: InventoryFilter.backStock,
-      //           label: Text(
-      //             style: TextStyle(overflow: TextOverflow.ellipsis),
-      //             'Backstock',
-      //           ),
-      //         ),
-      //         ButtonSegment<InventoryFilter>(
-      //           value: InventoryFilter.sold,
-      //           label: Text('Sold'),
-      //         ),
-      //       ],
-      //     ),
-      //     // DISPLAY NO INVENTORY MESSAGE IF INVENTORY IS EMPTY
-      //     filteredInventory.isEmpty
-      //         ? Center(
-      //             child: Padding(
-      //               padding: const EdgeInsets.fromLTRB(32, 0, 32, 32),
-      //               child: Text(
-      //                 style: TextStyle(
-      //                   fontSize: 32,
-      //                   fontWeight: FontWeight.bold,
-      //                 ),
-      //                 filterController.value == InventoryFilter.all
-      //                     ? 'You do not have any inventory items yet. Press the + to add an item!'
-      //                     : noInventoryMessage,
-      //               ),
-      //             ),
-      //           )
-      //         // OTHERWISE DISPLAY INVENTORY TILES
-      //         : Expanded(
-      //             child: ListView.builder(
-      //               itemExtent: 200,
-      //               itemBuilder: (context, index) {
-      //                 return GestureDetector(
-      //                   onTap: () {
-      //                     openEditInventoryDialog(
-      //                       filteredInventory[index],
-      //                     );
-      //                   },
-      //                   child: ManageInventoryItemTile(
-      //                     model: filteredInventory[index],
-      //                   ),
-      //                 );
-      //               },
-      //               itemCount: filteredInventory.length,
-      //             ),
-      //           ),
-      //   ],
-      // );
-      //     }
-      //     return Center(
-      //       child: Text('No inventory Items. Click the PLUS sign to add'),
-      //     );
-      //   },
-      //   // TODO
-      // ),
-      // floatingActionButton: FloatingActionButton(
-      //   shape: CircleBorder(side: BorderSide(color: Colors.blue, width: 2.0)),
-      //   onPressed: openAddInventoryDialog,
-      //   backgroundColor: Colors.blue,
-      //   child: Icon(size: 40.0, Icons.add),
-      // ),
     );
   }
 }

@@ -40,11 +40,18 @@ class AddItemDialog extends HookConsumerWidget {
     }, []);
 
     // Controllers for TextFields/TextFormFields states
-    final itemPurchasePriceController = useTextEditingController(text: '');
-    final itemListingPriceController = useTextEditingController(text: '');
-    final itemHeightController = useTextEditingController(text: '');
-    final itemWidthController = useTextEditingController(text: '');
-    final itemDepthController = useTextEditingController(text: '');
+    final itemPurchasePriceController = useTextEditingController();
+    // final itemListingPriceController = useTextEditingController(text: '');
+    // final itemHeightController = useTextEditingController(text: '');
+    // final itemWidthController = useTextEditingController(text: '');
+    // final itemDepthController = useTextEditingController(text: '');
+
+    // UseStates for text fields
+    final itemPurchasePrice = useState<String>('');
+    final itemListingPrice = useState<String>('');
+    final itemHeight = useState<String>('');
+    final itemWidth = useState<String>('');
+    final itemDepth = useState<String>('');
 
     // UseStates for non text fields states
     final purchaseDate = useState<DateTime?>(null);
@@ -113,19 +120,19 @@ class AddItemDialog extends HookConsumerWidget {
       final InventoryItemLocal itemToDB = InventoryItemLocal.toLocalDb(
         Uuid().v6(),
         userEmail,
-        imageUrlsToSave.first,
+        imageUrlsToSave.isNotEmpty ? imageUrlsToSave.first : null,
         '',
         imageUrlsToSave,
         '',
-        double.tryParse(itemPurchasePriceController.text),
-        double.tryParse(itemListingPriceController.text),
+        double.tryParse(itemPurchasePrice.value),
+        double.tryParse(itemListingPrice.value),
         null,
         purchaseDate.value,
         listingDate.value,
         null,
-        double.tryParse(itemHeightController.text),
-        double.tryParse(itemWidthController.text),
-        double.tryParse(itemDepthController.text),
+        double.tryParse(itemHeight.value),
+        double.tryParse(itemWidth.value),
+        double.tryParse(itemDepth.value),
         null,
         isChecked.value ? 1.0 : 0.0,
       );
@@ -138,19 +145,12 @@ class AddItemDialog extends HookConsumerWidget {
       // TODO: Fix adding to booth logic.
       // Both select a booth AND create booth CANNOT be selected
 
-      if (selectedBoothName != 'null' && isChecked.value) {
-        // Select current booth where currentBooth.name = selectedBoothName.
+      if (createBoothName.value != '' && isChecked.value) {
 
-        // Create MyBoothobject
-
-        // Update provider and update booth in DB
-      }
-
-      if (createBoothName.value != '' && selectedBoothName.value == '' && isChecked.value) {
         MyBooth boothToCreate = MyBooth(
           createBoothName.value,
           userEmail,
-          imageUrlsToSave,
+          [],
           null,
         );
 
@@ -176,50 +176,54 @@ class AddItemDialog extends HookConsumerWidget {
             PriceDateInputWidget(
               price: itemPurchasePriceController.text,
               date: purchaseDate.value,
-              onPriceChanged: (value) =>
-                  itemPurchasePriceController.value = value,
+              onPriceChanged: (value) => itemPurchasePriceController.text = value,
               onDateChanged: (value) => purchaseDate.value = value,
               label: purchasePriceRequiredLabel,
             ),
             PriceDateInputWidget(
-              price: itemListingPriceController.text,
+              price: itemListingPrice.value,
               date: listingDate.value,
               onPriceChanged: (value) =>
-                  itemListingPriceController.value = value,
+                  itemListingPrice.value = value,
               onDateChanged: (value) => listingDate.value = value,
               label: listingPriceLabel,
             ),
-            Flex(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              direction: Axis.horizontal,
-              children: [
-                ItemDimensionWidget(
-                  label: ItemDimension.height.name,
-                  value: itemHeightController.text,
-                  onValueChanged: (value) => itemHeightController.value = value,
-                ),
-                ItemDimensionWidget(
-                  label: ItemDimension.width.name,
-                  value: itemWidthController.text,
-                  onValueChanged: (value) => itemWidthController.value = value,
-                ),
-                ItemDimensionWidget(
-                  label: ItemDimension.depth.name,
-                  value: itemDepthController.text,
-                  onValueChanged: (value) => itemHeightController.value = value,
-                ),
-              ],
-            ),
+
+            // TODO: REMOVED TO PROVIDE MORE SPACE ON THE DIALOG
+            // Flex(
+            //   mainAxisSize: MainAxisSize.min,
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   direction: Axis.horizontal,
+            //   children: [
+            //     ItemDimensionWidget(
+            //       label: ItemDimension.height.name,
+            //       value: itemHeight.value,
+            //       onValueChanged: (value) => itemHeight.value = value,
+            //     ),
+            //     ItemDimensionWidget(
+            //       label: ItemDimension.width.name,
+            //       value: itemWidth.value,
+            //       onValueChanged: (value) => itemWidth.value = value,
+            //     ),
+            //     ItemDimensionWidget(
+            //       label: ItemDimension.depth.name,
+            //       value: itemDepth.value,
+            //       onValueChanged: (value) => itemDepth.value = value,
+            //     ),
+            //   ],
+            // ),
             Row(
               children: [
-                Text(
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.bold,
+                Flexible(
+                  flex: 1,
+                  child: Text(
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    addToBoothLabel,
                   ),
-                  addToBoothLabel,
                 ),
                 Checkbox(
                   value: isChecked.value,
@@ -229,11 +233,33 @@ class AddItemDialog extends HookConsumerWidget {
                         : true,
                   },
                 ),
+                 Visibility(
+                  visible: isChecked.value,
+                   child: Flexible(
+                    flex: 2,
+                    child: SizedBox(
+                      height: 40,
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          // border: OutlineInputBorder(),
+                          floatingLabelAlignment: FloatingLabelAlignment.center,
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                          fillColor: Colors.blue,
+                          labelStyle: TextStyle(
+                            fontSize: 16,
+                            fontStyle: FontStyle.italic,
+                          ),
+                          labelText: createBoothInputLabel,
+                        ),
+                        onChanged: (value) => createBoothName.value = value,
+                        validator: (value) =>
+                            value?.isEmpty ?? true ? 'Booth Name is required' : null,
+                      ),
+                    ),
+                                   ),
+                 ),
               ],
-            ), // AddToBoothCheckboxWidget(
-            //   value: isChecked.value,
-            //   onValueChanged: (value) => isChecked.value,
-            // ),
+            ), 
             Visibility(
               visible: isChecked.value,
               child: AddItemSelectBooth(
