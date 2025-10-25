@@ -36,7 +36,7 @@ class AddItemDialog extends HookConsumerWidget {
     // then ref.watch is notified of state update
     // widgets rebuild
     useEffect(() {
-       ref.read(myBoothsProvider.notifier).fetchUserBooths();
+      ref.read(myBoothsProvider.notifier).fetchUserBooths();
     }, []);
 
     // Controllers for TextFields/TextFormFields states
@@ -59,31 +59,29 @@ class AddItemDialog extends HookConsumerWidget {
     final currentBooths = useState<List<MyBooth>>(userBooths);
     final boothNames = useState<List<String>>([]);
     final selectedBoothName = useState<String>('');
+    final createBoothName = useState<String>('');
 
-      
     // boothNames.sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
 
     /// AFTER USER SELECTS PHOTOS OR TAKES A PHOTO, UPDATE THE EPHEMERAL STATE
     void selectPhotos() async {
-
       List<XFile> photosToAdd = await PhotoUtil.selectPhotosFromGallery();
-      
-      if(photosToAdd.isEmpty) return;
-      
+
+      if (photosToAdd.isEmpty) return;
+
       // Update state of selected photos
       List<XFile> updatedSelectedXFiles = [
         ...selectedXFiles.value,
         ...photosToAdd,
       ];
 
-       selectedXFiles.value = updatedSelectedXFiles;
+      selectedXFiles.value = updatedSelectedXFiles;
     }
 
     void takePhoto() async {
-
       XFile? photoTaken = await PhotoUtil.takeCameraPhoto();
 
-      if(photoTaken == null) return;
+      if (photoTaken == null) return;
 
       selectedXFiles.value = [...selectedXFiles.value, photoTaken];
     }
@@ -136,8 +134,29 @@ class AddItemDialog extends HookConsumerWidget {
         ref
             .watch(inventoryLocalProvider.notifier)
             .addUserInventoryItemLocal(itemToDB);
-        closeDialog();
       }
+      // TODO: Fix adding to booth logic.
+      // Both select a booth AND create booth CANNOT be selected
+
+      if (selectedBoothName != 'null' && isChecked.value) {
+        // Select current booth where currentBooth.name = selectedBoothName.
+
+        // Create MyBoothobject
+
+        // Update provider and update booth in DB
+      }
+
+      if (createBoothName.value != '' && selectedBoothName.value == '' && isChecked.value) {
+        MyBooth boothToCreate = MyBooth(
+          createBoothName.value,
+          userEmail,
+          imageUrlsToSave,
+          null,
+        );
+
+        ref.read(myBoothsProvider.notifier).createBoothForUser(boothToCreate);
+      }
+      closeDialog();
     }
 
     return AlertDialog(
@@ -157,14 +176,16 @@ class AddItemDialog extends HookConsumerWidget {
             PriceDateInputWidget(
               price: itemPurchasePriceController.text,
               date: purchaseDate.value,
-              onPriceChanged: (value) => itemPurchasePriceController.value,
+              onPriceChanged: (value) =>
+                  itemPurchasePriceController.value = value,
               onDateChanged: (value) => purchaseDate.value = value,
               label: purchasePriceRequiredLabel,
             ),
             PriceDateInputWidget(
               price: itemListingPriceController.text,
               date: listingDate.value,
-              onPriceChanged: (value) => itemListingPriceController.value,
+              onPriceChanged: (value) =>
+                  itemListingPriceController.value = value,
               onDateChanged: (value) => listingDate.value = value,
               label: listingPriceLabel,
             ),
@@ -176,37 +197,40 @@ class AddItemDialog extends HookConsumerWidget {
                 ItemDimensionWidget(
                   label: ItemDimension.height.name,
                   value: itemHeightController.text,
-                  onValueChanged: (value) => itemHeightController.value,
+                  onValueChanged: (value) => itemHeightController.value = value,
                 ),
                 ItemDimensionWidget(
                   label: ItemDimension.width.name,
                   value: itemWidthController.text,
-                  onValueChanged: (value) => itemWidthController.value,
+                  onValueChanged: (value) => itemWidthController.value = value,
                 ),
                 ItemDimensionWidget(
                   label: ItemDimension.depth.name,
                   value: itemDepthController.text,
-                  onValueChanged: (value) => itemHeightController.value,
+                  onValueChanged: (value) => itemHeightController.value = value,
                 ),
               ],
             ),
             Row(
-            children: [
-              Text(
-                style: TextStyle(
-                  fontSize: 16,
-                  fontStyle: FontStyle.italic,
-                  fontWeight: FontWeight.bold,
+              children: [
+                Text(
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  addToBoothLabel,
                 ),
-                addToBoothLabel,
-              ),
-              Checkbox(
-                value: isChecked.value,
-                onChanged: (value) => {
-                  isChecked.value = (value == null || value == false) ? false : true,
-                }),
+                Checkbox(
+                  value: isChecked.value,
+                  onChanged: (value) => {
+                    isChecked.value = (value == null || value == false)
+                        ? false
+                        : true,
+                  },
+                ),
               ],
-            ),      // AddToBoothCheckboxWidget(
+            ), // AddToBoothCheckboxWidget(
             //   value: isChecked.value,
             //   onValueChanged: (value) => isChecked.value,
             // ),

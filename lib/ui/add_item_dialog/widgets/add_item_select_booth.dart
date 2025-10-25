@@ -55,8 +55,9 @@ class AddItemSelectBooth extends StatelessWidget {
               ),
               labelText: createBoothInputLabel,
             ),
-            validator: (value) =>
-                value?.isEmpty ?? true ? 'Booth Name is required' : null,
+            onChanged: (value) => onValueUpdated,
+            // validator: (value) =>
+            //     value?.isEmpty ?? true ? 'Booth Name is required' : null,
           ),
         ),
       ],

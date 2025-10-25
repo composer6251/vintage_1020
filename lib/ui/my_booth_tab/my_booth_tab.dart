@@ -23,13 +23,13 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
   void initState() {
     super.initState();
 
-    myBoothFuture = ref.read(myBoothsProvider.notifier).fetchUserBoothsReturn();
+    // myBoothFuture = ref.read(myBoothsProvider.notifier).fetchUserBoothsReturn();
   }
 
   @override
   Widget build(BuildContext context) {
-
-    final List<MyBooth>? currentBooths = ref.watch(myBoothsProvider).toList();
+    final List<MyBooth> currentBooths = ref.watch(myBoothsProvider).toList();
+    print('current booths in MyBooth: ${currentBooths.length}');
     final List<InventoryItemLocal>? allInventory = ref.watch(inventoryProvider);
     final MyBooth currentBooth = currentBooths!.first;
     List<String>? boothImageUrls = currentBooth?.currentBoothImageUrls ?? [];
@@ -39,7 +39,6 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
     double inventoryCost = ref.watch(inventoryPurchaseCostProvider);
     double boothValue = ref.watch(inventoryPurchaseCostProvider);
 
-
     void takeBoothPhoto() async {
       String boothPhotoPath = await PhotoUtil.takePhotoAndReturnUrl();
 
@@ -47,86 +46,91 @@ class _MyBoothTabState extends ConsumerState<MyBoothTab> {
     }
 
     return Scaffold(
-        body: FutureBuilder<List<MyBooth>>(
-        future: myBoothFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            Center(child: Text('Error Fetching booth: ${snapshot.error.toString()}'));
-          } 
-            return 
-                Column(
+      body:
+          // FutureBuilder<List<MyBooth>>(
+          // future: myBoothFuture,
+          // builder: (context, snapshot) {
+          //   if (snapshot.connectionState == ConnectionState.waiting) {
+          //     return Center(child: CircularProgressIndicator());
+          //   } else if (snapshot.hasError) {
+          //     Center(child: Text('Error Fetching booth: ${snapshot.error.toString()}'));
+          //   }
+          //     return
+          Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Text(
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
+                currentBooth?.boothName ?? 'waiting',
+              ),
+              Flexible(
+                flex: 2,
+                child: Card(
+                  elevation: 3.0,
+                  shadowColor: Colors.blueAccent,
+                  child: Row(
                     mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Text(style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28), currentBooth?.boothName ?? 'waiting'),
-                      Flexible(
-                        flex: 2,
-                        child: Card(
-                          elevation: 3.0,
-                          shadowColor: Colors.blueAccent,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Text(
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                                'Items:${currentBooth?.boothName}',
-                              ),
-                              Text(
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                                'Cost: ${NumberFormat.currency(symbol: '\$').format(inventoryCost)}',
-                              ),
-                              Text(
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                                'Value: ${NumberFormat.currency(symbol: '\$').format(boothValue)}',
-                              ),
-                            ],
-                          ),
+                      Text(
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontStyle: FontStyle.italic,
                         ),
+                        'Items:${currentBooth?.boothName}',
                       ),
-                      boothImageUrls.isEmpty ?
-                      TextButton(onPressed: takeBoothPhoto, child: Text('You do not have booth images.'))
-                      :
-                      Expanded(
-                        flex: 4,
-                        child: ListView.builder(
-                          itemCount: currentBooth?.currentBoothImageUrls?.length,
-                          itemBuilder: (context, index) {
-                            currentBooth?.currentBoothImageUrls?.map((url) => Image.file(File(url)));
-                          }
-                        ,),
-                      ),
-                      Expanded(
-                        flex: 4,
-                        child: InventoryCarousel(
-                          inventoryItems: inventory ?? [],
-                          flexWeights: [3],
+                      Text(
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontStyle: FontStyle.italic,
                         ),
+                        'Cost: ${NumberFormat.currency(symbol: '\$').format(inventoryCost)}',
                       ),
-                      // Expanded(
-                      //   child: ListView.builder(
-                      //     itemExtent: 200,
-                      //     itemBuilder: (context, index) {
-                      //       inventory.map((item) => item.getPrimaryImage((item) => Image.file(item.))
-                      //     },
-                      //     itemCount: inventory?.length,
-                      //   ),
-                      // ),
+                      Text(
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontStyle: FontStyle.italic,
+                        ),
+                        'Value: ${NumberFormat.currency(symbol: '\$').format(boothValue)}',
+                      ),
                     ],
-                  );
-        
-        },
-      ),
+                  ),
+                ),
+              ),
+              boothImageUrls.isEmpty
+                  ? TextButton(
+                      onPressed: takeBoothPhoto,
+                      child: Text('You do not have booth images.'),
+                    )
+                  : Expanded(
+                      flex: 4,
+                      child: ListView.builder(
+                        itemCount: currentBooth?.currentBoothImageUrls?.length,
+                        itemBuilder: (context, index) {
+                          currentBooth?.currentBoothImageUrls?.map(
+                            (url) => Image.file(File(url)),
+                          );
+                        },
+                      ),
+                    ),
+              Expanded(
+                flex: 4,
+                child: InventoryCarousel(
+                  inventoryItems: inventory ?? [],
+                  flexWeights: [3],
+                ),
+              ),
+              // Expanded(
+              //   child: ListView.builder(
+              //     itemExtent: 200,
+              //     itemBuilder: (context, index) {
+              //       inventory.map((item) => item.getPrimaryImage((item) => Image.file(item.))
+              //     },
+              //     itemCount: inventory?.length,
+              //   ),
+              // ),
+            ],
+          ),
     );
   }
 }
