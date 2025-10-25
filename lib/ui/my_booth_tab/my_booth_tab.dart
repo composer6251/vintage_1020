@@ -36,6 +36,8 @@ class MyBoothTab extends HookConsumerWidget {
 
     final selectedBooth = useState<MyBooth>(currentBooths.first);
 
+    final selectedBoothImages = useState(selectedBooth.value.currentBoothImageUrls);
+
     // TODO:
     // - Add filter 
     // 
@@ -68,6 +70,7 @@ class MyBoothTab extends HookConsumerWidget {
 
     void takeBoothPhoto() async {
       String boothPhotoPath = await PhotoUtil.takePhotoAndReturnUrl();
+      List<String>? selectedBoothImageUrlsCurrentState = selectedBoothImages.value;
 
       // boothImageUrls.add(boothPhotoPath);
     }
