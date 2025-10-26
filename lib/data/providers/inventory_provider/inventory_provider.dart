@@ -3,7 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vintage_1020/data/local_db/my_booths_db.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
-import 'package:vintage_1020/data/local_db/local_db.dart';
+import 'package:vintage_1020/data/local_db/inventory_db.dart';
 
 part 'inventory_provider.g.dart';
 

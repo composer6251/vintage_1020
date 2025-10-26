@@ -4,7 +4,6 @@ import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:sqflite/sqlite_api.dart';
 import 'package:uuid/uuid.dart';
-import 'package:vintage_1020/data/local_db/my_booth_db.dart';
 import 'package:vintage_1020/domain/my_booth/my_booth.dart';
 
 final String dbName = 'vintage_1020.db';
@@ -19,6 +18,7 @@ final String buildCreateInventoryTableSql =
 
 // TABLE AND COLUMN NAMES
 final String inventoryItemTable = 'inventory_item';
+final String myBoothTable = 'my_booth';
 
 // VERSIONS
 final int db_version_two = 2;
@@ -87,6 +87,21 @@ class MyBoothsDb {
     } catch (ex) {
       print('error creating booth for user');
     }
+  }
+
+    // TODO: CREATE METHOD TO UPDATE BY ID.
+  Future<int> updateBooth(MyBooth booth) async {
+    final db = await _getDatabase();
+
+    final int updatedId = await db.update(
+      myBoothTable,
+      booth.toMapForLocalDB(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+      where: 'id = "${booth.id}"',
+    );
+
+    print('Added item to booth: $updatedId');
+    return updatedId;
   }
 
   Future<void> softDeleteBoothsByUserEmail() async {

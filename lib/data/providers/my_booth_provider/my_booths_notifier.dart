@@ -64,7 +64,7 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
     print('booths state after insert: ${state.length}');
   }
 
-    Future<void> removeItemFromBoothById(String itemId, String boothId) async {
+  Future<void> removeItemFromBoothById(String itemId, String boothId) async {
     // Get boothFromState
     MyBooth currentBoothState = state
         .where((booth) => booth.id == boothId)
@@ -85,6 +85,26 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
     state.removeAt(indexOfItemToUpdate);
     state.insert(indexOfItemToUpdate, currentBoothState);
     await MyBoothsDb().createBoothForUser(currentBoothState);
+
+    print('booths state after insert: ${state.length}');
+  }
+
+  Future<void> updateBooth(MyBooth booth) async {
+    // Get boothFromState
+    MyBooth currentBoothState = state
+        .where((booth) => booth.id == booth.id)
+        .first;
+
+    // Get Index of booth to update to maintain order
+    int indexOfItemToUpdate = state.indexOf(currentBoothState);
+    if (indexOfItemToUpdate == -1) {
+      print('Failed to find item to update in current state');
+      return;
+    }
+    state.removeAt(indexOfItemToUpdate);
+    state.insert(indexOfItemToUpdate, booth);
+
+    await MyBoothsDb().updateBooth(booth);
 
     print('booths state after insert: ${state.length}');
   }

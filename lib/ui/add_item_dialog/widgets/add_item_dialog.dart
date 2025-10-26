@@ -10,7 +10,7 @@ import 'package:vintage_1020/data/providers/my_booth_provider/my_booths_notifier
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart'
     hide userEmail;
-import 'package:vintage_1020/data/local_db/local_db.dart';
+import 'package:vintage_1020/data/local_db/inventory_db.dart';
 import 'package:vintage_1020/domain/my_booth/my_booth.dart';
 import 'package:vintage_1020/ui/add_item_dialog/widgets/add_to_booth_checkbox_widget.dart';
 import 'package:vintage_1020/util/photo_util.dart';

@@ -42,10 +42,6 @@ class ManageInventoryScreen extends HookConsumerWidget {
     );
 
     final snapshot = useFuture(result);
-    // useEffect(() {
-    //   ref.read(inventoryLocalProvider.notifier).fetchInitialUserInventory();
-    //   ref.read(myBoothsProvider.notifier).fetchUserBooths();
-    // }, []);
 
     final width = MediaQuery.sizeOf(context).width;
 
@@ -58,11 +54,6 @@ class ManageInventoryScreen extends HookConsumerWidget {
     final List<InventoryItemLocal> filteredInventory = ref.watch(
       inventoryProvider,
     );
-
-    // void setNewInventoryFilter(InventoryFilter newFilter) {
-    //   currentFilter.value = newFilter;
-    //   ref.read(filterProvider.notifier).setCurrentFilter(newFilter);
-    // }
 
     void openEditInventoryDialog(InventoryItemLocal item) {
       showDialog(

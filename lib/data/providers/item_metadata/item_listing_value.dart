@@ -1,33 +1,33 @@
 
 
-// Create class with annotation
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:vintage_1020/data/providers/inventory_notifier.dart';
-import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
+// // Create class with annotation
+// import 'package:riverpod_annotation/riverpod_annotation.dart';
+// import 'package:vintage_1020/data/providers/inventory_notifier.dart';
+// import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 
-part 'item_listing_value.g.dart';
+// part 'item_listing_value.g.dart';
 
-@riverpod
-class InventoryListingValue extends _$InventoryListingValue{
+// @riverpod
+// class InventoryListingValue extends _$InventoryListingValue{
 
-  @override
-  double build() {
+//   @override
+//   double build() {
 
-    return setInventoryPurchaseCost();
-  }
+//     return setInventoryPurchaseCost();
+//   }
 
-  double setInventoryPurchaseCost() {
+//   double setInventoryPurchaseCost() {
 
-    List<InventoryItemLocal> inventory = ref.watch(inventoryProvider);
+//     List<InventoryItemLocal> inventory = ref.watch(inventoryProvider);
 
-    double cost = 0.0;
+//     double cost = 0.0;
 
-    for (InventoryItemLocal item in inventory) {
+//     for (InventoryItemLocal item in inventory) {
 
-      cost += item.itemListingPrice as double;
-    }
+//       cost += item.itemListingPrice as double;
+//     }
 
-    return cost;
-  }
+//     return cost;
+//   }
 
-}
+// }

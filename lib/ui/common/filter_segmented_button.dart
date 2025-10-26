@@ -42,13 +42,6 @@ class FilterSegmentedButton extends HookConsumerWidget {
           value: InventoryFilter.backStock,
           label: Text(style: TextStyle(fontSize: 20), 'Backstock'),
         ),
-        // ButtonSegment<InventoryFilter>(
-        //   value: InventoryFilter.sold,
-        //   label: Badge(
-        //     label: Text(inventoryCounts[InventoryFilter.sold.name].toString()),
-        //     child: Text(style: TextStyle(fontSize: 24), 'Sold'),
-        //   ),
-        // ),
       ],
     );
   }

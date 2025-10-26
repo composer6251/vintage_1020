@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:vintage_1020/data/providers/inventory_notifier.dart';
+import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
 import 'package:vintage_1020/data/providers/item_metadata/item_purchase_cost.dart';
 import 'package:vintage_1020/data/providers/my_booth_provider/my_booths_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
@@ -21,41 +22,80 @@ import 'package:vintage_1020/ui/common/widgets/inventory_carousel/edit_item_inve
 class MyBoothsScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final booths = ref.watch(myBoothsProvider);
-    print('my booths in booths tab ${booths?.length}');
-    // useEffect(() {
-    //   ref.read(myBoothsProvider.notifier).fetchUserBooths();
-    // }, []);
-    print('my booths in booths tab after use effect ${booths?.length}');
+
+        // Initiate fetch for inventory
+    final result = useMemoized(
+      () => ref.read(myBoothsProvider.notifier).fetchUserBooths(),
+    );
+
+    final snapshot = useFuture(result);
 
     // Watch booths provider
     final currentBooths = ref.watch(myBoothsProvider);
+    final boothNames = currentBooths.map((booth) => booth.boothName).toList();
+    final currentBoothNames = useState<List<String>>(boothNames);
 
-    final selectedBooth = useState<MyBooth?>(null);
+    // Watch inventory
+    final inventory = ref.watch(inventoryLocalProvider);
+
+    // On my booth selected
+    final selectedBooth = useState<MyBooth>(currentBooths.first);
+    final selectedBoothInventory = useState<List<InventoryItemLocal>>([]);
+    final selectedBoothCost = useState<double?>(0.0);
+    final selectedBoothValue = useState<double?>(0.0);
+
+    
+    MyBooth setInventoryForBooth() {
+
+      MyBooth booth = selectedBooth.value;
+      List<InventoryItemLocal> boothInventoryItems = selectedBooth.value.boothInventory = inventory.where((item) => selectedBooth.value.boothInventoryIds.contains(item.id)).toList();
+      booth.boothInventory = boothInventoryItems;
+
+      return booth;
+    }
+
+    void getBoothItemsAndMetadata() {
+
+      MyBooth boothWithInventory = setInventoryForBooth();
+    }
+
+    void calculateBoothCost() {
+
+      double boothCost = selectedBooth.value.boothInventory?.fold<double>(
+        0.0,
+        (double sum, item) => sum + (item.itemPurchasePrice ?? 0.0),
+      ) ?? 0.0;
+    }
+
+    void calculateBoothValue() {
+
+      double boothValue = selectedBooth.value.boothInventory?.fold<double>(
+        0.0,
+        (double sum, item) => sum + (item.itemListingPrice ?? 0.0),
+      ) ?? 0.0;
+    }
+
 
     final selectedBoothImages = useState(
       selectedBooth.value?.currentBoothImageUrls,
     );
-
-    List<InventoryItemLocal>? inventory = ref.watch(inventoryProvider);
-
-    double inventoryCost = ref.watch(inventoryPurchaseCostProvider);
-    double boothValue = ref.watch(inventoryPurchaseCostProvider);
 
     void takeBoothPhoto() async {
       String boothPhotoPath = await PhotoUtil.takePhotoAndReturnUrl();
       List<String>? selectedBoothImageUrlsCurrentState =
           selectedBoothImages.value;
 
+      selectedBoothImageUrlsCurrentState?.add(boothPhotoPath);
+
+      MyBooth booth = selectedBooth.value;
+      booth.currentBoothImageUrls = selectedBoothImageUrlsCurrentState;
+
+      await ref.read(myBoothsProvider.notifier).updateBooth(booth);
+
       // boothImageUrls.add(boothPhotoPath);
     }
 
     Widget openQuickAddInventoryToBooth() {
-      List<InventoryItemLocal> inventory = ref.read(inventoryProvider).toList();
-
-      if (inventory.isEmpty)
-        return Text('You do not have inventory items. Please add some');
-
       return Column(
         children: [
           ListView.builder(
@@ -75,9 +115,19 @@ class MyBoothsScreen extends HookConsumerWidget {
       );
     }
 
-    return Column(
+    if(snapshot.connectionState == ConnectionState.waiting) {
+      return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          DropdownMenu(dropdownMenuEntries: boothNames
+            .map<DropdownMenuEntry<String>>(
+              (String boothName) => DropdownMenuEntry<String>(
+                leadingIcon: Icon(Icons.storefront),
+                value: boothName,
+                label: boothName,
+              ),
+            )
+            .toList(),),
           Expanded(
             child: ListView.builder(
               itemExtent: 150,
@@ -118,21 +168,21 @@ class MyBoothsScreen extends HookConsumerWidget {
                 children: [
                   Text(
                     style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
-                    'Items: ${selectedBooth.value?.boothInventoryIds?.length}',
+                    'Items: ${selectedBoothInventory.value.length}',
                   ),
                   Text(
                     style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
-                    'Cost: ${NumberFormat.currency(symbol: '\$').format(inventoryCost)}',
+                    'Cost: ${NumberFormat.currency(symbol: '\$').format(selectedBoothCost.value)}',
                   ),
                   Text(
                     style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
-                    'Value: ${NumberFormat.currency(symbol: '\$').format(boothValue)}',
+                    'Value: ${NumberFormat.currency(symbol: '\$').format(selectedBoothValue.value)}',
                   ),
                 ],
               ),
             ),
           ),
-          selectedBooth.value?.currentBoothImageUrls?.length == 0
+          selectedBooth.value.currentBoothImageUrls?.length == 0
               ? OutlinedButton(
                   onPressed: takeBoothPhoto,
                   child: Text('Take booth image'),
@@ -163,5 +213,11 @@ class MyBoothsScreen extends HookConsumerWidget {
                 ),
         ],
       );
+    } else if (snapshot.connectionState == ConnectionState.waiting) {
+      return Center(child: CircularProgressIndicator());
+    } else if (snapshot.connectionState == ConnectionState.none) {
+      return Center(child: Text('Snapshot has no connection'));
+    }
+    return Center(child: Text('Default condition'));
   }
 }
