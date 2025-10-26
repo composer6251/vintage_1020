@@ -26,16 +26,12 @@ final int db_version_two = 2;
 Future<Database> _getDatabase() async {
   final dbPath = await sql.getDatabasesPath();
 
-  final db = await sql.openDatabase(
-    path.join(dbPath, dbName),
-    version: 1,
-  );
-  
+  final db = await sql.openDatabase(path.join(dbPath, dbName), version: 1);
+
   return db;
 }
 
 class MyBoothsDb {
-  
   Future<List<MyBooth>> fetchUserBoothsByEmail() async {
     final db = await _getDatabase();
 
@@ -49,7 +45,6 @@ class MyBoothsDb {
         whereArgs: [userEmail],
       );
       booths = data.map((booth) => {MyBooth.fromLocalDB(booth)}).toList();
-    
     } catch (ex) {
       print('Exception caught in fetchingBoothsByEmail: $ex');
     }
@@ -83,11 +78,15 @@ class MyBoothsDb {
     // Set Booth Id
     booth.id = uuid.v6();
 
-    db.insert(
-      myBoothTable,
-      booth.toMapForLocalDB(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    try {
+      db.insert(
+        myBoothTable,
+        booth.toMapForLocalDB(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    } catch (ex) {
+      print('error creating booth for user');
+    }
   }
 
   Future<void> softDeleteBoothsByUserEmail() async {

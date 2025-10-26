@@ -1,4 +1,3 @@
-
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vintage_1020/data/local_db/my_booths_db.dart';
 import 'package:vintage_1020/domain/my_booth/my_booth.dart';
@@ -7,7 +6,6 @@ part 'my_booths_notifier.g.dart';
 
 @riverpod
 class MyBoothsNotifier extends _$MyBoothsNotifier {
-  
   @override
   List<MyBooth> build() {
     print('MyBoothNotifier build');
@@ -15,16 +13,14 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
   }
 
   Future<void> fetchUserBooths() async {
-
     List<MyBooth> userBooths = await MyBoothsDb().fetchUserBoothsByEmail();
 
-    if(ref.mounted) {
+    if (ref.mounted) {
       state = userBooths;
     }
   }
 
-    Future<List<MyBooth>> fetchUserBoothsReturn() async {
-
+  Future<List<MyBooth>> fetchUserBoothsReturn() async {
     List<MyBooth> userBooths = await MyBoothsDb().fetchUserBoothsByEmail();
 
     // state = userBooths;
@@ -33,25 +29,24 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
   }
 
   Future<void> createBoothForUser(MyBooth boothToInsert) async {
-
-
+    state = [...state, boothToInsert];
     await MyBoothsDb().createBoothForUser(boothToInsert);
 
+    print('booths state after insert: ${state.length}');
   }
 
   Future<void> getCurrentBooth(String boothId) async {
-
-      MyBooth currentBooth;
+    MyBooth currentBooth;
   }
-
 }
 
 @riverpod
 List<String> getNamesOfBooths(Ref ref) {
-
   List<MyBooth> currentBooths = ref.watch(myBoothsProvider);
 
-  List<String> boothNames = currentBooths.map((booth) => booth.boothName).toList();
-  
+  List<String> boothNames = currentBooths
+      .map((booth) => booth.boothName)
+      .toList();
+
   return boothNames;
 }

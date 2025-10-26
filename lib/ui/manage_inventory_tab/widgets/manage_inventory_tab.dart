@@ -5,11 +5,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:vintage_1020/constants/enums.dart';
 import 'package:vintage_1020/constants/welcome_tutorial_message.dart';
-import 'package:vintage_1020/data/local_db/local_db.dart';
 import 'package:vintage_1020/data/providers/filter_notifier.dart';
 
 import 'package:vintage_1020/data/providers/inventory_notifier.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
+import 'package:vintage_1020/data/providers/my_booth_provider/my_booths_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/ui/add_item_dialog/widgets/add_item_dialog.dart';
 import 'package:vintage_1020/ui/edit_item_dialog/edit_inventory_item_dialog.dart';
@@ -36,7 +36,10 @@ class ManageInventoryTab extends HookConsumerWidget {
     // Initiate fetch for inventory
     useEffect(() {
       ref.read(inventoryLocalProvider.notifier).fetchInitialUserInventory();
+      ref.read(myBoothsProvider.notifier).fetchUserBooths();
     }, []);
+
+    final width = MediaQuery.sizeOf(context).width;
 
     // Widget rebuilds when notified of inventoryLocalProvider state change
     ref.watch(inventoryLocalProvider);
@@ -58,11 +61,9 @@ class ManageInventoryTab extends HookConsumerWidget {
       String photoTaken = await PhotoUtil.takePhotoAndReturnUrl();
       if (photoTaken == "") return;
 
-      // Save xfile as file
-      // Get file path
-      // save file with provider
-
-      ref.read(inventoryLocalProvider.notifier).quickAddInventoryItem(photoTaken);
+      ref
+          .read(inventoryLocalProvider.notifier)
+          .quickAddInventoryItem(photoTaken);
     }
 
     void openEditInventoryDialog(InventoryItemLocal item) {
@@ -79,12 +80,38 @@ class ManageInventoryTab extends HookConsumerWidget {
     return Scaffold(
       body: Column(
         children: [
-          SizedBox(
-            height: 30,
-            child: Text(
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              'Number of items: ${filteredInventory.length}',
-            ),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                'TOTAL ITEMS: ${filteredInventory.length}',
+              ),
+              Card.filled(
+                elevation: 2,
+                child: OutlinedButton(
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll<Color>(Color.fromARGB(6, 6, 94, 63)),
+                  ),
+                  onPressed: openAddInventoryDialog,
+                  child: Center(
+                    child: Text(
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      'Add New Item',
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Divider(
+            height: 32,
+            indent: width * .10, 
+            endIndent: width * .10
           ),
           SegmentedButton<InventoryFilter>(
             style: ButtonStyle(elevation: WidgetStatePropertyAll(100)),
@@ -115,47 +142,27 @@ class ManageInventoryTab extends HookConsumerWidget {
               ),
             ],
           ),
-          SizedBox(
-            width: MediaQuery.widthOf(context) * .90,
-            child: Card.filled(
-              surfaceTintColor: Colors.red,
-              // elevation: 20,
-              child: OutlinedButton(
-                style: ButtonStyle(
-                  // backgroundColor: WidgetStatePropertyAll<Color>(Color.fromARGB(6, 6, 94, 63)),
-                ),
-                onPressed: openAddInventoryDialog, 
-                child: Center(
-                  child: 
-                  Text(style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    ), 
-                    'Add New Item')
-                  )
-                ),
-            ),
-          ),
           // DISPLAY NO INVENTORY MESSAGE IF INVENTORY IS EMPTY
-          filteredInventory.isEmpty && currentFilter.value == InventoryFilter.all
-          ? WelcomeTutorialMessage()
-          // OTHERWISE DISPLAY INVENTORY TILES
-          : Expanded(
-              child: ListView.builder(
-                itemExtent: 125,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      openEditInventoryDialog(filteredInventory[index]);
+          filteredInventory.isEmpty &&
+                  currentFilter.value == InventoryFilter.all
+              ? WelcomeTutorialMessage()
+              // OTHERWISE DISPLAY INVENTORY TILES
+              : Expanded(
+                  child: ListView.builder(
+                    itemExtent: 125,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          openEditInventoryDialog(filteredInventory[index]);
+                        },
+                        child: ManageInventoryItemTile(
+                          model: filteredInventory[index],
+                        ),
+                      );
                     },
-                    child: ManageInventoryItemTile(
-                      model: filteredInventory[index],
-                    ),
-                  );
-                },
-                itemCount: filteredInventory.length,
-              ),
-            ),
+                    itemCount: filteredInventory.length,
+                  ),
+                ),
         ],
       ),
       resizeToAvoidBottomInset: true,
@@ -164,8 +171,8 @@ class ManageInventoryTab extends HookConsumerWidget {
         label: Text('Quick'),
         icon: FaIcon(FontAwesomeIcons.plus),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadiusGeometry.all(Radius.circular(16))
-            ),
+          borderRadius: BorderRadiusGeometry.all(Radius.circular(16)),
+        ),
         onPressed: quickAddItemWithPhoto,
         backgroundColor: Colors.blue,
       ),

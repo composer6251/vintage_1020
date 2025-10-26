@@ -34,7 +34,7 @@ class PriceDateInputWidget extends StatelessWidget {
           //     value?.isEmpty ?? true ? 'Purchase Price is required' : null,
         ),
         OutlinedButton(
-          style: ButtonStyle(elevation: WidgetStatePropertyAll<double>(8.0)),
+          style: ButtonStyle(elevation: WidgetStatePropertyAll<double>(4.0)),
           onPressed: () async {
             onDateChanged(await selectDate(context));
           },
