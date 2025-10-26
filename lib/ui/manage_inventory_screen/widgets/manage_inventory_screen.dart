@@ -6,12 +6,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:vintage_1020/constants/enums.dart';
 import 'package:vintage_1020/constants/welcome_tutorial_message.dart';
 import 'package:vintage_1020/data/providers/filter_notifier.dart';
+import 'package:vintage_1020/data/providers/inventory_counts_notifier/inventory_counts_notifier.dart';
 
 import 'package:vintage_1020/data/providers/inventory_notifier.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
 import 'package:vintage_1020/data/providers/my_booth_provider/my_booths_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/ui/add_item_dialog/widgets/add_item_dialog.dart';
+import 'package:vintage_1020/ui/common/filter_segmented_button.dart';
 import 'package:vintage_1020/ui/edit_item_dialog/edit_inventory_item_dialog.dart';
 
 import 'package:vintage_1020/ui/manage_inventory_screen/widgets/manage_inventory_item_tile.dart';
@@ -57,10 +59,10 @@ class ManageInventoryScreen extends HookConsumerWidget {
       inventoryProvider,
     );
 
-    void setNewInventoryFilter(InventoryFilter newFilter) {
-      currentFilter.value = newFilter;
-      ref.read(filterProvider.notifier).setCurrentFilter(newFilter);
-    }
+    // void setNewInventoryFilter(InventoryFilter newFilter) {
+    //   currentFilter.value = newFilter;
+    //   ref.read(filterProvider.notifier).setCurrentFilter(newFilter);
+    // }
 
     void openEditInventoryDialog(InventoryItemLocal item) {
       showDialog(
@@ -71,72 +73,30 @@ class ManageInventoryScreen extends HookConsumerWidget {
 
     if (snapshot.connectionState == ConnectionState.done) {
       return Column(
+        mainAxisSize: MainAxisSize.max,
         children: [
-          Column(
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Text(
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                    'TOTAL ITEMS: ${filteredInventory.length}',
-                  ),
-                ],
-              ),
-            ],
-          ),
-          Divider(height: 32, indent: width * .10, endIndent: width * .10),
-          SegmentedButton<InventoryFilter>(
-            style: ButtonStyle(elevation: WidgetStatePropertyAll(100)),
-            multiSelectionEnabled: false,
-            selected: {currentFilter.value},
-            onSelectionChanged: (Set<InventoryFilter> filters) {
-              setNewInventoryFilter(filters.first);
-            },
-            segments: <ButtonSegment<InventoryFilter>>[
-              ButtonSegment<InventoryFilter>(
-                value: InventoryFilter.all,
-                label: Text('All'),
-              ),
-              ButtonSegment<InventoryFilter>(
-                value: InventoryFilter.listed,
-                label: Text('Booth'),
-              ),
-              ButtonSegment<InventoryFilter>(
-                value: InventoryFilter.backStock,
-                label: Text(
-                  style: TextStyle(overflow: TextOverflow.ellipsis),
-                  'Backstock',
-                ),
-              ),
-              ButtonSegment<InventoryFilter>(
-                value: InventoryFilter.sold,
-                label: Text('Sold'),
-              ),
-            ],
-          ),
+        FilterSegmentedButton(key: key),
           // DISPLAY NO INVENTORY MESSAGE IF INVENTORY IS EMPTY
           filteredInventory.isEmpty &&
                   currentFilter.value == InventoryFilter.all
-              ? WelcomeTutorialMessage()
-              // OTHERWISE DISPLAY INVENTORY TILES
-              : Expanded(
-                  child: ListView.builder(
-                    itemExtent: 125,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          openEditInventoryDialog(filteredInventory[index]);
-                        },
-                        child: ManageInventoryItemTile(
-                          model: filteredInventory[index],
-                        ),
-                      );
-                    },
-                    itemCount: filteredInventory.length,
+        ? WelcomeTutorialMessage()
+        // OTHERWISE DISPLAY INVENTORY TILES
+        : Expanded(
+            child: ListView.builder(
+              itemExtent: 125,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    openEditInventoryDialog(filteredInventory[index]);
+                  },
+                  child: ManageInventoryItemTile(
+                    model: filteredInventory[index],
                   ),
-                ),
+                );
+              },
+              itemCount: filteredInventory.length,
+            ),
+          ),
         ],
       );
     } else if (snapshot.connectionState == ConnectionState.waiting) {

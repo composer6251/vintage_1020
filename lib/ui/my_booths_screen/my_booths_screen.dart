@@ -11,6 +11,9 @@ import 'package:vintage_1020/data/providers/item_metadata/item_purchase_cost.dar
 import 'package:vintage_1020/data/providers/my_booth_provider/my_booths_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/domain/my_booth/my_booth.dart';
+import 'package:vintage_1020/ui/common/widgets/app_bar/custom_app_bar.dart';
+import 'package:vintage_1020/ui/common/widgets/app_bar/custom_bottom_navigation_bar.dart';
+import 'package:vintage_1020/ui/common/widgets/app_bar/custom_fab.dart';
 import 'package:vintage_1020/ui/image_widget_util/image_widget_util.dart';
 import 'package:vintage_1020/util/photo_util.dart';
 import 'package:vintage_1020/ui/common/widgets/inventory_carousel/edit_item_inventory_carousel.dart';
@@ -72,8 +75,7 @@ class MyBoothsScreen extends HookConsumerWidget {
       );
     }
 
-    return Scaffold(
-      body: Column(
+    return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Expanded(
@@ -92,9 +94,7 @@ class MyBoothsScreen extends HookConsumerWidget {
                       children: [
                         Badge(
                           label: Text(
-                            currentBooths[index].boothInventoryIds?.length
-                                    .toString() ??
-                                '0',
+                            currentBooths[index].boothInventoryIds?.length.toString() ?? '0',
                           ),
                           child: FaIcon(FontAwesomeIcons.tent),
                         ),
@@ -162,7 +162,6 @@ class MyBoothsScreen extends HookConsumerWidget {
                   ),
                 ),
         ],
-      ),
-    );
+      );
   }
 }

@@ -5,7 +5,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
-import 'package:vintage_1020/constants/enums.dart';
 import 'package:vintage_1020/constants/label_input_initial_values.dart';
 import 'package:vintage_1020/data/providers/my_booth_provider/my_booths_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
@@ -30,14 +29,6 @@ class AddItemDialog extends HookConsumerWidget {
     final formKey = useMemoized(() => GlobalKey<FormState>());
 
     List<MyBooth> userBooths = ref.watch(myBoothsProvider);
-    // async call initiated.
-    // widgets build
-    // async call finishes
-    // then ref.watch is notified of state update
-    // widgets rebuild
-    useEffect(() {
-      ref.read(myBoothsProvider.notifier).fetchUserBooths();
-    }, []);
 
     // Controllers for TextFields/TextFormFields states
     final itemPurchasePriceController = useTextEditingController();
@@ -58,17 +49,10 @@ class AddItemDialog extends HookConsumerWidget {
     final listingDate = useState<DateTime?>(null);
 
     final selectedXFiles = useState<List<XFile>>([]);
-    final selectedImagesAsFiles = useState<List<File>>([]);
     final itemImageUrls = useState<List<String>>([]);
-    final defaultItemImageUrl = useState<String>('');
 
     final isChecked = useState<bool>(false);
-    final currentBooths = useState<List<MyBooth>>(userBooths);
-    final boothNames = useState<List<String>>([]);
-    final selectedBoothName = useState<String>('');
     final createBoothName = useState<String>('');
-
-    // boothNames.sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
 
     /// AFTER USER SELECTS PHOTOS OR TAKES A PHOTO, UPDATE THE EPHEMERAL STATE
     void selectPhotos() async {
@@ -114,6 +98,8 @@ class AddItemDialog extends HookConsumerWidget {
     }
 
     void submit() async {
+
+      print('Saving item: purchase: ${itemPurchasePrice.value}. listing: ${itemPurchasePrice.value}. height: ${itemHeight.value} ');
       // Save the photos taken/selected and update the state with the urls to save
       List<String> imageUrlsToSave = await savePhotosAndGetUrls();
 
@@ -260,13 +246,15 @@ class AddItemDialog extends HookConsumerWidget {
                  ),
               ],
             ), 
-            Visibility(
-              visible: isChecked.value,
-              child: AddItemSelectBooth(
-                userBooths: userBooths,
-                onValueUpdated: (value) => selectedBoothName.value = value,
-              ),
-            ),
+            // TODO: Implement way to update booth item from add item, manage inv tile, select booth
+            // Visibility(
+            //   visible: isChecked.value,
+            //   child: AddItemSelectBooth(
+            //     // itemId: ,
+            //     // userBooths: userBooths,
+            //     // onValueUpdated: (value) => selectedBoothName.value = value,
+            //   ),
+            // ),
           ],
         ),
       ),

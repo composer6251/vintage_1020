@@ -203,7 +203,6 @@ class LocalDb {
 
   //   print('fetchingBoothByEmail: $userEmail');
 
-
   //   try {
   //     final data = await db.query(
   //       myBoothTable,

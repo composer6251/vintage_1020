@@ -1,13 +1,15 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
+import 'package:vintage_1020/ui/activity_chart_screen/activity_chart.dart';
 import 'package:vintage_1020/ui/add_item_dialog/widgets/add_item_dialog.dart';
+import 'package:vintage_1020/ui/common/widgets/app_bar/custom_app_bar.dart';
+import 'package:vintage_1020/ui/common/widgets/app_bar/custom_bottom_navigation_bar.dart';
+import 'package:vintage_1020/ui/common/widgets/app_bar/custom_fab.dart';
 import 'package:vintage_1020/ui/manage_inventory_screen/widgets/manage_inventory_screen.dart';
-import 'package:vintage_1020/util/photo_util.dart';
+import 'package:vintage_1020/ui/my_booths_screen/my_booths_screen.dart';
 
 class UiContainer extends ConsumerStatefulWidget {
   UiContainer({super.key});
@@ -23,81 +25,86 @@ class _HomeScreenState extends ConsumerState<UiContainer> {
     var sb = SnackBar(content: Text(message));
     ScaffoldMessenger.of(context).showSnackBar(sb);
   }
+  static List<Widget> _widgetOptions = <Widget>[
+    ManageInventoryScreen(),
+    MyBoothsScreen(),
+    ActivityChart(isShowingMainData: true)
+    
+  ];
+
+  int _selectedIndex = 0;
+
+  void openAddInventoryDialog() {
+    showDialog(context: context, builder: (context) => const AddItemDialog());
+  }
 
   @override
   Widget build(BuildContext context) {
     ref.watch(inventoryLocalProvider);
 
-        void quickAddItemWithPhoto() async {
-      String photoTaken = await PhotoUtil.takePhotoAndReturnUrl();
-      if (photoTaken == "") return;
-
-      ref
-          .read(inventoryLocalProvider.notifier)
-          .quickAddInventoryItem(photoTaken);
-    }
-
-    void openAddInventoryDialog() {
-      showDialog(context: context, builder: (context) => const AddItemDialog());
-    }
-
     return Scaffold(
-      body: ManageInventoryScreen(),
+      body: _widgetOptions[_selectedIndex],
       resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        title: Text(userEmail ?? 'welcome'),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
+        child: CustomAppBar(),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Colors.blue,
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-
-            Flexible(
-              flex: 1,
-              child: IconButton(
-                iconSize: 36,
-                onPressed: () => Navigator.of(context).pushNamed('/manage-inventory'),
-                icon: FaIcon(FontAwesomeIcons.couch)),
+      color: Colors.blue,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Flexible(
+            flex: 1,
+            child: IconButton(
+              iconSize: 36,
+              onPressed: () => setState(() {
+                _selectedIndex = 0;
+              }),
+                  //Navigator.of(context).pushNamed('/manage-inventory'),
+              icon: FaIcon(FontAwesomeIcons.couch),
             ),
-            Flexible(
-              flex: 1,
-              child: IconButton(
-                iconSize: 36,
-                onPressed: () => Navigator.of(context).pushNamed('/my-booths'),
-                icon: FaIcon(FontAwesomeIcons.tent)),
+          ),
+          Flexible(
+            flex: 1,
+            child: IconButton(
+              iconSize: 36,
+              onPressed: () => setState(() {
+                _selectedIndex = 1;
+              }),//Navigator.of(context).pushNamed('/my-booths'),
+              icon: FaIcon(FontAwesomeIcons.tent),
             ),
-            Flexible(
-              flex: 1,
-              child: IconButton(
-                iconSize: 36,
-                onPressed: () => Navigator.of(context).pushNamed('/inventory-analytics'),
-                icon: FaIcon(FontAwesomeIcons.chartBar)),
+          ),
+          Flexible(
+            flex: 1,
+            child: IconButton(
+              iconSize: 36,
+              onPressed: () => setState(() {
+                _selectedIndex = 2;
+              }),
+                  // Navigator.of(context).pushNamed('/inventory-analytics'),
+              icon: FaIcon(FontAwesomeIcons.chartBar),
             ),
-            Flexible(
-              flex: 2,
-              child: OutlinedButton(
-                onPressed: openAddInventoryDialog,
-                child: Text(
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold, fontSize: 16),
-                  'Add Item')),
-            )
-          ],
-        ),
+          ),
+          Flexible(
+            flex: 2,
+            child: OutlinedButton(
+              onPressed: openAddInventoryDialog,
+              child: Text(
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+                'Add Item',
+              ),
+            ),
+          ),
+        ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        extendedIconLabelSpacing: 10,
-        label: Text('Quick'),
-        icon: FaIcon(FontAwesomeIcons.plus),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadiusGeometry.all(Radius.circular(16)),
-        ),
-        onPressed: quickAddItemWithPhoto,
-        backgroundColor: Colors.blue,
-      ),
+    ),
+      floatingActionButton: CustomFab(),
     );
   }
 }

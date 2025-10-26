@@ -13,7 +13,6 @@ final userEmail = FirebaseAuth.instance.currentUser?.email;
 class InventoryLocal extends _$InventoryLocal {
   @override
   List<InventoryItemLocal> build() {
-
     return [];
   }
 
@@ -25,7 +24,7 @@ class InventoryLocal extends _$InventoryLocal {
       throw e;
     }
 
-    if(ref.mounted) {
+    if (ref.mounted) {
       state = inventory;
     }
   }
@@ -67,15 +66,16 @@ class InventoryLocal extends _$InventoryLocal {
   }
 
   Future<void> quickAddInventoryItem(String itemImageUrl) async {
-
     InventoryItemLocal itemToSave = InventoryItemLocal.empty(Uuid().v6());
+    
+    itemToSave.userEmail = userEmail;
+    itemToSave.itemPurchaseDate = DateTime.now();
     itemToSave.primaryImageUrl = itemImageUrl;
     itemToSave.itemImageUrls = [itemImageUrl];
 
     state = [...state, itemToSave];
 
     LocalDb().insertIntoInventoryItem(itemToSave);
-
   }
 
   List<InventoryItemLocal> getInventoryState() {

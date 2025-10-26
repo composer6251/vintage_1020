@@ -12,7 +12,7 @@ class MyBooth {
   late String id;
   String boothName;
   String? userEmail;
-  List<String>? boothInventoryIds = [];
+  List<String> boothInventoryIds = [];
   List<InventoryItemLocal>? boothInventory = [];
   List<String>? currentBoothImageUrls = [];
   DateTime? boothDeleteDate;
@@ -37,7 +37,7 @@ class MyBooth {
       userEmail = data?['email'],
       boothInventoryIds = data['boothInventoryIds'] != null
           ? List<String>.from(jsonDecode(data['boothInventoryIds']))
-          : null,
+          : [],
       currentBoothImageUrls = data['currentBoothImageUrls'] != null
           ? List<String>.from(jsonDecode(data['currentBoothImageUrls']))
           : null,

@@ -191,6 +191,10 @@ class InventoryItemLocal {
     return File(primaryImageUrl!);
   }
 
+  bool get isBackstock {
+    return isListed == false;
+  }
+
   bool get isListed {
     return (itemListingDate != null ||
         itemListingPrice != null ||
