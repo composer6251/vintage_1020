@@ -6,15 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:vintage_1020/data/providers/inventory_notifier.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
-import 'package:vintage_1020/data/providers/item_metadata/item_purchase_cost.dart';
 import 'package:vintage_1020/data/providers/my_booth_provider/my_booths_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/domain/my_booth/my_booth.dart';
-import 'package:vintage_1020/ui/common/widgets/app_bar/custom_app_bar.dart';
-import 'package:vintage_1020/ui/common/widgets/app_bar/custom_bottom_navigation_bar.dart';
-import 'package:vintage_1020/ui/common/widgets/app_bar/custom_fab.dart';
 import 'package:vintage_1020/ui/image_widget_util/image_widget_util.dart';
 import 'package:vintage_1020/util/photo_util.dart';
 import 'package:vintage_1020/ui/common/widgets/inventory_carousel/edit_item_inventory_carousel.dart';
@@ -22,8 +17,7 @@ import 'package:vintage_1020/ui/common/widgets/inventory_carousel/edit_item_inve
 class MyBoothsScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
-        // Initiate fetch for inventory
+    // Initiate fetch for inventory
     final result = useMemoized(
       () => ref.read(myBoothsProvider.notifier).fetchUserBooths(),
     );
@@ -32,49 +26,35 @@ class MyBoothsScreen extends HookConsumerWidget {
 
     // Watch booths provider
     final currentBooths = ref.watch(myBoothsProvider);
+    print('currentBooths in myBooths ${currentBooths.length}');
+    // INITIAL VALUE OF SELECTED BOOTH
+
+    final selectedBooth = useState<MyBooth>(currentBooths.first);
+    // print('selectedBooth in myBooths ${selectedBooth.value}');
     final boothNames = currentBooths.map((booth) => booth.boothName).toList();
-    final currentBoothNames = useState<List<String>>(boothNames);
+    print('boothNames in myBooths ${boothNames.length}');
 
     // Watch inventory
     final inventory = ref.watch(inventoryLocalProvider);
 
     // On my booth selected
-    final selectedBooth = useState<MyBooth>(currentBooths.first);
     final selectedBoothInventory = useState<List<InventoryItemLocal>>([]);
     final selectedBoothCost = useState<double?>(0.0);
     final selectedBoothValue = useState<double?>(0.0);
 
-    
     MyBooth setInventoryForBooth() {
-
       MyBooth booth = selectedBooth.value;
-      List<InventoryItemLocal> boothInventoryItems = selectedBooth.value.boothInventory = inventory.where((item) => selectedBooth.value.boothInventoryIds.contains(item.id)).toList();
+      List<InventoryItemLocal> boothInventoryItems =
+          selectedBooth.value.boothInventory = inventory
+              .where(
+                (item) =>
+                    selectedBooth.value.boothInventoryIds.contains(item.id),
+              )
+              .toList();
       booth.boothInventory = boothInventoryItems;
 
       return booth;
     }
-
-    void getBoothItemsAndMetadata() {
-
-      MyBooth boothWithInventory = setInventoryForBooth();
-    }
-
-    void calculateBoothCost() {
-
-      double boothCost = selectedBooth.value.boothInventory?.fold<double>(
-        0.0,
-        (double sum, item) => sum + (item.itemPurchasePrice ?? 0.0),
-      ) ?? 0.0;
-    }
-
-    void calculateBoothValue() {
-
-      double boothValue = selectedBooth.value.boothInventory?.fold<double>(
-        0.0,
-        (double sum, item) => sum + (item.itemListingPrice ?? 0.0),
-      ) ?? 0.0;
-    }
-
 
     final selectedBoothImages = useState(
       selectedBooth.value?.currentBoothImageUrls,
@@ -91,8 +71,6 @@ class MyBoothsScreen extends HookConsumerWidget {
       booth.currentBoothImageUrls = selectedBoothImageUrlsCurrentState;
 
       await ref.read(myBoothsProvider.notifier).updateBooth(booth);
-
-      // boothImageUrls.add(boothPhotoPath);
     }
 
     Widget openQuickAddInventoryToBooth() {
@@ -115,19 +93,10 @@ class MyBoothsScreen extends HookConsumerWidget {
       );
     }
 
-    if(snapshot.connectionState == ConnectionState.waiting) {
+    if (snapshot.connectionState == ConnectionState.done) {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          DropdownMenu(dropdownMenuEntries: boothNames
-            .map<DropdownMenuEntry<String>>(
-              (String boothName) => DropdownMenuEntry<String>(
-                leadingIcon: Icon(Icons.storefront),
-                value: boothName,
-                label: boothName,
-              ),
-            )
-            .toList(),),
           Expanded(
             child: ListView.builder(
               itemExtent: 150,
@@ -144,7 +113,9 @@ class MyBoothsScreen extends HookConsumerWidget {
                       children: [
                         Badge(
                           label: Text(
-                            currentBooths[index].boothInventoryIds?.length.toString() ?? '0',
+                            currentBooths[index].boothItemsCount
+                                    .toString() ??
+                                '0',
                           ),
                           child: FaIcon(FontAwesomeIcons.tent),
                         ),
@@ -156,7 +127,6 @@ class MyBoothsScreen extends HookConsumerWidget {
               },
             ),
           ),
-
           Flexible(
             flex: 2,
             child: Card(
@@ -191,20 +161,15 @@ class MyBoothsScreen extends HookConsumerWidget {
                   flex: 4,
                   child: ListView.builder(
                     itemCount:
-                        selectedBooth.value?.currentBoothImageUrls?.length,
+                        selectedBooth.value.currentBoothImageUrls?.length,
                     itemBuilder: (context, index) {
-                      selectedBooth.value?.currentBoothImageUrls?.map(
+                      selectedBooth.value.currentBoothImageUrls?.map(
                         (url) => Image.file(File(url)),
                       );
                     },
                   ),
                 ),
-          selectedBooth.value?.boothInventoryIds == null
-              ? OutlinedButton(
-                  onPressed: openQuickAddInventoryToBooth,
-                  child: Text('Click to open quick add from inventory'),
-                )
-              : Expanded(
+               Expanded(
                   flex: 4,
                   child: InventoryCarousel(
                     inventoryItems: inventory ?? [],
@@ -218,6 +183,6 @@ class MyBoothsScreen extends HookConsumerWidget {
     } else if (snapshot.connectionState == ConnectionState.none) {
       return Center(child: Text('Snapshot has no connection'));
     }
-    return Center(child: Text('Default condition'));
+    return Center(child: CircularProgressIndicator());
   }
 }

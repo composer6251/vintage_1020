@@ -16,6 +16,7 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
     List<MyBooth> userBooths = await MyBoothsDb().fetchUserBoothsByEmail();
 
     if (ref.mounted) {
+      print('Updating state with user booths ${userBooths.length}');
       state = userBooths;
     }
   }

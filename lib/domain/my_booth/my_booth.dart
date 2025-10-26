@@ -17,7 +17,31 @@ class MyBooth {
   List<String>? currentBoothImageUrls = [];
   DateTime? boothDeleteDate;
 
-  // MyBooth.empty();
+  int get boothItemsCount {
+    return boothInventoryIds.length;
+  }
+
+  double get boothCost {
+    double cost =
+        boothInventory?.fold<double>(
+          0.0,
+          (double sum, item) => sum + (item.itemPurchasePrice ?? 0.0),
+        ) ??
+        0.0;
+
+    return cost;
+  }
+
+  double get boothValue {
+    double boothValue =
+        boothInventory?.fold<double>(
+          0.0,
+          (double sum, item) => sum + (item.itemListingPrice ?? 0.0),
+        ) ??
+        0.0;
+
+    return boothValue;
+  }
 
   MyBooth(
     this.boothName,
@@ -26,10 +50,7 @@ class MyBooth {
     this.boothDeleteDate,
   );
 
-    MyBooth.initial(
-    this.boothName,
-    this.currentBoothImageUrls,
-  );
+  MyBooth.initial(this.boothName, this.currentBoothImageUrls);
 
   MyBooth.fromLocalDB(Map<String, dynamic> data)
     : id = data['id'],
