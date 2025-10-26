@@ -80,7 +80,7 @@ class _AuthGateState extends ConsumerState<UserAuthGate> {
             },
           );
         } else {
-          return ManageInventoryScreen();
+          return UiContainer();
         }
       },
     );

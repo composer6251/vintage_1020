@@ -44,6 +44,50 @@ class _HomeScreenState extends ConsumerState<UiContainer> {
     return Scaffold(
       body: ManageInventoryScreen(),
       resizeToAvoidBottomInset: true,
+      appBar: AppBar(
+        title: Text(userEmail ?? 'welcome'),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.blue,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+
+            Flexible(
+              flex: 1,
+              child: IconButton(
+                iconSize: 36,
+                onPressed: () => Navigator.of(context).pushNamed('/manage-inventory'),
+                icon: FaIcon(FontAwesomeIcons.couch)),
+            ),
+            Flexible(
+              flex: 1,
+              child: IconButton(
+                iconSize: 36,
+                onPressed: () => Navigator.of(context).pushNamed('/my-booths'),
+                icon: FaIcon(FontAwesomeIcons.tent)),
+            ),
+            Flexible(
+              flex: 1,
+              child: IconButton(
+                iconSize: 36,
+                onPressed: () => Navigator.of(context).pushNamed('/inventory-analytics'),
+                icon: FaIcon(FontAwesomeIcons.chartBar)),
+            ),
+            Flexible(
+              flex: 2,
+              child: OutlinedButton(
+                onPressed: openAddInventoryDialog,
+                child: Text(
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold, fontSize: 16),
+                  'Add Item')),
+            )
+          ],
+        ),
+      ),
       floatingActionButton: FloatingActionButton.extended(
         extendedIconLabelSpacing: 10,
         label: Text('Quick'),
