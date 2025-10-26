@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:vintage_1020/ui/activity_chart_screen/activity_chart.dart';
 import 'package:vintage_1020/ui/auth_gate/user_auth_gate.dart';
+import 'package:vintage_1020/ui/manage_inventory_screen/widgets/manage_inventory_screen.dart';
+import 'package:vintage_1020/ui/my_booths_screen/my_booths_screen.dart';
 
 import 'firebase_options.dart';
 
@@ -41,10 +44,11 @@ class MyApp extends StatelessWidget {
           color: Colors.blue,
           indent: 20,
           endIndent: 20,
-          radius: BorderRadius.circular(8.0)
+          radius: BorderRadius.circular(8.0),
         ),
         colorScheme: const ColorScheme.light(
-          primary: Colors.blue, // Date pickersubmit, tab bar selected button color, label text
+          primary: Colors
+              .blue, // Date pickersubmit, tab bar selected button color, label text
           secondary: Colors.black,
           primaryContainer: Color.fromARGB(149, 82, 1, 1),
           secondaryContainer: Color.fromARGB(1, 167, 34, 34),
@@ -52,6 +56,11 @@ class MyApp extends StatelessWidget {
           onPrimary: Colors.white,
         ),
       ),
+      routes: <String, WidgetBuilder>{
+        '/manage-inventory': (BuildContext context) => ManageInventoryScreen(),
+        '/my-booths': (BuildContext context) => MyBoothsScreen(),
+        '/inventory-analytics': (BuildContext context) => ActivityChart(isShowingMainData: true,),
+      },
       home: const UserAuthGate(),
     );
   }

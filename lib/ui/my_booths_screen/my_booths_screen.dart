@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart' show useEffect, useState;
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -15,10 +15,9 @@ import 'package:vintage_1020/ui/image_widget_util/image_widget_util.dart';
 import 'package:vintage_1020/util/photo_util.dart';
 import 'package:vintage_1020/ui/common/widgets/inventory_carousel/edit_item_inventory_carousel.dart';
 
-class MyBoothTab extends HookConsumerWidget {
+class MyBoothsScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     final booths = ref.watch(myBoothsProvider);
     print('my booths in booths tab ${booths?.length}');
     // useEffect(() {

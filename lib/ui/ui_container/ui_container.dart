@@ -1,14 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
-import 'package:vintage_1020/data/local_db/local_db.dart';
-import 'package:vintage_1020/data/providers/filter_notifier.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
-import 'package:vintage_1020/ui/manage_inventory_tab/widgets/manage_inventory_tab.dart';
-import 'package:vintage_1020/ui/activity_chart_screen/activity_chart.dart';
-import 'package:vintage_1020/ui/my_booth_tab/my_booth_tab.dart';
+import 'package:vintage_1020/ui/add_item_dialog/widgets/add_item_dialog.dart';
+import 'package:vintage_1020/ui/manage_inventory_screen/widgets/manage_inventory_screen.dart';
+import 'package:vintage_1020/util/photo_util.dart';
 
 class UiContainer extends ConsumerStatefulWidget {
   UiContainer({super.key});
@@ -28,84 +27,32 @@ class _HomeScreenState extends ConsumerState<UiContainer> {
   @override
   Widget build(BuildContext context) {
     ref.watch(inventoryLocalProvider);
-    print('UI container');
+
+        void quickAddItemWithPhoto() async {
+      String photoTaken = await PhotoUtil.takePhotoAndReturnUrl();
+      if (photoTaken == "") return;
+
+      ref
+          .read(inventoryLocalProvider.notifier)
+          .quickAddInventoryItem(photoTaken);
+    }
+
+    void openAddInventoryDialog() {
+      showDialog(context: context, builder: (context) => const AddItemDialog());
+    }
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [TabViewsContent()],
+      body: ManageInventoryScreen(),
+      resizeToAvoidBottomInset: true,
+      floatingActionButton: FloatingActionButton.extended(
+        extendedIconLabelSpacing: 10,
+        label: Text('Quick'),
+        icon: FaIcon(FontAwesomeIcons.plus),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadiusGeometry.all(Radius.circular(16)),
         ),
-      ),
-    );
-  }
-}
-
-class TabViewsContent extends ConsumerWidget {
-  TabViewsContent({super.key});
-
-  static List<Tab> myTabs = <Tab>[
-    Tab(text: 'Manage', icon: Icon(Icons.chair_rounded)),
-    Tab(text: 'My Booth', icon: Icon(Icons.storefront)),
-    Tab(text: 'Sales', icon: Icon(Icons.bar_chart)),
-  ];
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final double height = MediaQuery.sizeOf(context).height;
-    final double width = MediaQuery.sizeOf(context).width;
-
-    final FirebaseAuth auth = FirebaseAuth.instance;
-
-    return DefaultTabController(
-      length: myTabs.length,
-      child: ConstrainedBox(
-        constraints: BoxConstraints(maxHeight: height, maxWidth: width),
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text('WELCOME VINTAGE 1020!!!'),
-            titleTextStyle: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              fontStyle: FontStyle.italic,
-            ),
-            centerTitle: true,
-            toolbarHeight: 40,
-            elevation: 100,
-            automaticallyImplyLeading: false,
-            backgroundColor: Colors.blue[700],
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.logout),
-                onPressed: () {
-                  auth.signOut();
-                },
-              ),
-            ],
-            bottom: TabBar(
-              dividerColor: Colors.white,
-              isScrollable: false,
-              indicatorAnimation: TabIndicatorAnimation.elastic,
-              automaticIndicatorColorAdjustment: false,
-              unselectedLabelColor: Colors.white38,
-              indicatorColor: Colors.white,
-              labelColor: Colors.white,
-              tabs: [...myTabs],
-              onTap: (value) => ref
-                  .read(filterProvider.notifier)
-                  .setCurrentTabInventoryFilter(value),
-            ),
-          ),
-          body: TabBarView(
-            physics: NeverScrollableScrollPhysics(),
-            children: [
-              ManageInventoryTab(),
-              MyBoothTab(),
-              ActivityChart(isShowingMainData: true),
-            ],
-          ),
-        ),
+        onPressed: quickAddItemWithPhoto,
+        backgroundColor: Colors.blue,
       ),
     );
   }

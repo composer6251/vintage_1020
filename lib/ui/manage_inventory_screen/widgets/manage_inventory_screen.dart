@@ -14,11 +14,11 @@ import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.da
 import 'package:vintage_1020/ui/add_item_dialog/widgets/add_item_dialog.dart';
 import 'package:vintage_1020/ui/edit_item_dialog/edit_inventory_item_dialog.dart';
 
-import 'package:vintage_1020/ui/manage_inventory_tab/widgets/manage_inventory_item_tile.dart';
+import 'package:vintage_1020/ui/manage_inventory_screen/widgets/manage_inventory_item_tile.dart';
 import 'package:vintage_1020/util/photo_util.dart';
 
-class ManageInventoryTab extends HookConsumerWidget {
-  const ManageInventoryTab({super.key});
+class ManageInventoryScreen extends HookConsumerWidget {
+  const ManageInventoryScreen({super.key});
 
   // late Future<List<InventoryItemLocal>> inventoryFuture;
 
@@ -34,10 +34,16 @@ class ManageInventoryTab extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Initiate fetch for inventory
-    useEffect(() {
-      ref.read(inventoryLocalProvider.notifier).fetchInitialUserInventory();
-      ref.read(myBoothsProvider.notifier).fetchUserBooths();
-    }, []);
+    final result = useMemoized(
+      () =>
+          ref.read(inventoryLocalProvider.notifier).fetchInitialUserInventory(),
+    );
+
+    final snapshot = useFuture(result);
+    // useEffect(() {
+    //   ref.read(inventoryLocalProvider.notifier).fetchInitialUserInventory();
+    //   ref.read(myBoothsProvider.notifier).fetchUserBooths();
+    // }, []);
 
     final width = MediaQuery.sizeOf(context).width;
 
@@ -45,7 +51,6 @@ class ManageInventoryTab extends HookConsumerWidget {
     ref.watch(inventoryLocalProvider);
 
     final currentFilter = useState<InventoryFilter>(InventoryFilter.all);
-    final quickAddPhoto = useState<XFile?>(null);
 
     // Watch the inventory provider which filters the inventory based on current filter
     final List<InventoryItemLocal> filteredInventory = ref.watch(
@@ -57,15 +62,6 @@ class ManageInventoryTab extends HookConsumerWidget {
       ref.read(filterProvider.notifier).setCurrentFilter(newFilter);
     }
 
-    void quickAddItemWithPhoto() async {
-      String photoTaken = await PhotoUtil.takePhotoAndReturnUrl();
-      if (photoTaken == "") return;
-
-      ref
-          .read(inventoryLocalProvider.notifier)
-          .quickAddInventoryItem(photoTaken);
-    }
-
     void openEditInventoryDialog(InventoryItemLocal item) {
       showDialog(
         context: context,
@@ -73,46 +69,24 @@ class ManageInventoryTab extends HookConsumerWidget {
       );
     }
 
-    void openAddInventoryDialog() {
-      showDialog(context: context, builder: (context) => const AddItemDialog());
-    }
-
-    return Scaffold(
-      body: Column(
+    if (snapshot.connectionState == ConnectionState.done) {
+      return Column(
         children: [
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          Column(
             children: [
-              Text(
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                'TOTAL ITEMS: ${filteredInventory.length}',
-              ),
-              Card.filled(
-                elevation: 2,
-                child: OutlinedButton(
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll<Color>(Color.fromARGB(6, 6, 94, 63)),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text(
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    'TOTAL ITEMS: ${filteredInventory.length}',
                   ),
-                  onPressed: openAddInventoryDialog,
-                  child: Center(
-                    child: Text(
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      'Add New Item',
-                    ),
-                  ),
-                ),
+                ],
               ),
             ],
           ),
-          Divider(
-            height: 32,
-            indent: width * .10, 
-            endIndent: width * .10
-          ),
+          Divider(height: 32, indent: width * .10, endIndent: width * .10),
           SegmentedButton<InventoryFilter>(
             style: ButtonStyle(elevation: WidgetStatePropertyAll(100)),
             multiSelectionEnabled: false,
@@ -164,18 +138,12 @@ class ManageInventoryTab extends HookConsumerWidget {
                   ),
                 ),
         ],
-      ),
-      resizeToAvoidBottomInset: true,
-      floatingActionButton: FloatingActionButton.extended(
-        extendedIconLabelSpacing: 10,
-        label: Text('Quick'),
-        icon: FaIcon(FontAwesomeIcons.plus),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadiusGeometry.all(Radius.circular(16)),
-        ),
-        onPressed: quickAddItemWithPhoto,
-        backgroundColor: Colors.blue,
-      ),
-    );
+      );
+    } else if (snapshot.connectionState == ConnectionState.waiting) {
+      return Center(child: CircularProgressIndicator());
+    } else if (snapshot.connectionState == ConnectionState.none) {
+      return Center(child: Text('Snapshot has no connection'));
+    }
+    return Center(child: Text('Default condition'));
   }
 }
