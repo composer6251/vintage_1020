@@ -33,9 +33,6 @@ class AddItemDialog extends HookConsumerWidget {
     // Controllers for TextFields/TextFormFields states
     final itemPurchasePriceController = useTextEditingController();
     // final itemListingPriceController = useTextEditingController(text: '');
-    // final itemHeightController = useTextEditingController(text: '');
-    // final itemWidthController = useTextEditingController(text: '');
-    // final itemDepthController = useTextEditingController(text: '');
 
     // UseStates for text fields
     final itemPurchasePrice = useState<String>('');
@@ -52,7 +49,7 @@ class AddItemDialog extends HookConsumerWidget {
     final itemImageUrls = useState<List<String>>([]);
 
     final isChecked = useState<bool>(false);
-    final createBoothName = useState<String>('');
+    final createdBoothName = useState<String>('');
 
     /// AFTER USER SELECTS PHOTOS OR TAKES A PHOTO, UPDATE THE EPHEMERAL STATE
     void selectPhotos() async {
@@ -120,7 +117,7 @@ class AddItemDialog extends HookConsumerWidget {
         double.tryParse(itemWidth.value),
         double.tryParse(itemDepth.value),
         null,
-        isChecked.value ? 1.0 : 0.0,
+        createdBoothName.value,
       );
 
       if (formKey.currentState?.validate() ?? false) {
@@ -131,12 +128,12 @@ class AddItemDialog extends HookConsumerWidget {
       // TODO: Fix adding to booth logic.
       // Both select a booth AND create booth CANNOT be selected
 
-      if (createBoothName.value != '' && isChecked.value) {
+      if (createdBoothName.value != '' && isChecked.value) {
 
         MyBooth boothToCreate = MyBooth(
-          createBoothName.value,
+          createdBoothName.value,
           userEmail ?? '',
-          [],
+          [itemToDB.id],
           [],
           null,
         );
@@ -175,30 +172,6 @@ class AddItemDialog extends HookConsumerWidget {
               onDateChanged: (value) => listingDate.value = value,
               label: listingPriceLabel,
             ),
-
-            // TODO: REMOVED TO PROVIDE MORE SPACE ON THE DIALOG
-            // Flex(
-            //   mainAxisSize: MainAxisSize.min,
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   direction: Axis.horizontal,
-            //   children: [
-            //     ItemDimensionWidget(
-            //       label: ItemDimension.height.name,
-            //       value: itemHeight.value,
-            //       onValueChanged: (value) => itemHeight.value = value,
-            //     ),
-            //     ItemDimensionWidget(
-            //       label: ItemDimension.width.name,
-            //       value: itemWidth.value,
-            //       onValueChanged: (value) => itemWidth.value = value,
-            //     ),
-            //     ItemDimensionWidget(
-            //       label: ItemDimension.depth.name,
-            //       value: itemDepth.value,
-            //       onValueChanged: (value) => itemDepth.value = value,
-            //     ),
-            //   ],
-            // ),
             Row(
               children: [
                 Flexible(
@@ -238,7 +211,7 @@ class AddItemDialog extends HookConsumerWidget {
                           ),
                           labelText: createBoothInputLabel,
                         ),
-                        onChanged: (value) => createBoothName.value = value,
+                        onChanged: (value) => createdBoothName.value = value,
                         validator: (value) =>
                             value?.isEmpty ?? true ? 'Booth Name is required' : null,
                       ),

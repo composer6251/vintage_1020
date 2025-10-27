@@ -1,85 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart'
     hide userEmail;
+import 'package:vintage_1020/util/date_picker_util.dart';
 import 'package:vintage_1020/utils/date_util.dart';
 
-class EditInventoryItemDialog extends ConsumerStatefulWidget {
+class EditInventoryItemDialog extends HookConsumerWidget {
 
-  const EditInventoryItemDialog({super.key, required this.itemEditing});
+  EditInventoryItemDialog({super.key, required this.itemEditing});
 
   final InventoryItemLocal itemEditing;
-
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() =>
-      _EditInventoryItemDialogState();
-}
-
-class _EditInventoryItemDialogState
-    extends ConsumerState<EditInventoryItemDialog> {
-
-  late InventoryItemLocal itemEditing = widget.itemEditing;
   // VARIABLES TO HOLD DATE STATES
-  DateTime? purchaseDate;
-  DateTime? listingDate;
-  DateTime? soldDate;
-
-  // VARIABLES TO HOLD PRICE STATES
-  double? purchasePrice;
-  double? listingPrice;
-  double? soldPrice;
-
-  // VARIABLES TO HOLD DIMENSIONS STATES
-  double? height;
-  double? width;
-  double? depth;
-
-  // VARIABLE TO HOLD BOOTH STATE
-  bool isBoothItem = false;
+  final purchaseDate = useState<DateTime?>(null);
+  final listingDate = useState<DateTime?>(null);
+  final soldDate = useState<DateTime?>(null);
+  final purchasePrice = useState<double?>(0.0);
+  final listingPrice = useState<double?>(0.0);
+  final soldPrice = useState<double?>(0.0);
+  final height = useState<double?>(0.0);
+  final width = useState<double?>(0.0);
+  final depth = useState<double?>(0.0);
+  final boothName = useState<String?>('');
 
   @override
-  void initState() {
-    super.initState();
-    purchaseDate = itemEditing.itemPurchaseDate;
-    listingDate = itemEditing.itemListingDate;
-    soldDate = itemEditing.itemSoldDate;
-    purchasePrice = itemEditing.itemPurchasePrice;
-    listingPrice = itemEditing.itemListingPrice;
-    soldPrice = itemEditing.itemSoldPrice;
-    height = itemEditing.itemHeight;
-    width = itemEditing.itemWidth;
-    depth = itemEditing.itemDepth;
-    isBoothItem = itemEditing.isCurrentBoothItem == 1.0;
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
 
     final DateTime initialDate = DateTime.now();
 
-    Future<void> selectDate(String type) async {
-      final DateTime? pickedDate = await showDatePicker(
-        context: context,
-        firstDate: DateTime.now().subtract(const Duration(days: 365)),
-        lastDate: initialDate,
-      );
+    Future<void> selectDateForItem(String type) async {
+
+      DateTime? pickedDate = await selectDate(context);
       if (pickedDate == null) return; // User cancelled the date picker
       if (type == 'Listing') {
-        setState(() {
-          listingDate = pickedDate;
-        });
+          listingDate.value = pickedDate;
         return;
       }
       if (type == 'Sold') {
-        setState(() {
-          soldDate = pickedDate;
-        });
+
+          soldDate.value = pickedDate;
         return;
       }
-      setState(() {
-        soldDate = pickedDate;
-      });
+      purchaseDate.value = pickedDate;
     }
 
     void closeDialog() {
@@ -93,17 +56,18 @@ class _EditInventoryItemDialogState
         '',
         itemEditing.itemImageUrls,
         '',
-        purchasePrice,
-        listingPrice,
-        soldPrice,
-        soldDate,
-        listingDate,
-        soldDate,
-        height,
-        width,
-        depth,
+        purchasePrice.value,
+        listingPrice.value,
+        soldPrice.value,
+        soldDate.value,
+        listingDate.value,
+        soldDate.value,
+        height.value,
+        width.value,
+        depth.value,
         null,
-        isBoothItem = (soldPrice != null || soldDate != null) ? false : isBoothItem,
+        boothName.value
+
       );
       return currentItemState;
     }
@@ -145,9 +109,9 @@ class _EditInventoryItemDialogState
                   flex: 5,
                   child: TextFormField(
                     initialValue: purchasePrice?.toString(),
-                    onChanged: (value) => setState(() {
-                      purchasePrice = double.tryParse(value);
-                    }),
+                    onChanged: (value) => 
+                      purchasePrice.value = double.tryParse(value),
+                                        
                     decoration: const InputDecoration(
                       prefixText: '\$',
                       fillColor: Colors.blue,
@@ -172,9 +136,9 @@ class _EditInventoryItemDialogState
                         Colors.white,
                       ),
                     ),
-                    onPressed: () => selectDate('Purchase'),
+                    onPressed: () => selectDate,
                     child: Text(
-                      getMonthDayYearStringFromDateTime(purchaseDate),
+                      getMonthDayYearStringFromDateTime(purchaseDate.value),
                     ),
                   ),
                 ),
@@ -185,10 +149,9 @@ class _EditInventoryItemDialogState
                 Flexible(
                   flex: 5,
                   child: TextFormField(
-                    initialValue: listingPrice?.toString(),
-                    onChanged: (value) => setState(() {
-                      listingPrice = double.tryParse(value);
-                    }),
+                    initialValue: listingPrice.toString(),
+                    onChanged: (value) => 
+                      listingPrice.value = double.tryParse(value),
                     decoration: const InputDecoration(
                       prefixText: '\$',
                       floatingLabelAlignment: FloatingLabelAlignment.start,
@@ -211,9 +174,9 @@ class _EditInventoryItemDialogState
                         Colors.white,
                       ),
                     ),
-                    onPressed: () => selectDate('Listing'),
+                    onPressed: () => selectDate,
                     child: Text(
-                      getMonthDayYearStringFromDateTime(listingDate),
+                      getMonthDayYearStringFromDateTime(listingDate.value),
                     ),
                   ),
                 ),
@@ -225,9 +188,8 @@ class _EditInventoryItemDialogState
                   flex: 5,
                   child: TextFormField(
                     initialValue: soldPrice?.toString(),
-                    onChanged: (value) => setState(() {
-                      soldPrice = double.tryParse(value);
-                    }),
+                    onChanged: (value) => 
+                      soldPrice.value = double.tryParse(value),
                     decoration: const InputDecoration(
                       prefixText: '\$',
                       labelStyle: TextStyle(fontSize: 12),
@@ -246,9 +208,9 @@ class _EditInventoryItemDialogState
                     style: ButtonStyle(
                       elevation: WidgetStatePropertyAll<double>(8.0),
                     ),
-                    onPressed: () => selectDate('Sold'),
+                    onPressed: () => selectDate,
                     child: Text(
-                      getMonthDayYearStringFromDateTime(soldDate),
+                      getMonthDayYearStringFromDateTime(soldDate.value),
                     ),
                   ),
                 ),
@@ -270,9 +232,8 @@ class _EditInventoryItemDialogState
                       labelText: 'Height',
                       labelStyle: TextStyle(fontSize: 12)
                     ),
-                    onChanged: (value) => setState(() {
-                      height = double.tryParse(value);
-                    }),
+                    onChanged: (value) => 
+                      height.value = double.tryParse(value),
                     keyboardType: TextInputType.numberWithOptions(decimal: true),
                   ),
                 ),
@@ -286,9 +247,8 @@ class _EditInventoryItemDialogState
                       floatingLabelAlignment: FloatingLabelAlignment.start,
                       labelStyle: TextStyle(fontSize: 12)
                     ),
-                    onChanged: (value) => setState(() {
-                      width = double.tryParse(value);
-                    }),
+                    onChanged: (value) => 
+                      width.value = double.tryParse(value),
                     keyboardType: TextInputType.numberWithOptions(decimal: true),
                   ),
                 ),
@@ -302,9 +262,8 @@ class _EditInventoryItemDialogState
                       floatingLabelAlignment: FloatingLabelAlignment.start,
                       labelStyle: TextStyle(fontSize: 12)
                     ),
-                    onChanged: (value) => setState(() {
-                      depth = double.tryParse(value);
-                    }),
+                    onChanged: (value) =>
+                      depth.value = double.tryParse(value),
                     keyboardType: TextInputType.numberWithOptions(decimal: true),
                   ),
                 ),

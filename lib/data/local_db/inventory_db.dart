@@ -14,21 +14,12 @@ final String? userEmail = FirebaseAuth.instance.currentUser?.email;
 final String buildCreateBoothTableSql =
     'CREATE TABLE IF NOT EXISTS my_booth(id TEXT PRIMARY KEY, boothName TEXT, email TEXT, boothInventoryIds TEXT, currentBoothImageUrls TEXT, boothDeleteDate TEXT)';
 final String buildCreateInventoryTableSql =
-    'CREATE TABLE IF NOT EXISTS inventory_item(id TEXT PRIMARY KEY, email TEXT, primaryImageUrl TEXT, itemDescription TEXT, itemImageUrls TEXT, itemCategory TEXT, itemPurchasePrice REAL, itemListingPrice REAL, itemSoldPrice REAL, itemPurchaseDate TEXT, itemListingDate TEXT, itemSoldDate TEXT, itemHeight REAL, itemWidth REAL, itemDepth REAL, itemDeleteDate TEXT, isCurrentBoothItem REAL)';
+    'CREATE TABLE IF NOT EXISTS inventory_item(id TEXT PRIMARY KEY, email TEXT, primaryImageUrl TEXT, itemDescription TEXT, itemImageUrls TEXT, itemCategory TEXT, itemPurchasePrice REAL, itemListingPrice REAL, itemSoldPrice REAL, itemPurchaseDate TEXT, itemListingDate TEXT, itemSoldDate TEXT, itemHeight REAL, itemWidth REAL, itemDepth REAL, itemDeleteDate TEXT, boothName REAL)';
 // final String buildCreateBoothTableSql =
 //     'CREATE TABLE IF NOT EXISTS my_booth(id TEXT PRIMARY KEY, email TEXT, boothName TEXT, boothImages TEXT, boothDeleteDate REAL)';
 
-// TABLE UPDATES
-final String addItemDeleteDateToItemInventorySql =
-    'ALTER TABLE $inventoryItemTable ADD COLUMN $deleteDateColumnName';
-final String addIsCurrentBoothItemToItemInventorySql =
-    'ALTER TABLE $inventoryItemTable ADD COLUMN $isCurrentBoothItem';
-
-// TABLE AND COLUMN NAMES
-final String userTable = 'user';
+// TABLE NAME
 final String inventoryItemTable = 'inventory_item';
-final String deleteDateColumnName = 'deleteDate TEXT';
-final String isCurrentBoothItem = 'isCurrentBoothItem REAL';
 
 // VERSIONS
 final int db_version_two = 2;
@@ -44,42 +35,11 @@ Future<Database> _getDatabase() async {
       db.execute(buildCreateInventoryTableSql);
       db.execute(buildCreateBoothTableSql);
     },
-    onUpgrade: (db, oldVersion, newVersion) async {
-      await db.execute(addItemDeleteDateToItemInventorySql);
-      await db.execute(addIsCurrentBoothItemToItemInventorySql);
-    },
   );
   return db;
 }
 
 class InventoryDb {
-  Future<void> _createUserAndInventoryTables(Database db) async {
-    print('\nCreating user and inventory tables\n');
-    // TODO check if table exists
-    var userTbl = await db.query(
-      'sqlite_master',
-      where: 'name = ?',
-      whereArgs: [userTable],
-    );
-    var invTbl = await db.query(
-      'sqlite_master',
-      where: 'name = ?',
-      whereArgs: [inventoryItemTable],
-    );
-
-    if (userTbl.isEmpty) {
-      await db.execute(buildCreateBoothTableSql);
-    }
-    if (invTbl.isEmpty) {
-      await db.execute(buildCreateInventoryTableSql);
-    }
-    var tables = await db.query(
-      'sqlite_master',
-      where: 'name = ?',
-      whereArgs: [userTable, inventoryItemTable],
-    );
-    print('tables created or already existed ${tables.length}');
-  }
 
   void insertIntoInventoryItem(InventoryItemLocal item) async {
     final db = await _getDatabase();

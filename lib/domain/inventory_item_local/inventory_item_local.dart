@@ -19,7 +19,7 @@ class InventoryItemLocal {
   double? itemWidth;
   double? itemDepth;
   DateTime? itemDeleteDate;
-  double? isCurrentBoothItem = 0.0;
+  String? boothName;
 
   InventoryItemLocal.empty(this.id);
 
@@ -39,7 +39,7 @@ class InventoryItemLocal {
     double? itemWidth,
     double? itemDepth,
     DateTime? itemDeleteDate,
-    bool isCurrentBoothItem,
+    String? boothName,
   ) : primaryImageUrl = primaryImageUrl ?? primaryImageUrl,
       itemDescription = itemDescription ?? itemDescription,
       itemImageUrls = itemImageUrls ?? itemImageUrls,
@@ -54,44 +54,7 @@ class InventoryItemLocal {
       itemWidth = itemWidth ?? itemWidth,
       itemDepth = itemDepth ?? itemDepth,
       itemDeleteDate = itemDeleteDate ?? itemDeleteDate,
-      isCurrentBoothItem = isCurrentBoothItem ? 1.0 : 0.0;
-
-  // InventoryItemLocal.copyWith({
-  //   String id,
-  //   String? primaryImageUrl,
-  //   String? itemDescription,
-  //   List<File>? itemImages,
-  //   List<String>? itemImageUrls,
-  //   String? itemCategory,
-  //   double? itemPurchasePrice,
-  //   double? itemListingPrice,
-  //   double? itemSoldPrice,
-  //   DateTime? itemPurchaseDate,
-  //   DateTime? itemListingDate,
-  //   DateTime? itemSoldDate,
-  //   double? itemHeight,
-  //   double? itemWidth,
-  //   double? itemDepth,
-  //   DateTime? itemDeleteDate,
-  //   bool isCurrentBoothItem = false,
-  // }) {
-  //   this.id,
-  //   this.primaryImageUrl = primaryImageUrl ?? this.primaryImageUrl;
-  //   this.itemDescription = itemDescription ?? this.itemDescription;
-  //   this.itemImageUrls = itemImageUrls ?? this.itemImageUrls;
-  //   this.itemCategory = itemCategory ?? this.itemCategory;
-  //   this.itemPurchasePrice = itemPurchasePrice ?? this.itemPurchasePrice;
-  //   this.itemListingPrice = itemListingPrice ?? this.itemListingPrice;
-  //   this.itemSoldPrice = itemSoldPrice ?? this.itemSoldPrice;
-  //   this.itemPurchaseDate = itemPurchaseDate ?? this.itemPurchaseDate;
-  //   this.itemListingDate = itemListingDate ?? this.itemListingDate;
-  //   this.itemSoldDate = itemSoldDate ?? this.itemSoldDate;
-  //   this.itemHeight = itemHeight ?? this.itemHeight;
-  //   this.itemWidth = itemWidth ?? this.itemWidth;
-  //   this.itemDepth = itemDepth ?? this.itemDepth;
-  //   this.itemDeleteDate = itemDeleteDate ?? this.itemDeleteDate;
-  //   this.isCurrentBoothItem = isCurrentBoothItem ? 1.0 : 0.0;
-  // }
+      boothName = boothName ?? boothName;
 
   InventoryItemLocal.updateItem(
     this.id,
@@ -109,7 +72,7 @@ class InventoryItemLocal {
     this.itemWidth,
     this.itemDepth,
     this.itemDeleteDate,
-    this.isCurrentBoothItem,
+    this.boothName
   );
 
   InventoryItemLocal.toLocalDb(
@@ -129,7 +92,7 @@ class InventoryItemLocal {
     this.itemWidth,
     this.itemDepth,
     this.itemDeleteDate,
-    this.isCurrentBoothItem,
+    this.boothName
   );
 
   InventoryItemLocal.fromLocalDB(Map<String, dynamic> data)
@@ -159,7 +122,7 @@ class InventoryItemLocal {
       itemDeleteDate = data['itemDeleteDate'] != null
           ? DateTime.parse(data['itemDeleteDate']) as DateTime?
           : null,
-      isCurrentBoothItem = data['isCurrentBoothItem'] as double?;
+      boothName = data['isCurrentBoothItem'] as String?;
 
   Map<String, dynamic> toMapForLocalDB() {
     return <String, dynamic>{
@@ -179,7 +142,7 @@ class InventoryItemLocal {
       "itemWidth": itemWidth,
       "itemDepth": itemDepth,
       "itemDeleteDate": itemDeleteDate?.toIso8601String(),
-      "isCurrentBoothItem": isCurrentBoothItem,
+      "boothName": boothName,
     };
   }
 
@@ -198,7 +161,7 @@ class InventoryItemLocal {
   bool get isListed {
     return (itemListingDate != null ||
         itemListingPrice != null ||
-        isCurrentBoothItem == 1.0);
+        boothName != null);
   }
 
   bool get isSold {
@@ -207,13 +170,6 @@ class InventoryItemLocal {
 
   bool get isDeleted {
     return (itemDeleteDate != null);
-  }
-
-  bool get isBoothItem {
-    print('isBoothItem: $isCurrentBoothItem $itemSoldDate $itemSoldDate');
-    return (isCurrentBoothItem == 1.0 &&
-        itemSoldDate == null &&
-        itemSoldPrice == null);
   }
 
   InventoryItemLocal.fromJson(Map<String, dynamic> json)
@@ -230,7 +186,8 @@ class InventoryItemLocal {
       itemSoldDate = json['itemSoldDate'] as DateTime,
       itemHeight = json['itemHeight'],
       itemWidth = json['itemWidth'],
-      itemDepth = json['itemDepth'];
+      itemDepth = json['itemDepth'],
+      boothName = json['boothName'];
 
   Map<String, dynamic> toJson() => {
     'id': id,
@@ -248,6 +205,6 @@ class InventoryItemLocal {
     'itemWidth': itemWidth,
     'itemDepth': itemDepth,
     'itemDeleteDate': itemDeleteDate,
-    'isCurrentBoothItem': isCurrentBoothItem,
+    'boothName': boothName,
   };
 }

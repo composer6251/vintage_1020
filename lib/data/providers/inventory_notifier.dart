@@ -68,12 +68,12 @@ class InventoryNotifier extends _$InventoryNotifier {
     state.removeWhere((item) => item.id == itemId);
 
     // Update item as booth item
-    itemToAddToBooth.isCurrentBoothItem = 1.0;
+    // itemToAddToBooth.boothName = ;
     // Update inventory
     currentState.add(itemToAddToBooth);
     // Update state so user sees reflected change
     state = [...currentState];
     // Persist change
-    InventoryDb().addInventoryItemToCurrentBooth(itemId);
+    // InventoryDb().addInventoryItemToCurrentBooth(itemId);
   }
 }
