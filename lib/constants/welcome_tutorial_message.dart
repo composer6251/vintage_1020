@@ -35,8 +35,6 @@ class WelcomeTutorialMessage extends StatelessWidget {
             ),
           ],
         ),
-        Spacer(),
-        // quickAddIcon(),
         Text(
           style: GoogleFonts.lato(
             textStyle: Theme.of(context).textTheme.displayLarge,
