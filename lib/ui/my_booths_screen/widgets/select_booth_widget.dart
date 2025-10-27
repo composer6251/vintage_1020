@@ -18,20 +18,6 @@ class SelectBoothWidget extends HookConsumerWidget {
 
     final inventory = ref.watch(inventoryLocalProvider);
 
-    MyBooth setInventoryForBooth() {
-      MyBooth booth = selectedBooth.value;
-      List<InventoryItemLocal> boothInventoryItems =
-          selectedBooth.value.boothInventory = inventory
-              .where(
-                (item) =>
-                    selectedBooth.value.boothInventoryIds.contains(item.id),
-              )
-              .toList();
-      booth.boothInventory = boothInventoryItems;
-
-      return booth;
-    }
-
     return Expanded(
       child: ListView.builder(
         itemExtent: 150,
@@ -41,7 +27,6 @@ class SelectBoothWidget extends HookConsumerWidget {
           return GestureDetector(
             onTap: () {
               selectedBooth.value == currentBooths[index];
-              setInventoryForBooth();
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,

@@ -109,19 +109,28 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
 
     print('booths state after insert: ${state.length}');
   }
+
+
+  // TODO: IMPLEMENT METHOD TO ADD IMAGE URL TO BOOTH IMAGEURLS
+  Future<void> addBoothPhoto(String boothUrl, String boothId) async {
+    // Get boothFromState
+    MyBooth currentBoothState = state
+        .where((booth) => booth.id == booth.id)
+        .first;
+    currentBoothState.currentBoothImageUrls?.add(boothUrl);
+
+    // // Get Index of booth to update to maintain order
+    // int indexOfItemToUpdate = state.indexOf(currentBoothState);
+    // if (indexOfItemToUpdate == -1) {
+    //   print('Failed to find item to update in current state');
+    //   return;
+    // }
+    // state.removeAt(indexOfItemToUpdate);
+    // state.insert(indexOfItemToUpdate, booth);
+
+    // await MyBoothsDb().updateBooth(booth);
+
+    // print('booths state after insert: ${state.length}');
+  }
 }
 
-Future<void> getCurrentBooth(String boothId) async {
-  MyBooth currentBooth;
-}
-
-@riverpod
-List<String> getNamesOfBooths(Ref ref) {
-  List<MyBooth> currentBooths = ref.watch(myBoothsProvider);
-
-  List<String> boothNames = currentBooths
-      .map((booth) => booth.boothName)
-      .toList();
-
-  return boothNames;
-}
