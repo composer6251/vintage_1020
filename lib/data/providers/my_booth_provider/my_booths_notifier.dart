@@ -1,5 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vintage_1020/data/local_db/my_booths_db.dart';
+import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
+import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/domain/my_booth/my_booth.dart';
 
 part 'my_booths_notifier.g.dart';
@@ -16,8 +18,11 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
     List<MyBooth> userBooths = await MyBoothsDb().fetchUserBoothsByEmail();
 
     if (ref.mounted) {
+      List<MyBooth> boothsWithInventory = userBooths
+          .map((booth) => setInventoryForBooth(booth))
+          .toList();
       print('Updating state with user booths ${userBooths.length}');
-      state = userBooths;
+      state = boothsWithInventory;
     }
   }
 
@@ -110,6 +115,20 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
     print('booths state after insert: ${state.length}');
   }
 
+  MyBooth setInventoryForBooth(MyBooth selectedBooth) {
+    List<InventoryItemLocal> inventory = ref.read(inventoryLocalProvider);
+    MyBooth booth = selectedBooth;
+    List<InventoryItemLocal> boothInventoryItems =
+        selectedBooth.boothInventory = inventory
+            .where(
+              (item) => selectedBooth.boothInventoryIds.contains(item.id),
+            )
+            .toList();
+            
+    booth.boothInventory = boothInventoryItems;
+
+    return booth;
+  }
 
   // TODO: IMPLEMENT METHOD TO ADD IMAGE URL TO BOOTH IMAGEURLS
   Future<void> addBoothPhoto(String boothUrl, String boothId) async {
@@ -133,4 +152,3 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
     // print('booths state after insert: ${state.length}');
   }
 }
-
