@@ -60,7 +60,7 @@ class MyBoothsDb {
 
   Future<void> addBoothToMyBoothTable(MyBooth booth) async {
     final db = await _getDatabase();
-    booth.userEmail = userEmail;
+    booth.userEmail = userEmail ?? '';
     if (booth.boothName == null) 'My Booth';
     print(
       'addBoothToMyBoothTable: ${booth.id} with urls ${booth.currentBoothImageUrls?.first}',

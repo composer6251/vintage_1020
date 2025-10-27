@@ -135,7 +135,8 @@ class AddItemDialog extends HookConsumerWidget {
 
         MyBooth boothToCreate = MyBooth(
           createBoothName.value,
-          userEmail,
+          userEmail ?? '',
+          [],
           [],
           null,
         );

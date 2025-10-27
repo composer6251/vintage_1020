@@ -1,3 +1,6 @@
+### **************KEY WORDS *******************
+late = nonnullable field that will be initialized later. i.e. When it's value needs to wait on the instantiation of another value. MUST BE INITIALIZED BEFORE IT IS FIRST READ
+
 
 ### ***************BEST PRACTICES****************
 

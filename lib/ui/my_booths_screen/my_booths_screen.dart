@@ -28,8 +28,8 @@ class MyBoothsScreen extends HookConsumerWidget {
     final currentBooths = ref.watch(myBoothsProvider);
     print('currentBooths in myBooths ${currentBooths.length}');
     // INITIAL VALUE OF SELECTED BOOTH
-
-    final selectedBooth = useState<MyBooth>(currentBooths.first);
+    final selectedBooth = useState(MyBooth.initial('',[]));
+  
     // print('selectedBooth in myBooths ${selectedBooth.value}');
     final boothNames = currentBooths.map((booth) => booth.boothName).toList();
     print('boothNames in myBooths ${boothNames.length}');
@@ -57,7 +57,7 @@ class MyBoothsScreen extends HookConsumerWidget {
     }
 
     final selectedBoothImages = useState(
-      selectedBooth.value?.currentBoothImageUrls,
+      selectedBooth.value.currentBoothImageUrls,
     );
 
     void takeBoothPhoto() async {
@@ -103,25 +103,23 @@ class MyBoothsScreen extends HookConsumerWidget {
               scrollDirection: Axis.horizontal,
               itemCount: currentBooths.length,
               itemBuilder: (context, index) {
-                return Flexible(
-                  child: GestureDetector(
-                    onTap: () {
-                      selectedBooth.value == currentBooths[index];
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Badge(
-                          label: Text(
-                            currentBooths[index].boothItemsCount
-                                    .toString() ??
-                                '0',
-                          ),
-                          child: FaIcon(FontAwesomeIcons.tent),
+                return GestureDetector(
+                  onTap: () {
+                    selectedBooth == currentBooths[index];
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Badge(
+                        label: Text(
+                          currentBooths[index].boothItemsCount
+                                  .toString() ??
+                              '0',
                         ),
-                        Text(currentBooths[index].boothName),
-                      ],
-                    ),
+                        child: FaIcon(FontAwesomeIcons.tent),
+                      ),
+                      Text(currentBooths[index].boothName),
+                    ],
                   ),
                 );
               },
@@ -152,7 +150,7 @@ class MyBoothsScreen extends HookConsumerWidget {
               ),
             ),
           ),
-          selectedBooth.value.currentBoothImageUrls?.length == 0
+          selectedBooth.value.currentBoothImageUrls == null
               ? OutlinedButton(
                   onPressed: takeBoothPhoto,
                   child: Text('Take booth image'),

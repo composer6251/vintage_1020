@@ -30,7 +30,7 @@ class InventoryLocal extends _$InventoryLocal {
   }
 
   Future<List<InventoryItemLocal>> fetchInitialUserInventory() async {
-    List<InventoryItemLocal> inventoryWithArchives = await LocalDb()
+    List<InventoryItemLocal> inventoryWithArchives = await InventoryDb()
         .fetchUserInventoryFromDb();
     print('Fetch from DB return ${inventoryWithArchives.length} items');
     state = [...inventoryWithArchives];
@@ -62,7 +62,7 @@ class InventoryLocal extends _$InventoryLocal {
       ),
     ];
 
-    LocalDb().insertIntoInventoryItem(item);
+    InventoryDb().insertIntoInventoryItem(item);
   }
 
   Future<void> quickAddInventoryItem(String itemImageUrl) async {
@@ -75,7 +75,7 @@ class InventoryLocal extends _$InventoryLocal {
 
     state = [...state, itemToSave];
 
-    LocalDb().insertIntoInventoryItem(itemToSave);
+    InventoryDb().insertIntoInventoryItem(itemToSave);
   }
 
   List<InventoryItemLocal> getInventoryState() {
@@ -98,13 +98,13 @@ class InventoryLocal extends _$InventoryLocal {
     state.removeAt(indexOfItemToUpdate);
     state.insert(indexOfItemToUpdate, newItem);
 
-    LocalDb().updateInventoryItem(newItem);
+    InventoryDb().updateInventoryItem(newItem);
   }
 
   Future<int> deleteUserInventoryByEmail() async {
-    int numberOfDeletedItems = await LocalDb().deleteUserInventory();
+    int numberOfDeletedItems = await InventoryDb().deleteUserInventory();
 
-    List<InventoryItemLocal> items = await LocalDb().fetchUserInventoryFromDb();
+    List<InventoryItemLocal> items = await InventoryDb().fetchUserInventoryFromDb();
     if (items.isEmpty) {
       state = [...items];
     }
@@ -116,7 +116,7 @@ class InventoryLocal extends _$InventoryLocal {
     // Remove from state
     state = state.where((item) => item.id != id).toList();
 
-    int numberOfDeletedItems = await LocalDb().softDeleteInventoryItem(id);
+    int numberOfDeletedItems = await InventoryDb().softDeleteInventoryItem(id);
 
     return numberOfDeletedItems;
   }

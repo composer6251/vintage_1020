@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logger/logger.dart';
+import 'package:vintage_1020/data/local_db/inventory_db.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
 import 'package:vintage_1020/ui/activity_chart_screen/activity_chart.dart';
 import 'package:vintage_1020/ui/add_item_dialog/widgets/add_item_dialog.dart';
@@ -45,7 +46,8 @@ class _HomeScreenState extends ConsumerState<UiContainer> {
     return Scaffold(
       body: _widgetOptions[_selectedIndex],
       resizeToAvoidBottomInset: true,
-      appBar: PreferredSize(
+      appBar: 
+        PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
         child: CustomAppBar(),
       ),

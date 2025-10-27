@@ -10,8 +10,8 @@ final Uuid uuid = Uuid();
 /// DATA CLASS FOR MY_BOOTH_TAB
 class MyBooth {
   late String id;
-  String boothName;
-  String? userEmail;
+  late String boothName;
+  late String userEmail;
   List<String> boothInventoryIds = [];
   List<InventoryItemLocal>? boothInventory = [];
   List<String>? currentBoothImageUrls = [];
@@ -46,6 +46,7 @@ class MyBooth {
   MyBooth(
     this.boothName,
     this.userEmail,
+    this.boothInventoryIds,
     this.currentBoothImageUrls,
     this.boothDeleteDate,
   );

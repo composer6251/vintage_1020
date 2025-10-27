@@ -52,7 +52,7 @@ Future<Database> _getDatabase() async {
   return db;
 }
 
-class LocalDb {
+class InventoryDb {
   Future<void> _createUserAndInventoryTables(Database db) async {
     print('\nCreating user and inventory tables\n');
     // TODO check if table exists

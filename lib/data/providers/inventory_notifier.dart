@@ -74,6 +74,6 @@ class InventoryNotifier extends _$InventoryNotifier {
     // Update state so user sees reflected change
     state = [...currentState];
     // Persist change
-    LocalDb().addInventoryItemToCurrentBooth(itemId);
+    InventoryDb().addInventoryItemToCurrentBooth(itemId);
   }
 }
