@@ -1,5 +1,4 @@
 import 'dart:core';
-import 'dart:io';
 import 'dart:convert';
 
 import 'package:uuid/uuid.dart';
@@ -14,7 +13,8 @@ class MyBooth {
   late String userEmail;
   List<String> boothInventoryIds = [];
   List<InventoryItemLocal>? boothInventory = [];
-  List<String>? currentBoothImageUrls = [];
+
+  List<String> currentBoothImageUrls = [];
   DateTime? boothDeleteDate;
 
   int get boothItemsCount {
@@ -22,14 +22,14 @@ class MyBooth {
   }
 
   double get boothCost {
-    double cost =
+    double boothCost =
         boothInventory?.fold<double>(
           0.0,
           (double sum, item) => sum + (item.itemPurchasePrice ?? 0.0),
         ) ??
         0.0;
 
-    return cost;
+    return boothCost;
   }
 
   double get boothValue {
@@ -62,7 +62,7 @@ class MyBooth {
           : [],
       currentBoothImageUrls = data['currentBoothImageUrls'] != null
           ? List<String>.from(jsonDecode(data['currentBoothImageUrls']))
-          : null,
+          : [],
       boothDeleteDate = data['boothDeleteDate'] != null
           ? DateTime.parse(data['boothDeleteDate']) as DateTime?
           : null;

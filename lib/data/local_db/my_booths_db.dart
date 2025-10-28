@@ -35,8 +35,6 @@ class MyBoothsDb {
   Future<List<MyBooth>> fetchUserBoothsByEmail() async {
     final db = await _getDatabase();
 
-    print('fetchingBoothsByEmail: $userEmail');
-
     List<Set<MyBooth>> booths = [];
     try {
       final data = await db.query(
@@ -54,23 +52,8 @@ class MyBoothsDb {
     for (Set<MyBooth> set in booths) {
       flattenedBooths.addAll(set);
     }
-
+    
     return flattenedBooths;
-  }
-
-  Future<void> addBoothToMyBoothTable(MyBooth booth) async {
-    final db = await _getDatabase();
-    booth.userEmail = userEmail ?? '';
-    if (booth.boothName == null) 'My Booth';
-    print(
-      'addBoothToMyBoothTable: ${booth.id} with urls ${booth.currentBoothImageUrls?.first}',
-    );
-
-    db.insert(
-      myBoothTable,
-      booth.toMapForLocalDB(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
   }
 
   Future<void> createBoothForUser(MyBooth booth) async {
@@ -89,9 +72,11 @@ class MyBoothsDb {
     }
   }
 
-    // TODO: CREATE METHOD TO UPDATE BY ID.
+  // TODO: CREATE METHOD TO UPDATE BY ID.
   Future<int> updateBooth(MyBooth booth) async {
     final db = await _getDatabase();
+
+    print('Updating booth with booth id ${booth.id}');
 
     final int updatedId = await db.update(
       myBoothTable,

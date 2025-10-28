@@ -31,11 +31,6 @@ class AddItemDialog extends HookConsumerWidget {
 
     List<MyBooth> userBooths = ref.watch(myBoothsProvider);
 
-    // Controllers for TextFields/TextFormFields states
-    // final itemPurchasePriceController = useTextEditingController();
-    // // final purchasePrice = useRef('');
-    // final itemListingPriceController = useTextEditingController();
-
     // UseStates for text fields
     final itemPurchasePrice = useState<String>('');
     final itemListingPrice = useState<String>('');
@@ -98,7 +93,6 @@ class AddItemDialog extends HookConsumerWidget {
 
     void submit() async {
 
-      // print('Saving item: purchase: ${purchasePrice.value}. listing: ${itemPurchasePrice.value}. height: ${itemHeight.value} ');
       // Save the photos taken/selected and update the state with the urls to save
       List<String> imageUrlsToSave = await savePhotosAndGetUrls();
 
@@ -200,7 +194,6 @@ class AddItemDialog extends HookConsumerWidget {
                       height: 40,
                       child: TextFormField(
                         decoration: const InputDecoration(
-                          // border: OutlineInputBorder(),
                           floatingLabelAlignment: FloatingLabelAlignment.center,
                           floatingLabelBehavior: FloatingLabelBehavior.never,
                           fillColor: Colors.blue,

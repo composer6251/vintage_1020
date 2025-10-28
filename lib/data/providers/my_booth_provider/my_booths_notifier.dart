@@ -17,6 +17,7 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
     List<MyBooth> userBooths = await MyBoothsDb().fetchUserBoothsByEmail();
 
     if (ref.mounted) {
+      print('booth imageUrls: ${userBooths?.first.currentBoothImageUrls}');
       List<MyBooth> boothsWithInventory = userBooths
           .map((booth) => setInventoryForBooth(booth))
           .toList();
@@ -91,7 +92,7 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
     }
     state.removeAt(indexOfItemToUpdate);
     state.insert(indexOfItemToUpdate, booth);
-
+    print('\nBooth id ${booth.id}');
     await MyBoothsDb().updateBooth(booth);
 
     print('booths state after insert: ${state.length}');
@@ -102,9 +103,7 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
     MyBooth booth = selectedBooth;
     List<InventoryItemLocal> boothInventoryItems =
         selectedBooth.boothInventory = inventory
-            .where(
-              (item) => selectedBooth.boothInventoryIds.contains(item.id),
-            )
+            .where((item) => selectedBooth.boothInventoryIds.contains(item.id))
             .toList();
 
     booth.boothInventory = boothInventoryItems;

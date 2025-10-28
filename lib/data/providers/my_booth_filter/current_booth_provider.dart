@@ -21,6 +21,7 @@ class CurrentBoothNotifier extends _$CurrentBoothNotifier {
     booth.boothInventory = inventory
         .where((item) => item.boothName == booth.boothName)
         .toList();
+    print('setting currentBooth with inventorySize: ${inventory.length}');
     state = booth;
   }
 }
