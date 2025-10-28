@@ -23,15 +23,15 @@ class PriceDateInputWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         TextFormField(
-          onChanged: (value) => onPriceChanged,
+          onChanged: (value) { 
+            onPriceChanged(value); 
+          },
           decoration: InputDecoration(
             prefixText: '\$',
             fillColor: Colors.blue,
             labelText: label,
           ),
           keyboardType: TextInputType.numberWithOptions(decimal: true),
-          // validator: (value) =>
-          //     value?.isEmpty ?? true ? 'Purchase Price is required' : null,
         ),
         OutlinedButton(
           style: ButtonStyle(elevation: WidgetStatePropertyAll<double>(4.0)),

@@ -12,11 +12,9 @@ class SelectBoothWidget extends HookConsumerWidget {
   SelectBoothWidget({
     required super.key,
     required this.currentBooths,
-    required this.onBoothChanged,
   });
 
   late final List<MyBooth> currentBooths;
-  final GestureTapCallback onBoothChanged;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -24,30 +22,34 @@ class SelectBoothWidget extends HookConsumerWidget {
       ref.read(currentBoothProvider.notifier).setCurrentBooth(booth);
     }
 
-    return ListView.builder(
-      itemExtent: 150,
-      scrollDirection: Axis.horizontal,
-      itemCount: currentBooths.length,
-      itemBuilder: (context, index) {
-        return SizedBox(
-          height: 100,
-          child: GestureDetector(
-            onTap: () {
-              print('Gesture');
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Badge(
-                  label: Text(currentBooths[index].boothItemsCount.toString()),
-                  child: FaIcon(FontAwesomeIcons.tent),
-                ),
-                Text(currentBooths[index].boothName),
-              ],
+    return Flexible(
+      child: ListView.builder(
+        itemExtent: 150,
+        scrollDirection: Axis.horizontal,
+        padding: EdgeInsets.all(8),
+        itemCount: currentBooths.length,
+        itemBuilder: (context, index) {
+          return SizedBox(
+            child: GestureDetector(
+              onTap: () {
+                print('Gesture');
+                updateCurrentBooth(currentBooths[index]);
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Badge(
+                    label: Text(currentBooths[index].boothItemsCount.toString()),
+                    child: FaIcon(size: 40,
+                      FontAwesomeIcons.tent),
+                  ),
+                  Text(currentBooths[index].boothName),
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

@@ -89,7 +89,7 @@ class MyBoothsScreen extends HookConsumerWidget {
           : Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SelectBoothWidget(key: key, currentBooths: currentBooths, onBoothChanged: () => pickedBooth.value = ref.read(currentBoothProvider),),
+                SelectBoothWidget(key: key, currentBooths: currentBooths),
                 BoothMetricsWidget(
                   key: key,
                   boothItemCount: selectedBoothInventory.value.length,

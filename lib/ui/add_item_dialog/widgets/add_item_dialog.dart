@@ -13,6 +13,7 @@ import 'package:vintage_1020/data/providers/inventory_provider/inventory_provide
 import 'package:vintage_1020/data/local_db/inventory_db.dart';
 import 'package:vintage_1020/domain/my_booth/my_booth.dart';
 import 'package:vintage_1020/ui/add_item_dialog/widgets/add_to_booth_checkbox_widget.dart';
+import 'package:vintage_1020/ui/validators/form_field_validators.dart';
 import 'package:vintage_1020/util/photo_util.dart';
 import 'package:vintage_1020/ui/add_item_dialog/widgets/add_item_select_booth.dart';
 import 'package:vintage_1020/ui/add_item_dialog/widgets/item_dimension_widget.dart';
@@ -31,8 +32,9 @@ class AddItemDialog extends HookConsumerWidget {
     List<MyBooth> userBooths = ref.watch(myBoothsProvider);
 
     // Controllers for TextFields/TextFormFields states
-    final itemPurchasePriceController = useTextEditingController();
-    // final itemListingPriceController = useTextEditingController(text: '');
+    // final itemPurchasePriceController = useTextEditingController();
+    // // final purchasePrice = useRef('');
+    // final itemListingPriceController = useTextEditingController();
 
     // UseStates for text fields
     final itemPurchasePrice = useState<String>('');
@@ -96,7 +98,7 @@ class AddItemDialog extends HookConsumerWidget {
 
     void submit() async {
 
-      print('Saving item: purchase: ${itemPurchasePrice.value}. listing: ${itemPurchasePrice.value}. height: ${itemHeight.value} ');
+      // print('Saving item: purchase: ${purchasePrice.value}. listing: ${itemPurchasePrice.value}. height: ${itemHeight.value} ');
       // Save the photos taken/selected and update the state with the urls to save
       List<String> imageUrlsToSave = await savePhotosAndGetUrls();
 
@@ -156,17 +158,16 @@ class AddItemDialog extends HookConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             PriceDateInputWidget(
-              price: itemPurchasePriceController.text,
+              price: itemPurchasePrice.value,
               date: purchaseDate.value,
-              onPriceChanged: (value) => itemPurchasePriceController.text = value,
+              onPriceChanged: (value) => itemPurchasePrice.value = value,
               onDateChanged: (value) => purchaseDate.value = value,
               label: purchasePriceRequiredLabel,
             ),
             PriceDateInputWidget(
               price: itemListingPrice.value,
               date: listingDate.value,
-              onPriceChanged: (value) =>
-                  itemListingPrice.value = value,
+              onPriceChanged: (value) => itemListingPrice.value = value,
               onDateChanged: (value) => listingDate.value = value,
               label: listingPriceLabel,
             ),
@@ -211,7 +212,7 @@ class AddItemDialog extends HookConsumerWidget {
                         ),
                         onChanged: (value) => createdBoothName.value = value,
                         validator: (value) =>
-                            value?.isEmpty ?? true ? 'Booth Name is required' : null,
+                            validateNewBoothName(value, userBooths)
                       ),
                     ),
                                    ),
