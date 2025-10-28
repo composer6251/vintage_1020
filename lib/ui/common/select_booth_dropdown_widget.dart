@@ -21,26 +21,23 @@ class SelectBoothDropDown extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final userBooths = ref.watch(myBoothsProvider);
 
-    return SizedBox(
-      width: MediaQuery.sizeOf(context).width,
-      child: Center(
-        child: DropdownMenu(
-                // expandedInsets: EdgeInsets.all(4),
-                initialSelection: userBooths.first.boothName,
-                onSelected: (value) {
-                  onValueUpdated(value);
-                },
-                dropdownMenuEntries: userBooths
-                    .map<DropdownMenuEntry<MyBooth>>(
-                      (MyBooth booth) => DropdownMenuEntry<MyBooth>(
-                        leadingIcon: Icon(Icons.storefront),
-                        value: booth,
-                        label: booth.boothName,
-                      ),
-                    )
-                    .toList(),
-              ),
-      ),
+    return Center(
+      child: DropdownMenu(
+              // expandedInsets: EdgeInsets.all(4),
+              initialSelection: userBooths.first.boothName,
+              onSelected: (value) {
+                onValueUpdated(value);
+              },
+              dropdownMenuEntries: userBooths
+                  .map<DropdownMenuEntry<MyBooth>>(
+                    (MyBooth booth) => DropdownMenuEntry<MyBooth>(
+                      leadingIcon: Icon(Icons.storefront),
+                      value: booth,
+                      label: '${booth.boothName}: ${booth.boothItemsCount} Items',
+                    ),
+                  )
+                  .toList(),
+            ),
     );
   }
 }

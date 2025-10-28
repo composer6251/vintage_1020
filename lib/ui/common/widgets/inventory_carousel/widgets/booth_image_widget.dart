@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:vintage_1020/ui/image_widget_util/image_widget_util.dart';
 
 class BoothImageWidget extends ConsumerWidget {
   const BoothImageWidget({
@@ -16,8 +17,7 @@ class BoothImageWidget extends ConsumerWidget {
    final height = MediaQuery.sizeOf(context).height;
    return  SizedBox(
     height: height,
-    child: Image.file(
-      fit: BoxFit.cover,
-      File(url)));
+    child: ImageWidgetUtil.getItemImage(url),
+   );
   }
 }

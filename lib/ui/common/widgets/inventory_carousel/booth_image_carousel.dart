@@ -13,22 +13,17 @@ class BoothImageCarousel extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final double height = MediaQuery.sizeOf(context).height;
-    final double width = MediaQuery.sizeOf(context).width;
 
-    return ConstrainedBox(
-      constraints: BoxConstraints(minHeight: height, maxHeight: height),
-      child: CarouselView.weighted(
-        itemSnapping: true,
-        flexWeights: flexWeights,
-        children: itemImageUrls
-            .map(
-              (boothImageUrl) => BoothImageWidget(
-                url: boothImageUrl,
-              ),
-            )
-            .toList(),
-      ),
+    return CarouselView.weighted(
+      itemSnapping: true,
+      flexWeights: flexWeights,
+      children: itemImageUrls
+          .map(
+            (boothImageUrl) => BoothImageWidget(
+              url: boothImageUrl,
+            ),
+          )
+          .toList(),
     );
   }
 }

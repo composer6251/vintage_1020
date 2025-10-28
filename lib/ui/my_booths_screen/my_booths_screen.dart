@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:vintage_1020/data/providers/my_booth_filter/current_booth_provider.dart';
 import 'package:vintage_1020/data/providers/my_booth_provider/my_booths_notifier.dart';
@@ -38,7 +39,7 @@ class MyBoothsScreen extends HookConsumerWidget {
       List<String>? selectedBoothImageUrlsCurrentState =
           pickedBooth.value.currentBoothImageUrls;
 
-      selectedBoothImageUrlsCurrentState?.add(boothPhotoPath);
+      selectedBoothImageUrlsCurrentState.add(boothPhotoPath);
 
       MyBooth booth = pickedBooth.value;
       booth.currentBoothImageUrls = selectedBoothImageUrlsCurrentState;
@@ -50,24 +51,58 @@ class MyBoothsScreen extends HookConsumerWidget {
       return userBooths.isEmpty
           ? CreateBoothWidget()
           : Column(
-              mainAxisSize: MainAxisSize.min,
+              mainAxisSize: MainAxisSize.max,
               children: [
-                SelectBoothDropDown(
-                  userBooths: userBooths,
-                  onValueUpdated: (value) => pickedBooth.value = value,
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Flexible(
+                      flex: 1,
+                      child: IconButton(
+                        onPressed: takeBoothPhoto,
+                        icon: FaIcon(FontAwesomeIcons.camera),
+                        iconSize: 32,
+                      ),
+                    ),
+                    Flexible(
+                      flex: 2,
+                      child: SelectBoothDropDown(
+                        userBooths: userBooths,
+                        onValueUpdated: (value) => pickedBooth.value = value,
+                      ),
+                    ),
+                    Flexible(
+                      flex: 1,
+                      child: Column(
+                        children: [
+                          Text(
+                            'Cost: \$${pickedBooth.value.boothCost}',
+                            style: TextStyle(fontSize: 16),
+                          ), 
+                          Text(
+                            'Value: \$${pickedBooth.value.boothValue}',
+                            style: TextStyle(fontSize: 16),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
                 ),
                 // SelectBoothWidget(key: key, currentBooths: currentBooths),
-                BoothMetricsWidget(
-                  key: key,
-                  boothItemCount: pickedBooth.value.boothItemsCount,
-                  boothCost: pickedBooth.value.boothCost,
-                  boothValue: pickedBooth.value.boothValue,
-                ),
-                // pickedBooth.value.currentBoothImageUrls.isEmpty
-                //     ? OutlinedButton(
-                //         onPressed: takeBoothPhoto,
-                //         child: Text('Take booth image'),
-                //       )
+                // BoothMetricsWidget(
+                //   key: key,
+                //   boothItemCount: pickedBooth.value.boothItemsCount,
+                //   boothCost: pickedBooth.value.boothCost,
+                //   boothValue: pickedBooth.value.boothValue,
+                // ),
+                pickedBooth.value.currentBoothImageUrls.isEmpty
+                    ? Center(
+                      child: OutlinedButton(
+                          onPressed: takeBoothPhoto,
+                          child: Text('Take booth image'),
+                        ),
+                    )
                 //     : Expanded(
                 //         flex: 4,
                 //         child: ListView.builder(
@@ -80,15 +115,16 @@ class MyBoothsScreen extends HookConsumerWidget {
                 //           },
                 //         ),
                 //       ),
+                :
                 Expanded(
-                  flex: 4,
+                  flex: 6,
                   child: BoothImageCarousel(
                     itemImageUrls: pickedBooth.value.currentBoothImageUrls,
                     flexWeights: [3],
                   ),
                 ),
                 Expanded(
-                  flex: 4,
+                  flex: 6,
                   child: InventoryItemCarousel(
                     inventoryItems: pickedBooth.value.boothInventory ?? [],
                     flexWeights: [3],
