@@ -125,8 +125,6 @@ class AddItemDialog extends HookConsumerWidget {
             .watch(inventoryLocalProvider.notifier)
             .addUserInventoryItemLocal(itemToDB);
       }
-      // TODO: Fix adding to booth logic.
-      // Both select a booth AND create booth CANNOT be selected
 
       if (createdBoothName.value != '' && isChecked.value) {
 

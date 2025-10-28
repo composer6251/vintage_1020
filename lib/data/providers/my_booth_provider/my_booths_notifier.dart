@@ -10,7 +10,6 @@ part 'my_booths_notifier.g.dart';
 class MyBoothsNotifier extends _$MyBoothsNotifier {
   @override
   List<MyBooth> build() {
-    print('MyBoothNotifier build');
     return [];
   }
 
@@ -26,27 +25,12 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
     }
   }
 
-  Future<List<MyBooth>> fetchUserBoothsReturn() async {
-    List<MyBooth> userBooths = await MyBoothsDb().fetchUserBoothsByEmail();
-
-    // state = userBooths;
-
-    return userBooths;
-  }
-
   Future<void> createBoothForUser(MyBooth boothToInsert) async {
     state = [...state, boothToInsert];
     await MyBoothsDb().createBoothForUser(boothToInsert);
-
-    print('booths state after insert: ${state.length}');
-  }
-
-  Future<void> getCurrentBooth(String boothId) async {
-    MyBooth currentBooth;
   }
 
   Future<void> addItemToBoothById(String itemId, String boothId) async {
-    // Get boothFromState
     MyBooth currentBoothState = state
         .where((booth) => booth.id == boothId)
         .first;
@@ -66,8 +50,6 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
     state.removeAt(indexOfItemToUpdate);
     state.insert(indexOfItemToUpdate, currentBoothState);
     await MyBoothsDb().createBoothForUser(currentBoothState);
-
-    print('booths state after insert: ${state.length}');
   }
 
   Future<void> removeItemFromBoothById(String itemId, String boothId) async {
@@ -124,7 +106,7 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
               (item) => selectedBooth.boothInventoryIds.contains(item.id),
             )
             .toList();
-            
+
     booth.boothInventory = boothInventoryItems;
 
     return booth;

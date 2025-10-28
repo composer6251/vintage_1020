@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
+import 'package:vintage_1020/data/providers/my_booth_filter/current_booth_provider.dart';
 import 'package:vintage_1020/data/providers/my_booth_provider/my_booths_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/domain/my_booth/my_booth.dart';
@@ -32,17 +33,22 @@ class MyBoothsScreen extends HookConsumerWidget {
     // Watch booths provider
     final currentBooths = ref.watch(myBoothsProvider);
     print('currentBooths in myBooths ${currentBooths.length}');
+
     // INITIAL VALUE OF SELECTED BOOTH
-    final selectedBooth = useState(MyBooth.initial('', []));
+    final selectedBooth = ref.watch(currentBoothProvider);
+
+    final pickedBooth = useState<MyBooth>(selectedBooth);
+
+    print(
+      'Selected booth inventory in my booth: ${selectedBooth?.boothInventory?.length}',
+    );
 
     // On my booth selected
     final selectedBoothInventory = useState<List<InventoryItemLocal>>([]);
     final selectedBoothCost = useState<double>(0.0);
     final selectedBoothValue = useState<double>(0.0);
 
-    final selectedBoothImages = useState(
-      selectedBooth.value.currentBoothImageUrls,
-    );
+    final selectedBoothImages = useState(selectedBooth?.currentBoothImageUrls);
 
     void takeBoothPhoto() async {
       String boothPhotoPath = await PhotoUtil.takePhotoAndReturnUrl();
@@ -51,8 +57,8 @@ class MyBoothsScreen extends HookConsumerWidget {
 
       selectedBoothImageUrlsCurrentState?.add(boothPhotoPath);
 
-      MyBooth booth = selectedBooth.value;
-      booth.currentBoothImageUrls = selectedBoothImageUrlsCurrentState;
+      MyBooth booth = selectedBooth;
+      booth?.currentBoothImageUrls = selectedBoothImageUrlsCurrentState;
 
       await ref.read(myBoothsProvider.notifier).updateBooth(booth);
     }
@@ -83,26 +89,30 @@ class MyBoothsScreen extends HookConsumerWidget {
           : Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SelectBoothWidget(key: key, currentBooths: currentBooths),
-                BoothMetricsWidget(key: key, boothItemCount: selectedBoothInventory.value.length, boothCost: selectedBoothCost.value, boothValue: selectedBoothValue.value),
-                selectedBooth.value.currentBoothImageUrls == null
-                ? 
-                OutlinedButton(
-                    onPressed: takeBoothPhoto,
-                    child: Text('Take booth image'),
-                  )
-                : 
-                Expanded(
-                    flex: 4,
-                    child: ListView.builder(
-                      itemCount: selectedBooth.value.currentBoothImageUrls?.length,
-                      itemBuilder: (context, index) {
-                        selectedBooth.value.currentBoothImageUrls?.map(
-                          (url) => Image.file(File(url)),
-                        );
-                      },
-                    ),
-                  ),
+                SelectBoothWidget(key: key, currentBooths: currentBooths, onBoothChanged: () => pickedBooth.value = ref.read(currentBoothProvider),),
+                BoothMetricsWidget(
+                  key: key,
+                  boothItemCount: selectedBoothInventory.value.length,
+                  boothCost: selectedBoothCost.value,
+                  boothValue: selectedBoothValue.value,
+                ),
+                selectedBooth?.currentBoothImageUrls == null
+                    ? OutlinedButton(
+                        onPressed: takeBoothPhoto,
+                        child: Text('Take booth image'),
+                      )
+                    : Expanded(
+                        flex: 4,
+                        child: ListView.builder(
+                          itemCount:
+                              selectedBooth?.currentBoothImageUrls?.length,
+                          itemBuilder: (context, index) {
+                            selectedBooth?.currentBoothImageUrls?.map(
+                              (url) => Image.file(File(url)),
+                            );
+                          },
+                        ),
+                      ),
                 Expanded(
                   flex: 4,
                   child: BoothImageCarousel(
