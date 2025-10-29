@@ -47,6 +47,18 @@ class MyBoothsScreen extends HookConsumerWidget {
       await ref.read(myBoothsProvider.notifier).updateBooth(booth);
     }
 
+    void selectImagesFromPhotos() async {
+      List<String> boothPhotoPath = await PhotoUtil.selectPhotosFromGalleryAndReturnUrls();
+      List<String>? selectedBoothImageUrlsCurrentState =
+          pickedBooth.value.currentBoothImageUrls;
+
+      selectedBoothImageUrlsCurrentState.addAll(boothPhotoPath);
+
+      pickedBooth.value.currentBoothImageUrls = selectedBoothImageUrlsCurrentState;
+
+      await ref.read(myBoothsProvider.notifier).updateBooth(pickedBooth.value);
+    }
+
     if (snapshot.connectionState == ConnectionState.done) {
       return userBooths.isEmpty
           ? CreateBoothWidget()
@@ -57,6 +69,19 @@ class MyBoothsScreen extends HookConsumerWidget {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
+                    Flexible(
+                      flex: 1,
+                      child:             
+                      IconButton(
+                        icon: const Icon(Icons.photo_library),
+                        tooltip: 'Select Booth Images From Photos',
+                        style: ButtonStyle(
+                          elevation: WidgetStatePropertyAll<double>(8.0),
+                        ),
+                        onPressed: selectImagesFromPhotos,
+                        iconSize: 32,
+                      ),
+                    ),
                     Flexible(
                       flex: 1,
                       child: IconButton(
@@ -89,32 +114,16 @@ class MyBoothsScreen extends HookConsumerWidget {
                     )
                   ],
                 ),
-                // SelectBoothWidget(key: key, currentBooths: currentBooths),
-                // BoothMetricsWidget(
-                //   key: key,
-                //   boothItemCount: pickedBooth.value.boothItemsCount,
-                //   boothCost: pickedBooth.value.boothCost,
-                //   boothValue: pickedBooth.value.boothValue,
-                // ),
                 pickedBooth.value.currentBoothImageUrls.isEmpty
-                    ? Center(
-                      child: OutlinedButton(
-                          onPressed: takeBoothPhoto,
-                          child: Text('Take booth image'),
-                        ),
-                    )
-                //     : Expanded(
-                //         flex: 4,
-                //         child: ListView.builder(
-                //           itemCount:
-                //               pickedBooth.value.currentBoothImageUrls.length,
-                //           itemBuilder: (context, index) {
-                //             pickedBooth.value.currentBoothImageUrls.map(
-                //               (url) => Image.file(File(url)),
-                //             );
-                //           },
-                //         ),
-                //       ),
+                ? 
+                Expanded(
+                  child: Center(
+                    child: OutlinedButton(
+                        onPressed: takeBoothPhoto,
+                        child: Text('Take booth image'),
+                      ),
+                  ),
+                )
                 :
                 Expanded(
                   flex: 6,

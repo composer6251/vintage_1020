@@ -56,7 +56,7 @@ class MyBooth {
   MyBooth.fromLocalDB(Map<String, dynamic> data)
     : id = data['id'],
       boothName = data['boothName'] ?? 'My Booth',
-      userEmail = data?['email'],
+      userEmail = data['email'],
       boothInventoryIds = data['boothInventoryIds'] != null
           ? List<String>.from(jsonDecode(data['boothInventoryIds']))
           : [],

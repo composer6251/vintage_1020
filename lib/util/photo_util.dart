@@ -25,6 +25,23 @@ class PhotoUtil {
     return savedFilePath;
   }
 
+  static Future<List<String>> selectPhotosFromGalleryAndReturnUrls() async {
+    // Take photo
+    List<XFile> photos = await selectPhotosFromGallery();
+    if (photos.isEmpty) return [];
+    
+    List<String> selectedImagesUrls = [];
+
+    for (XFile photo in photos) {
+      File file = await saveSingleImageFile(File(photo.path));
+      String savedFilePath = file.path;
+      selectedImagesUrls.add(savedFilePath);
+    }
+    print('Saved selected ${selectedImagesUrls.length} booth images');
+
+    return selectedImagesUrls;
+  }
+
   /// OPEN CAMERA AND RETURN PHOTO TAKEN
   static Future<XFile?> takeCameraPhoto() async {
     // INSTANTIATE IMAGE PICKER
@@ -147,10 +164,6 @@ class PhotoUtil {
 
     return paths;
   }
-
-
-
-
 
   /// Saves XFiles to local and returns Files to be displayed
   static Future<List<File>> saveImagesAndReturnFile(List<XFile> images) async {
