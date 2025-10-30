@@ -64,6 +64,9 @@ class AddItemDialog extends HookConsumerWidget {
       // If checkbox is checked, fetch booths, update provider which notifies listeners and will result in the dropdown if mybooths is not empty.
       if(isChecked.value) {
         fetchUserBooths();
+      } else {
+        // On uncheck Add to Booth, clear out create new value
+        boothNameOfBoothToCreate.value = '';
       }
     }
 
@@ -110,10 +113,37 @@ class AddItemDialog extends HookConsumerWidget {
       return updatedItemImageUrls;
     }
 
+    void saveNewBooth(String itemId) async {
+
+        MyBooth boothToCreate = MyBooth(
+          Uuid().v6(),
+          boothNameOfBoothToCreate.value,
+          userEmail ?? '',
+          [itemId],
+          [],
+          null,
+        );
+
+        await ref.read(myBoothsProvider.notifier).createBoothForUser(boothToCreate);
+      }
+
+    void updateExistingBooth() {
+
+
+    }
+
+
+
     void submit() async {
 
       // Save the photos taken/selected and update the state with the urls to save
       List<String> imageUrlsToSave = await savePhotosAndGetUrls();
+
+      // If the checkbox is checked, choose if it is a new booth or an existing booth.
+      String boothNameToAddItem = '';
+      if(isChecked.value) {
+        boothNameToAddItem = boothNameOfBoothToCreate.value.isNotEmpty ? boothNameOfBoothToCreate.value : boothSelectedFromDropdown.value.boothName;
+      }
 
       final InventoryItemLocal itemToDB = InventoryItemLocal.toLocalDb(
         Uuid().v6(),
@@ -132,27 +162,26 @@ class AddItemDialog extends HookConsumerWidget {
         double.tryParse(itemWidth.value),
         double.tryParse(itemDepth.value),
         null,
-        boothNameOfBoothToCreate.value,
+        boothNameToAddItem.isEmpty ? null : boothNameToAddItem,
       );
 
+
+
+      // If isChecked, add to selectedBooth, or create no booth and add to selected booth.
+      if(isChecked.value && boothNameOfBoothToCreate.value != '') {
+          saveNewBooth(itemToDB.id);
+      }
+      if(isChecked.value) {
+
+      }
       if (formKey.currentState?.validate() ?? false) {
         ref
             .watch(inventoryLocalProvider.notifier)
             .addUserInventoryItemLocal(itemToDB);
       }
 
-      if (boothNameOfBoothToCreate.value != '' && isChecked.value) {
 
-        MyBooth boothToCreate = MyBooth(
-          boothNameOfBoothToCreate.value,
-          userEmail ?? '',
-          [itemToDB.id],
-          [],
-          null,
-        );
 
-        ref.read(myBoothsProvider.notifier).createBoothForUser(boothToCreate);
-      }
       closeDialog();
     }
 

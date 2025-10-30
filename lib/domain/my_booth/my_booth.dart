@@ -44,6 +44,7 @@ class MyBooth {
   }
 
   MyBooth(
+    this.id,
     this.boothName,
     this.userEmail,
     this.boothInventoryIds,

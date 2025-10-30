@@ -36,11 +36,11 @@ class MyBoothsScreen extends HookConsumerWidget {
     void takeBoothPhoto() async {
       String boothPhotoPath = await PhotoUtil.takePhotoAndReturnUrl();
       List<String>? selectedBoothImageUrlsCurrentState =
-          pickedBooth.value.currentBoothImageUrls;
+          selectedBooth.currentBoothImageUrls;
 
       selectedBoothImageUrlsCurrentState.add(boothPhotoPath);
 
-      MyBooth booth = pickedBooth.value;
+      MyBooth booth = selectedBooth;
       booth.currentBoothImageUrls = selectedBoothImageUrlsCurrentState;
 
       await ref.read(myBoothsProvider.notifier).updateBooth(booth);
@@ -49,13 +49,9 @@ class MyBoothsScreen extends HookConsumerWidget {
     void selectImagesFromPhotos() async {
       List<String> boothPhotoPath = await PhotoUtil.selectPhotosFromGalleryAndReturnUrls();
       List<String>? selectedBoothImageUrlsCurrentState =
-          pickedBooth.value.currentBoothImageUrls;
+          selectedBooth.currentBoothImageUrls;
 
-      selectedBoothImageUrlsCurrentState.addAll(boothPhotoPath);
-
-      pickedBooth.value.currentBoothImageUrls = selectedBoothImageUrlsCurrentState;
-
-      await ref.read(myBoothsProvider.notifier).updateBooth(pickedBooth.value);
+      await updateBoothImages(selectedBoothImageUrlsCurrentState, boothPhotoPath, selectedBooth, ref);
     }
 
     if (snapshot.connectionState == ConnectionState.done) {
@@ -93,7 +89,7 @@ class MyBoothsScreen extends HookConsumerWidget {
                       flex: 2,
                       child: SelectBoothDropDown(
                         userBooths: userBooths,
-                        onValueUpdated: (value) => pickedBooth.value = value,
+                        // onValueUpdated: (value) => selectedBooth = value,
                       ),
                     ),
                     Flexible(
@@ -101,11 +97,11 @@ class MyBoothsScreen extends HookConsumerWidget {
                       child: Column(
                         children: [
                           Text(
-                            'Cost: \$${pickedBooth.value.boothCost}',
+                            'Cost: \$${selectedBooth.boothCost}',
                             style: TextStyle(fontSize: 16),
                           ), 
                           Text(
-                            'Value: \$${pickedBooth.value.boothValue}',
+                            'Value: \$${selectedBooth.boothValue}',
                             style: TextStyle(fontSize: 16),
                           )
                         ],
@@ -146,5 +142,14 @@ class MyBoothsScreen extends HookConsumerWidget {
       return Center(child: Text('Snapshot has no connection'));
     }
     return Center(child: CircularProgressIndicator());
+  }
+
+  Future<void> updateBoothImages(List<String> selectedBoothImageUrlsCurrentState, List<String> boothPhotoPath, MyBooth selectedBooth, WidgetRef ref) async {
+    
+    selectedBoothImageUrlsCurrentState.addAll(boothPhotoPath);
+    
+    selectedBooth.currentBoothImageUrls = selectedBoothImageUrlsCurrentState;
+    
+    await ref.read(myBoothsProvider.notifier).updateBooth(selectedBooth);
   }
 }
