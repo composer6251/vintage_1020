@@ -30,6 +30,7 @@ class MyBoothsScreen extends HookConsumerWidget {
     // INITIAL VALUE OF SELECTED BOOTH
     final selectedBooth = ref.watch(currentBoothProvider);
 
+    // State to hold new user-selected booth
     final pickedBooth = useState<MyBooth>(selectedBooth);
 
     void takeBoothPhoto() async {

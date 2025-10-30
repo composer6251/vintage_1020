@@ -31,10 +31,10 @@ class AddItemSelectBooth extends ConsumerWidget {
                   onValueUpdated(value);
                 },
                 dropdownMenuEntries: userBooths
-                    .map<DropdownMenuEntry<String>>(
-                      (MyBooth booth) => DropdownMenuEntry<String>(
+                    .map<DropdownMenuEntry<MyBooth>>(
+                      (MyBooth booth) => DropdownMenuEntry<MyBooth>(
                         leadingIcon: Icon(Icons.storefront),
-                        value: booth.id,
+                        value: booth,
                         label: booth.boothName,
                       ),
                     )

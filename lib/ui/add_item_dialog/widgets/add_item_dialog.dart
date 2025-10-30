@@ -46,7 +46,7 @@ class AddItemDialog extends HookConsumerWidget {
     final itemImageUrls = useState<List<String>>([]);
 
     final isChecked = useState<bool>(false);
-    final boothToAddItem = useState<String>('');
+    final boothToAddItem = useState<MyBooth>();
 
     /// AFTER USER SELECTS PHOTOS OR TAKES A PHOTO, UPDATE THE EPHEMERAL STATE
     void selectPhotos() async {

@@ -19,11 +19,10 @@ class SelectBoothDropDown extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final userBooths = ref.watch(myBoothsProvider);
+    // final userBooths = ref.watch(myBoothsProvider);
 
     return Center(
       child: DropdownMenu(
-              // expandedInsets: EdgeInsets.all(4),
               initialSelection: userBooths.first,
               onSelected: (value) {
                 onValueUpdated(value);
@@ -33,7 +32,7 @@ class SelectBoothDropDown extends ConsumerWidget {
                     (MyBooth booth) => DropdownMenuEntry<MyBooth>(
                       leadingIcon: Icon(Icons.storefront),
                       value: booth,
-                      label: '${booth.boothName}: ${booth.boothItemsCount} Items',
+                      label: '${booth.boothName}: ${booth.boothItemsCount}',
                     ),
                   )
                   .toList(),
