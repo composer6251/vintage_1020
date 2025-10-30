@@ -24,7 +24,7 @@ class SelectBoothDropDown extends ConsumerWidget {
     return Center(
       child: DropdownMenu(
               // expandedInsets: EdgeInsets.all(4),
-              initialSelection: userBooths.first.boothName,
+              initialSelection: userBooths.first,
               onSelected: (value) {
                 onValueUpdated(value);
               },

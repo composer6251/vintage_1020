@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:vintage_1020/data/local_db/my_booths_db.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart';
+import 'package:vintage_1020/data/providers/my_booth_filter/current_booth_provider.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/domain/my_booth/my_booth.dart';
 
@@ -10,6 +11,7 @@ part 'my_booths_notifier.g.dart';
 class MyBoothsNotifier extends _$MyBoothsNotifier {
   @override
   List<MyBooth> build() {
+    print('myBoothProvider build');
     return [];
   }
 
@@ -17,17 +19,21 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
     List<MyBooth> userBooths = await MyBoothsDb().fetchUserBoothsByEmail();
 
     if (ref.mounted) {
-      print('booth imageUrls: ${userBooths?.first.currentBoothImageUrls}');
       List<MyBooth> boothsWithInventory = userBooths
           .map((booth) => setInventoryForBooth(booth))
           .toList();
-      print('Updating state with user booths ${userBooths.length}');
+
       state = boothsWithInventory;
+      ref
+          .read(currentBoothProvider.notifier)
+          .setCurrentBooth(boothsWithInventory.first);
+      ref.notifyListeners();
     }
   }
 
   Future<void> createBoothForUser(MyBooth boothToInsert) async {
     state = [...state, boothToInsert];
+    ref.notifyListeners();
     await MyBoothsDb().createBoothForUser(boothToInsert);
   }
 
@@ -50,6 +56,9 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
 
     state.removeAt(indexOfItemToUpdate);
     state.insert(indexOfItemToUpdate, currentBoothState);
+
+    ref.notifyListeners();
+
     await MyBoothsDb().createBoothForUser(currentBoothState);
   }
 
@@ -73,6 +82,7 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
 
     state.removeAt(indexOfItemToUpdate);
     state.insert(indexOfItemToUpdate, currentBoothState);
+    ref.notifyListeners();
     await MyBoothsDb().createBoothForUser(currentBoothState);
 
     print('booths state after insert: ${state.length}');
@@ -92,10 +102,8 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
     }
     state.removeAt(indexOfItemToUpdate);
     state.insert(indexOfItemToUpdate, booth);
-    print('\nBooth id ${booth.id}');
+    ref.notifyListeners();
     await MyBoothsDb().updateBooth(booth);
-
-    print('booths state after insert: ${state.length}');
   }
 
   MyBooth setInventoryForBooth(MyBooth selectedBooth) {
@@ -107,8 +115,15 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
             .toList();
 
     booth.boothInventory = boothInventoryItems;
+    ref.notifyListeners();
 
     return booth;
+  }
+
+  Future<void> deleteUserBooths() async {
+    state = [];
+    ref.notifyListeners();
+    MyBoothsDb().softDeleteBoothsByUserEmail();
   }
 
   // TODO: IMPLEMENT METHOD TO ADD IMAGE URL TO BOOTH IMAGEURLS
@@ -117,7 +132,8 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
     MyBooth currentBoothState = state
         .where((booth) => booth.id == booth.id)
         .first;
-    currentBoothState.currentBoothImageUrls?.add(boothUrl);
+    currentBoothState.currentBoothImageUrls.add(boothUrl);
+    ref.notifyListeners();
 
     // // Get Index of booth to update to maintain order
     // int indexOfItemToUpdate = state.indexOf(currentBoothState);

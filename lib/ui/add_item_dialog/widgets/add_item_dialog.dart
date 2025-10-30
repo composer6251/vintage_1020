@@ -46,7 +46,7 @@ class AddItemDialog extends HookConsumerWidget {
     final itemImageUrls = useState<List<String>>([]);
 
     final isChecked = useState<bool>(false);
-    final createdBoothName = useState<String>('');
+    final boothToAddItem = useState<String>('');
 
     /// AFTER USER SELECTS PHOTOS OR TAKES A PHOTO, UPDATE THE EPHEMERAL STATE
     void selectPhotos() async {
@@ -113,7 +113,7 @@ class AddItemDialog extends HookConsumerWidget {
         double.tryParse(itemWidth.value),
         double.tryParse(itemDepth.value),
         null,
-        createdBoothName.value,
+        boothToAddItem.value,
       );
 
       if (formKey.currentState?.validate() ?? false) {
@@ -122,10 +122,10 @@ class AddItemDialog extends HookConsumerWidget {
             .addUserInventoryItemLocal(itemToDB);
       }
 
-      if (createdBoothName.value != '' && isChecked.value) {
+      if (boothToAddItem.value != '' && isChecked.value) {
 
         MyBooth boothToCreate = MyBooth(
-          createdBoothName.value,
+          boothToAddItem.value,
           userEmail ?? '',
           [itemToDB.id],
           [],
@@ -203,7 +203,7 @@ class AddItemDialog extends HookConsumerWidget {
                           ),
                           labelText: createBoothInputLabel,
                         ),
-                        onChanged: (value) => createdBoothName.value = value,
+                        onChanged: (value) => boothToAddItem.value = value,
                         validator: (value) =>
                             validateNewBoothName(value, userBooths)
                       ),
@@ -213,14 +213,13 @@ class AddItemDialog extends HookConsumerWidget {
               ],
             ), 
             // TODO: Implement way to update booth item from add item, manage inv tile, select booth
-            // Visibility(
-            //   visible: isChecked.value,
-            //   child: AddItemSelectBooth(
-            //     // itemId: ,
-            //     // userBooths: userBooths,
-            //     // onValueUpdated: (value) => selectedBoothName.value = value,
-            //   ),
-            // ),
+            Visibility(
+              visible: isChecked.value,
+              child: AddItemSelectBooth(
+                userBooths: userBooths,
+                onValueUpdated: (value) => boothToAddItem.value = value,
+              ),
+            ),
           ],
         ),
       ),

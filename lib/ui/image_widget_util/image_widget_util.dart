@@ -27,6 +27,6 @@ class ImageWidgetUtil {
 
       if(errorText.isNotEmpty) return Text(errorText);
 
-      return Image.file(file);
+      return Image.file(fit: BoxFit.cover, file);
     }
 }

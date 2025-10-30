@@ -61,13 +61,13 @@ class InventoryLocal extends _$InventoryLocal {
         item.boothName,
       ),
     ];
-
+    ref.notifyListeners();
     InventoryDb().insertIntoInventoryItem(item);
   }
 
   Future<void> quickAddInventoryItem(String itemImageUrl) async {
     InventoryItemLocal itemToSave = InventoryItemLocal.empty(Uuid().v6());
-    
+
     itemToSave.userEmail = userEmail;
     itemToSave.itemPurchaseDate = DateTime.now();
     itemToSave.primaryImageUrl = itemImageUrl;
@@ -104,7 +104,8 @@ class InventoryLocal extends _$InventoryLocal {
   Future<int> deleteUserInventoryByEmail() async {
     int numberOfDeletedItems = await InventoryDb().deleteUserInventory();
 
-    List<InventoryItemLocal> items = await InventoryDb().fetchUserInventoryFromDb();
+    List<InventoryItemLocal> items = await InventoryDb()
+        .fetchUserInventoryFromDb();
     if (items.isEmpty) {
       state = [...items];
     }

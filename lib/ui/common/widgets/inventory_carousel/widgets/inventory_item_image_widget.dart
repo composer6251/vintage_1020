@@ -13,14 +13,41 @@ class InventoryItemImage extends ConsumerWidget {
   
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-   final height = MediaQuery.sizeOf(context).height;
+   final height = MediaQuery.sizeOf(context).width;
+   final width = MediaQuery.sizeOf(context).height;
    return  Stack(
      children: [
       SizedBox(
+        width: width,
         height: height,
         child: ImageWidgetUtil.getItemImage(item.primaryImageUrl),
      ),
-     Text(item.itemPurchasePrice.toString()),
+     Align(
+        alignment: Alignment.bottomLeft,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Text(
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontStyle: FontStyle.italic,
+                ),
+                '\$${item.itemPurchasePrice.toString()}',
+              ),
+              Text(
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontStyle: FontStyle.italic,
+                ),
+                '\$${item.itemListingPrice.toString()}',
+              ),
+            ],
+          ),
+        ),
+      ),
    ]);
   }
 }

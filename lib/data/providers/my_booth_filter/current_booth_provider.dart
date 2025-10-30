@@ -17,11 +17,12 @@ class CurrentBoothNotifier extends _$CurrentBoothNotifier {
   }
 
   void setCurrentBooth(MyBooth booth) {
-    List<InventoryItemLocal> inventory = ref.watch(inventoryLocalProvider);
-    booth.boothInventory = inventory
-        .where((item) => item.boothName == booth.boothName)
-        .toList();
-    print('setting currentBooth with inventorySize: ${inventory.length}');
+    // List<InventoryItemLocal> inventory = ref.watch(inventoryLocalProvider);
+    // booth.boothInventory = inventory
+    //     .where((item) => item.boothName == booth.boothName)
+    //     .toList();
+    // print('setting currentBooth with inventorySize: ${inventory.length}');
     state = booth;
+    ref.notifyListeners();
   }
 }

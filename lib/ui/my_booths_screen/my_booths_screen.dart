@@ -26,13 +26,11 @@ class MyBoothsScreen extends HookConsumerWidget {
 
     // Watch booths provider
     final userBooths = ref.watch(myBoothsProvider);
-    print('currentBooths in myBooths ${userBooths.length}');
 
     // INITIAL VALUE OF SELECTED BOOTH
     final selectedBooth = ref.watch(currentBoothProvider);
 
     final pickedBooth = useState<MyBooth>(selectedBooth);
-    print('pickedBooth images: ${pickedBooth.value.currentBoothImageUrls}');
 
     void takeBoothPhoto() async {
       String boothPhotoPath = await PhotoUtil.takePhotoAndReturnUrl();

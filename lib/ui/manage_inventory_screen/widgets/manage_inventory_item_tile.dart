@@ -97,12 +97,12 @@ class ManageInventoryItemTile extends ConsumerWidget {
       return Image.file(file);
     }
 
-    void addItemToBooth(String itemId) {
-      showDialog(
-        context: context,
-        builder: (context) => AddItemSelectBooth(itemId: itemId),
-      );
-    }
+    // void addItemToBooth(String itemId) {
+    //   showDialog(
+    //     context: context,
+    //     builder: (context) => AddItemSelectBooth(itemId: itemId),
+    //   );
+    // }
     // TODO: CREATE SIMPLE UPDATE LOGIC
     // void removeItemFromBooth(String itemId) {
     //   ref.read(myBoothsProvider.notifier).removeItemFromBoothById(itemId);
@@ -179,7 +179,7 @@ class ManageInventoryItemTile extends ConsumerWidget {
                             iconSize: 30,
                             padding: EdgeInsets.all(0),
                             tooltip: 'Add to booth',
-                            onPressed: () => addItemToBooth(model.id),
+                            onPressed: () {},//=> addItemToBooth(model.id),
                             icon: FaIcon(FontAwesomeIcons.tentArrowDownToLine),
                           )
                         // TODO: IMPLEMENT UPDATE LOGIC
