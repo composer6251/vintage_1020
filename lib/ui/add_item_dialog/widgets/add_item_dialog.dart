@@ -6,6 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vintage_1020/constants/label_input_initial_values.dart';
+import 'package:vintage_1020/data/providers/my_booth_filter/current_booth_provider.dart';
 import 'package:vintage_1020/data/providers/my_booth_provider/my_booths_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart'
@@ -46,7 +47,25 @@ class AddItemDialog extends HookConsumerWidget {
     final itemImageUrls = useState<List<String>>([]);
 
     final isChecked = useState<bool>(false);
-    final boothToAddItem = useState<MyBooth>();
+    final boothNameOfBoothToCreate = useState<String>('');
+
+    final currentBooth = ref.watch(currentBoothProvider);
+    final boothSelectedFromDropdown = useState<MyBooth>(currentBooth);
+
+
+    void fetchUserBooths() async {
+      await ref.read(myBoothsProvider.notifier).fetchUserBooths();
+    }
+
+    void handleCheckboxOnChange(bool? value) {
+      // Set checkbox value
+      isChecked.value = (value == null || value == false) ? false : true;
+
+      // If checkbox is checked, fetch booths, update provider which notifies listeners and will result in the dropdown if mybooths is not empty.
+      if(isChecked.value) {
+        fetchUserBooths();
+      }
+    }
 
     /// AFTER USER SELECTS PHOTOS OR TAKES A PHOTO, UPDATE THE EPHEMERAL STATE
     void selectPhotos() async {
@@ -113,7 +132,7 @@ class AddItemDialog extends HookConsumerWidget {
         double.tryParse(itemWidth.value),
         double.tryParse(itemDepth.value),
         null,
-        boothToAddItem.value,
+        boothNameOfBoothToCreate.value,
       );
 
       if (formKey.currentState?.validate() ?? false) {
@@ -122,10 +141,10 @@ class AddItemDialog extends HookConsumerWidget {
             .addUserInventoryItemLocal(itemToDB);
       }
 
-      if (boothToAddItem.value != '' && isChecked.value) {
+      if (boothNameOfBoothToCreate.value != '' && isChecked.value) {
 
         MyBooth boothToCreate = MyBooth(
-          boothToAddItem.value,
+          boothNameOfBoothToCreate.value,
           userEmail ?? '',
           [itemToDB.id],
           [],
@@ -180,10 +199,8 @@ class AddItemDialog extends HookConsumerWidget {
                 ),
                 Checkbox(
                   value: isChecked.value,
-                  onChanged: (value) => {
-                    isChecked.value = (value == null || value == false)
-                        ? false
-                        : true,
+                  onChanged: (value)  {
+                    handleCheckboxOnChange(value);
                   },
                 ),
                  Visibility(
@@ -203,7 +220,7 @@ class AddItemDialog extends HookConsumerWidget {
                           ),
                           labelText: createBoothInputLabel,
                         ),
-                        onChanged: (value) => boothToAddItem.value = value,
+                        onChanged: (value) => boothNameOfBoothToCreate.value = value,
                         validator: (value) =>
                             validateNewBoothName(value, userBooths)
                       ),
@@ -212,12 +229,11 @@ class AddItemDialog extends HookConsumerWidget {
                  ),
               ],
             ), 
-            // TODO: Implement way to update booth item from add item, manage inv tile, select booth
             Visibility(
-              visible: isChecked.value,
+              visible: isChecked.value && userBooths.isNotEmpty && boothNameOfBoothToCreate.value == '',
               child: AddItemSelectBooth(
                 userBooths: userBooths,
-                onValueUpdated: (value) => boothToAddItem.value = value,
+                onValueUpdated: (value) => boothSelectedFromDropdown.value = value,
               ),
             ),
           ],

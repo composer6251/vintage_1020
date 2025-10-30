@@ -10,5 +10,5 @@ const String selectPhotosToolTip = 'Select Photos';
 const String takePhotoToolTip = 'Take Photo';
 
 // CREATE BOOTH INPUT TEXT
-const String createBoothInputLabel = 'Booth Name';
+const String createBoothInputLabel = 'Create New';
 const String selectBoothInitialSelection = 'Select Booth';

@@ -28,7 +28,7 @@ class MyBoothsScreen extends HookConsumerWidget {
     final userBooths = ref.watch(myBoothsProvider);
 
     // INITIAL VALUE OF SELECTED BOOTH
-    final selectedBooth = ref.watch(currentBoothProvider);
+    final MyBooth selectedBooth = ref.watch(currentBoothProvider);
 
     // State to hold new user-selected booth
     final pickedBooth = useState<MyBooth>(selectedBooth);
@@ -113,13 +113,13 @@ class MyBoothsScreen extends HookConsumerWidget {
                     )
                   ],
                 ),
-                pickedBooth.value.currentBoothImageUrls.isEmpty
+                selectedBooth.currentBoothImageUrls.isEmpty
                 ? 
                 Expanded(
                   child: Center(
-                    child: OutlinedButton(
-                        onPressed: takeBoothPhoto,
-                        child: Text('Take booth image'),
+                    child: Text(
+                        style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+                        'You do not have any booth images. Press the camera or photos button to add one!'
                       ),
                   ),
                 )
@@ -127,14 +127,14 @@ class MyBoothsScreen extends HookConsumerWidget {
                 Expanded(
                   flex: 6,
                   child: BoothImageCarousel(
-                    itemImageUrls: pickedBooth.value.currentBoothImageUrls,
+                    itemImageUrls: selectedBooth.currentBoothImageUrls,
                     flexWeights: [3],
                   ),
                 ),
                 Expanded(
                   flex: 6,
                   child: InventoryItemCarousel(
-                    inventoryItems: pickedBooth.value.boothInventory ?? [],
+                    inventoryItems: selectedBooth.boothInventory ?? [],
                     flexWeights: [3],
                   ),
                 ),

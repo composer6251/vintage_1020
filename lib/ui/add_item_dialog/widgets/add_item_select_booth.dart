@@ -23,10 +23,8 @@ class AddItemSelectBooth extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        userBooths.isEmpty
-            ? Container()
-            : DropdownMenu(
-                initialSelection: userBooths.first.boothName,
+              DropdownMenu(
+                initialSelection: selectBoothInitialSelection,
                 onSelected: (value) {
                   onValueUpdated(value);
                 },
