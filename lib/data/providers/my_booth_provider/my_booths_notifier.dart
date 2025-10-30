@@ -79,6 +79,7 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
     boothCurrentItemIds.add(itemId);
 
     currentBoothState.boothInventoryIds = boothCurrentItemIds;
+    setInventoryForBooth(currentBoothState);
 
     state.removeAt(indexOfItemToUpdate);
     state.insert(indexOfItemToUpdate, currentBoothState);
@@ -100,6 +101,9 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
       print('Failed to find item to update in current state');
       return;
     }
+    
+    setInventoryForBooth(currentBoothState);
+
     state.removeAt(indexOfItemToUpdate);
     state.insert(indexOfItemToUpdate, booth);
     ref.notifyListeners();

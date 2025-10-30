@@ -31,7 +31,7 @@ class MyBoothsScreen extends HookConsumerWidget {
     final MyBooth selectedBooth = ref.watch(currentBoothProvider);
 
     // State to hold new user-selected booth
-    final pickedBooth = useState<MyBooth>(selectedBooth);
+    // final pickedBooth = useState<MyBooth>(selectedBooth);
 
     void takeBoothPhoto() async {
       String boothPhotoPath = await PhotoUtil.takePhotoAndReturnUrl();
@@ -62,7 +62,7 @@ class MyBoothsScreen extends HookConsumerWidget {
               children: [
                 Row(
                   mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Flexible(
                       flex: 1,
@@ -93,7 +93,7 @@ class MyBoothsScreen extends HookConsumerWidget {
                       ),
                     ),
                     Flexible(
-                      flex: 1,
+                      flex: 2,
                       child: Column(
                         children: [
                           Text(

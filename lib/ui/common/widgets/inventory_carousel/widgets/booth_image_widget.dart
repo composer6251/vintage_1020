@@ -22,16 +22,13 @@ class BoothImageWidget extends ConsumerWidget {
           child: ImageWidgetUtil.getItemImage(url),
         ),
         Align(
-          alignment: Alignment.centerLeft,
+          alignment: Alignment.topRight,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-                fontStyle: FontStyle.italic,
-              ),
-              'Text',
+            child: IconButton(
+              icon: Icon(Icons.favorite),
+              color: Colors.pink,
+              onPressed: () {},
             ),
           ),
         ),

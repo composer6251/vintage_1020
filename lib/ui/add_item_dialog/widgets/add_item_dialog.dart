@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -52,7 +53,6 @@ class AddItemDialog extends HookConsumerWidget {
     final currentBooth = ref.watch(currentBoothProvider);
     final boothSelectedFromDropdown = useState<MyBooth>(currentBooth);
 
-
     void fetchUserBooths() async {
       await ref.read(myBoothsProvider.notifier).fetchUserBooths();
     }
@@ -60,13 +60,12 @@ class AddItemDialog extends HookConsumerWidget {
     void handleCheckboxOnChange(bool? value) {
       // Set checkbox value
       isChecked.value = (value == null || value == false) ? false : true;
-
-      // If checkbox is checked, fetch booths, update provider which notifies listeners and will result in the dropdown if mybooths is not empty.
-      if(isChecked.value) {
-        fetchUserBooths();
-      } else {
-        // On uncheck Add to Booth, clear out create new value
+      if (!isChecked.value) {
         boothNameOfBoothToCreate.value = '';
+        return;
+      }
+      if(userBooths.isEmpty){
+        fetchUserBooths();
       }
     }
 
@@ -114,22 +113,24 @@ class AddItemDialog extends HookConsumerWidget {
     }
 
     void saveNewBooth(String itemId) async {
+      MyBooth boothToCreate = MyBooth(
+        Uuid().v6(),
+        boothNameOfBoothToCreate.value,
+        userEmail ?? '',
+        [itemId],
+        [],
+        null,
+      );
 
-        MyBooth boothToCreate = MyBooth(
-          Uuid().v6(),
-          boothNameOfBoothToCreate.value,
-          userEmail ?? '',
-          [itemId],
-          [],
-          null,
-        );
+      await ref
+          .read(myBoothsProvider.notifier)
+          .createBoothForUser(boothToCreate);
+    }
 
-        await ref.read(myBoothsProvider.notifier).createBoothForUser(boothToCreate);
-      }
-
-    void updateExistingBooth(String itemId) {
-
+    void updateExistingBooth(String itemId) async {
       currentBooth.boothInventoryIds.add(itemId);
+
+      await ref.read(myBoothsProvider.notifier).updateBooth(currentBooth);
     }
 
     void submit() async {
@@ -138,9 +139,11 @@ class AddItemDialog extends HookConsumerWidget {
 
       // If the checkbox is checked, choose if it is a new booth or an existing booth.
       String boothNameToAddItem = '';
-      
-      if(isChecked.value) {
-        boothNameToAddItem = boothNameOfBoothToCreate.value.isNotEmpty ? boothNameOfBoothToCreate.value : boothSelectedFromDropdown.value.boothName;
+
+      if (isChecked.value) {
+        boothNameToAddItem = boothNameOfBoothToCreate.value.isNotEmpty
+            ? boothNameOfBoothToCreate.value
+            : boothSelectedFromDropdown.value.boothName;
       }
 
       final InventoryItemLocal itemToDB = InventoryItemLocal.toLocalDb(
@@ -164,11 +167,10 @@ class AddItemDialog extends HookConsumerWidget {
       );
 
       // If isChecked, add to selectedBooth, or create no booth and add to selected booth.
-      if(isChecked.value) {
-        if(boothNameOfBoothToCreate.value.isNotEmpty) {
+      if (isChecked.value) {
+        if (boothNameOfBoothToCreate.value.isNotEmpty) {
           saveNewBooth(itemToDB.id);
-        }
-        else {
+        } else {
           updateExistingBooth(itemToDB.id);
         }
       }
@@ -224,41 +226,57 @@ class AddItemDialog extends HookConsumerWidget {
                 ),
                 Checkbox(
                   value: isChecked.value,
-                  onChanged: (value)  {
+                  onChanged: (value) {
                     handleCheckboxOnChange(value);
                   },
                 ),
-                 Visibility(
-                  visible: isChecked.value,
-                   child: Flexible(
-                    flex: 2,
-                    child: SizedBox(
-                      height: 40,
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          floatingLabelAlignment: FloatingLabelAlignment.center,
-                          floatingLabelBehavior: FloatingLabelBehavior.never,
-                          fillColor: Colors.blue,
-                          labelStyle: TextStyle(
-                            fontSize: 16,
-                            fontStyle: FontStyle.italic,
+                
+              ],
+            ),
+            ConstrainedBox(
+              constraints: BoxConstraints(),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Visibility(
+                    visible: isChecked.value,
+                    child: Flexible(
+                      fit: FlexFit.tight,
+                      child: SizedBox(
+                        child: TextFormField(
+                          decoration: const InputDecoration(
+                            floatingLabelAlignment: FloatingLabelAlignment.center,
+                            floatingLabelBehavior: FloatingLabelBehavior.never,
+                            fillColor: Colors.blue,
+                            labelStyle: TextStyle(
+                              fontSize: 16,
+                              fontStyle: FontStyle.italic,
+                            ),
+                            labelText: createBoothInputLabel,
                           ),
-                          labelText: createBoothInputLabel,
+                          onChanged: (value) =>
+                              boothNameOfBoothToCreate.value = value,
+                          validator: (value) =>
+                              validateNewBoothName(value, userBooths),
                         ),
-                        onChanged: (value) => boothNameOfBoothToCreate.value = value,
-                        validator: (value) =>
-                            validateNewBoothName(value, userBooths)
                       ),
                     ),
-                                   ),
-                 ),
-              ],
-            ), 
-            Visibility(
-              visible: isChecked.value && userBooths.isNotEmpty && boothNameOfBoothToCreate.value == '',
-              child: AddItemSelectBooth(
-                userBooths: userBooths,
-                onValueUpdated: (value) => boothSelectedFromDropdown.value = value,
+                  ),
+                  Flexible(
+                    fit: FlexFit.tight,
+                    child: Visibility(
+                      visible:
+                          isChecked.value &&
+                          userBooths.isNotEmpty &&
+                          boothNameOfBoothToCreate.value == '',
+                      child: AddItemSelectBooth(
+                        userBooths: userBooths,
+                        onValueUpdated: (value) =>
+                            boothSelectedFromDropdown.value = value,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

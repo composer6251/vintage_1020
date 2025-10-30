@@ -6,6 +6,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   app_links
   cloud_firestore
   desktop_webview_auth
+  dynamic_color
   file_selector_windows
   firebase_auth
   firebase_core

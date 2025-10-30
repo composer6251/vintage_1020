@@ -65,17 +65,10 @@ class InventoryLocal extends _$InventoryLocal {
     InventoryDb().insertIntoInventoryItem(item);
   }
 
-  Future<void> quickAddInventoryItem(String itemImageUrl) async {
-    InventoryItemLocal itemToSave = InventoryItemLocal.empty(Uuid().v6());
+  Future<void> quickAddInventoryItem(InventoryItemLocal item) async {
+    state = [...state, item];
 
-    itemToSave.userEmail = userEmail;
-    itemToSave.itemPurchaseDate = DateTime.now();
-    itemToSave.primaryImageUrl = itemImageUrl;
-    itemToSave.itemImageUrls = [itemImageUrl];
-
-    state = [...state, itemToSave];
-
-    InventoryDb().insertIntoInventoryItem(itemToSave);
+    InventoryDb().insertIntoInventoryItem(item);
   }
 
   List<InventoryItemLocal> getInventoryState() {
