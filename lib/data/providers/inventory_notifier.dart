@@ -51,29 +51,29 @@ class InventoryNotifier extends _$InventoryNotifier {
     return inventory;
   }
 
-  void addItemToBooth(String itemId) {
-    // Store current state before updating
-    List<InventoryItemLocal> currentState = state;
-    // Get item to update as booth item
-    InventoryItemLocal itemToAddToBooth = state.firstWhere(
-      (item) => item.id == itemId,
-    );
+  // void addItemToBooth(String itemId) {
+  //   // Store current state before updating
+  //   List<InventoryItemLocal> currentState = state;
+  //   // Get item to update as booth item
+  //   InventoryItemLocal itemToAddToBooth = state.firstWhere(
+  //     (item) => item.id == itemId,
+  //   );
 
-    // If the item to add isn't found, show snack bar.
-    if (itemToAddToBooth.id.isEmpty) {
-      print('Error in addItemToBooth. Item id not found in state');
-      return;
-    }
-    // Remove existing item
-    state.removeWhere((item) => item.id == itemId);
+  //   // If the item to add isn't found, show snack bar.
+  //   if (itemToAddToBooth.id.isEmpty) {
+  //     print('Error in addItemToBooth. Item id not found in state');
+  //     return;
+  //   }
+  //   // Remove existing item
+  //   state.removeWhere((item) => item.id == itemId);
 
-    // Update item as booth item
-    // itemToAddToBooth.boothName = ;
-    // Update inventory
-    currentState.add(itemToAddToBooth);
-    // Update state so user sees reflected change
-    state = [...currentState];
-    // Persist change
-    // InventoryDb().addInventoryItemToCurrentBooth(itemId);
-  }
+  //   // Update item as booth item
+  //   // itemToAddToBooth.boothName = ;
+  //   // Update inventory
+  //   currentState.add(itemToAddToBooth);
+  //   // Update state so user sees reflected change
+  //   state = [...currentState];
+  //   // Persist change
+  //   // InventoryDb().addInventoryItemToCurrentBooth(itemId);
+  // }
 }

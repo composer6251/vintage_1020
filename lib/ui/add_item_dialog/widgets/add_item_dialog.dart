@@ -127,20 +127,18 @@ class AddItemDialog extends HookConsumerWidget {
         await ref.read(myBoothsProvider.notifier).createBoothForUser(boothToCreate);
       }
 
-    void updateExistingBooth() {
+    void updateExistingBooth(String itemId) {
 
-
+      currentBooth.boothInventoryIds.add(itemId);
     }
 
-
-
     void submit() async {
-
       // Save the photos taken/selected and update the state with the urls to save
       List<String> imageUrlsToSave = await savePhotosAndGetUrls();
 
       // If the checkbox is checked, choose if it is a new booth or an existing booth.
       String boothNameToAddItem = '';
+      
       if(isChecked.value) {
         boothNameToAddItem = boothNameOfBoothToCreate.value.isNotEmpty ? boothNameOfBoothToCreate.value : boothSelectedFromDropdown.value.boothName;
       }
@@ -165,22 +163,20 @@ class AddItemDialog extends HookConsumerWidget {
         boothNameToAddItem.isEmpty ? null : boothNameToAddItem,
       );
 
-
-
       // If isChecked, add to selectedBooth, or create no booth and add to selected booth.
-      if(isChecked.value && boothNameOfBoothToCreate.value != '') {
-          saveNewBooth(itemToDB.id);
-      }
       if(isChecked.value) {
-
+        if(boothNameOfBoothToCreate.value.isNotEmpty) {
+          saveNewBooth(itemToDB.id);
+        }
+        else {
+          updateExistingBooth(itemToDB.id);
+        }
       }
       if (formKey.currentState?.validate() ?? false) {
         ref
             .watch(inventoryLocalProvider.notifier)
             .addUserInventoryItemLocal(itemToDB);
       }
-
-
 
       closeDialog();
     }
