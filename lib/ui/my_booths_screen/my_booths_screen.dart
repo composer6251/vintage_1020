@@ -28,7 +28,7 @@ class MyBoothsScreen extends HookConsumerWidget {
     final userBooths = ref.watch(myBoothsProvider);
 
     // INITIAL VALUE OF SELECTED BOOTH
-    MyBooth selectedBooth = ref.watch(currentBoothProvider);
+    final selectedBooth = ref.watch(currentBoothProvider);
 
     void takeBoothPhoto() async {
       String boothPhotoPath = await PhotoUtil.takePhotoAndReturnUrl();
@@ -48,8 +48,11 @@ class MyBoothsScreen extends HookConsumerWidget {
       List<String>? selectedBoothImageUrlsCurrentState =
           selectedBooth.currentBoothImageUrls;
 
-      await updateBoothImages(selectedBoothImageUrlsCurrentState, boothPhotoPath, selectedBooth, ref);
-    }
+      selectedBoothImageUrlsCurrentState.addAll(boothPhotoPath);
+      
+      selectedBooth.currentBoothImageUrls = selectedBoothImageUrlsCurrentState;
+      
+      await ref.read(myBoothsProvider.notifier).updateBooth(selectedBooth);    }
 
     void openAddItemToSelectedBoothDialog() {
       showDialog(context: context, builder: (context) => const AddItemToBoothDialog());
@@ -200,12 +203,5 @@ class MyBoothsScreen extends HookConsumerWidget {
   );
 }
 
-  Future<void> updateBoothImages(List<String> selectedBoothImageUrlsCurrentState, List<String> boothPhotoPath, MyBooth selectedBooth, WidgetRef ref) async {
-    
-    selectedBoothImageUrlsCurrentState.addAll(boothPhotoPath);
-    
-    selectedBooth.currentBoothImageUrls = selectedBoothImageUrlsCurrentState;
-    
-    await ref.read(myBoothsProvider.notifier).updateBooth(selectedBooth);
-  }
+
 }

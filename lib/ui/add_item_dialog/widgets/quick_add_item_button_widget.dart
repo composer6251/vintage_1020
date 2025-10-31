@@ -29,12 +29,12 @@ class QuickAddItemButtonWidget extends ConsumerWidget {
       ref.read(inventoryLocalProvider.notifier).quickAddInventoryItem(itemToSave);
 
       if (result.name == 'yes') {
-        MyBooth currentBooth = ref.read(currentBoothProvider);
+        MyBooth boothToUpdate = ref.read(currentBoothProvider);
 
-        currentBooth.boothInventoryIds.add(itemToSave.id);
-        currentBooth.boothInventory?.add(itemToSave);
+        boothToUpdate.boothInventoryIds.add(itemToSave.id);
+        boothToUpdate.boothInventory?.add(itemToSave);
 
-        ref.read(myBoothsProvider.notifier).updateBooth(currentBooth);
+        ref.read(myBoothsProvider.notifier).updateBooth(boothToUpdate);
       }
     }
 
