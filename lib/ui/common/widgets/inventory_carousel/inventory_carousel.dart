@@ -18,21 +18,19 @@ class InventoryItemCarousel extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentBooth = ref.watch(currentBoothProvider);
+    List<InventoryItemLocal> currentBoothItems =
+        currentBooth.boothInventory ?? [];
     final inventory = useState<List<InventoryItemLocal>>([]);
     print(
       'Inventory Carousel current booth items: ${currentBooth.boothInventory?.length}',
     );
-    print(
-      'Inventory Carousel inventory length: ${inventory.value.length}',
-    );
-    print(
-      'Inventory Carousel inventory items: ${inventory.value.length}',
-    );
+    print('Inventory Carousel inventory length: ${inventory.value.length}');
+    print('Inventory Carousel inventory items: ${inventory.value.length}');
 
     return CarouselView.weighted(
       itemSnapping: true,
       flexWeights: flexWeights,
-      children: inventoryItems
+      children: currentBoothItems
           .map((itemUrl) => InventoryItemImage(item: itemUrl))
           .toList(),
     );

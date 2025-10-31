@@ -13,15 +13,15 @@ class BoothCarouselImage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
-      void addBoothImages() async {
-        String photo = await PhotoUtil.takePhotoAndReturnUrl();
+      // void addBoothImages() async {
+      //   String photo = await PhotoUtil.takePhotoAndReturnUrl();
 
-        ref.read(myBoothsProvider.notifier).addBoothPhoto(photo, boothId);
-      }
+      //   ref.read(myBoothsProvider.notifier).addBoothPhoto(photo, boothId);
+      // }
 
       return Stack(
         children: [
-          IconButton(onPressed: addBoothImages, icon: Icon(Icons.camera)),
+          // IconButton(onPressed: addBoothImages, icon: Icon(Icons.camera)),
           Card(
           elevation: 3.0,
           shape: RoundedRectangleBorder(

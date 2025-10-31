@@ -37,9 +37,32 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
     await MyBoothsDb().createBoothForUser(boothToInsert);
   }
 
-  Future<void> addItemToBoothById(String itemId, String boothId) async {
+  // Future<void> addItemToBoothById(String itemId, String boothId) async {
+  //   MyBooth currentBoothState = state
+  //       .where((booth) => booth.id == boothId)
+  //       .first;
+
+  //   // Get Index of booth to update to maintain order
+  //   int indexOfItemToUpdate = state.indexOf(currentBoothState);
+  //   if (indexOfItemToUpdate == -1) {
+  //     print('Failed to find item to update in current state');
+  //     return;
+  //   }
+  //   List<String> boothCurrentItemIds = currentBoothState.boothInventoryIds;
+
+  //   boothCurrentItemIds.add(itemId);
+
+  //   currentBoothState.boothInventoryIds = boothCurrentItemIds;
+
+  //   state.removeAt(indexOfItemToUpdate);
+  //   state.insert(indexOfItemToUpdate, currentBoothState);
+
+  //   ref.notifyListeners();
+  // }
+
+  Future<void> updateBooth(MyBooth boothToUpdate) async {
     MyBooth currentBoothState = state
-        .where((booth) => booth.id == boothId)
+        .where((booth) => booth.id == boothToUpdate.id)
         .first;
 
     // Get Index of booth to update to maintain order
@@ -48,36 +71,12 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
       print('Failed to find item to update in current state');
       return;
     }
-    List<String> boothCurrentItemIds = currentBoothState.boothInventoryIds;
-
-    boothCurrentItemIds.add(itemId);
-
-    currentBoothState.boothInventoryIds = boothCurrentItemIds;
-
-    state.removeAt(indexOfItemToUpdate);
-    state.insert(indexOfItemToUpdate, currentBoothState);
-
-    ref.notifyListeners();
-
-    await MyBoothsDb().createBoothForUser(currentBoothState);
-  }
-
-  Future<void> updateBooth(MyBooth boothToUpdate) async {
-    MyBooth currentBoothState = state
-        .where((booth) => booth.id == boothToUpdate.id)
-        .first;
-
-            // Get Index of booth to update to maintain order
-    int indexOfItemToUpdate = state.indexOf(currentBoothState);
-    if (indexOfItemToUpdate == -1) {
-      print('Failed to find item to update in current state');
-      return;
-    }
 
     state.removeAt(indexOfItemToUpdate);
     state.insert(indexOfItemToUpdate, currentBoothState);
     ref.notifyListeners();
 
+    MyBoothsDb().updateBooth(currentBoothState);
   }
 
   Future<void> removeItemFromBoothById(String itemId, String boothId) async {
@@ -102,31 +101,8 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
     state.removeAt(indexOfItemToUpdate);
     state.insert(indexOfItemToUpdate, currentBoothState);
     ref.notifyListeners();
-    // await MyBoothsDb().createBoothForUser(currentBoothState);
-
-    print('booths state after insert: ${state.length}');
+    await MyBoothsDb().updateBooth(currentBoothState);
   }
-
-  // Future<void> updateBooth(MyBooth booth) async {
-  //   // Get boothFromState
-  //   MyBooth currentBoothState = state
-  //       .where((booth) => booth.id == booth.id)
-  //       .first;
-
-  //   // Get Index of booth to update to maintain order
-  //   int indexOfItemToUpdate = state.indexOf(currentBoothState);
-  //   if (indexOfItemToUpdate == -1) {
-  //     print('Failed to find item to update in current state');
-  //     return;
-  //   }
-    
-  //   setInventoryForBooth(currentBoothState);
-
-  //   state.removeAt(indexOfItemToUpdate);
-  //   state.insert(indexOfItemToUpdate, booth);
-  //   ref.notifyListeners();
-  //   await MyBoothsDb().updateBooth(booth);
-  // }
 
   MyBooth setInventoryForBooth(MyBooth selectedBooth) {
     List<InventoryItemLocal> inventory = ref.read(inventoryLocalProvider);

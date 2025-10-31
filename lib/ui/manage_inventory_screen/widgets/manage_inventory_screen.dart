@@ -13,7 +13,9 @@ import 'package:vintage_1020/data/providers/inventory_provider/inventory_provide
 import 'package:vintage_1020/data/providers/my_booth_provider/my_booths_notifier.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/ui/add_item_dialog/widgets/add_item_dialog.dart';
+import 'package:vintage_1020/ui/add_item_dialog/widgets/quick_add_item_button_widget.dart';
 import 'package:vintage_1020/ui/common/filter_segmented_button.dart';
+import 'package:vintage_1020/ui/common/widgets/app_bar/custom_app_bar.dart';
 import 'package:vintage_1020/ui/edit_item_dialog/edit_inventory_item_dialog.dart';
 
 import 'package:vintage_1020/ui/manage_inventory_screen/widgets/manage_inventory_item_tile.dart';
@@ -62,39 +64,97 @@ class ManageInventoryScreen extends HookConsumerWidget {
       );
     }
 
-    if (snapshot.connectionState == ConnectionState.done) {
-      return Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-        FilterSegmentedButton(key: key),
-          // DISPLAY NO INVENTORY MESSAGE IF INVENTORY IS EMPTY
-          filteredInventory.isEmpty &&
-                  currentFilter.value == InventoryFilter.all
-        ? WelcomeTutorialMessage()
-        // OTHERWISE DISPLAY INVENTORY TILES
-        : Expanded(
-            child: ListView.builder(
-              itemExtent: 125,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    openEditInventoryDialog(filteredInventory[index]);
-                  },
-                  child: ManageInventoryItemTile(
-                    model: filteredInventory[index],
-                  ),
-                );
-              },
-              itemCount: filteredInventory.length,
-            ),
-          ),
-        ],
-      );
-    } else if (snapshot.connectionState == ConnectionState.waiting) {
-      return Center(child: CircularProgressIndicator());
-    } else if (snapshot.connectionState == ConnectionState.none) {
-      return Center(child: Text('Snapshot has no connection'));
+    void openAddItemDialog() {
+      showDialog(context: context, builder: (context) => const AddItemDialog());
     }
-    return Center(child: Text('Default condition'));
+
+    Widget buildBody() {
+      if (snapshot.connectionState == ConnectionState.done) {
+        return Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            FilterSegmentedButton(key: key),
+            // DISPLAY NO INVENTORY MESSAGE IF INVENTORY IS EMPTY
+            filteredInventory.isEmpty &&
+                    currentFilter.value == InventoryFilter.all
+              ? 
+              WelcomeTutorialMessage()
+              // OTHERWISE DISPLAY INVENTORY TILES
+              : 
+              Expanded(
+                child: ListView.builder(
+                  itemExtent: 125,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        openEditInventoryDialog(filteredInventory[index]);
+                      },
+                      child: ManageInventoryItemTile(
+                        model: filteredInventory[index],
+                      ),
+                    );
+                  },
+                  itemCount: filteredInventory.length,
+                ),
+              ),
+          ],
+        );
+      } else if (snapshot.connectionState == ConnectionState.waiting) {
+        return Center(child: CircularProgressIndicator());
+      } else if (snapshot.connectionState == ConnectionState.none) {
+        return Center(child: Text('Snapshot has no connection'));
+      }
+      return Center(child: Text('Default condition'));
+    }
+
+    return Scaffold(
+      body: buildBody(),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
+        child: CustomAppBar(),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.blue,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Flexible(
+              flex: 1,
+              child: IconButton(
+                iconSize: 36,
+                onPressed: () =>
+                  Navigator.pushNamed(context, '/my-booths'),
+                icon: FaIcon(FontAwesomeIcons.tent),
+              ),
+            ),
+            Flexible(
+              flex: 1,
+              child: IconButton(
+                iconSize: 36,
+                onPressed: () =>
+                  Navigator.pushNamed(context, '/inventory-analytics'),
+                icon: FaIcon(FontAwesomeIcons.chartBar),
+              ),
+            ),
+            Flexible(
+              flex: 2,
+              child: OutlinedButton(
+                onPressed: openAddItemDialog,
+                child: Text(
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                  'Add Item',
+                ),
+              ),
+            ),
+            Flexible(flex: 2, child: QuickAddItemButtonWidget()),
+          ],
+        ),
+      ),
+    );
   }
 }

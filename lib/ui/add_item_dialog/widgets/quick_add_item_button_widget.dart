@@ -45,9 +45,17 @@ class QuickAddItemButtonWidget extends ConsumerWidget {
       displayAddToBoothConfirmation(photoTaken);
     }
 
-    return IconButton(
+    return OutlinedButton(
+
       onPressed: quickAddItemWithPhoto,
-      icon: FaIcon(FontAwesomeIcons.plus),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(style: TextStyle(fontSize: 16, color: Colors.white), 'Quick'),
+          FaIcon(color: Colors.white, FontAwesomeIcons.plus),
+        ],
+      ),
     );
   }
 }

@@ -28,7 +28,7 @@ class MyBoothsScreen extends HookConsumerWidget {
     final userBooths = ref.watch(myBoothsProvider);
 
     // INITIAL VALUE OF SELECTED BOOTH
-    final MyBooth selectedBooth = ref.watch(currentBoothProvider);
+    MyBooth selectedBooth = ref.watch(currentBoothProvider);
 
     void takeBoothPhoto() async {
       String boothPhotoPath = await PhotoUtil.takePhotoAndReturnUrl();
@@ -186,7 +186,7 @@ class MyBoothsScreen extends HookConsumerWidget {
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
               ),
-              'Add Item',
+              'New Item',
               ),
             ),
           ),
