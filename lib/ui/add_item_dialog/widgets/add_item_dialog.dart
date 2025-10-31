@@ -166,6 +166,11 @@ class AddItemDialog extends HookConsumerWidget {
         boothNameToAddItem.isEmpty ? null : boothNameToAddItem,
       );
 
+      if (formKey.currentState?.validate() ?? false) {
+        ref
+            .watch(inventoryLocalProvider.notifier)
+            .addUserInventoryItemLocal(itemToDB);
+      }
       // If isChecked, add to selectedBooth, or create no booth and add to selected booth.
       if (isChecked.value) {
         if (boothNameOfBoothToCreate.value.isNotEmpty) {
@@ -173,11 +178,6 @@ class AddItemDialog extends HookConsumerWidget {
         } else {
           updateExistingBooth(itemToDB.id);
         }
-      }
-      if (formKey.currentState?.validate() ?? false) {
-        ref
-            .watch(inventoryLocalProvider.notifier)
-            .addUserInventoryItemLocal(itemToDB);
       }
 
       closeDialog();
