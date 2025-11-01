@@ -43,6 +43,7 @@ dependencies:
   wheel_picker: ^0.2.2
   google_fonts: ^6.3.2
   adaptive_dialog: ^2.5.0
+  webview_flutter: ^4.13.0
 
 dev_dependencies:
   flutter_test:

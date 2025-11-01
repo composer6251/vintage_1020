@@ -15,7 +15,7 @@ import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.da
 import 'package:vintage_1020/ui/add_item_dialog/widgets/add_item_dialog.dart';
 import 'package:vintage_1020/ui/add_item_dialog/widgets/quick_add_item_button_widget.dart';
 import 'package:vintage_1020/ui/common/filter_segmented_button.dart';
-import 'package:vintage_1020/ui/common/widgets/app_bar/custom_app_bar.dart';
+import 'package:vintage_1020/ui/common/widgets/app_bar/mybooths_app_bar_widget.dart';
 import 'package:vintage_1020/ui/edit_item_dialog/edit_inventory_item_dialog.dart';
 
 import 'package:vintage_1020/ui/manage_inventory_screen/widgets/manage_inventory_item_tile.dart';
@@ -77,26 +77,24 @@ class ManageInventoryScreen extends HookConsumerWidget {
             // DISPLAY NO INVENTORY MESSAGE IF INVENTORY IS EMPTY
             filteredInventory.isEmpty &&
                     currentFilter.value == InventoryFilter.all
-              ? 
-              WelcomeTutorialMessage()
-              // OTHERWISE DISPLAY INVENTORY TILES
-              : 
-              Expanded(
-                child: ListView.builder(
-                  itemExtent: 125,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        openEditInventoryDialog(filteredInventory[index]);
+                ? WelcomeTutorialMessage()
+                // OTHERWISE DISPLAY INVENTORY TILES
+                : Expanded(
+                    child: ListView.builder(
+                      itemExtent: 125,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            openEditInventoryDialog(filteredInventory[index]);
+                          },
+                          child: ManageInventoryItemTile(
+                            model: filteredInventory[index],
+                          ),
+                        );
                       },
-                      child: ManageInventoryItemTile(
-                        model: filteredInventory[index],
-                      ),
-                    );
-                  },
-                  itemCount: filteredInventory.length,
-                ),
-              ),
+                      itemCount: filteredInventory.length,
+                    ),
+                  ),
           ],
         );
       } else if (snapshot.connectionState == ConnectionState.waiting) {
@@ -111,7 +109,7 @@ class ManageInventoryScreen extends HookConsumerWidget {
       body: buildBody(),
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
-        child: CustomAppBar(),
+        child: MyBoothsAppBar(),
       ),
       bottomNavigationBar: BottomAppBar(
         color: Colors.blue,
@@ -123,8 +121,7 @@ class ManageInventoryScreen extends HookConsumerWidget {
               flex: 1,
               child: IconButton(
                 iconSize: 36,
-                onPressed: () =>
-                  Navigator.pushNamed(context, '/my-booths'),
+                onPressed: () => Navigator.pushNamed(context, '/my-booths'),
                 icon: FaIcon(FontAwesomeIcons.tent),
               ),
             ),
@@ -133,7 +130,7 @@ class ManageInventoryScreen extends HookConsumerWidget {
               child: IconButton(
                 iconSize: 36,
                 onPressed: () =>
-                  Navigator.pushNamed(context, '/inventory-analytics'),
+                    Navigator.pushNamed(context, '/inventory-analytics'),
                 icon: FaIcon(FontAwesomeIcons.chartBar),
               ),
             ),

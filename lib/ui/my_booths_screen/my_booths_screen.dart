@@ -7,8 +7,8 @@ import 'package:vintage_1020/data/providers/my_booth_provider/my_booths_notifier
 import 'package:vintage_1020/domain/my_booth/my_booth.dart';
 import 'package:vintage_1020/ui/add_item_dialog/widgets/add_item_booth_screen.dart';
 import 'package:vintage_1020/ui/add_item_dialog/widgets/quick_add_item_button_widget.dart';
-import 'package:vintage_1020/ui/common/select_booth_dropdown_widget.dart';
-import 'package:vintage_1020/ui/common/widgets/app_bar/custom_app_bar.dart';
+import 'package:vintage_1020/ui/common/dropdowns/select_booth_dropdown_widget.dart';
+import 'package:vintage_1020/ui/common/widgets/app_bar/mybooths_app_bar_widget.dart';
 import 'package:vintage_1020/ui/common/widgets/inventory_carousel/booth_image_carousel.dart';
 import 'package:vintage_1020/ui/common/widgets/inventory_carousel/inventory_carousel.dart';
 import 'package:vintage_1020/ui/my_booths_screen/widgets/booth_metadata_card_widget.dart';
@@ -103,8 +103,15 @@ class MyBoothsScreen extends HookConsumerWidget {
                           iconSize: 32,
                         ),
                       ),
-                ]),
-                  BoothMetadataWidget(boothCost: selectedBooth.boothCost, boothValue: selectedBooth.boothValue, boothRentRemaining: selectedBooth.boothRentRemaining, boothProfitMonthToDate: selectedBooth.boothMonthProfitToDate),
+                    ],
+                  ),
+                  BoothMetadataWidget(
+                    boothCost: selectedBooth.boothCost,
+                    boothValue: selectedBooth.boothValue,
+                    boothRentRemaining: selectedBooth.boothRentRemaining,
+                    boothProfitMonthToDate:
+                        selectedBooth.boothMonthProfitToDate,
+                  ),
                   selectedBooth.currentBoothImageUrls.isEmpty
                       ? Expanded(
                           child: Center(
@@ -117,23 +124,22 @@ class MyBoothsScreen extends HookConsumerWidget {
                             ),
                           ),
                         )
-                      : 
-                      Expanded(
+                      : Expanded(
                           flex: 6,
                           child: BoothImageCarousel(
                             itemImageUrls: selectedBooth.currentBoothImageUrls,
                             flexWeights: [3],
                           ),
                         ),
-                      Expanded(
-                        flex: 6,
-                        child: InventoryItemCarousel(
-                          inventoryItems: selectedBooth.boothInventory ?? [],
-                          flexWeights: [3],
-                        ),
-                      ),
-                    ],
-                  );
+                  Expanded(
+                    flex: 6,
+                    child: InventoryItemCarousel(
+                      inventoryItems: selectedBooth.boothInventory ?? [],
+                      flexWeights: [3],
+                    ),
+                  ),
+                ],
+              );
       } else if (snapshot.connectionState == ConnectionState.waiting) {
         return Center(child: CircularProgressIndicator());
       } else if (snapshot.connectionState == ConnectionState.none) {
@@ -146,7 +152,7 @@ class MyBoothsScreen extends HookConsumerWidget {
       body: buildBodyContent(),
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
-        child: CustomAppBar(),
+        child: MyBoothsAppBar(),
       ),
       bottomNavigationBar: BottomAppBar(
         color: Colors.blue,

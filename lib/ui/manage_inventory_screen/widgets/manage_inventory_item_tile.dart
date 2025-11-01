@@ -105,11 +105,8 @@ class ManageInventoryItemTile extends ConsumerWidget {
     // }
     // TODO: CREATE SIMPLE UPDATE LOGIC
     void removeItemFromBooth(InventoryItemLocal item) async {
-
-
       await ref.read(myBoothsProvider.notifier).removeItemFromBoothById(item);
       item.removeItemFromBooth();
-      
     }
 
     return model == null
@@ -183,7 +180,7 @@ class ManageInventoryItemTile extends ConsumerWidget {
                             iconSize: 30,
                             padding: EdgeInsets.all(0),
                             tooltip: 'Add to booth',
-                            onPressed: () {},//=> addItemToBooth(model.id),
+                            onPressed: () {}, //=> addItemToBooth(model.id),
                             icon: FaIcon(FontAwesomeIcons.tentArrowDownToLine),
                           )
                         // TODO: IMPLEMENT UPDATE LOGIC
@@ -191,7 +188,9 @@ class ManageInventoryItemTile extends ConsumerWidget {
                             iconSize: 30,
                             padding: EdgeInsets.all(0),
                             tooltip: 'Remove from booth',
-                            onPressed: removeItemFromBooth,
+                            onPressed: () {
+                              removeItemFromBooth(model);
+                            },
                             icon: FaIcon(FontAwesomeIcons.tentArrowTurnLeft),
                           ),
                   ],
