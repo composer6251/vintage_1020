@@ -164,6 +164,7 @@ class AddItemDialog extends HookConsumerWidget {
         double.tryParse(itemDepth.value),
         null,
         boothNameToAddItem.isEmpty ? null : boothNameToAddItem,
+        Uuid().v6()
       );
 
       if (formKey.currentState?.validate() ?? false) {

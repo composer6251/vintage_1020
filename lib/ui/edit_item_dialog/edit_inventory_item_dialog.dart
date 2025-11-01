@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:vintage_1020/domain/inventory_item_local/inventory_item_local.dart';
 import 'package:vintage_1020/data/providers/inventory_provider/inventory_provider.dart'
     hide userEmail;
+import 'package:vintage_1020/ui/add_item_dialog/widgets/item_dimension_widget.dart';
 import 'package:vintage_1020/util/date_picker_util.dart';
 import 'package:vintage_1020/utils/date_util.dart';
 
@@ -12,20 +13,21 @@ class EditInventoryItemDialog extends HookConsumerWidget {
   EditInventoryItemDialog({super.key, required this.itemEditing});
 
   final InventoryItemLocal itemEditing;
-  // VARIABLES TO HOLD DATE STATES
-  final purchaseDate = useState<DateTime?>(null);
-  final listingDate = useState<DateTime?>(null);
-  final soldDate = useState<DateTime?>(null);
-  final purchasePrice = useState<double?>(0.0);
-  final listingPrice = useState<double?>(0.0);
-  final soldPrice = useState<double?>(0.0);
-  final height = useState<double?>(0.0);
-  final width = useState<double?>(0.0);
-  final depth = useState<double?>(0.0);
-  final boothName = useState<String?>('');
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
+      // VARIABLES TO HOLD DATE STATES
+    final purchaseDate = useState<DateTime?>(null);
+    final listingDate = useState<DateTime?>(null);
+    final soldDate = useState<DateTime?>(null);
+    final purchasePrice = useState<double?>(0.0);
+    final listingPrice = useState<double?>(0.0);
+    final soldPrice = useState<double?>(0.0);
+    final height = useState<double?>(0.0);
+    final width = useState<double?>(0.0);
+    final depth = useState<double?>(0.0);
+    final boothName = useState<String?>('');
 
     final DateTime initialDate = DateTime.now();
 
@@ -66,8 +68,8 @@ class EditInventoryItemDialog extends HookConsumerWidget {
         width.value,
         depth.value,
         null,
-        boothName.value
-
+        boothName.value,
+        null,
       );
       return currentItemState;
     }
@@ -108,7 +110,7 @@ class EditInventoryItemDialog extends HookConsumerWidget {
                 Flexible(
                   flex: 5,
                   child: TextFormField(
-                    initialValue: purchasePrice?.toString(),
+                    initialValue: purchasePrice.value?.toString(),
                     onChanged: (value) => 
                       purchasePrice.value = double.tryParse(value),
                                         
@@ -116,7 +118,7 @@ class EditInventoryItemDialog extends HookConsumerWidget {
                       prefixText: '\$',
                       fillColor: Colors.blue,
                       labelStyle: TextStyle(fontSize: 12),
-                      labelText: 'Purchase Price*',
+                      labelText: 'Purchase Price',
                     ),
                     keyboardType: TextInputType.numberWithOptions(
                       decimal: true,
@@ -149,7 +151,7 @@ class EditInventoryItemDialog extends HookConsumerWidget {
                 Flexible(
                   flex: 5,
                   child: TextFormField(
-                    initialValue: listingPrice.toString(),
+                    initialValue: listingPrice.value?.toString(),
                     onChanged: (value) => 
                       listingPrice.value = double.tryParse(value),
                     decoration: const InputDecoration(
@@ -187,7 +189,7 @@ class EditInventoryItemDialog extends HookConsumerWidget {
                 Flexible(
                   flex: 5,
                   child: TextFormField(
-                    initialValue: soldPrice?.toString(),
+                    initialValue: soldPrice.value?.toString(),
                     onChanged: (value) => 
                       soldPrice.value = double.tryParse(value),
                     decoration: const InputDecoration(
@@ -222,54 +224,11 @@ class EditInventoryItemDialog extends HookConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               direction: Axis.horizontal,
               children: [
-                SizedBox(
-                  width: 80,
-                  child: TextFormField(
-                    initialValue: height?.toString(),
-                    decoration: const InputDecoration(
-                      fillColor: Colors.blue,
-                      floatingLabelAlignment: FloatingLabelAlignment.start,
-                      labelText: 'Height',
-                      labelStyle: TextStyle(fontSize: 12)
-                    ),
-                    onChanged: (value) => 
-                      height.value = double.tryParse(value),
-                    keyboardType: TextInputType.numberWithOptions(decimal: true),
-                  ),
-                ),
-                SizedBox(
-                  width: 80,
-                  child: TextFormField(
-                    initialValue: width?.toString(),
-                    decoration: const InputDecoration(
-                      fillColor: Colors.blue,
-                      labelText: 'Width',
-                      floatingLabelAlignment: FloatingLabelAlignment.start,
-                      labelStyle: TextStyle(fontSize: 12)
-                    ),
-                    onChanged: (value) => 
-                      width.value = double.tryParse(value),
-                    keyboardType: TextInputType.numberWithOptions(decimal: true),
-                  ),
-                ),
-                SizedBox(
-                  width: 80,
-                  child: TextFormField(
-                    initialValue: depth?.toString(),
-                    decoration: const InputDecoration(
-                      fillColor: Colors.blue,
-                      labelText: 'Depth',
-                      floatingLabelAlignment: FloatingLabelAlignment.start,
-                      labelStyle: TextStyle(fontSize: 12)
-                    ),
-                    onChanged: (value) =>
-                      depth.value = double.tryParse(value),
-                    keyboardType: TextInputType.numberWithOptions(decimal: true),
-                  ),
-                ),
+                ItemDimensionWidget(value: itemEditing.itemHeight.toString(), onValueChanged: (value) => height.value = value, label: 'Height'),
+                ItemDimensionWidget(value: itemEditing.itemWidth.toString(), onValueChanged: (value) => width.value = value, label: 'Width'),
+                ItemDimensionWidget(value: itemEditing.itemDepth.toString(), onValueChanged: (value) => depth.value = value, label: 'Depth'),
               ],
             ),
-            // ItemDimensionsInputWidget(heightController: itemHeightController, widthController: itemWidthController, depthController: itemDepthController),
           ],
         ),
       ),

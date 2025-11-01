@@ -41,6 +41,7 @@ class InventoryItemLocal {
     double? itemDepth,
     DateTime? itemDeleteDate,
     String? boothName,
+    String? boothId,
   ) : primaryImageUrl = primaryImageUrl ?? primaryImageUrl,
       itemDescription = itemDescription ?? itemDescription,
       itemImageUrls = itemImageUrls ?? itemImageUrls,
@@ -55,7 +56,8 @@ class InventoryItemLocal {
       itemWidth = itemWidth ?? itemWidth,
       itemDepth = itemDepth ?? itemDepth,
       itemDeleteDate = itemDeleteDate ?? itemDeleteDate,
-      boothName = boothName ?? boothName;
+      boothName = boothName ?? boothName,
+      boothId = boothId ?? boothId;
 
   InventoryItemLocal.updateItem(
     this.id,
@@ -73,7 +75,8 @@ class InventoryItemLocal {
     this.itemWidth,
     this.itemDepth,
     this.itemDeleteDate,
-    this.boothName
+    this.boothName,
+    this.boothId,
   );
 
   InventoryItemLocal.toLocalDb(
@@ -93,7 +96,8 @@ class InventoryItemLocal {
     this.itemWidth,
     this.itemDepth,
     this.itemDeleteDate,
-    this.boothName
+    this.boothName,
+    this.boothId,
   );
 
   InventoryItemLocal.fromLocalDB(Map<String, dynamic> data)
@@ -123,7 +127,8 @@ class InventoryItemLocal {
       itemDeleteDate = data['itemDeleteDate'] != null
           ? DateTime.parse(data['itemDeleteDate']) as DateTime?
           : null,
-      boothName = data['isCurrentBoothItem'] as String?;
+      boothName = data['boothName'] as String?,
+      boothId = data['boothId'] as String?;
 
   Map<String, dynamic> toMapForLocalDB() {
     return <String, dynamic>{
@@ -144,6 +149,7 @@ class InventoryItemLocal {
       "itemDepth": itemDepth,
       "itemDeleteDate": itemDeleteDate?.toIso8601String(),
       "boothName": boothName,
+      "boothId": boothId,
     };
   }
 
@@ -177,6 +183,7 @@ class InventoryItemLocal {
     itemListingDate = null;
     itemListingPrice = null;
     boothName = null;
+    boothId = null;
   }
 
   void addItemToBooth() {

@@ -59,6 +59,7 @@ class InventoryLocal extends _$InventoryLocal {
         item.itemDepth,
         item.itemDeleteDate,
         item.boothName,
+        item.boothId
       ),
     ];
     ref.notifyListeners();

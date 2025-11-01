@@ -12,7 +12,7 @@ import 'package:vintage_1020/domain/my_booth/my_booth.dart';
 import 'package:vintage_1020/ui/common/dialog/confirmation_dialog.dart';
 import 'package:vintage_1020/util/photo_util.dart';
 
-class CustomFab extends HookConsumerWidget {
+class ManageInventoryAddItemFAB extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     void addInventoryItem(InventoryItemLocal itemToSave) async {
