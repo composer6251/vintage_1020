@@ -9,6 +9,7 @@ import 'package:vintage_1020/ui/add_item_dialog/widgets/add_item_booth_screen.da
 import 'package:vintage_1020/ui/add_item_dialog/widgets/quick_add_item_button_widget.dart';
 import 'package:vintage_1020/ui/common/dropdowns/select_booth_dropdown_widget.dart';
 import 'package:vintage_1020/ui/common/widgets/app_bar/mybooths_app_bar_widget.dart';
+import 'package:vintage_1020/ui/common/widgets/app_bar/mybooths_app_bar_widget_new.dart';
 import 'package:vintage_1020/ui/common/widgets/inventory_carousel/booth_image_carousel.dart';
 import 'package:vintage_1020/ui/common/widgets/inventory_carousel/inventory_carousel.dart';
 import 'package:vintage_1020/ui/my_booths_screen/widgets/booth_metadata_card_widget.dart';
@@ -87,21 +88,21 @@ class MyBoothsScreen extends HookConsumerWidget {
                           iconSize: 32,
                         ),
                       ),
-                      Flexible(
-                        flex: 2,
-                        child: SelectBoothDropDown(
-                          userBooths: userBooths,
-                          // onValueUpdated: (value) => selectedBooth = value,
-                        ),
-                      ),
-                      Flexible(
-                        flex: 1,
-                        child: IconButton(
-                          onPressed: takeBoothPhoto,
-                          icon: FaIcon(FontAwesomeIcons.camera),
-                          iconSize: 32,
-                        ),
-                      ),
+                      // Flexible(
+                      //   flex: 2,
+                      //   child: SelectBoothDropDown(
+                      //     userBooths: userBooths,
+                      //     // onValueUpdated: (value) => selectedBooth = value,
+                      //   ),
+                      // ),
+                      // Flexible(
+                      //   flex: 1,
+                      //   child: IconButton(
+                      //     onPressed: takeBoothPhoto,
+                      //     icon: FaIcon(FontAwesomeIcons.camera),
+                      //     iconSize: 32,
+                      //   ),
+                      // ),
                     ],
                   ),
                   BoothMetadataWidget(
@@ -151,7 +152,7 @@ class MyBoothsScreen extends HookConsumerWidget {
       body: buildBodyContent(),
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
-        child: MyBoothsAppBar(),
+        child: MyBoothsAppBarNew(),
       ),
       bottomNavigationBar: BottomAppBar(
         color: Colors.blue,

@@ -8,10 +8,9 @@ class DropDownFromMap extends ConsumerWidget {
     required super.key,
     required this.keyValueMap,
     required this.onValueUpdated,
-    // required this.onValueUpdated,
   });
 
-  final List<MyBooth> keyValueMap;
+  final Map<String, int> keyValueMap;
   final Function onValueUpdated;
 
   @override
