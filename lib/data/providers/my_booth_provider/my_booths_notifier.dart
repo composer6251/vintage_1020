@@ -24,9 +24,11 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
           .toList();
 
       state = boothsWithInventory;
+
       ref
           .read(currentBoothProvider.notifier)
           .setCurrentBooth(boothsWithInventory.first);
+
       ref.notifyListeners();
     }
   }
@@ -38,6 +40,16 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
   }
 
   Future<void> updateBooth(MyBooth boothToUpdate) async {
+    // TODO: check if booth being updated is current booth.
+    // If so, need to notify listeners/update provider.
+
+    // TODO: find a different way to update. According to id
+
+    // TODO: remove the state.remove
+
+    // List<MyBooth> currentBooths = state;
+
+    // MyBooth currentBooth = ref.read(currentBoothProvider);
     MyBooth currentBoothState = state
         .where((booth) => booth.id == boothToUpdate.id)
         .first;
@@ -51,6 +63,7 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
 
     state.removeAt(indexOfItemToUpdate);
     state.insert(indexOfItemToUpdate, currentBoothState);
+    ref.read(currentBoothProvider.notifier).setCurrentBooth(currentBoothState);
     ref.notifyListeners();
 
     MyBoothsDb().updateBooth(currentBoothState);

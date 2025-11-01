@@ -14,7 +14,6 @@ import 'package:vintage_1020/util/photo_util.dart';
 class QuickAddItemButtonWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     void displayAddToBoothConfirmation(String photoUrl) async {
       // Update item.BoothName, ItemListedDate, booth.itemIds
       InventoryItemLocal itemToSave = InventoryItemLocal.empty(Uuid().v6());
@@ -26,15 +25,23 @@ class QuickAddItemButtonWidget extends ConsumerWidget {
         context,
       );
 
-      ref.read(inventoryLocalProvider.notifier).quickAddInventoryItem(itemToSave);
+      print('selected quick add yes/no: ${result.name}');
 
-      if (result.name == 'yes') {
+      await ref
+          .read(inventoryLocalProvider.notifier)
+          .quickAddInventoryItem(itemToSave);
+
+      if (result.name == 'ok') {
         MyBooth boothToUpdate = ref.read(currentBoothProvider);
 
         boothToUpdate.boothInventoryIds.add(itemToSave.id);
         boothToUpdate.boothInventory?.add(itemToSave);
 
-        ref.read(myBoothsProvider.notifier).updateBooth(boothToUpdate);
+        print(
+          'quick add item to booth with num items ${boothToUpdate.boothInventoryIds.length}',
+        );
+
+        await ref.read(myBoothsProvider.notifier).updateBooth(boothToUpdate);
       }
     }
 
@@ -46,7 +53,6 @@ class QuickAddItemButtonWidget extends ConsumerWidget {
     }
 
     return OutlinedButton(
-
       onPressed: quickAddItemWithPhoto,
       child: Row(
         mainAxisSize: MainAxisSize.min,

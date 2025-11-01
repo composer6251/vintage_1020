@@ -34,8 +34,8 @@ class AddItemDialog extends HookConsumerWidget {
     List<MyBooth> userBooths = ref.watch(myBoothsProvider);
 
     // UseStates for text fields
-    final itemPurchasePrice = useState<String>('');
-    final itemListingPrice = useState<String>('');
+    final itemPurchasePrice = useState<String>('1234');
+    final itemListingPrice = useState<String>('123212r');
     final itemHeight = useState<String>('');
     final itemWidth = useState<String>('');
     final itemDepth = useState<String>('');
@@ -199,14 +199,14 @@ class AddItemDialog extends HookConsumerWidget {
           children: [
             PriceDateInputWidget(
               price: itemPurchasePrice.value,
-              date: purchaseDate.value,
+              date: DateTime.now(),//purchaseDate.value,
               onPriceChanged: (value) => itemPurchasePrice.value = value,
               onDateChanged: (value) => purchaseDate.value = value,
               label: purchasePriceRequiredLabel,
             ),
             PriceDateInputWidget(
               price: itemListingPrice.value,
-              date: listingDate.value,
+              date: DateTime.now(),// ///listingDate.value,
               onPriceChanged: (value) => itemListingPrice.value = value,
               onDateChanged: (value) => listingDate.value = value,
               label: listingPriceLabel,

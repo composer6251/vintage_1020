@@ -43,6 +43,35 @@ class MyBooth {
     return boothValue;
   }
 
+  double get boothMonthProfitToDate {
+    int currentYear = DateTime.now().year;
+    int currentMonth = DateTime.now().month;
+
+    List<InventoryItemLocal> soldItems =
+        boothInventory
+            ?.where(
+              (item) =>
+                  item.itemSoldDate?.year == currentYear &&
+                  item.itemSoldDate?.month == currentMonth,
+            )
+            .toList() ??
+        [];
+
+    double boothProfit = soldItems.fold<double>(
+      0.0,
+      (double sum, item) => sum + (item.itemSoldPrice ?? 0.0),
+    );
+
+    return boothProfit;
+    ;
+  }
+
+  double get boothRentRemaining {
+    double boothRentRemaining = boothMonthProfitToDate - 150;
+
+    return boothRentRemaining;
+  }
+
   MyBooth(
     this.id,
     this.boothName,

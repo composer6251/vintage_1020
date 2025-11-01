@@ -85,6 +85,9 @@ class AddItemToBoothDialog extends HookConsumerWidget {
 
     void updateCurrentBooth(String itemId) async {
       currentBooth.boothInventoryIds.add(itemId);
+      print(
+        'Before updating my booths provider in add item dialog with num items: ${currentBooth.boothInventoryIds.length}',
+      );
 
       await ref.read(myBoothsProvider.notifier).updateBooth(currentBooth);
     }
@@ -121,7 +124,7 @@ class AddItemToBoothDialog extends HookConsumerWidget {
             .watch(inventoryLocalProvider.notifier)
             .addUserInventoryItemLocal(itemToDB);
 
-            updateCurrentBooth(itemToDB.id);
+        updateCurrentBooth(itemToDB.id);
       }
 
       closeDialog();
