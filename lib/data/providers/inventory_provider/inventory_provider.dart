@@ -67,6 +67,7 @@ class InventoryLocal extends _$InventoryLocal {
 
   Future<void> quickAddInventoryItem(InventoryItemLocal item) async {
     state = [...state, item];
+    ref.notifyListeners();
 
     InventoryDb().insertIntoInventoryItem(item);
   }

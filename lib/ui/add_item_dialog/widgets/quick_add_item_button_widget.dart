@@ -15,8 +15,9 @@ class QuickAddItemButtonWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     void displayAddToBoothConfirmation(String photoUrl) async {
-      // Update item.BoothName, ItemListedDate, booth.itemIds
+
       InventoryItemLocal itemToSave = InventoryItemLocal.empty(Uuid().v6());
+      itemToSave.userEmail = userEmail;
       itemToSave.itemImageUrls = [photoUrl];
       itemToSave.primaryImageUrl = photoUrl;
 
@@ -29,7 +30,7 @@ class QuickAddItemButtonWidget extends ConsumerWidget {
 
       await ref
           .read(inventoryLocalProvider.notifier)
-          .quickAddInventoryItem(itemToSave);
+          .addUserInventoryItemLocal(itemToSave);
 
       if (result.name == 'ok') {
         MyBooth boothToUpdate = ref.read(currentBoothProvider);
