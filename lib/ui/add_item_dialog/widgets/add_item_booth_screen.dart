@@ -149,7 +149,7 @@ class AddItemToBoothDialog extends HookConsumerWidget {
               date: purchaseDate.value,
               onPriceChanged: (value) => itemPurchasePrice.value = value,
               onDateChanged: (value) => purchaseDate.value = value,
-              label: purchasePriceRequiredLabel,
+              label: addItemPurchasePriceLabel,
             ),
             PriceDateInputWidget(
               price: itemListingPrice.value,

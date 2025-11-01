@@ -21,28 +21,31 @@ class FilterSegmentedButton extends HookConsumerWidget {
       ref.read(filterProvider.notifier).setCurrentFilter(newFilter);
     }
 
-    return SegmentedButton<InventoryFilter>(
-      style: ButtonStyle(elevation: WidgetStatePropertyAll(300)),
-      multiSelectionEnabled: false,
-      selected: {currentFilter},
-      onSelectionChanged: (Set<InventoryFilter> filters) {
-        setNewInventoryFilter(filters.first);
-      },
-      segments: <ButtonSegment<InventoryFilter>>[
-        ButtonSegment<InventoryFilter>(
-          enabled: true,
-          value: InventoryFilter.all,
-          label: Text(style: TextStyle(fontSize: 20), 'All'),
-        ),
-        ButtonSegment<InventoryFilter>(
-          value: InventoryFilter.listed,
-          label: Text(style: TextStyle(fontSize: 20), 'Listed'),
-        ),
-        ButtonSegment<InventoryFilter>(
-          value: InventoryFilter.backStock,
-          label: Text(style: TextStyle(fontSize: 20), 'Backstock'),
-        ),
-      ],
+    return SizedBox(
+      width: MediaQuery.sizeOf(context).width,
+      child: SegmentedButton<InventoryFilter>(
+        style: ButtonStyle(elevation: WidgetStatePropertyAll(300)),
+        multiSelectionEnabled: false,
+        selected: {currentFilter},
+        onSelectionChanged: (Set<InventoryFilter> filters) {
+          setNewInventoryFilter(filters.first);
+        },
+        segments: <ButtonSegment<InventoryFilter>>[
+          ButtonSegment<InventoryFilter>(
+            enabled: true,
+            value: InventoryFilter.all,
+            label: Text(style: TextStyle(fontSize: 16), 'All'),
+          ),
+          ButtonSegment<InventoryFilter>(
+            value: InventoryFilter.listed,
+            label: Text(style: TextStyle(fontSize: 16), 'Listed'),
+          ),
+          ButtonSegment<InventoryFilter>(
+            value: InventoryFilter.backStock,
+            label: Text(style: TextStyle(fontSize: 16, overflow: TextOverflow.ellipsis), 'Backstock'),
+          ),
+        ],
+      ),
     );
   }
 }

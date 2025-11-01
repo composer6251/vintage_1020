@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:convert';
 
 class InventoryItemLocal {
-  String id; // default id on creation
+  String id;
   String? userEmail;
   String? primaryImageUrl;
   String? itemDescription;
@@ -20,6 +20,7 @@ class InventoryItemLocal {
   double? itemDepth;
   DateTime? itemDeleteDate;
   String? boothName;
+  String? boothId;
 
   InventoryItemLocal.empty(this.id);
 
@@ -171,6 +172,17 @@ class InventoryItemLocal {
   bool get isDeleted {
     return (itemDeleteDate != null);
   }
+
+  void removeItemFromBooth() {
+    itemListingDate = null;
+    itemListingPrice = null;
+    boothName = null;
+  }
+
+  void addItemToBooth() {
+    // TODO implement logic to pull up booth checkbox listview
+  }
+
 
   InventoryItemLocal.fromJson(Map<String, dynamic> json)
     : id = json['id'],

@@ -23,7 +23,6 @@ class PriceDateInputWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         TextFormField(
-          initialValue: '123',
           onChanged: (value) { 
             onPriceChanged(value); 
           },

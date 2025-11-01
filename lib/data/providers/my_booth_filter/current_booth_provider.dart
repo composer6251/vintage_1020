@@ -11,13 +11,11 @@ part 'current_booth_provider.g.dart';
 class CurrentBoothNotifier extends _$CurrentBoothNotifier {
   @override
   MyBooth build() {
-    print('current Booth provider build');
     return MyBooth.initial('', []);
   }
 
   void setCurrentBooth(MyBooth booth) {
     MyBooth boothWithInventory = setInventoryForBooth(booth);
-    print('setting currentBooth with inventorySize: ${boothWithInventory?.boothInventory?.length}');
     state = booth;
     ref.notifyListeners();
   }
@@ -41,12 +39,6 @@ class CurrentBoothNotifier extends _$CurrentBoothNotifier {
 
     state = booths.singleWhere((booth) => booth.id == id);
 
-    // List<InventoryItemLocal> inventory = ref.watch(inventoryLocalProvider);
-    // booth.boothInventory = inventory
-    //     .where((item) => item.boothName == booth.boothName)
-    //     .toList();
-    // print('setting currentBooth with inventorySize: ${inventory.length}');
-    // state = booth;
     ref.notifyListeners();
   }
 }

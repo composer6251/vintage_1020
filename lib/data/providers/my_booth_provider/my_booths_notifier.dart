@@ -69,10 +69,10 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
     MyBoothsDb().updateBooth(currentBoothState);
   }
 
-  Future<void> removeItemFromBoothById(String itemId, String boothId) async {
+  Future<void> removeItemFromBoothById(InventoryItemLocal item) async {
     // Get boothFromState
     MyBooth currentBoothState = state
-        .where((booth) => booth.id == boothId)
+        .where((booth) => booth.id == item.boothId)
         .first;
 
     // Get Index of booth to update to maintain order
@@ -83,7 +83,7 @@ class MyBoothsNotifier extends _$MyBoothsNotifier {
     }
     List<String> boothCurrentItemIds = currentBoothState.boothInventoryIds;
 
-    boothCurrentItemIds.add(itemId);
+    boothCurrentItemIds.remove(item.id);
 
     currentBoothState.boothInventoryIds = boothCurrentItemIds;
     setInventoryForBooth(currentBoothState);

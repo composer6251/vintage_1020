@@ -1,6 +1,6 @@
 // ADD ITEM LABELS
 const String selectDateLabel = 'Select Date';
-const String purchasePriceRequiredLabel = 'Purchase Price(required)';
+const String addItemPurchasePriceLabel = 'Purchase Price';
 const String listingPriceLabel = 'Listing Price';
 const String sellingPriceLabel = 'Selling Price';
 const String addToBoothLabel = 'Add to booth?';

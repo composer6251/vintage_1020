@@ -199,14 +199,14 @@ class AddItemDialog extends HookConsumerWidget {
           children: [
             PriceDateInputWidget(
               price: itemPurchasePrice.value,
-              date: DateTime.now(),//purchaseDate.value,
+              date: purchaseDate.value,
               onPriceChanged: (value) => itemPurchasePrice.value = value,
               onDateChanged: (value) => purchaseDate.value = value,
-              label: purchasePriceRequiredLabel,
+              label: addItemPurchasePriceLabel,
             ),
             PriceDateInputWidget(
               price: itemListingPrice.value,
-              date: DateTime.now(),// ///listingDate.value,
+              date: listingDate.value,
               onPriceChanged: (value) => itemListingPrice.value = value,
               onDateChanged: (value) => listingDate.value = value,
               label: listingPriceLabel,

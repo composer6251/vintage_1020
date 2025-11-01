@@ -104,9 +104,13 @@ class ManageInventoryItemTile extends ConsumerWidget {
     //   );
     // }
     // TODO: CREATE SIMPLE UPDATE LOGIC
-    // void removeItemFromBooth(String itemId) {
-    //   ref.read(myBoothsProvider.notifier).removeItemFromBoothById(itemId);
-    // }
+    void removeItemFromBooth(InventoryItemLocal item) async {
+
+
+      await ref.read(myBoothsProvider.notifier).removeItemFromBoothById(item);
+      item.removeItemFromBooth();
+      
+    }
 
     return model == null
         ? Container()
@@ -187,7 +191,7 @@ class ManageInventoryItemTile extends ConsumerWidget {
                             iconSize: 30,
                             padding: EdgeInsets.all(0),
                             tooltip: 'Remove from booth',
-                            onPressed: () => {},
+                            onPressed: removeItemFromBooth,
                             icon: FaIcon(FontAwesomeIcons.tentArrowTurnLeft),
                           ),
                   ],
