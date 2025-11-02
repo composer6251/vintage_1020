@@ -63,7 +63,6 @@ class MyBooth {
     );
 
     return boothProfit;
-    ;
   }
 
   double get boothRentRemaining {

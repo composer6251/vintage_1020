@@ -35,23 +35,40 @@ class MyBoothsAppBarNew extends HookConsumerWidget {
     }
 
     return AppBar(
+      toolbarHeight: MediaQuery.sizeOf(context).height * .40,
       actions: [
-        DropDownFromMap(
-          key: key,
-          keyValueMap: boothDiscounts,
-          onValueUpdated: (value) =>
-              selectedDiscount.value = int.tryParse(value),
+        Expanded(
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Flexible(
+                flex: 3,
+                child: DropDownFromMap(
+                  key: key,
+                  keyValueMap: boothDiscounts,
+                  onValueUpdated: (value) =>
+                      selectedDiscount.value = int.tryParse(value),
+                ),
+              ),
+              Flexible(
+                flex: 4,
+                child: SelectBoothDropDown(userBooths: userBooths)),
+              Flexible(
+                flex: 2,
+                child: IconButton(
+                  onPressed: takeBoothPhoto,
+                  icon: FaIcon(FontAwesomeIcons.camera),
+                  iconSize: 32,
+                ),
+              ),
+              Flexible(
+                flex: 1,
+                child: IconButton(onPressed: auth.signOut, icon: Icon(Icons.logout_outlined))),
+                ],
+              ),
         ),
-        IconButton(
-          onPressed: takeBoothPhoto,
-          icon: FaIcon(FontAwesomeIcons.camera),
-          iconSize: 32,
-        ),
-
-        IconButton(onPressed: auth.signOut, icon: Icon(Icons.logout_outlined)),
-      ],
+        ],
       backgroundColor: Colors.white,
-      title: SelectBoothDropDown(userBooths: userBooths),
     );
   }
 }

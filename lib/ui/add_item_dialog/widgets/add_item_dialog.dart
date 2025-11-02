@@ -235,7 +235,7 @@ class AddItemDialog extends HookConsumerWidget {
               ],
             ),
             ConstrainedBox(
-              constraints: BoxConstraints(),
+              constraints: BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * .5),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

@@ -72,39 +72,6 @@ class MyBoothsScreen extends HookConsumerWidget {
             : Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Flexible(
-                        flex: 1,
-                        child: IconButton(
-                          icon: const Icon(Icons.photo_library),
-                          tooltip: 'Select Booth Images From Photos',
-                          style: ButtonStyle(
-                            elevation: WidgetStatePropertyAll<double>(8.0),
-                          ),
-                          onPressed: selectImagesFromPhotos,
-                          iconSize: 32,
-                        ),
-                      ),
-                      // Flexible(
-                      //   flex: 2,
-                      //   child: SelectBoothDropDown(
-                      //     userBooths: userBooths,
-                      //     // onValueUpdated: (value) => selectedBooth = value,
-                      //   ),
-                      // ),
-                      // Flexible(
-                      //   flex: 1,
-                      //   child: IconButton(
-                      //     onPressed: takeBoothPhoto,
-                      //     icon: FaIcon(FontAwesomeIcons.camera),
-                      //     iconSize: 32,
-                      //   ),
-                      // ),
-                    ],
-                  ),
                   BoothMetadataWidget(
                     boothCost: selectedBooth.boothCost,
                     boothValue: selectedBooth.boothValue,
@@ -165,8 +132,7 @@ class MyBoothsScreen extends HookConsumerWidget {
               child: IconButton(
                 iconSize: 36,
                 onPressed: () =>
-                    Navigator.pushNamed(context, '/manage-inventory'),
-                //Navigator.of(context).pushNamed('/manage-inventory'),
+                  Navigator.pushNamed(context, '/manage-inventory'),
                 icon: FaIcon(FontAwesomeIcons.couch),
               ),
             ),
@@ -175,8 +141,7 @@ class MyBoothsScreen extends HookConsumerWidget {
               child: IconButton(
                 iconSize: 36,
                 onPressed: () =>
-                    Navigator.pushNamed(context, '/inventory-analytics'),
-                // Navigator.of(context).pushNamed('/inventory-analytics'),
+                  Navigator.pushNamed(context, '/inventory-analytics'),
                 icon: FaIcon(FontAwesomeIcons.chartBar),
               ),
             ),

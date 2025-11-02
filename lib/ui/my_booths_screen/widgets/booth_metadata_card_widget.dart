@@ -19,36 +19,25 @@ class BoothMetadataWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 100,
       child: Card(
         elevation: 50,
         child: Row(
           mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text('Cost: ${NumberFormat.currency(symbol: '\$').format(boothCost)}',style: TextStyle(fontSize: 18)),
-                    Divider(),
-                    Text('Value: ${NumberFormat.currency(symbol: '\$').format(boothValue)}', style: TextStyle(fontSize: 18)),
-                  ],
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // Text('Rent: ${NumberFormat.currency(symbol: '\$').format(boothRentRemaining)}', style: TextStyle(fontSize: 24)),
-                    Text('Profit: ${NumberFormat.currency(symbol: '\$').format(boothProfitMonthToDate)}!!!!', style: TextStyle(color: Colors.green, fontSize: 20)),
-                  ],
-                ),
+                Text('Cost: ${NumberFormat.currency(symbol: '\$').format(boothCost)}',style: TextStyle(fontSize: 20)),
+                Text('Value: ${NumberFormat.currency(symbol: '\$').format(boothValue)}', style: TextStyle(fontSize: 20)),
               ],
             ),
-          ],
-        ),
+            Column(
+              children: [
+                Text('Rent: ${NumberFormat.currency(symbol: '\$').format(boothRentRemaining)}', style: TextStyle(fontSize: 20)),
+                Text('Profit: ${NumberFormat.currency(symbol: '\$').format(boothProfitMonthToDate)}!', style: TextStyle(color: Colors.green, fontSize: 20)),
+              ],
+            ),
+        ])
       ),
     );
   }
