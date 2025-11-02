@@ -31,21 +31,24 @@ class SelectBoothDropDown extends ConsumerWidget {
       ref.read(currentBoothProvider.notifier).setCurrentBooth(selectedBooth);
     }
 
-    return Center(
-      child: DropdownMenu(
-        initialSelection: userBooths.first,
-        onSelected: (value) {
-          updateCurrentBoothProvider(value);
-        },
-        dropdownMenuEntries: userBooths
-            .map<DropdownMenuEntry<MyBooth>>(
-              (MyBooth booth) => DropdownMenuEntry<MyBooth>(
-                leadingIcon: Icon(Icons.storefront),
-                value: booth,
-                label: '${booth.boothName}: ${booth.boothItemsCount}',
-              ),
-            )
-            .toList(),
+    return SizedBox(
+      // width: MediaQuery.sizeOf(context).width,
+      child: Center(
+        child: DropdownMenu(
+          initialSelection: userBooths.first,
+          onSelected: (value) {
+            updateCurrentBoothProvider(value);
+          },
+          dropdownMenuEntries: userBooths
+              .map<DropdownMenuEntry<MyBooth>>(
+                (MyBooth booth) => DropdownMenuEntry<MyBooth>(
+                  leadingIcon: Icon(Icons.storefront),
+                  value: booth,
+                  label: '${booth.boothName}: ${booth.boothItemsCount}',
+                ),
+              )
+              .toList(),
+        ),
       ),
     );
   }
