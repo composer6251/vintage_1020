@@ -1,0 +1,68 @@
+This file outlines the steps to create a Flutter widget that allows a user to select an image, upload it to Google Cloud Storage for Firebase, and then view the Google Lens analysis of that image in a webview.
+
+## 1. Firebase/GCP Setup
+
+Before writing any Flutter code, you need to configure your Firebase project and Cloud Storage.
+
+1.  **Create or Use a Firebase Project:**
+    - Go to the [Firebase Console](https://console.firebase.google.com/).
+    - Create a new project or select an existing one.
+    - Make sure to register your Flutter application (iOS, Android, Web) with this Firebase project. You can follow the instructions in the Firebase console to download the necessary configuration files (e.g., `google-services.json` for Android, `GoogleService-Info.plist` for iOS).
+
+2.  **Enable Cloud Storage:**
+    - In the Firebase Console, navigate to the "Storage" section in the left-hand menu.
+    - Click "Get Started" to enable Cloud Storage for your project.
+    - Complete the setup wizard.
+
+3.  **Configure Security Rules for Public Access:**
+    - This is a critical step. For Google Lens to access the image, the URL must be publicly readable.
+    - In the Firebase Storage section, go to the "Rules" tab.
+    - **Warning:** The following rule makes your storage bucket publicly readable. This is necessary for this specific use case but be aware of the security implications. Anyone with the URL will be able to view the files. It is highly recommended to create a specific folder for these public images to limit exposure.
+    - Modify the rules to look like this:
+
+      ```
+      rules_version = '2';
+      service firebase.storage {
+        match /b/{bucket}/o {
+          // Allow public read access for all files.
+          // For better security, you could restrict this to a specific path,
+          // e.g., match /public_images/{allPaths=**}
+          match /{allPaths=**} {
+            allow read;
+            allow write: if request.auth != null; // Only authenticated users can write
+          }
+        }
+      }
+      ```
+    - Publish the new rules.
+
+## 2. Flutter App Workflow & Implementation
+
+This is the plan for the Flutter widget itself.
+
+1.  **Add Required Packages:**
+    - You will need to add the following packages to your `pubspec.yaml` file:
+      - `firebase_core`: To initialize the Firebase app.
+      - `firebase_storage`: To interact with Firebase Cloud Storage.
+      - `image_picker`: To allow users to select an image from their gallery or camera.
+      - `webview_flutter`: To display the Google Lens results.
+
+2.  **Implement the Widget:**
+    - **StatefulWidget:** The widget will need to be a `StatefulWidget` to manage the state of the selected image file and the upload process.
+    - **UI Elements:**
+        - A button to trigger the image selection process.
+        - A placeholder to show the selected image.
+        - A button to start the upload and analysis process.
+    - **Logic:**
+        - **Pick File:** Use the `image_picker` package to let the user select an image.
+        - **Upload to Firebase Storage:**
+            - Once an image is selected, create a reference to a location in your Firebase Storage bucket (e.g., `uploads/${DateTime.now().millisecondsSinceEpoch}.png`).
+            - Use the `putFile()` method from the `firebase_storage` package to upload the file.
+        - **Get Download URL:**
+            - After the upload is complete, call `getDownloadURL()` on the storage reference. This returns a public, permanent URL for the uploaded file.
+        - **Construct Google Lens URL:**
+            - Take the download URL and URL-encode it.
+            - Create the final Google Lens URL: `https://lens.google.com/uploadbyurl?url=<encoded_firebase_storage_url>`.
+        - **Launch WebView:**
+            - Navigate to a new screen that contains a `WebView` widget.
+            - Set the `initialUrl` of the `WebView` to the Google Lens URL you just constructed.
