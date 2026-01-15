@@ -1268,8 +1268,6 @@ PODS:
     - nanopb (~> 3.30910.0)
   - FirebaseSharedSwift (12.2.0)
   - Flutter (1.0.0)
-  - flutter_image_gallery_saver (0.0.1):
-    - Flutter
   - google_sign_in_ios (0.0.1):
     - AppAuth (>= 1.7.4)
     - Flutter
@@ -1439,7 +1437,6 @@ DEPENDENCIES:
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - Flutter (from `Flutter`)
-  - flutter_image_gallery_saver (from `.symlinks/plugins/flutter_image_gallery_saver/ios`)
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/darwin`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
@@ -1489,8 +1486,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_core/ios"
   Flutter:
     :path: Flutter
-  flutter_image_gallery_saver:
-    :path: ".symlinks/plugins/flutter_image_gallery_saver/ios"
   google_sign_in_ios:
     :path: ".symlinks/plugins/google_sign_in_ios/darwin"
   image_picker_ios:
@@ -1529,7 +1524,6 @@ SPEC CHECKSUMS:
   FirebaseFirestoreInternal: 6506aef21ac270bf137c34cd7283723d930eddb0
   FirebaseSharedSwift: 52d868d4c269fcb4e4e1310c548435a9c1f46e25
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
-  flutter_image_gallery_saver: 0453c83412e9691abef94c04c8d180724f5083a8
   google_sign_in_ios: b48bb9af78576358a168361173155596c845f0b9
   GoogleSignIn: ce8c89bb9b37fb624b92e7514cc67335d1e277e4
   GoogleUtilities: 00c88b9a86066ef77f0da2fab05f65d7768ed8e1

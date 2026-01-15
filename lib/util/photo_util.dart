@@ -52,8 +52,6 @@ class PhotoUtil {
       source: ImageSource.camera,
       imageQuality: 90,
     );
-    // File file = getFileFromXFile(image!);
-    // AlertDialog(content: Text('Picking photo with path ${file.path}'));
 
     return image;
   }
@@ -185,94 +183,94 @@ class PhotoUtil {
     return savedImages;
   }
 
-  static Future<List<String>> saveImageCurrent(XFile image, String index) async {
-    if (image.path.isEmpty) return [];
-    // Get directory on local device for storing images.
-    final appDir = await sys_path.getApplicationDocumentsDirectory();
+  // static Future<List<String>> saveImageCurrent(XFile image, String index) async {
+  //   if (image.path.isEmpty) return [];
+  //   // Get directory on local device for storing images.
+  //   final appDir = await sys_path.getApplicationDocumentsDirectory();
 
-    // Get filename of image
-    String appDirPath = appDir.path;
-    print('appDir Path: $appDirPath');
+  //   // Get filename of image
+  //   String appDirPath = appDir.path;
+  //   print('appDir Path: $appDirPath');
 
-    // Create album if it doesn't exist
-    AssetPathEntity? pathEntity = await createInventoryPhotoAlbum(
-      appNameForImages,
-    );
-    if (pathEntity == null) {
-      print('Failed to create album: $appNameForImages');
-      return [];
-    }
+  //   // Create album if it doesn't exist
+  //   AssetPathEntity? pathEntity = await createInventoryPhotoAlbum(
+  //     appNameForImages,
+  //   );
+  //   if (pathEntity == null) {
+  //     print('Failed to create album: $appNameForImages');
+  //     return [];
+  //   }
 
-    AssetEntity savedImage = await saveImageWithPathViaPhotoManager(
-      image.path,
-      null,
-    );
-    final assetEntityFile = await savedImage.file;
+  //   AssetEntity savedImage = await saveImageWithPathViaPhotoManager(
+  //     image.path,
+  //     null,
+  //   );
+  //   final assetEntityFile = await savedImage.file;
 
-    print(
-      'IMAGE_UTIL.saveImageCurrent saved image path(assetEntityFile.path): ${assetEntityFile?.path}',
-    );
+  //   print(
+  //     'IMAGE_UTIL.saveImageCurrent saved image path(assetEntityFile.path): ${assetEntityFile?.path}',
+  //   );
 
-    // Adds image reference to the album created above
-    await PhotoManager.plugin.copyAssetToGallery(savedImage, pathEntity);
+  //   // Adds image reference to the album created above
+  //   await PhotoManager.plugin.copyAssetToGallery(savedImage, pathEntity);
 
-    String? photoUrl = await PhotoManager.plugin.getFullFile(
-      savedImage.id,
-      isOrigin: false,
-    );
-    print('IMAGE_UTIL.saveImageCurrent photoURL: $photoUrl');
-    // Return imageUrl
-    return [photoUrl!];
-  }
+  //   String? photoUrl = await PhotoManager.plugin.getFullFile(
+  //     savedImage.id,
+  //     isOrigin: false,
+  //   );
+  //   print('IMAGE_UTIL.saveImageCurrent photoURL: $photoUrl');
+  //   // Return imageUrl
+  //   return [photoUrl!];
+  // }
 
-  // Saving with PhotoManager
-  static Future<AssetEntity> saveImageWithPathViaPhotoManager(
-    String imagePath,
-    String? category,
-  ) async {
-    AssetEntity savedImage = await PhotoManager.editor.saveImageWithPath(
-      imagePath,
-    );
+  // // Saving with PhotoManager
+  // static Future<AssetEntity> saveImageWithPathViaPhotoManager(
+  //   String imagePath,
+  //   String? category,
+  // ) async {
+  //   AssetEntity savedImage = await PhotoManager.editor.saveImageWithPath(
+  //     imagePath,
+  //   );
 
-    return savedImage;
-  }
+  //   return savedImage;
+  // }
 
-  static Future<List<String>> saveSingleXFileImageController(
-    XFile image,
-    String index,
-  ) async {
-    if (image.path.isEmpty) return [];
-    // Get directory on local device for storing images.
-    final appDir = await sys_path.getApplicationDocumentsDirectory();
+  // static Future<List<String>> saveSingleXFileImageController(
+  //   XFile image,
+  //   String index,
+  // ) async {
+  //   if (image.path.isEmpty) return [];
+  //   // Get directory on local device for storing images.
+  //   final appDir = await sys_path.getApplicationDocumentsDirectory();
 
-    // Get filename of image
-    String appDirPath = appDir.path;
-    print('appDir Path: $appDirPath');
+  //   // Get filename of image
+  //   String appDirPath = appDir.path;
+  //   print('appDir Path: $appDirPath');
 
-    // Create album if it doesn't exist
-    AssetPathEntity? pathEntity = await createInventoryPhotoAlbum(
-      appNameForImages,
-    );
-    if (pathEntity == null) {
-      print('Failed to create album: $appNameForImages');
-      return [];
-    }
+  //   // Create album if it doesn't exist
+  //   AssetPathEntity? pathEntity = await createInventoryPhotoAlbum(
+  //     appNameForImages,
+  //   );
+  //   if (pathEntity == null) {
+  //     print('Failed to create album: $appNameForImages');
+  //     return [];
+  //   }
 
-    AssetEntity savedImage = await saveImageWithPathViaPhotoManager(
-      image.path,
-      null,
-    );
+  //   AssetEntity savedImage = await saveImageWithPathViaPhotoManager(
+  //     image.path,
+  //     null,
+  //   );
 
-    // Adds image reference to the album created above
-    await PhotoManager.plugin.copyAssetToGallery(savedImage, pathEntity);
+  //   // Adds image reference to the album created above
+  //   await PhotoManager.plugin.copyAssetToGallery(savedImage, pathEntity);
 
-    String? photoUrl = await PhotoManager.plugin.getFullFile(
-      savedImage.id,
-      isOrigin: false,
-    );
+  //   String? photoUrl = await PhotoManager.plugin.getFullFile(
+  //     savedImage.id,
+  //     isOrigin: false,
+  //   );
 
-    return [photoUrl!];
-  }
+  //   return [photoUrl!];
+  // }
 
   ///
   /// ************** IMAGE LOADING ***********
@@ -337,34 +335,34 @@ class PhotoUtil {
     String? verboseFilePath = PhotoManager.getVerboseFilePath();
   }
 
-  static Future<String> handleImageSelection(XFile image, String? imageName) async {
-    // Create new album if it doesn't exist
-    AssetPathEntity? pathEntity = await createInventoryPhotoAlbum(
-      appNameForImages,
-    );
+  // static Future<String> handleImageSelection(XFile image, String? imageName) async {
+  //   // Create new album if it doesn't exist
+  //   AssetPathEntity? pathEntity = await createInventoryPhotoAlbum(
+  //     appNameForImages,
+  //   );
 
-    if (image.path.isEmpty) return '';
-    print('image path: ${image.path}');
+  //   if (image.path.isEmpty) return '';
+  //   print('image path: ${image.path}');
 
-    // Save image to disk
-    AssetEntity assetEntity = await saveImageWithPathViaPhotoManager(
-      image.path,
-      imageName!,
-    );
-    String? savedImagePath = await assetEntity.getMediaUrl();
-    print('Saved Image Media URL: $savedImagePath');
+  //   // Save image to disk
+  //   AssetEntity assetEntity = await saveImageWithPathViaPhotoManager(
+  //     image.path,
+  //     imageName!,
+  //   );
+  //   String? savedImagePath = await assetEntity.getMediaUrl();
+  //   print('Saved Image Media URL: $savedImagePath');
 
-    // Save image to album
-    saveImageToAlbum(assetEntity, pathEntity!);
+  //   // Save image to album
+  //   saveImageToAlbum(assetEntity, pathEntity!);
 
-    String? url = await getFullFile(image.path, isOrigin: false);
-    print(
-      'image.path: ${image.path}'
-      '\nurl: $url',
-    );
+  //   String? url = await getFullFile(image.path, isOrigin: false);
+  //   print(
+  //     'image.path: ${image.path}'
+  //     '\nurl: $url',
+  //   );
 
-    return image.path;
-  }
+  //   return image.path;
+  // }
 
   /// **CREATE ALBUM IN PHOTOS LIBRARY ON IOS FOR VINTAGE_1020 IF IT DOESN'T ALREADY EXIST
   static Future<AssetPathEntity?> createInventoryPhotoAlbum(String albumName) async {

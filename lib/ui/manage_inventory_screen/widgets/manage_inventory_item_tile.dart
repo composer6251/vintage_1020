@@ -191,7 +191,7 @@ class ManageInventoryItemTile extends ConsumerWidget {
                             iconSize: 30,
                             padding: EdgeInsets.all(0),
                             tooltip: 'Remove from booth',
-                            onPressed: removeItemFromBooth,
+                            onPressed: () {},// removeItemFromBooth,
                             icon: FaIcon(FontAwesomeIcons.tentArrowTurnLeft),
                           ),
                   ],

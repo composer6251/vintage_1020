@@ -31,3 +31,10 @@ You will be given a URL for accessing your URL
 
 AuthGuard creates Firebase instance and stores credentials. 
 This can be used throughout the app. 
+
+
+npm install -g firebase-tools
+firebase login
+firebase init hosting
+flutter build web # (Assuming your Flutter project is set up for web)
+firebase deploy --only hosting
