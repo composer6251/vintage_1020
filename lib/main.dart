@@ -56,12 +56,32 @@ class MyApp extends StatelessWidget {
           onPrimary: Colors.white,
         ),
       ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        dividerTheme: DividerThemeData(
+          space: 50,
+          thickness: 2,
+          color: Colors.grey[700], // Darker grey for divider
+          indent: 20,
+          endIndent: 20,
+          radius: BorderRadius.circular(8.0),
+        ),
+        colorScheme: ColorScheme.dark(
+          primary: Colors.blueGrey[800]!, // Dark blue-grey for primary
+          secondary: Colors.grey[300]!,
+          primaryContainer: Colors.blueGrey[900]!,
+          secondaryContainer: Colors.grey[800]!,
+          onSurface: Colors.white70, // Lighter text on dark surfaces
+          onPrimary: Colors.white,
+        ),
+      ),
+      themeMode: ThemeMode.dark,
       routes: <String, WidgetBuilder>{
         '/manage-inventory': (BuildContext context) => ManageInventoryScreen(),
         '/my-booths': (BuildContext context) => MyBoothsScreen(),
-        '/inventory-analytics': (BuildContext context) => ActivityChart(isShowingMainData: true,),
+        // '/inventory-analytics': (BuildContext context) => ActivityChart(isShowingMainData: true,),
       },
-      home: const UserAuthGate(),
+      home: const ManageInventoryScreen(),
     );
   }
 }

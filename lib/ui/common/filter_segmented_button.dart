@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:vintage_1020/constants/enums.dart';
 import 'package:vintage_1020/data/providers/filter_notifier.dart';
@@ -34,15 +32,15 @@ class FilterSegmentedButton extends HookConsumerWidget {
           ButtonSegment<InventoryFilter>(
             enabled: true,
             value: InventoryFilter.all,
-            label: Text(style: TextStyle(fontSize: 16), 'All'),
+            label: Center(child: Text(style: TextStyle(fontSize: 24), 'All')),
           ),
           ButtonSegment<InventoryFilter>(
             value: InventoryFilter.listed,
-            label: Text(style: TextStyle(fontSize: 16), 'Listed'),
+            label: Text(style: TextStyle(fontSize: 24), 'Listed'),
           ),
           ButtonSegment<InventoryFilter>(
             value: InventoryFilter.backStock,
-            label: Text(style: TextStyle(fontSize: 16, overflow: TextOverflow.ellipsis), 'Backstock'),
+            label: Text(style: TextStyle(fontSize: 24, overflow: TextOverflow.ellipsis), 'Backstock'),
           ),
         ],
       ),

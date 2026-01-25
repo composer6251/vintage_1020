@@ -164,16 +164,16 @@ class MyBoothsScreen extends HookConsumerWidget {
                 icon: FaIcon(FontAwesomeIcons.couch),
               ),
             ),
-            Flexible(
-              flex: 1,
-              child: IconButton(
-                iconSize: 36,
-                onPressed: () =>
-                    Navigator.pushNamed(context, '/inventory-analytics'),
-                // Navigator.of(context).pushNamed('/inventory-analytics'),
-                icon: FaIcon(FontAwesomeIcons.chartBar),
-              ),
-            ),
+            // Flexible(
+            //   flex: 1,
+            //   child: IconButton(
+            //     iconSize: 36,
+            //     onPressed: () =>
+            //         Navigator.pushNamed(context, '/inventory-analytics'),
+            //     // Navigator.of(context).pushNamed('/inventory-analytics'),
+            //     icon: FaIcon(FontAwesomeIcons.chartBar),
+            //   ),
+            // ),
             Flexible(
               flex: 2,
               child: OutlinedButton(

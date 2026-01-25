@@ -16,16 +16,24 @@ class CustomAppBar extends ConsumerWidget {
   void deleteAllBooths() {
     ref.read(myBoothsProvider.notifier).deleteUserBooths();
   }
+
     return AppBar(
       actions: [
-        IconButton(onPressed: deleteAllInventory, icon: Icon(Icons.delete_forever_sharp)),
-        IconButton(onPressed: deleteAllBooths, icon: Icon(Icons.delete_forever_sharp)),
+        // IconButton(onPressed: deleteAllBooths, icon: Icon(Icons.delete_forever_sharp)),
         IconButton(onPressed: auth.signOut, icon: Icon(Icons.logout_outlined))
       ],
       backgroundColor: Colors.blue,
-      title: Text(
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        'Welcome, $userEmail!!',
+      centerTitle: true,
+      title: userEmail == null
+      ?
+      Text(
+        style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+        'Welcome!',
+      )
+      :
+      Text(
+        style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+        'Welcome, ${userEmail?.toUpperCase()}!!',
       ),
     );
   }

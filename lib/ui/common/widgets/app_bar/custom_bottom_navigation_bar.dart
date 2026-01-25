@@ -34,17 +34,17 @@ class CustomBottomNavigationBar extends StatelessWidget {
               icon: FaIcon(FontAwesomeIcons.tent),
             ),
           ),
+          // Flexible(
+          //   flex: 1,
+          //   child: IconButton(
+          //     iconSize: 36,
+          //     onPressed: () =>
+          //         Navigator.of(context).pushNamed('/inventory-analytics'),
+          //     icon: FaIcon(FontAwesomeIcons.chartBar),
+          //   ),
+          // ),
           Flexible(
             flex: 1,
-            child: IconButton(
-              iconSize: 36,
-              onPressed: () =>
-                  Navigator.of(context).pushNamed('/inventory-analytics'),
-              icon: FaIcon(FontAwesomeIcons.chartBar),
-            ),
-          ),
-          Flexible(
-            flex: 2,
             child: OutlinedButton(
               onPressed: openAddInventoryDialog,
               child: Text(

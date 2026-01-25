@@ -71,9 +71,11 @@ class ManageInventoryScreen extends HookConsumerWidget {
     Widget buildBody() {
       if (snapshot.connectionState == ConnectionState.done) {
         return Column(
-          mainAxisSize: MainAxisSize.max,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            FilterSegmentedButton(key: key),
+            SizedBox(
+              height: MediaQuery.heightOf(context) * .1,
+              child: FilterSegmentedButton(key: key)),
             // DISPLAY NO INVENTORY MESSAGE IF INVENTORY IS EMPTY
             filteredInventory.isEmpty &&
                     currentFilter.value == InventoryFilter.all
@@ -82,6 +84,7 @@ class ManageInventoryScreen extends HookConsumerWidget {
               // OTHERWISE DISPLAY INVENTORY TILES
               : 
               Expanded(
+                flex: 4,
                 child: ListView.builder(
                   itemExtent: 125,
                   itemBuilder: (context, index) {
@@ -114,7 +117,7 @@ class ManageInventoryScreen extends HookConsumerWidget {
         child: CustomAppBar(),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Colors.blue,
+        color: Theme.of(context).colorScheme.primary,
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -143,7 +146,7 @@ class ManageInventoryScreen extends HookConsumerWidget {
                 onPressed: openAddItemDialog,
                 child: Text(
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.onPrimary,
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),
